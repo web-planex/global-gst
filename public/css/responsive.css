@@ -1,0 +1,424 @@
+/*@media (min-width: 992px) and (max-width: 1199px) {}@media (max-width: 991px) {.header-section { margin:30px 0; }.form-box-shadow {  margin:0 0 30px 0; }.header-section p { font-size:16px; margin:0 25px; }}@media (min-width: 768px) and (max-width: 991px) {.header-section h2 { font-size:28px; }}@media (max-width: 767px) {.header-section h2 { font-size:24px; }.form-box h2 { font-size:20px; }.current-location-shadow { padding:0; margin-bottom:30px; }}@media (max-width: 400px) {	.thumbnail-box-main .media-left { display:block; padding-right:0;}	.thumbnail-box-main .media-left img { width:100%; margin-bottom:10px;}	.thumbnail-box-main .media-body a.btn { margin-top:5px;}} */
+
+
+@media only screen and (min-width : 1200px) {
+
+}
+
+
+@media (max-width: 1199px) {
+
+
+
+}
+
+@media (max-width: 1024px) {
+.orders-list-form,
+.orders-list-left {
+	display: block;
+}
+.orders-list-left .form-group.search-icon {
+	width: 38%;
+}
+.orders-list-right {
+	padding-left: 0px;
+	margin-right:0px;
+}
+.orders-list-right .form-group {
+display: block;
+text-align: right;
+padding-top: 5px;
+}
+.current-plan-left {
+	width: 100%;
+    padding-bottom: 15px;
+}
+.change-plan-btn {
+    border-left: none;
+    padding-left: 0px;
+    margin-left: 0px;
+    margin-right: 8px;
+}
+.resync-orders {
+    float: none;
+    display: inline-block;
+}
+.results-bootam .col-sm-9.col-md-9.col-lg-10.text-left {
+	width: 50%;
+	float: left;
+}
+.results-bootam .col-sm-3.col-md-3.col-lg-2.text-right.d-flex {
+	width: 50%;
+	float: left;
+}
+
+}
+
+
+@media (min-width: 992px) and (max-width: 1199px) {
+
+}
+
+@media (max-width: 991px) {
+
+.header-section { margin:30px 0; }
+
+.form-box-shadow {  margin:0 0 30px 0; }
+
+.header-section p { font-size:16px; margin:0 25px; }
+.orders-list-left .form-group.search-icon {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.orders-list-left .form-group {
+	float: left;
+	width: 30%;
+}
+.orders-list-left .form-group.calendar-icon {
+    width: 20%;
+}
+.orders-list-right {
+	float: right;
+    padding-top: 5px;
+}
+.results-top .col-sm-3 {
+    float: left;
+}
+.results-top .col-sm-3:nth-child(1) {
+	width: 35.33%;
+}
+.results-top .col-sm-3:nth-child(2) {
+	width: 29.33%;
+	text-align: center;
+}
+.results-top .col-sm-3:nth-child(3) {
+	display: none;
+}
+.results-top .col-sm-3:nth-child(4) {
+	width: 35.33%;
+}
+.results-bootam {
+    padding: 0px 0;
+}
+select.form-control {
+    padding-right: 20px;
+}
+.cm-customers-tab .search-left {
+    padding-right: 15px;
+}
+.cm-customers-tab .search-right {
+    padding-left: 15px;
+    padding-bottom: 15px;
+}
+.invoice-settings-tab #frmGstSetting .cart-page-view {
+	padding-top: 15px;
+}
+.invoice-settings-tab #frmGstSetting hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.report-builder-tab #frmSearch .form-group-top .form-group.calendar-icon.one {
+    width: 50%;
+}
+.report-builder-tab #frmSearch .form-group-top .form-group.calendar-icon {
+    width: 50%;
+}
+.report-builder-tab #frmSearch .form-group-top .form-group.btn-group-left {
+    margin-left: 0px;
+}
+.create-report-template-bg .top-row .three {
+    padding-top: 15px;
+}
+.create-report-template-bg .middle-row .two {
+    padding-bottom: 20px;
+}
+.create-report-template-bg .middle-row .two br {
+	display: none;
+}
+.create-report-template-bg .middle-row .two button {
+
+}
+.create-report-template-bg .bottom-row {
+	    display: block;
+}
+.create-report-template-bg .bottom-row .one {
+	width: 100%;
+}
+.create-report-template-bg .bottom-row .two {
+	display: none;
+}
+.create-report-template-bg .bottom-row .three {
+	display: block;
+}
+.create-report-template-bg .bottom-row .three .left {
+
+    display: inline-block;
+}
+
+
+
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+
+.header-section h2 { font-size:28px; }
+.container.custom-container { width:auto;}
+
+}
+
+
+@media (max-width: 767px) {
+.header-section h2 { font-size:24px; }
+.form-box h2 { font-size:20px; }
+.current-location-shadow { padding:0; margin-bottom:30px; }
+.results-top .col-sm-3:nth-child(1) {
+	width: 34.33%;
+}
+.results-top .col-sm-3:nth-child(2) {
+	width: 31.33%;
+	text-align: center;
+}
+.results-top .col-sm-3:nth-child(4) {
+	width: 34.33%;
+}
+.gst-hsn-tab #frmSearch .form-group.search-collections select {
+	min-width: 140px;
+}
+.report-builder-tab #frmSearch .form-group-bottom {
+	text-align: left;
+}
+.report-builder-tab #frmSearch .form-group-bottom .form-group.title {
+    width: 100%;
+    margin-top: 0px;
+}
+.panel.panel-default.create-report-template-bg {
+    margin: 0;
+    border: none;
+}
+.report-builder-tab #frmSearch .form-group-bottom .form-group.select {
+    min-width: 100%;
+    padding-bottom: 10px;
+    margin-right: 0px;
+}
+
+
+
+
+}
+
+@media (max-width: 575px) {
+.orders-list-left .form-group {
+	width: 50%;
+	padding-bottom: 10px;
+}
+.orders-list-left .form-group.calendar-icon {
+	width: 50%;
+}
+.orders-list-right {
+	padding-top: 0px;
+}
+.results-top .col-sm-3 {
+    float: none;
+    padding-bottom: 10px;
+}
+.results-top .col-sm-3:nth-child(1) {
+	width: 100%;
+}
+.results-top .col-sm-3:nth-child(2) {
+	width: 100%;
+	text-align: center;
+}
+.results-top .col-sm-3:nth-child(3) {
+	display: none;
+}
+.results-top .col-sm-3:nth-child(4) {
+	width: 100%;
+}
+.cm-customers-tab .search-left form {
+    display: block;
+}
+.cm-customers-tab .search-left .form-group.button {
+	display: block;
+    margin-left: 0px;
+    text-align: center;
+}
+.cm-customers-tab .search-right form {
+    display: block;
+}
+.cm-customers-tab .search-right form .form-group.btn-submit-csv {
+    margin-left: 0px;
+    text-align: center;
+}
+.cm-customers-tab .search-right form .form-group.csv-file .csv-note {
+	margin-right: 0px;
+}
+.gst-hsn-tab #frmSearch {
+    display: block;
+}
+.gst-hsn-tab #frmSearch .form-group.btn-search-clear {
+    display: block;
+    text-align: center;
+}
+.invoice-templates .media-body .btn {
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+
+
+}
+
+@media (max-width: 479px) {
+.your-current-plan {
+	text-align: center;
+}
+.change-plan-btn {
+    margin-bottom: 10px;
+}
+.results-bootam .col-sm-9.col-md-9.col-lg-10.text-left {
+	width: 100%;
+	float: left;
+}
+.results-bootam .col-sm-3.col-md-3.col-lg-2.text-right.d-flex {
+	width: 100%;
+	float: left;
+}
+.results-bootam .pagination {
+    width: 100%;
+}
+.results-bootam .pagination li:nth-child(1) {
+	float: left;
+    margin-bottom: 10px;
+}
+.results-bootam .pagination li:nth-child(2) {
+	float: right;
+    margin-bottom: 10px;
+}
+.gst-hsn-tab #frmSearch .form-group.search-collections {
+	display: block;
+}
+.gst-hsn-tab #frmSearch .form-group.search-collections select {
+	margin-left: 0px;
+	margin-top: 10px;
+}
+.report-builder-tab #frmSearch .form-group-bottom .form-group.select {
+    width: 100%;
+    margin-right: 0px;
+}
+.report-builder-tab #frmSearch .form-group-bottom .form-group.button {
+    float: none;
+    text-align: center;
+    width: 100%;
+    margin-top: 0px;
+}
+.report-builder-tab #frmSearch .form-group-bottom .form-group.title {
+	text-align: center;
+}
+.report-builder-tab #frmSearch .form-group-top .form-group.calendar-icon.one {
+    width: 100%;
+    margin-right: 0px;
+}
+.report-builder-tab #frmSearch .form-group-top .form-group.calendar-icon {
+    width: 100%;
+}
+.report-builder-tab #frmSearch .form-group-top .form-group.calendar-icon.two input {
+	border-radius: 3px;
+}
+.report-builder-tab #frmSearch .form-group-top .form-group.calendar-icon.one input {
+	border-radius: 3px;
+}
+.report-builder-tab #frmSearch .form-group-top .form-group.btn-group-left {
+    width: 100%;
+    text-align: center;
+}
+.report-builder-tab #frmSearch .form-group-top .form-group.btn-group-right {
+    float: none;
+    width: 100%;
+    text-align: center;
+}
+.create-report-template-bg .top-row .three .btn {
+    margin-left: 5px;
+}
+.create-report-template-bg .bottom-row .one {
+    padding-right: 0;
+}
+.create-report-template-bg .bottom-row .three {
+    padding-left: 8px;
+}
+.create-report-template-bg .top-row .three input {
+	font-size: 1.4rem;
+}
+.create-report-template-bg .top-row .three {
+	display: block;
+}
+.create-report-template-bg .top-row .three .btn {
+	width: 86px;
+    display: inherit;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+.create-report-template-bg .bottom-row {
+    display: block;
+}
+.create-report-template-bg .bottom-row .three {
+    padding-left: 15px;
+    text-align: center;
+    display: block;
+        padding-top: 10px;
+}
+.create-report-template-bg .bottom-row .one {
+    padding-right: 15px;
+}
+.create-report-template-bg .bottom-row .three .left {
+    margin-right: 3px;
+    float: left;
+}
+.report-builder-tab #frmSearch .form-group-bottom .form-group.btn-group-right {
+    float: none;
+    text-align: center;
+    width: 100%;
+    padding-top: 10px;
+}
+.create-report-template-bg .save-template .three {
+    display: block;
+}
+.create-report-template-bg .save-template .three .btn {
+    width: 130px;
+    display: inherit;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+.thumbnail-box-main .media-left { display:block; padding-right:0;}
+.thumbnail-box-main .media-left img { width:100%; margin-bottom:10px;}
+.thumbnail-box-main .media-body {
+    text-align: center;
+}
+.invoice-templates .media-body .btn {
+    margin-right: 0px;
+}
+
+
+}
+
+
+@media (max-width: 400px) {
+
+.orders-list-left .form-group {
+		width: 100%;
+}
+.orders-list-left .form-group.calendar-icon {
+    width: 100%;
+}
+.orders-list-right {
+	width: 100%;
+    text-align: center;
+}
+.orders-list-right .form-group {
+	text-align: center;
+}
+}
+
+
+
+
+

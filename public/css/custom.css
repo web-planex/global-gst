@@ -1,0 +1,11 @@
+/* your styles go here */
+ul.footer-links{
+margin: 0;
+float: left;
+}
+
+ul.footer-links li{
+  list-style: none;
+  display: inline-block;
+  padding: 0 8px;
+}
