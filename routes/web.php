@@ -23,6 +23,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/expense', 'Globals\ExpenseController@index')->name('expense');
 Route::get('/expense/create', 'Globals\ExpenseController@create')->name('expense-add');
 
+Route::get('/payment-account', 'Globals\PaymentAccountController@index')->name('payment-account');
+Route::get('/payment-account/create', 'Globals\PaymentAccountController@create')->name('payment-account-add');
+
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
