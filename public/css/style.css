@@ -558,7 +558,7 @@ textarea.form-control {
 
 .search-input-wrapper {
 
-	position:relative;	
+	position:relative;
 
 }
 
@@ -586,7 +586,7 @@ textarea.form-control {
 
 .search-input-wrapper .form-control {
 
-	padding-left:35px;	
+	padding-left:35px;
 
 }
 
@@ -968,7 +968,7 @@ h2.modal-title {
 
 	opacity: 0.65;
 
-	
+
 
 }
 
@@ -990,7 +990,7 @@ h2.modal-title {
 
 	background-color: #5563c1;
 
-		
+
 
 }
 
@@ -1008,7 +1008,7 @@ h2.modal-title {
 
 }
 
-	
+
 
 /*------Checkbox and radio end------*/
 
@@ -1130,7 +1130,7 @@ h2.modal-title {
 
 .no-pad-container {padding:0;}
 .thumbnail-box-main { border-bottom: solid 1px #dfe4e8; }
-.thumbnail-box-main:hover{ background-color:#f9fafb;} 
+.thumbnail-box-main:hover{ background-color:#f9fafb;}
  .thumbnail-box-main.active { background-color:#f9fafb; /*#eff2f5*/}
 .thumbnail-box-main:last-child { border-bottom:0;}
 .thumbnail-box-main .media-left {padding-right:20px;}
@@ -1199,16 +1199,16 @@ select.form-control {
     padding: 0 5px 0 10px;
 }
 
-.col-sm-2.d-flex .form-control::-webkit-input-placeholder { 
+.col-sm-2.d-flex .form-control::-webkit-input-placeholder {
   font-size: 13px;
 }
-.col-sm-2.d-flex .form-control::-moz-placeholder { 
+.col-sm-2.d-flex .form-control::-moz-placeholder {
   font-size: 13px;
 }
-.col-sm-2.d-flex .form-control:-ms-input-placeholder { 
+.col-sm-2.d-flex .form-control:-ms-input-placeholder {
   font-size: 13px;
 }
-.col-sm-2.d-flex .form-control:-moz-placeholder { 
+.col-sm-2.d-flex .form-control:-moz-placeholder {
   font-size: 13px;
 }
 
@@ -1239,7 +1239,7 @@ select.form-control {
 .pricing-white-box.plan-bg-box  .divider { background-color: #ffea8a!important;}
 .pricing-white-box.plan-bg-box.active { background-color: #edffed!important; border-color: #c4e4c4!important;}
 .pricing-white-box.plan-bg-box.active  .divider { background-color: #c4e4c4!important;}
-.plan-active-badge {     
+.plan-active-badge {
     display: inline-block;
     background-color: #005500;
     color: #ffffff;
@@ -1321,7 +1321,7 @@ select.form-control {
     display: inline-block;
     margin-right: -1px;
     width: 17%;
-    margin-bottom: 0; 
+    margin-bottom: 0;
 }
 .orders-list-left .form-group.search-icon {
     position: relative;
@@ -1393,7 +1393,7 @@ select.form-control {
 	width: 100%;
 }
 .cm-order_lists {
-	
+
 }
 .results-top .form-group {
     margin: 0;
@@ -1555,7 +1555,7 @@ select.form-control {
 	padding-right: 30px;
 }
 .cm-customers-tab .search-right {
-	padding-left: 30px;	
+	padding-left: 30px;
 }
 #frmProduct table .form-control {
 	font-size: 1.4rem;
@@ -1677,7 +1677,7 @@ select.form-control {
 }
 .create-report-template-bg .top-row {
 	padding-top: 15px;
-} 
+}
 .create-report-template-bg .top-row .three {
     display: flex;
 }
@@ -1712,3 +1712,9 @@ select.form-control {
     margin-left: 30px;
 }
 
+.hide {
+    display: none !important;
+}
+.show {
+    display: block !important;
+}
