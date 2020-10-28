@@ -13,11 +13,13 @@ class ExpenseController extends Controller
     }
 
     public function index(){
+        $data['menu'] = 'Expense';
         $data['expense'] = Expense::orderBy('id','DESC')->get();
-        return view('expense.index',$data);
+        return view('globals.expense.index',$data);
     }
 
     public function create(){
-        return view('expense.create');
+        $data['menu'] = 'Expense';
+        return view('globals.expense.create',$data);
     }
 }

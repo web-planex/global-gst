@@ -13,11 +13,13 @@ class PayeeController extends Controller
     }
 
     public function index(){
+        $data['menu'] = 'Payees';
         $data['payees'] = Payees::orderBy('id','DESC')->get();
-        return view('payees.index',$data);
+        return view('globals.payees.index',$data);
     }
 
     public function create(){
-        return view('payees.create');
+        $data['menu'] = 'Payees';
+        return view('globals.payees.create',$data);
     }
 }
