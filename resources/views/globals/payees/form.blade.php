@@ -15,7 +15,7 @@
 </div>
 
 <!----------------Suppliers Form---------------->
-<div class="row" id="suppliers">
+<div class="row" id="Suppliers">
     <div class="col-md-6">
         <div class="form-group mb-3 row">
             <label for="first_name" class="col-md-12 col-form-label">First Name</label>
@@ -284,7 +284,7 @@
 </div>
 
 <!----------------Employees Form---------------->
-<div class="row" id="employees">
+<div class="row hide" id="Employees">
     <div class="col-md-6">
         <div class="form-group mb-3 row">
             <label for="first_name" class="col-md-12 col-form-label">First Name</label>
@@ -516,7 +516,7 @@
 </div>
 
 <!----------------Customer Form---------------->
-<div class="row" id="customers">
+<div class="row hide" id="Customers">
     <div class="col-md-6">
         <div class="form-group mb-3 row">
             <label for="first_name" class="col-md-12 col-form-label">First Name</label>
@@ -802,15 +802,15 @@
 
 <script>
     $('#type_selection').change(function(){
-        var tval = $(this).val();
-        $('#type_selection > option').each(function(index,value) {
-        $('#'+$(this).val()).addClass('hide');
-        $('#'+$(this).val()).removeClass('show');
-        if(tval == $(this).val()) {
-            $('#'+$(this).val()).addClass('show');
-        $('#'+$(this).val()).removeClass('hide');
-            return;
-        }
+        var tval = $(this).find(":selected").text();
+        $('#type_selection > option').each(function() {
+            $('#'+$(this).text()).addClass('hide');
+            $('#'+$(this).text()).removeClass('show');
+            if(tval == $(this).text()) {
+                $('#'+$(this).text()).addClass('show');
+            $('#'+$(this).text()).removeClass('hide');
+                return;
+            }
         });
     });
 </script>
