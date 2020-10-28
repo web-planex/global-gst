@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class PaymentAccount extends Model
 {
     //protected $connection = 'new_db';
+
+    protected $fillable = ['type','name','description','default_tax_code','balance','as_of'];
+
     const ACCOUNT_TYPE_CURRENT_ASSETS = 1;
     const ACCOUNT_TYPE_BANK = 2;
     const ACCOUNT_TYPE_CREDIT_CARD = 3;
