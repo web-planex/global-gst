@@ -13,11 +13,13 @@ class PaymentAccountController extends Controller
     }
 
     public function index(){
+        $data['menu'] = 'payment-account';
         $data['payment_accounts'] = PaymentAccount::orderBy('id','DESC')->get();
-        return view('globals.payment-account.index',$data);
+        return view('globals.payment-account.index', $data);
     }
 
     public function create(){
-        return view('globals.payment-account.create');
+        $data['menu'] = 'payment-account';
+        return view('globals.payment-account.create', $data);
     }
 }

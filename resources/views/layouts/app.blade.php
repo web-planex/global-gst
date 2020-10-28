@@ -139,6 +139,9 @@
                     <li class="@if(Route::currentRouteName() == 'expense' ) active @endif">
                         <a class="waves-effect waves-dark" href="{{ url('expense')}}"><i class="ti-pencil-alt"></i><span class="hide-menu">Expense</span></a>
                     </li>
+                    <li class="@if($menu == 'payment-account' ) active @endif">
+                        <a class="waves-effect waves-dark" href="{{route('payment-account')}}"><i class="ti-wallet"></i><span class="hide-menu">Payment Account</span></a>
+                    </li>
                 </ul>
             </nav>
             <!-- End Sidebar navigation -->
