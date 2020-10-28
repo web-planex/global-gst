@@ -19,8 +19,8 @@ class CreateExpensesTable extends Migration
             $table->integer('payee_id');
             $table->integer('payment_account_id');
             $table->dateTime('payment_date');
-            $table->string('payment_method');
-            $table->string('ref_no');
+            $table->string('payment_method',50);
+            $table->string('ref_no',50);
             $table->integer('expense_category');
             $table->integer('item_id');
             $table->timestamps();
