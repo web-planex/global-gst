@@ -10,16 +10,15 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-body">
-                    <form method="POST" action="#">
-                        @csrf
+                 <div class="card-body">
+                     {!! Form::open(['url' => url('payees'), 'class' => 'form-horizontal','files'=>true]) !!}
                         @include('globals.payees.form')
                         <div class="form-group row mb-0">
                             <div class="col-md-12">
                                 <button type="submit" class="btn btn-primary float-right">Save</button>
                             </div>
                         </div>
-                    </form>
+                     {!! Form::close() !!}
                 </div>
             </div>
         </div>
