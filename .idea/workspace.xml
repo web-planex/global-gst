@@ -19,21 +19,21 @@
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </expand>
-    <select />
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:origin/lalit" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d033389-e0fa-4d4a-bda2-9d597350049b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Globals/ExpenseController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Globals/ExpenseController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Globals/PayeeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Globals/PayeeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Globals/Payees.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Globals/Payees.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/expense/create.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/expense/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/payees/create.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/payees/form.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/payees/index.blade.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Globals/PaymentAccountController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Globals/PaymentAccountController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Globals/PaymentAccount.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Globals/PaymentAccount.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/globals/payment-account/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/globals/payment-account/create.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,12 +163,14 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/views" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/Models/Globals" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\xampp\htdocs\global-gst\app\Models\Globals" />
+      <recent name="E:\xampp\htdocs\global-gst\database\migrations" />
       <recent name="E:\xampp\htdocs\gstapp\resources\views" />
       <recent name="E:\xampp\htdocs\gstapp\resources\views\payees" />
     </key>
@@ -193,6 +195,8 @@
       <workItem from="1603799798658" duration="643000" />
       <workItem from="1603802100700" duration="4584000" />
       <workItem from="1603860284593" duration="8529000" />
+      <workItem from="1603878345810" duration="40000" />
+      <workItem from="1603878446894" duration="3757000" />
     </task>
     <servers />
   </component>
@@ -204,7 +208,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/lalit" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -228,9 +244,9 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="623" height="498" key="SwitcherDM/0.0.1366.728@0.0.1366.728" timestamp="1603866443812" />
-    <state x="262" y="-1" width="840" height="1034" key="search.everywhere.popup" timestamp="1603805527675">
+    <state x="262" y="-1" width="840" height="1034" key="search.everywhere.popup" timestamp="1603878469306">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="262" y="-1" width="840" height="1034" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1603805527675" />
+    <state x="262" y="-1" width="840" height="1034" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1603878469306" />
   </component>
 </project>

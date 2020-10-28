@@ -13,16 +13,16 @@
                 <form>
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
-                            <label for="inputEmail4">Account Type *</label>
-                            <select id="accountType" class="form-control">
-                                <option value="Current assets">Current assets</option>
-                                <option value="Bank">Bank</option>
-                                <option value="Credit Card">Credit Card</option>
+                            <label for="accountType">Account Type *</label>
+                            <select id="accountType" name="account_type" class="form-control">
+                                @foreach(\App\Models\Globals\PaymentAccount::$account_type as $key => $value)
+                                <option value="{{$key}}">{{$value}}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group mb-3 col-md-6">
-                            <label for="inputPassword4">Detail Type *</label>
-                            <select id="accountType" class="form-control">
+                            <label for="detailType">Detail Type *</label>
+                            <select id="detailType" name="detail_type" class="form-control">
                                 <option value="Current assets">Current assets</option>
                                 <option value="Bank">Bank</option>
                                 <option value="Credit Card">Credit Card</option>
@@ -31,37 +31,30 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
-                            <label for="inputAddress">Name *</label>
-                            <input type="text" class="form-control" id="name" placeholder="">
+                            <label for="name">Name *</label>
+                            <input type="text" class="form-control" name="name" id="name" placeholder="">
                         </div>
                         <div class="form-group mb-3 col-md-6">
-                            <label for="inputAddress2">Description</label>
-                            <input type="text" class="form-control" id="description" placeholder="">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control" name="description" id="description" placeholder="">
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="inputCity">Default Tax Code</label>
-                            <select id="inputState" class="form-control">
-                                <option>18.0% IGST</option>
-                                <option>14.00% ST</option>
-                                <option>0% IGST</option>
-                                <option>Out of Scope</option>
-                                <option>0% GST</option>
-                                <option>14.5% ST</option>
-                                <option>14.00% ST</option>
-                                <option>14.00% ST</option>
-                                <option>14.00% ST</option>
-                                <option>14.00% ST</option>
-                                <option>14.00% ST</option>
+                        <div class="form-group mb-3 col-md-5">
+                            <label for="defaultTaxCode">Default Tax Code</label>
+                            <select id="defaultTaxCode" name="default_tax_code" class="form-control">
+                                @foreach($taxes as $tax)
+                                <option value="{{$tax['tax_name']}}">{{$tax['tax_name']}}</option>
+                                @endforeach
                             </select>
                         </div>
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="inputState">State</label>
-                            <select id="inputState" class="form-control">
-                                <option selected>Choose...</option>
-                                <option>...</option>
-                            </select>
+                        <div class="form-group mb-3 col-md-4">
+                            <label for="balance">Balance</label>
+                            <input type="text" class="form-control" id="balance" name="balance" placeholder="">
+                        </div>
+                        <div class="form-group mb-3 col-md-3">
+                            <label for="as_of">As Of</label>
+                            <input type="text" class="form-control" id="as_of" placeholder="">
                         </div>
                     </div>
                     <button type="submit" class="btn btn-default btn-lg btn-primary">Submit</button>
