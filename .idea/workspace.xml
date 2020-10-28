@@ -23,21 +23,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d033389-e0fa-4d4a-bda2-9d597350049b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/resources/views/dashboard.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/inc/message.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/public/favicon.ico" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/bootstrap.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/sass/_variables.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/sass/app.scss" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/auth/login.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/login.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/expense/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/expense/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Globals/ExpenseController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Globals/ExpenseController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Globals/PayeeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Globals/PayeeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Globals/Payees.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Globals/Payees.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/expense/create.blade.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/expense/index.blade.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/payees/create.blade.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/payees/form.blade.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/payees/index.blade.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -195,7 +191,8 @@
       <workItem from="1603541446260" duration="5107000" />
       <workItem from="1603773285610" duration="13712000" />
       <workItem from="1603799798658" duration="643000" />
-      <workItem from="1603802100700" duration="3297000" />
+      <workItem from="1603802100700" duration="4584000" />
+      <workItem from="1603860284593" duration="8529000" />
     </task>
     <servers />
   </component>
@@ -212,6 +209,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="452" y="101" key="#Web_Browsers" timestamp="1603548018368">
@@ -226,10 +224,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="410" y="61" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1603801549610" />
-    <state width="623" height="498" key="SwitcherDM" timestamp="1603777043372">
+    <state width="623" height="498" key="SwitcherDM" timestamp="1603866443812">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="623" height="498" key="SwitcherDM/0.0.1366.728@0.0.1366.728" timestamp="1603777043372" />
+    <state width="623" height="498" key="SwitcherDM/0.0.1366.728@0.0.1366.728" timestamp="1603866443812" />
     <state x="262" y="-1" width="840" height="1034" key="search.everywhere.popup" timestamp="1603805527675">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
