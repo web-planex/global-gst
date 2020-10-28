@@ -15,7 +15,7 @@
 </div>
 
 <!----------------Suppliers Form---------------->
-<div class="row" id="suppliers">
+<div class="row" id="Suppliers">
     <div class="col-md-6">
         <div class="form-group mb-3 row">
             <label for="first_name" class="col-md-12 col-form-label">First Name</label>
@@ -258,7 +258,7 @@
         <div class="form-group mb-3 row">
             <label for="gst_registration_type_id" class="col-md-12 col-form-label">Gst Registration Type</label>
             <div class="col-md-9">
-                {!! Form::select('gst_registration_type_id', \App\Models\Globals\Payees::$get_type, null, ['class' => 'form-control', 'id'=>'gst_selection']) !!}
+                {!! Form::select('gst_registration_type_id', \App\Models\Globals\Payees::$get_type, null, ['class' => 'form-control', 'id'=>'type_selection']) !!}
                 @if ($errors->has('gst_registration_type_id'))
                     <span class="text-danger">
                         <strong>{{ $errors->first('gst_registration_type_id') }}</strong>
@@ -284,7 +284,7 @@
 </div>
 
 <!----------------Employees Form---------------->
-<div class="row" id="employees" style="display: none;">
+<div class="row hide" id="Employees">
     <div class="col-md-6">
         <div class="form-group mb-3 row">
             <label for="first_name" class="col-md-12 col-form-label">First Name</label>
@@ -516,7 +516,7 @@
 </div>
 
 <!----------------Customer Form---------------->
-<div class="row" id="customers" style="display: none;">
+<div class="row hide" id="Customers">
     <div class="col-md-6">
         <div class="form-group mb-3 row">
             <label for="first_name" class="col-md-12 col-form-label">First Name</label>
@@ -802,13 +802,13 @@
 
 <script>
     $('#type_selection').change(function(){
-        var tval = $(this).val();
-        $('#type_selection > option').each(function(index,value) {
-            $('#'+$(this).val()).addClass('hide');
-            $('#'+$(this).val()).removeClass('show');
-            if(tval == $(this).val()) {
-                $('#'+$(this).val()).addClass('show');
-                $('#'+$(this).val()).removeClass('hide');
+        var tval = $(this).find(":selected").text();
+        $('#type_selection > option').each(function() {
+            $('#'+$(this).text()).addClass('hide');
+            $('#'+$(this).text()).removeClass('show');
+            if(tval == $(this).text()) {
+                $('#'+$(this).text()).addClass('show');
+                $('#'+$(this).text()).removeClass('hide');
                 return;
             }
         });
