@@ -284,7 +284,7 @@
 </div>
 
 <!----------------Employees Form---------------->
-<div class="row" id="employees" style="display: none;">
+<div class="row" id="employees">
     <div class="col-md-6">
         <div class="form-group mb-3 row">
             <label for="first_name" class="col-md-12 col-form-label">First Name</label>
@@ -516,7 +516,7 @@
 </div>
 
 <!----------------Customer Form---------------->
-<div class="row" id="customers" style="display: none;">
+<div class="row" id="customers">
     <div class="col-md-6">
         <div class="form-group mb-3 row">
             <label for="first_name" class="col-md-12 col-form-label">First Name</label>
@@ -802,23 +802,15 @@
 
 <script>
     $('#type_selection').change(function(){
-       var tval = $(this).val();
-        if(tval == 1){
-            $('#employees').hide();
-            $('#customers').hide();
-            $('#suppliers').show();
+        var tval = $(this).val();
+        $('#type_selection > option').each(function(index,value) {
+        $('#'+$(this).val()).addClass('hide');
+        $('#'+$(this).val()).removeClass('show');
+        if(tval == $(this).val()) {
+            $('#'+$(this).val()).addClass('show');
+        $('#'+$(this).val()).removeClass('hide');
+            return;
         }
-
-       if(tval == 2){
-           $('#suppliers').hide();
-           $('#customers').hide();
-           $('#employees').show();
-       }
-
-        if(tval == 3){
-            $('#suppliers').hide();
-            $('#employees').hide();
-            $('#customers').show();
-        }
+        });
     });
 </script>
