@@ -8,9 +8,9 @@ class Payees extends Model
 {
     protected $fillable = ['name','type','type_id'];
 
-    const TYPE_SUPPLIERS = 1;
-    const TYPE_EMPLOYEES = 2;
-    const TYPE_CUSTOMERS = 3;
+    const TYPE_SUPPLIERS = 'suppliers';
+    const TYPE_EMPLOYEES = 'employees';
+    const TYPE_CUSTOMERS = 'customers';
 
     public static $type = [
         self::TYPE_SUPPLIERS => 'Suppliers',
