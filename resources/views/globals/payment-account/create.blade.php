@@ -14,11 +14,12 @@
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
                             <label for="accountType">Account Type *</label>
-                            <select id="accountType" name="account_type" class="form-control">
-                                @foreach(\App\Models\Globals\PaymentAccount::$account_type as $key => $value)
-                                <option value="{{$key}}">{{$value}}</option>
-                                @endforeach
-                            </select>
+                            {!! Form::select('account_type', \App\Models\Globals\PaymentAccount::$account_type, null, ['class' => 'form-control']) !!}
+                            @if ($errors->has('account_type'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('account_type') }}</strong>
+                                </span>
+                            @endif
                         </div>
                         <div class="form-group mb-3 col-md-6">
                             <label for="detailType">Detail Type *</label>
@@ -27,16 +28,31 @@
                                 <option value="Bank">Bank</option>
                                 <option value="Credit Card">Credit Card</option>
                             </select>
+                            @if ($errors->has('detail_type'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('detail_type') }}</strong>
+                                </span>
+                            @endif
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
                             <label for="name">Name *</label>
-                            <input type="text" class="form-control" name="name" id="name" placeholder="">
+                            {!! Form::text('name', null, ['class' => 'form-control','id'=>'name']) !!}
+                            @if ($errors->has('name'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('name') }}</strong>
+                                </span>
+                            @endif
                         </div>
                         <div class="form-group mb-3 col-md-6">
                             <label for="description">Description</label>
-                            <input type="text" class="form-control" name="description" id="description" placeholder="">
+                            {!! Form::text('description', null, ['class' => 'form-control','id'=>'description']) !!}
+                            @if ($errors->has('description'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('description') }}</strong>
+                                </span>
+                            @endif
                         </div>
                     </div>
                     <div class="form-row">
@@ -44,17 +60,32 @@
                             <label for="defaultTaxCode">Default Tax Code</label>
                             <select id="defaultTaxCode" name="default_tax_code" class="form-control">
                                 @foreach($taxes as $tax)
-                                <option value="{{$tax['tax_name']}}">{{$tax['tax_name']}}</option>
+                                    <option value="{{$tax['tax_name']}}">{{$tax['tax_name']}}</option>
                                 @endforeach
                             </select>
+                            @if ($errors->has('default_tax_code'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('default_tax_code') }}</strong>
+                                </span>
+                            @endif
                         </div>
                         <div class="form-group mb-3 col-md-4">
                             <label for="balance">Balance</label>
-                            <input type="text" class="form-control" id="balance" name="balance" placeholder="">
+                            {!! Form::text('balance', null, ['class' => 'form-control','id'=>'balance']) !!}
+                            @if ($errors->has('balance'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('balance') }}</strong>
+                                </span>
+                            @endif
                         </div>
                         <div class="form-group mb-3 col-md-3">
                             <label for="as_of">As Of</label>
-                            <input type="text" class="form-control" id="as_of" placeholder="">
+                            {!! Form::text('as_of', null, ['class' => 'form-control','id'=>'as_of']) !!}
+                            @if ($errors->has('as_of'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('as_of') }}</strong>
+                                </span>
+                            @endif
                         </div>
                     </div>
                     <button type="submit" class="btn btn-default btn-lg btn-primary">Submit</button>
