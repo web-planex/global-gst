@@ -23,19 +23,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5d033389-e0fa-4d4a-bda2-9d597350049b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gstapp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gstapp.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Globals/PayeeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Globals/PayeeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_10_24_114001_create_expenses_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_10_24_114001_create_expenses_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_10_27_053507_create_payees_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_10_27_053507_create_payees_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_10_27_063754_create_suppliers_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_10_27_063754_create_suppliers_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_10_27_063809_create_employees_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_10_27_063809_create_employees_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2020_10_27_063822_create_customers_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_10_27_063822_create_customers_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/globals/payees/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/globals/payees/create.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/globals/payees/form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/globals/payees/form.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -193,7 +182,7 @@
       <workItem from="1603773285610" duration="13712000" />
       <workItem from="1603799798658" duration="643000" />
       <workItem from="1603802100700" duration="4584000" />
-      <workItem from="1603860284593" duration="17237000" />
+      <workItem from="1603860284593" duration="17778000" />
     </task>
     <servers />
   </component>
