@@ -1,21 +1,28 @@
 @extends('layouts.app')
-
 @section('content')
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <a href="expense/create">
-                    <button type="button" class="btn btn-info float-right mb-2">New Payment Account</button>
-                </a>
-            </div>
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">Payment Account</div>
-                    <div class="card-body table-responsive">
-                        <table class="table table-striped">
+    <div class="row page-titles">
+        <div class="col-sm-6 align-self-center">
+            <h4 class="text-themecolor">Account</h4>
+        </div>
+        <div class="col-sm-6 text-right">
+            <a href="{{route('payment-account-add')}}" class="btn sync-orders-btn waves-effect waves-light btn-warning">New Payment Account</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 page-min-height">
+            @include('inc.message')
+            <div class="card">
+                <div class="gstinvoice-table-data">
+                    <div class="table-responsive data-table-gst-box pb-3">
+                        <table id="myTable0" class="table table-hover">
                             <thead>
-                                <th>User</th>
-                                
+                                <th>Account Type</th>
+                                <th>Detail Type</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Default Tax Code</th>
+                                <th>Balance</th>
+                                <th>As Of</th>
                             </thead>
                             <tbody>
                                 @if($payment_accounts->count()>0)
