@@ -24,4 +24,8 @@ class PaymentAccountController extends Controller
         $data['taxes'] = Taxes::where('status',1)->get();
         return view('globals.payment-account.create', $data);
     }
+    
+    public function ajaxGetAccountType() {
+        
+    }
 }
