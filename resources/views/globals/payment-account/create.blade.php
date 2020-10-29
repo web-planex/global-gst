@@ -10,11 +10,11 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="box card">
-                <form>
+                <form action="" method="POST">
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
                             <label for="accountType">Account Type *</label>
-                            {!! Form::select('account_type', \App\Models\Globals\PaymentAccount::$account_type, null, ['class' => 'form-control']) !!}
+                            {!! Form::select('account_type', \App\Models\Globals\PaymentAccount::$account_type, null, ['class' => 'form-control', 'id' => 'accountType']) !!}
                             @if ($errors->has('account_type'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('account_type') }}</strong>
@@ -23,11 +23,7 @@
                         </div>
                         <div class="form-group mb-3 col-md-6">
                             <label for="detailType">Detail Type *</label>
-                            <select id="detailType" name="detail_type" class="form-control">
-                                <option value="Current assets">Current assets</option>
-                                <option value="Bank">Bank</option>
-                                <option value="Credit Card">Credit Card</option>
-                            </select>
+                            {!! Form::select('detail_type', \App\Models\Globals\PaymentAccount::$current_assets, null, ['class' => 'form-control', 'id' => 'detailType']) !!}
                             @if ($errors->has('detail_type'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('detail_type') }}</strong>
@@ -56,7 +52,7 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group mb-3 col-md-5">
+                        <div class="form-group mb-3 col-md-6">
                             <label for="defaultTaxCode">Default Tax Code</label>
                             <select id="defaultTaxCode" name="default_tax_code" class="form-control">
                                 @foreach($taxes as $tax)
@@ -71,14 +67,14 @@
                         </div>
                         <div class="form-group mb-3 col-md-4">
                             <label for="balance">Balance</label>
-                            {!! Form::text('balance', null, ['class' => 'form-control','id'=>'balance']) !!}
+                            {!! Form::number('balance', null, ['class' => 'form-control','id'=>'balance']) !!}
                             @if ($errors->has('balance'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('balance') }}</strong>
                                 </span>
                             @endif
                         </div>
-                        <div class="form-group mb-3 col-md-3">
+                        <div class="form-group mb-3 col-md-2">
                             <label for="as_of">As Of</label>
                             {!! Form::text('as_of', null, ['class' => 'form-control','id'=>'as_of']) !!}
                             @if ($errors->has('as_of'))
@@ -94,4 +90,25 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var val = $('#detailType').find(":selected").text();
+        $('#name').val(val);
+        $('#detailType').on('change',function(){
+            var val = $(this).find(":selected").text();
+            $('#name').val(val);
+        });
+        
+        $('#accountType').change(function(){
+            var name = $(this).find(":selected").text();
+            $.ajax({
+                method: "POST",
+                url: "{{ route('ajax-get-account-type') }}",
+                data: { name: name }
+            }).done(function(data) {
+                console.log(data);
+            });
+        });
+    });
+</script>
 @endsection
