@@ -18,6 +18,12 @@
     <link href="{{ asset('assets/prism/prism.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
     <script src="{{ asset('assets/jquery/jquery-3.2.1.min.js') }}"></script>
+    <!--Validation Jquery File-->
+    <script src="{{ asset('assets/dist/js/jquery.js') }}"></script>
+    <script src="{{ asset('assets/dist/js/jquery.validate.js') }}"></script>
+    <style>
+        .error{color: #ff0000;}
+    </style>
 </head>
 <body class="skin-megna fixed-layout skin-default-dark">
 <div class="preloader">

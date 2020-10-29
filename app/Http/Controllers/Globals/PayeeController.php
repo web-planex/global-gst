@@ -22,4 +22,22 @@ class PayeeController extends Controller
         $data['menu'] = 'Payees';
         return view('globals.payees.create',$data);
     }
+
+    public function store(Request  $request){
+        return 'in';
+//        if($request['type']==1){
+//            $this->validate($request, [
+//                'first_name' => 'required',
+//                'last_name' => 'required',
+//                'email' => 'required',
+//                'mobile' => 'required',
+//                'displayname' => 'required',
+//                'street' => 'required',
+//                'city' => 'required',
+//                'state' => 'required',
+//                'pincode' => 'required',
+//                'country' => 'required',
+//            ]);
+//        }
+    }
 }

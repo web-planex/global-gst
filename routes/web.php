@@ -26,5 +26,6 @@ Route::get('/expense/create', 'Globals\ExpenseController@create')->name('expense
 //Payees
 Route::get('/payees', 'Globals\PayeeController@index')->name('payees');
 Route::get('/payees/create', 'Globals\PayeeController@create')->name('payees-add');
+Route::post('/payees', 'Globals\PayeeController@store')->name('payees-store');
 Route::get('/payment-account', 'Globals\PaymentAccountController@index')->name('payment-account');
 Route::get('/payment-account/create', 'Globals\PaymentAccountController@create')->name('payment-account-add');
