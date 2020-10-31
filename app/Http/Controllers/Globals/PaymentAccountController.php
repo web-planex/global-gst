@@ -22,7 +22,7 @@ class PaymentAccountController extends Controller
 
     public function create(){
         $data['menu'] = 'payment-account';
-        $data['taxes'] = Taxes::where('status', 1)->pluck('tax_name')->toArray();
+        $data['taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
         return view('globals.payment-account.create', $data);
     }
 
