@@ -22,6 +22,6 @@ if (version != "git") {
 }
 
 
-document.write( "<script src='" + file + "'></script>" );
+// document.write( "<script src='" + file + "'></script>" );
 
 })();

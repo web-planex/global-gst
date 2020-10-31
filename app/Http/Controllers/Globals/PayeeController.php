@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Globals;
 
 use App\Http\Controllers\Controller;
+use App\Models\Globals\Customers;
+use App\Models\Globals\Employees;
 use App\Models\Globals\Payees;
+use App\Models\Globals\Suppliers;
 use Illuminate\Http\Request;
 
 class PayeeController extends Controller
@@ -24,20 +27,26 @@ class PayeeController extends Controller
     }
 
     public function store(Request  $request){
-        return 'in';
-//        if($request['type']==1){
-//            $this->validate($request, [
-//                'first_name' => 'required',
-//                'last_name' => 'required',
-//                'email' => 'required',
-//                'mobile' => 'required',
-//                'displayname' => 'required',
-//                'street' => 'required',
-//                'city' => 'required',
-//                'state' => 'required',
-//                'pincode' => 'required',
-//                'country' => 'required',
-//            ]);
-//        }
+        $input = $request->all();
+        if($request['type']==1){
+            $input['apply_tds_for_supplier'] = isset($request['apply_tds_for_supplier'])&&!empty($request['apply_tds_for_supplier'])?1:0;
+
+            $supplier = Suppliers::create($input);
+            $payee['name'] = $supplier['first_name'].' '.$supplier['last_name'];
+            $payee['type'] = 1;
+            $payee['type_id'] = $supplier['id'];
+        }elseif ($request['type']==2){
+            $employee = Employees::create($input);
+            $payee['name'] = $employee['first_name'].' '.$employee['last_name'];
+            $payee['type'] = 2;
+            $payee['type_id'] = $employee['id'];
+        }else{
+            $customer = Customers::create($input);
+            $payee['name'] = $customer['first_name'].' '.$customer['last_name'];
+            $payee['type'] = 2;
+            $payee['type_id'] = $customer['id'];
+        }
+        Payees::create($payee);
+        return redirect('payees');
     }
 }
