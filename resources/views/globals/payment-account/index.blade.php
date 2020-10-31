@@ -28,7 +28,19 @@
                                 @if($payment_accounts->count()>0)
                                     @foreach($payment_accounts as $payment_account)
                                         <tr>
-                                            <td>{{$payment_account['id']}}</td>
+                                            <td>{{\App\Models\Globals\PaymentAccount::$account_type[$payment_account['account_type']]}}</td>
+                                            @if($payment_account['account_type'] == 1)
+                                            <td>{{\App\Models\Globals\PaymentAccount::$current_assets[$payment_account['detail_type']]}}</td>
+                                            @elseif($payment_account['account_type'] == 2)
+                                            <td>{{\App\Models\Globals\PaymentAccount::$bank[$payment_account['detail_type']]}}</td>
+                                            @elseif($payment_account['account_type'] == 3)
+                                            <td>{{\App\Models\Globals\PaymentAccount::$credit_card[$payment_account['detail_type']]}}</td>
+                                            @endif
+                                            <td>{{$payment_account['name']}}</td>
+                                            <td>{{$payment_account['description']}}</td>
+                                            <td>{{$payment_account['default_tax_code']}}</td>
+                                            <td>{{number_format($payment_account['balance'],2)}}</td>
+                                            <td>{{date('d F Y', strtotime($payment_account['as_of']))}}</td>
                                         </tr>
                                     @endforeach
                                 @endif

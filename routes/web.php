@@ -29,5 +29,5 @@ Route::get('/payees/create', 'Globals\PayeeController@create')->name('payees-add
 Route::post('/payees', 'Globals\PayeeController@store')->name('payees-store');
 Route::get('/payment-account', 'Globals\PaymentAccountController@index')->name('payment-account');
 Route::get('/payment-account/create', 'Globals\PaymentAccountController@create')->name('payment-account-add');
-
-Route::post('/ajax-get-account-type', 'Globals\PaymentAccountController@ajaxGetAccountType')->name('ajax-get-account-type');
+Route::any('/payment-account/addedit', 'Globals\PaymentAccountController@addedit')->name('payment-account-insert');
+Route::post('/ajax/get-account-type', 'Globals\PaymentAccountController@ajaxGetAccountType')->name('ajax-get-account-type');

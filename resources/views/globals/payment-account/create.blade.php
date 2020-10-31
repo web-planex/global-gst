@@ -10,7 +10,8 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="box card">
-                <form action="" method="POST">
+                <form action="{{route('payment-account-insert')}}" method="POST">
+                    @csrf
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
                             <label for="accountType">Account Type *</label>
@@ -54,11 +55,7 @@
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
                             <label for="defaultTaxCode">Default Tax Code</label>
-                            <select id="defaultTaxCode" name="default_tax_code" class="form-control">
-                                @foreach($taxes as $tax)
-                                    <option value="{{$tax['tax_name']}}">{{$tax['tax_name']}}</option>
-                                @endforeach
-                            </select>
+                            {!! Form::select('default_tax_code', $taxes, null, ['class' => 'form-control', 'id' => 'defaultTaxCode']) !!}
                             @if ($errors->has('default_tax_code'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('default_tax_code') }}</strong>
@@ -84,7 +81,7 @@
                             @endif
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-default btn-lg btn-primary">Submit</button>
+                    <button type="submit" name="submit" class="btn btn-default btn-lg btn-primary">Submit</button>
                 </form>
             </div>
         </div>
@@ -98,7 +95,7 @@
             var val = $(this).find(":selected").text();
             $('#name').val(val);
         });
-        
+
         $('#accountType').change(function(){
             var name = $(this).find(":selected").text();
             $.ajax({
@@ -106,7 +103,12 @@
                 url: "{{ route('ajax-get-account-type') }}",
                 data: { name: name }
             }).done(function(data) {
-                console.log(data);
+                $("#detailType").empty();
+                $.each(data.response, function(i, val) {
+                    $("#detailType").append("<option value='"+i+"'>"+val+"</option>");
+                });
+                var val = $('#detailType').find(":selected").text();
+                $('#name').val(val);
             });
         });
     });
