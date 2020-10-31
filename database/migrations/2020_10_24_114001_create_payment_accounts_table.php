@@ -15,12 +15,13 @@ class CreatePaymentAccountsTable extends Migration
     {
         Schema::create('payment_accounts', function (Blueprint $table) {
             $table->id();
-            $table->string('type', 45);
+            $table->integer('account_type');
+            $table->integer('detail_type');
             $table->string('name', 45);
             $table->text('description');
             $table->string('default_tax_code', 45);
             $table->string('balance', 45);
-            $table->dateTime('as_of');
+            $table->date('as_of');
             $table->timestamps();
         });
     }
