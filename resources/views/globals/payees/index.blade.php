@@ -19,7 +19,7 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Name</th>
+                                <th style="width: 30%">Name</th>
                                 <th>Type</th>
                                 <th>Action</th>
                             </tr>
@@ -31,8 +31,13 @@
                                     <tr>
                                         <td>{{$i}}</td>
                                         <td>{{$list['name']}}</td>
-                                        <td>{{$list['type']}}</td>
-                                        <td>Action</td>
+                                        <td>@if($list['type']==1) Suppliers @elseif($list['type']==2) Employees @else Customers @endif</td>
+                                        <td>
+                                            <div class="btn-group table-icons-box" role="group" aria-label="Basic example">
+                                                <a href="#" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Update Payee"><i class="fas fa-edit"></i></a>
+                                                <a href="#" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Delete Payee"><i class="fas fa-trash"></i></a>
+                                            </div>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endif
