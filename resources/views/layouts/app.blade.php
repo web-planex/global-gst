@@ -11,6 +11,7 @@
     <link href="{{ asset('assets/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/datatables.net-bs4/css/responsive.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ URL::asset('assets/font-awesome/css/font-awesome.min.css')}}">
     <link href="{{ asset('assets/dist/css/pages/float-chart.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/dist/css/style.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/dist/css/custom.css') }}" rel="stylesheet">
@@ -51,8 +52,15 @@
                             class="nav-link sidebartoggler d-none d-lg-block d-md-block waves-effect waves-dark"
                             href="javascript:void(0)"><i class="icon-menu"></i></a> </li>
                 </ul>
-                <ul class="navbar-nav my-lg-0" style="margin-right:20px;">
-                </ul>
+                <?php $user_detail = \Illuminate\Support\Facades\Auth::user(); ?>
+                <div class="dropdown mr-4">
+                    <span class="dropdown-toggle text-white" style="cursor: pointer" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{$user_detail->name}}</span>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{{url('edit-profile/'.$user_detail->id)}}">My Profile</a>
+                        <a class="dropdown-item" href="{{url('change-password/'.$user_detail->id)}}">Change Password</a>
+                        <a class="dropdown-item" href="{{url('logout')}}">Logout</a>
+                    </div>
+                </div>
             </div>
         </nav>
     </header>
@@ -60,14 +68,20 @@
         <div class="scroll-sidebar">
             <nav class="sidebar-nav">
                 <ul id="sidebarnav">
+                    <li class="@if($menu == 'Dashboard' ) active @endif">
+                        <a class="waves-effect waves-dark" href="{{ url('dashboard')}}"><i class="fa fa-home"></i><span class="hide-menu">Dashboard</span></a>
+                    </li>
+
                     <li class="@if($menu == 'Expense' ) active @endif">
-                        <a class="waves-effect waves-dark" href="{{ url('expense')}}"><i class="ti-pencil-alt"></i><span class="hide-menu">Expense</span></a>
+                        <a class="waves-effect waves-dark" href="{{ url('expense')}}"><i class="fa fa-money"></i><span class="hide-menu">Expense</span></a>
                     </li>
 
                     <li class="@if($menu == 'Payees' ) active @endif">
-                        <a class="waves-effect waves-dark" href="{{ url('payees')}}"><i class="ti-pencil-alt"></i><span class="hide-menu">Payees</span></a>
+                        <a class="waves-effect waves-dark" href="{{ url('payees')}}"><i class="fa fa-user-plus"></i><span class="hide-menu">Payees</span></a>
+                    </li>
+
                     <li class="@if($menu == 'payment-account' ) active @endif">
-                        <a class="waves-effect waves-dark" href="{{route('payment-account')}}"><i class="ti-wallet"></i><span class="hide-menu">Payment Account</span></a>
+                        <a class="waves-effect waves-dark" href="{{route('payment-account')}}"><i class="fa fa-credit-card"></i><span class="hide-menu">Payment Account</span></a>
                     </li>
                 </ul>
             </nav>

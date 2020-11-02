@@ -68,4 +68,11 @@ class PaymentAccountController extends Controller
         $get_name = PaymentAccount::${$name};
         return response()->json(['response'=>$get_name]);
     }
+
+    public function delete($id){
+        $payment_account = PaymentAccount::where('id',$id)->first();
+        $payment_account->delete();
+        \Session::flash('error-message', 'Payment Account has been deleted successfully!');
+        return redirect('payment-account');
+    }
 }

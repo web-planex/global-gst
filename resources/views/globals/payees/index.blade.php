@@ -35,10 +35,11 @@
                                         <td>
                                             <div class="btn-group table-icons-box" role="group" aria-label="Basic example">
                                                 <a href="#" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Update Payee"><i class="fas fa-edit"></i></a>
-                                                <a href="#" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Delete Payee"><i class="fas fa-trash"></i></a>
+                                                <a href="javascript:;" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Delete Payee" onclick="delete_report_records({{$list['id']}});"><i class="fas fa-trash"></i></a>
                                             </div>
                                         </td>
                                     </tr>
+                                    <?php $i++;?>
                                 @endforeach
                             @endif
                             </tbody>
@@ -48,4 +49,22 @@
             </div>
         </div>
     </div>
+
+    <script type='text/javascript'>
+        function delete_report_records(report_id){
+            Swal.fire({
+                title: 'Are you want to delete this?',
+                text: "",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#01c0c8",
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value) {
+                    window.location.href= '{{url('payees/delete')}}/'+report_id;
+                }
+            })
+        }
+    </script>
+
 @endsection
