@@ -12,7 +12,7 @@ a.active { color:#000;}
 .header-section { margin:50px 0; padding:0; }
 .header-section h2 { font-family: 'Open Sans', sans-serif; font-size:36px; color:#333; font-weight:600;  margin:70px 0 10px 0; padding:0; }
 .header-section p { font-family: 'Open Sans', sans-serif; font-size:18px; color:#000;  font-weight:300; margin:0; padding:0; }
-.add-form-box { margin:50px 0; padding:0; } 
+.add-form-box { margin:50px 0; padding:0; }
 .form-box-shadow {  margin:0; padding:20px; background-color:#fff; -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px; -webkit-box-shadow: 0 0 10px 0 #dfdfdf; box-shadow: 0 0 10px 0 #dfdfdf; }
 .form-box { margin:0; padding:0;  }
 .form-box h2 {  font-family: 'Open Sans', sans-serif; font-size:24px; color:#333; font-weight:500;  margin:0 0 30px 0; padding:0;  }
@@ -100,3 +100,4 @@ a.active { color:#000;}
    .order-authorized-status-bg {
     background-color: #ffea8a;
 }
+

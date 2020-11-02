@@ -525,12 +525,12 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="note" class="col-md-12 col-form-label">Note</label>
+                                     <label for="notes" class="col-md-12 col-form-label">Note</label>
                                      <div class="col-md-9">
-                                         {!! Form::textarea('note',null,['class'=>'form-control', 'rows' => 2, 'cols' => 40]) !!}
-                                         @if ($errors->has('note'))
+                                         {!! Form::textarea('notes',null,['class'=>'form-control', 'rows' => 2, 'cols' => 40]) !!}
+                                         @if ($errors->has('notes'))
                                              <span class="text-danger">
-                                                <strong>{{ $errors->first('note') }}</strong>
+                                                <strong>{{ $errors->first('notes') }}</strong>
                                             </span>
                                          @endif
                                      </div>

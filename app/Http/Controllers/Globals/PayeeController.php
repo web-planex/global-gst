@@ -36,6 +36,12 @@ class PayeeController extends Controller
             $payee['type'] = 1;
             $payee['type_id'] = $supplier['id'];
         }elseif ($request['type']==2){
+            $input['hire_date'] = !empty($request['hire_date'])?date('y-m-d',strtotime($request['hire_date'])):"";
+            if(!empty($request['released'])){
+                $input['released'] = date('y-m-d',strtotime($request['released']));
+            }
+            $input['date_of_birth'] = !empty($request['date_of_birth'])?date('y-m-d',strtotime($request['date_of_birth'])):"";
+
             $employee = Employees::create($input);
             $payee['name'] = $employee['first_name'].' '.$employee['last_name'];
             $payee['type'] = 2;
@@ -47,6 +53,14 @@ class PayeeController extends Controller
             $payee['type_id'] = $customer['id'];
         }
         Payees::create($payee);
+        \Session::flash('message', 'Payee has been created successfully!');
+        return redirect('payees');
+    }
+
+    public function delete($id){
+        $payee = Payees::where('id',$id)->first();
+        $payee->delete();
+        \Session::flash('error-message', 'Payee has been deleted successfully!');
         return redirect('payees');
     }
 }
