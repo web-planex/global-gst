@@ -40,7 +40,7 @@
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-12">
                             <label for="company_logo">Company Logo</label><br>
-                            @if(isset($company))
+                            @if(isset($company)&&!empty($company))
                                 <div id="imagePreview" style="background-image: url({{url($company['company_logo'])}});" class="form-control mt-2"></div>
                             @else
                                 <div id="imagePreview" src="" class="form-control mt-2"></div>
@@ -55,7 +55,7 @@
 
                         <div class="form-group mb-3 col-md-6">
                             <label for="company_name">Company Name</label>
-                            {!! Form::text('company_name', isset($company)?$company['company_name']:null, ['class' => 'form-control','id'=>'company_name']) !!}
+                            {!! Form::text('company_name', isset($company)&&!empty($company)?$company['company_name']:null, ['class' => 'form-control','id'=>'company_name']) !!}
                             @if ($errors->has('company_name'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('company_name') }}</strong>
@@ -65,7 +65,7 @@
 
                         <div class="form-group mb-3 col-md-6">
                             <label for="pan_no">Pan No</label>
-                            {!! Form::text('pan_no', isset($company)?$company['pan_no']:null, ['class' => 'form-control','id'=>'pan_no']) !!}
+                            {!! Form::text('pan_no', isset($company)&&!empty($company)?$company['pan_no']:null, ['class' => 'form-control','id'=>'pan_no']) !!}
                             @if ($errors->has('pan_no'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('pan_no') }}</strong>
@@ -75,7 +75,7 @@
 
                         <div class="form-group mb-3 col-md-6">
                             <label for="gstin">GSTIN</label>
-                            {!! Form::text('gstin', isset($company)?$company['gstin']:null, ['class' => 'form-control','id'=>'gstin']) !!}
+                            {!! Form::text('gstin', isset($company)&&!empty($company)?$company['gstin']:null, ['class' => 'form-control','id'=>'gstin']) !!}
                             @if ($errors->has('gstin'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('gstin') }}</strong>
@@ -85,7 +85,7 @@
 
                         <div class="form-group mb-3 col-md-6">
                             <label for="company_email">Company Email</label>
-                            {!! Form::text('company_email', isset($company)?$company['company_email']:null, ['class' => 'form-control','id'=>'company_email']) !!}
+                            {!! Form::text('company_email', isset($company)&&!empty($company)?$company['company_email']:null, ['class' => 'form-control','id'=>'company_email']) !!}
                             @if ($errors->has('company_email'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('company_email') }}</strong>
@@ -95,7 +95,7 @@
 
                         <div class="form-group mb-3 col-md-6">
                             <label for="company_phone">Company Phone</label>
-                            {!! Form::text('company_phone', isset($company)?$company['company_phone']:null, ['class' => 'form-control','id'=>'company_phone']) !!}
+                            {!! Form::text('company_phone', isset($company)&&!empty($company)?$company['company_phone']:null, ['class' => 'form-control','id'=>'company_phone']) !!}
                             @if ($errors->has('company_phone'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('company_phone') }}</strong>
@@ -105,7 +105,7 @@
 
                         <div class="form-group mb-3 col-md-6">
                             <label for="website">Website</label>
-                            {!! Form::text('website', isset($company)?$company['website']:null, ['class' => 'form-control','id'=>'website']) !!}
+                            {!! Form::text('website', isset($company)&&!empty($company)?$company['website']:null, ['class' => 'form-control','id'=>'website']) !!}
                             @if ($errors->has('website'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('website') }}</strong>
@@ -115,7 +115,7 @@
 
                         <div class="form-group mb-3 col-md-6">
                             <label for="street">Street</label>
-                            {!! Form::text('street', isset($company)?$company['street']:null, ['class' => 'form-control','id'=>'street']) !!}
+                            {!! Form::text('street', isset($company)&&!empty($company)?$company['street']:null, ['class' => 'form-control','id'=>'street']) !!}
                             @if ($errors->has('street'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('street') }}</strong>
@@ -125,7 +125,7 @@
 
                         <div class="form-group mb-3 col-md-6">
                             <label for="city">City</label>
-                            {!! Form::text('city', isset($company)?$company['city']:null, ['class' => 'form-control','id'=>'city']) !!}
+                            {!! Form::text('city', isset($company)&&!empty($company)?$company['city']:null, ['class' => 'form-control','id'=>'city']) !!}
                             @if ($errors->has('city'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('city') }}</strong>
@@ -135,7 +135,7 @@
 
                         <div class="form-group mb-3 col-md-6">
                             <label for="state">State</label>
-                            {!! Form::text('state', isset($company)?$company['state']:null, ['class' => 'form-control','id'=>'state']) !!}
+                            {!! Form::text('state', isset($company)&&!empty($company)?$company['state']:null, ['class' => 'form-control','id'=>'state']) !!}
                             @if ($errors->has('state'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('state') }}</strong>
@@ -145,7 +145,7 @@
 
                         <div class="form-group mb-3 col-md-6">
                             <label for="pincode">Pincode</label>
-                            {!! Form::text('pincode', isset($company)?$company['pincode']:null, ['class' => 'form-control','id'=>'pincode']) !!}
+                            {!! Form::text('pincode', isset($company)&&!empty($company)?$company['pincode']:null, ['class' => 'form-control','id'=>'pincode']) !!}
                             @if ($errors->has('pincode'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('pincode') }}</strong>
@@ -155,7 +155,7 @@
 
                         <div class="form-group mb-3 col-md-6">
                             <label for="country">Country</label>
-                            {!! Form::text('country', isset($company)?$company['country']:null, ['class' => 'form-control','id'=>'country']) !!}
+                            {!! Form::text('country', isset($company)&&!empty($company)?$company['country']:null, ['class' => 'form-control','id'=>'country']) !!}
                             @if ($errors->has('country'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('country') }}</strong>

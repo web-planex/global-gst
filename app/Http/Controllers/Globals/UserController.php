@@ -14,7 +14,9 @@ class UserController extends Controller
         $data['menu'] = 'Profile';
         $data['user'] = User::where('id',$id)->first();
         $data['company'] = CompanySettings::where('user_id',$id)->first();
-        $data['company']['company_logo'] = substr($data['company']['company_logo'],6);
+        if(!empty($data['company'])){
+            $data['company']['company_logo'] = substr($data['company']['company_logo'],6);
+        }
         return view('user.edit_profile',$data);
     }
 
