@@ -40,7 +40,9 @@ class PayeeController extends Controller
             if(!empty($request['released'])){
                 $input['released'] = date('y-m-d',strtotime($request['released']));
             }
-            $input['date_of_birth'] = !empty($request['date_of_birth'])?date('y-m-d',strtotime($request['date_of_birth'])):"";
+            if(!empty($request['date_of_birth'])){
+                $input['date_of_birth'] = date('y-m-d',strtotime($request['date_of_birth']));
+            }
 
             $employee = Employees::create($input);
             $payee['name'] = $employee['first_name'].' '.$employee['last_name'];
@@ -49,7 +51,7 @@ class PayeeController extends Controller
         }else{
             $customer = Customers::create($input);
             $payee['name'] = $customer['first_name'].' '.$customer['last_name'];
-            $payee['type'] = 2;
+            $payee['type'] = 3;
             $payee['type_id'] = $customer['id'];
         }
         Payees::create($payee);
