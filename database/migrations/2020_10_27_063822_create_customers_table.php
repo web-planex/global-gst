@@ -18,12 +18,12 @@ class CreateCustomersTable extends Migration
             $table->string('first_name',45);
             $table->string('last_name',45);
             $table->string('email',45);
-            $table->string('company',45);
+            $table->string('company',45)->nullable();
             $table->string('phone',15)->nullable();
             $table->string('mobile',15);
             $table->string('display_name',45);
             $table->string('website',45)->nullable();
-            $table->string('gstin',25);
+            $table->string('gstin',25)->nullable();
             $table->integer('gst_registration_type_id');
             $table->string('billing_street',255);
             $table->string('billing_city',45);
