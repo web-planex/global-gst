@@ -15,6 +15,7 @@
     <link href="{{ asset('assets/dist/css/pages/float-chart.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/dist/css/style.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/dist/css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/switchery/dist/switchery.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/prism/prism.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
@@ -22,6 +23,7 @@
     <!--Validation Jquery File-->
     <script src="{{ asset('assets/dist/js/jquery.js') }}"></script>
     <script src="{{ asset('assets/dist/js/jquery.validate.js') }}"></script>
+    
     <style>
         .error{color: #ff0000;}
     </style>
@@ -53,12 +55,14 @@
                             href="javascript:void(0)"><i class="icon-menu"></i></a> </li>
                 </ul>
                 <?php $user_detail = \Illuminate\Support\Facades\Auth::user(); ?>
-                <div class="dropdown mr-4">
-                    <span class="dropdown-toggle text-white" style="cursor: pointer" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{$user_detail->name}}</span>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="{{url('edit-profile/'.$user_detail->id)}}">My Profile</a>
-                        <a class="dropdown-item" href="{{url('change-password/'.$user_detail->id)}}">Change Password</a>
-                        <a class="dropdown-item" href="{{url('logout')}}">Logout</a>
+                <div class="dropdown u-pro mr-3">
+                    <span class="dropdown-toggle text-white" style="cursor: pointer" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="hidden-md-down">{{$user_detail->name}} &nbsp;<i class="fa fa-angle-down"></i></span>
+                    </span>
+                    <div class="dropdown-menu dropdown-menu-header animated flipInY" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{{url('edit-profile/'.$user_detail->id)}}"><i class="ti-user pr-2"></i>My Profile</a>
+                        <a class="dropdown-item" href="{{url('change-password/'.$user_detail->id)}}"><i class="ti-settings pr-2"></i>Change Password</a>
+                        <a class="dropdown-item" href="{{url('logout')}}"><i class="fa fa-power-off pr-2"></i>Logout</a>
                     </div>
                 </div>
             </div>

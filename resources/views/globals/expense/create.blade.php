@@ -112,27 +112,28 @@
                                                         <td>
                                                             <select id="taxes" class="form-control tax-input" name="taxes[]">
                                                                 @foreach($taxes as $tax)
-                                                                <option value="{{$tax['id']}}">{{$tax['rate'].'% '.$tax['tax_name']}}</option>
+                                                                <option value="{{$tax['rate']}}">{{$tax['rate'].'% '.$tax['tax_name']}}</option>
                                                                 @endforeach
                                                             </select>
                                                         </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                            <table class="table table-hover" style="width: 35%;float: right;">
-                                                <tr>
-                                                    <th>Subtotal</th>
-                                                    <td><input type="text" id="subtotal" class="form-control" readonly></td>
+                                            <table class="table table-hover" style="width: 40%;float: right;">
+                                                <tr id="subtotal_row">
+                                                    <th width="50%">Subtotal</th>
+                                                    <td width="50%">
+                                                        <input type="text" class="form-control" id="subtotal" readonly="" />
+                                                    </td>
                                                 </tr>
-                                                @foreach($taxes as $tax)
                                                 <tr>
-                                                    <th>{{$tax['tax_name'].' @ '.$tax['rate'].'% on'}}</th>
-                                                    <td>&nbsp;</td>
+                                                    <td colspan="2">
+                                                        <table><tr></tr></table>
+                                                    </td>
                                                 </tr>
-                                                @endforeach
                                                 <tr>
-                                                    <th>Total</th>
-                                                    <td>&nbsp;</td>
+                                                    <th width="50%">Total</th>
+                                                    <td width="50%">&nbsp;</td>
                                                 </tr>
                                             </table>
                                             <button type="button" id="addItem" class="btn btn-primary btn-sm">Add Lines</button>
@@ -149,6 +150,10 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
+        $(document).on('change','#amounts_are',function(){
+            tax_type = $(this).find(":selected").val();
+        });
+        
         $("#addItem").click(function () {
             var numItems = $('.itemTr').length;
             var i = numItems + 1;
@@ -161,9 +166,9 @@
             html += "<td>" + i + "</td>";
             html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name[]\"></td>";
             html += "<td><input type=\"text\" class=\"form-control\" name=\"description[]\"></td>";
-            html += "<td><input type=\"number\" class=\"form-control quantity-input\" name=\"quantity[]\"></td>";
-            html += "<td><input type=\"number\" class=\"form-control rate-input\" name=\"rate[]\"></td>";
-            html += "<td><input type=\"number\" class=\"form-control amount-input\" name=\"amount[]\"></td>";
+            html += "<td><input type=\"number\" min=\"0\" class=\"form-control quantity-input\" name=\"quantity[]\"></td>";
+            html += "<td><input type=\"number\" min=\"0\" class=\"form-control rate-input\" name=\"rate[]\"></td>";
+            html += "<td><input type=\"number\" min=\"0\" class=\"form-control amount-input\" name=\"amount[]\"></td>";
             html += "<td><select class=\"form-control tax-input\" name=\"taxes[]\">"+tax_options+"</select></td>";
             html += "</tr>";
             $("#items_list_body").append(html);
@@ -173,7 +178,7 @@
             var qty = $(this).parent('td').siblings('td').find('.quantity-input').val();
             var amount = $(this).val() * qty;
             $(this).parent('td').next('td').find('.amount-input').val(amount);
-            subTotal();
+            taxCalculation(this)
         });
 
         $(document).on('change','.quantity-input',function(){
@@ -181,23 +186,49 @@
             var amount = $(this).val() * rate;
             $(this).parent('td').next('td').next('td').find('.amount-input').val(amount);
             subTotal();
+            taxCalculation(this)
         });
-        
+
         $(document).on('change','.amount-input',function(){
             var qty = $(this).parent('td').prev('td').prev('td').find('.quantity-input').val();
             var rate = $(this).val() / qty;
             $(this).parent('td').prev('td').find('.rate-input').val(rate);
             subTotal();
+            taxCalculation(this)
         });
-        
+
         function subTotal() {
             amount = 0;
             $('.amount-input').each(function(){
-                console.log($(this).val());
-                amount = amount + $(this).val();
+                amount += parseInt($(this).val());
             });
-            $('#subtotal').val(amount);
+            $('#subtotal').val(amount.toFixed(2));
+            
+            $('.tax-label').html(amount.toFixed(2));
+            return amount.toFixed(2);
         }
+        
+        function taxCalculation(ele) {
+            var subtotal = subTotal();
+            var tax_rate = $(ele).parent('td').next('td').next('td').find('select').find(":selected").val();
+            var tax_text = $(ele).parent('td').next('td').next('td').find('select').find(":selected").text();
+            var tax_raw_html = '<tr><td>' + tax_text + ' on ' + subtotal + '</td>';
+            var tax_type = $('#amounts_are').find(":selected").val();
+            
+            var tax = 0;
+            
+            if(tax_type == 'exclusive') {
+                tax = subtotal * tax_rate / 100;
+            } else if(tax_type == 'inclusive') {
+                tax = subtotal * tax_rate / (100 + tax_rate);
+            }
+            tax_raw_html += '<td>' + tax + '</td>';
+            $('#subtotal_row').siblings('tr').find('table').html(tax_raw_html);
+        }
+
+        $(document).on('change','.tax-input', function(){
+            var tax = $(this).val();
+        });
     });
 </script>
 @endsection
