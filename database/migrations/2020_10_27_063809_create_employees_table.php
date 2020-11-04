@@ -28,9 +28,9 @@ class CreateEmployeesTable extends Migration
             $table->string('country',45);
             $table->integer('gender');
             $table->date('hire_date');
-            $table->date('released');
-            $table->date('date_of_birth');
-            $table->longText('notes');
+            $table->date('released')->nullable();
+            $table->date('date_of_birth')->nullable();
+            $table->longText('notes')->nullable();
             $table->timestamps();
         });
     }

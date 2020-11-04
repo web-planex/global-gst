@@ -29,8 +29,8 @@
                                 {!! Form::text('email', null, ['class' => 'form-control','id'=>'email']) !!}
                                 @if ($errors->has('email'))
                                     <span class="text-danger">
-                                    <strong>{{ $errors->first('email') }}</strong>
-                                </span>
+                                        <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
                                 @endif
                             </div>
                         </div>
@@ -46,6 +46,7 @@
                                 <div id="imagePreview" src="" class="form-control mt-2"></div>
                             @endif
                             <input id="uploadFile" type="file" name="company_logo" class="img" />
+                            <br><span class="text-danger hide" id="img_msg"></span>
                             @if ($errors->has('company_logo'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('company_logo') }}</strong>
@@ -174,6 +175,15 @@
         $(function(){
             $("#uploadFile").on("change", function(){
                 var files = !!this.files ? this.files : [];
+                var match = ["image/jpeg", "image/png", "image/jpg"];
+                if (!((files[0].type == match[0]) || (files[0].type == match[1]) || (files[0].type == match[2]))){
+                    $('#img_msg').html('<strong>Please Select A valid Image File</strong>');
+                    $('#img_msg').addClass('show');
+                    $('#img_msg').removeClass('hide');
+                }else{
+                    $('#img_msg').addClass('hide');
+                    $('#img_msg').removeClass('show');
+                }
                 if (!files.length || !window.FileReader) return;
                 if (/^image/.test( files[0].type)){
                     var reader = new FileReader();
