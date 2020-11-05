@@ -48,7 +48,7 @@
         });
 
         $('#to-login').on("click", function() {
-            $("#loginform").slideDown(); 
+            $("#loginform").slideDown();
             $("#recoverform").fadeOut();
         });
     </script>
