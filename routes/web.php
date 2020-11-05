@@ -17,8 +17,23 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::get('/dashboard', 'HomeController@index')->name('home');
+
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 Auth::routes();
+
+//Forgot Password
+
+
+
+
+
+
+
+Route::get('/reset-password', 'Globals\UserController@reset_password')->name('reset-password');
+Route::post('/reset_password', 'Globals\UserController@change_password')->name('reset_password');
+
+Route::post('/forgot_password', 'Globals\UserController@forgot_password')->name('forgot-password');
 
 //User
 Route::get('/edit-profile/{id}', 'Globals\UserController@edit')->name('edit-profile');
@@ -26,7 +41,6 @@ Route::patch('/profile_update/{id}', 'Globals\UserController@update')->name('upd
 Route::get('/change-password/{id}', 'Globals\UserController@edit_password')->name('change-password');
 Route::patch('/update_password/{id}', 'Globals\UserController@update_password')->name('update-password');
 
-Route::get('/dashboard', 'HomeController@index')->name('home');
 Route::get('/expense', 'Globals\ExpenseController@index')->name('expense');
 Route::get('/expense/create', 'Globals\ExpenseController@create')->name('expense-add');
 

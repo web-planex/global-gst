@@ -10,7 +10,7 @@
             <div class="col-xs-12">
                 <input class="form-control" type="text" name="name" required="" placeholder="Name">
                 @error('name')
-                <span class="invalid-feedback" role="alert" style="color: #a94442!important;">
+                <span class="text-danger" role="alert" style="color: #a94442!important;">
                     <strong>{{ $message }}</strong>
                 </span>
                 @enderror
@@ -20,7 +20,7 @@
             <div class="col-xs-12">
                 <input class="form-control" type="text" name="email" required="" placeholder="Email">
                 @error('email')
-                <span class="invalid-feedback" role="alert" style="color: #a94442!important;">
+                <span class="text-danger" role="alert" style="color: #a94442!important;">
                     <strong>{{ $message }}</strong>
                 </span>
                 @enderror
@@ -30,7 +30,7 @@
             <div class="col-xs-12">
                 <input class="form-control" type="password" name="password" required="" placeholder="Password">
                 @error('password')
-                <span class="help-block" role="alert" style="color: #a94442!important;">
+                <span class="text-danger" role="alert" style="color: #a94442!important;">
                     <strong>{{ $message }}</strong>
                 </span>
                 @enderror

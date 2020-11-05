@@ -10,7 +10,7 @@
             <div class="col-xs-12">
                 <input class="form-control" type="text" name="email" required="" placeholder="Email">
                 @if ($errors->has('email'))
-                    <span class="help-block">
+                    <span class="text-danger">
                         <strong>{{ $errors->first('email') }}</strong>
                     </span>
                 @endif
@@ -20,7 +20,7 @@
             <div class="col-xs-12">
                 <input class="form-control" type="password" name="password" required="" placeholder="Password">
                 @if ($errors->has('password'))
-                    <span class="help-block">
+                    <span class="text-danger">
                         <strong>{{ $errors->first('password') }}</strong>
                     </span>
                 @endif
@@ -46,7 +46,9 @@
             </div>
         </div>
     </form>
-    <form class="form-horizontal" id="recoverform" action="index.html">
+
+    <form class="form-horizontal" id="recoverform" action="{{ route('password.email') }}" method="post">
+        {{ csrf_field() }}
         <div class="form-group ">
             <div class="col-xs-12">
                 <h3>Recover Password</h3>
@@ -55,22 +57,33 @@
         </div>
         <div class="form-group ">
             <div class="col-xs-12">
-                <input class="form-control" type="text" required="" placeholder="Email">
+                <input class="form-control" type="text" name="email" id="recover_email" required="" placeholder="Email">
+                <span class="text-danger hide" id="recover_email_msg"></span>
+                @if ($errors->has('recover_email'))
+                    <span class="text-danger">
+                        <strong>{{ $errors->first('recover_email') }}</strong>
+                    </span>
+                @endif
             </div>
         </div>
         <div class="form-group text-center m-t-20">
             <div class="col-xs-12">
-                <button class="btn btn-primary btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Reset</button>
+                <button class="btn btn-primary btn-lg btn-block text-uppercase waves-effect waves-light" id="forgot_password_btn_132" type="submit">Reset</button>
             </div>
         </div>
+
+        <span class="text-danger hide" id="email_link"></span>
+
         <div class="form-group row">
             <div class="col-md-12">
                 <div class="d-flex no-block align-items-center">
                     <div class="ml-auto">
-                        <a href="javascript:void(0)" id="to-login" class="text-muted">Login</a>
+                        <a href="javascript:void(0)" id="to-login" class="text-muted">Back To Login</a>
                     </div>
                 </div>
             </div>
         </div>
     </form>
+
+
 @endsection
