@@ -17,7 +17,7 @@ class ExpenseController extends Controller
 
     public function index(){
         $data['menu'] = 'Expense';
-        $data['expense'] = Expense::orderBy('id','DESC')->get();
+        $data['expense'] = Expense::orderBy('id','DESC')->paginate($this->pagination);
         return view('globals.expense.index',$data);
     }
 

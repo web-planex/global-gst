@@ -5,7 +5,9 @@
             <h4 class="text-themecolor">Payees</h4>
         </div>
         <div class="col-sm-6 text-right">
-            <a href="{{url('payees/create')}}" class="btn sync-orders-btn waves-effect waves-light btn-warning">New Payees</a>
+            <a href="{{url('payees/create')}}" class="float-right">
+                <button type="button" class="btn btn-info d-none d-lg-block"><i class="fa fa-plus-circle"></i> Create New</button>
+            </a>
         </div>
     </div>
 
@@ -44,6 +46,11 @@
                             @endif
                             </tbody>
                         </table>
+                        <div class="fixed-table-pagination">
+                            <div class="float-right pagination mr-3">
+                                @include('inc.pagination', ['paginator' => $payees])
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
