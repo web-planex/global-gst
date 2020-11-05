@@ -48,8 +48,8 @@
         });
 
         $('#to-login').on("click", function() {
-            $("#loginform").slideDown(); 
-            $("#recoverform").fadeOut();
+            $("#recoverform").slideUp();
+            $("#loginform").fadeIn();
         });
     </script>
 </body>
