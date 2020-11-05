@@ -5,7 +5,9 @@
             <h4 class="text-themecolor">Account</h4>
         </div>
         <div class="col-sm-6 text-right">
-            <a href="{{route('payment-account-add')}}" class="btn sync-orders-btn waves-effect waves-light btn-warning">New Payment Account</a>
+            <a href="{{route('payment-account-add')}}" class="float-right">
+                <button type="button" class="btn btn-info d-none d-lg-block"><i class="fa fa-plus-circle"></i> Create New</button>
+            </a>
         </div>
     </div>
     <div class="row">
@@ -56,6 +58,11 @@
                                 @endif
                             </tbody>
                         </table>
+                        <div class="fixed-table-pagination">
+                            <div class="float-right pagination mr-3">
+                                @include('inc.pagination', ['paginator' => $payment_accounts])
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

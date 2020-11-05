@@ -23,7 +23,7 @@
     <!--Validation Jquery File-->
     <script src="{{ asset('assets/dist/js/jquery.js') }}"></script>
     <script src="{{ asset('assets/dist/js/jquery.validate.js') }}"></script>
-    
+
     <style>
         .error{color: #ff0000;}
     </style>
@@ -223,7 +223,6 @@
             ]
         });
         $('.buttons-copy, .buttons-csv, .buttons-print, .buttons-pdf, .buttons-excel').addClass('btn btn-primary mr-1');
-
     });
 </script>
 </body>

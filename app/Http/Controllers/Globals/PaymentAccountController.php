@@ -16,7 +16,7 @@ class PaymentAccountController extends Controller
 
     public function index(){
         $data['menu'] = 'payment-account';
-        $data['payment_accounts'] = PaymentAccount::orderBy('id','DESC')->get();
+        $data['payment_accounts'] = PaymentAccount::orderBy('id','DESC')->paginate($this->pagination);
         return view('globals.payment-account.index', $data);
     }
 

@@ -15,9 +15,9 @@ class PayeeController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(){
+    public function index(Request $request){
         $data['menu'] = 'Payees';
-        $data['payees'] = Payees::orderBy('id','DESC')->get();
+        $data['payees'] = Payees::orderBy('id','DESC')->paginate($this->pagination);
         return view('globals.payees.index',$data);
     }
 

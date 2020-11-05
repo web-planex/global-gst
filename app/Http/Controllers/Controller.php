@@ -11,7 +11,7 @@ use Image;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-
+    protected $pagination = 15;
     public function image($photo, $path)
     {
         $root = base_path() . '/public/upload/' . $path;
