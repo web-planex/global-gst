@@ -84,12 +84,12 @@
                                             <table id="" class="table table-hover">
                                                 <thead>
                                                     <th width="3%">#</th>
-                                                    <th width="23%">Item Name</th>
-                                                    <th width="23%">Description</th>
-                                                    <th width="9%">QTY</th>
+                                                    <th width="28%">Item Name</th>
+                                                    <th width="28%">Description</th>
+                                                    <th width="10%">QTY</th>
                                                     <th width="13%">Rate</th>
                                                     <th width="13%">Amount</th>
-                                                    <th width="15%">Tax</th>
+                                                    <th width="5%">&nbsp;</th>
                                                 </thead>
                                                 <tbody id="items_list_body">
                                                     <tr class="itemTr">
@@ -109,17 +109,21 @@
                                                         <td>
                                                             <input type="number" min="0" class="form-control amount-input" name="amount[]">
                                                         </td>
-                                                        <td>
-                                                            <select id="taxes" class="form-control tax-input" name="taxes[]">
-                                                                @foreach($taxes as $tax)
-                                                                <option value="{{$tax['rate']}}">{{$tax['rate'].'% '.$tax['tax_name']}}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </td>
+                                                        <td></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                             <table class="table table-hover" style="width: 40%;float: right;">
+                                                <tr>
+                                                    <th>Tax</th>
+                                                    <td>
+                                                        <select id="taxes" class="form-control tax-input" name="taxes[]">
+                                                            @foreach($taxes as $tax)
+                                                            <option value="{{$tax['rate']}}">{{$tax['rate'].'% '.$tax['tax_name']}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </td>
+                                                </tr>
                                                 <tr id="subtotal_row">
                                                     <th width="50%">Subtotal</th>
                                                     <td width="50%">
@@ -128,7 +132,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td colspan="2">
-                                                        <table><tr></tr></table>
+                                                        <table width="100%"><tr></tr></table>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -136,7 +140,7 @@
                                                     <td width="50%">&nbsp;</td>
                                                 </tr>
                                             </table>
-                                            <button type="button" id="addItem" class="btn btn-primary btn-sm">Add Lines</button>
+                                            <button type="button" id="addItem" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>&nbsp;Add Lines</button>
                                         </div>
                                     </div>
                                 </div>
@@ -169,7 +173,7 @@
             html += "<td><input type=\"number\" min=\"0\" class=\"form-control quantity-input\" name=\"quantity[]\"></td>";
             html += "<td><input type=\"number\" min=\"0\" class=\"form-control rate-input\" name=\"rate[]\"></td>";
             html += "<td><input type=\"number\" min=\"0\" class=\"form-control amount-input\" name=\"amount[]\"></td>";
-            html += "<td><select class=\"form-control tax-input\" name=\"taxes[]\">"+tax_options+"</select></td>";
+            html += "<td><button type=\"button\" class=\"btn btn-danger btn-circle remove-line-item \"><i class=\"fa fa-times\"></i> </button></td>";
             html += "</tr>";
             $("#items_list_body").append(html);
         });
@@ -186,7 +190,7 @@
             var amount = $(this).val() * rate;
             $(this).parent('td').next('td').next('td').find('.amount-input').val(amount);
             subTotal();
-            taxCalculation(this)
+            //taxCalculation(this)
         });
 
         $(document).on('change','.amount-input',function(){
@@ -194,7 +198,17 @@
             var rate = $(this).val() / qty;
             $(this).parent('td').prev('td').find('.rate-input').val(rate);
             subTotal();
-            taxCalculation(this)
+            //taxCalculation(this)
+        });
+        
+        $(document).on('click', '.remove-line-item', function(){
+            $(this).parents('.itemNewCheckTr').prev('.itemTr').remove();
+            $(this).parents('.itemNewCheckTr').remove();
+            var i = 2;
+            $('.itemNewCheckTr').each(function(){
+                $(this).children('td:first-child').html(i);
+                i++;
+            });
         });
 
         function subTotal() {
@@ -208,21 +222,22 @@
             return amount.toFixed(2);
         }
         
-        function taxCalculation(ele) {
+        function taxCalculation() {
             var subtotal = subTotal();
-            var tax_rate = $(ele).parent('td').next('td').next('td').find('select').find(":selected").val();
-            var tax_text = $(ele).parent('td').next('td').next('td').find('select').find(":selected").text();
-            var tax_raw_html = '<tr><td>' + tax_text + ' on ' + subtotal + '</td>';
+            var tax_rate = $('.tax-input').find(":selected").val();
+            var tax_text = $('.tax-input').find(":selected").text();
+            
+            var tax_raw_html = '<tr><th width="50%" colspan="2" style="display:block;margin-top:10px;width:100%;padding:0;border:none;">' + tax_text + ' on ' + subtotal + '</th>';
             var tax_type = $('#amounts_are').find(":selected").val();
-            
+
             var tax = 0;
-            
+
             if(tax_type == 'exclusive') {
                 tax = subtotal * tax_rate / 100;
             } else if(tax_type == 'inclusive') {
                 tax = subtotal * tax_rate / (100 + tax_rate);
             }
-            tax_raw_html += '<td>' + tax + '</td>';
+            tax_raw_html += '<td width="50%" style="padding-left:30px;border:none;">' + tax + '</td>';
             $('#subtotal_row').siblings('tr').find('table').html(tax_raw_html);
         }
 
