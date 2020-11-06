@@ -25,7 +25,7 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
-                            <label for="payee">Payee *</label>
+                            <label for="payee">Payee <span class="text-danger">*</span></label>
                             {!! Form::select('payee', $payees, null, ['class' => 'form-control', 'id' => 'payee']) !!}
                             @if ($errors->has('payee'))
                                 <span class="text-danger">
@@ -34,7 +34,7 @@
                             @endif
                         </div>
                         <div class="form-group mb-3 col-md-6">
-                            <label for="payment_account">Payment account *</label>
+                            <label for="payment_account">Payment account <span class="text-danger">*</span></label>
                             {!! Form::select('payment_account', $payment_accounts, null, ['class' => 'form-control', 'id' => 'payment_account']) !!}
                             @if ($errors->has('payment_account'))
                                 <span class="text-danger">
@@ -45,7 +45,7 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-4">
-                            <label for="payment_date">Payment date *</label>
+                            <label for="payment_date">Payment date <span class="text-danger">*</span></label>
                             {!! Form::text('payment_date', null, ['class' => 'form-control','id'=>'payment_date']) !!}
                             @if ($errors->has('payment_date'))
                                 <span class="text-danger">
@@ -157,7 +157,7 @@
         $(document).on('change','#amounts_are',function(){
             tax_type = $(this).find(":selected").val();
         });
-        
+
         $("#addItem").click(function () {
             var numItems = $('.itemTr').length;
             var i = numItems + 1;
@@ -200,7 +200,7 @@
             subTotal();
             //taxCalculation(this)
         });
-        
+
         $(document).on('click', '.remove-line-item', function(){
             $(this).parents('.itemNewCheckTr').prev('.itemTr').remove();
             $(this).parents('.itemNewCheckTr').remove();
@@ -217,16 +217,16 @@
                 amount += parseInt($(this).val());
             });
             $('#subtotal').val(amount.toFixed(2));
-            
+
             $('.tax-label').html(amount.toFixed(2));
             return amount.toFixed(2);
         }
-        
+
         function taxCalculation() {
             var subtotal = subTotal();
             var tax_rate = $('.tax-input').find(":selected").val();
             var tax_text = $('.tax-input').find(":selected").text();
-            
+
             var tax_raw_html = '<tr><th width="50%" colspan="2" style="display:block;margin-top:10px;width:100%;padding:0;border:none;">' + tax_text + ' on ' + subtotal + '</th>';
             var tax_type = $('#amounts_are').find(":selected").val();
 

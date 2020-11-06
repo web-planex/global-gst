@@ -14,7 +14,7 @@
                     @csrf
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
-                            <label for="old_password">Old Password *</label>
+                            <label for="old_password">Old Password <span class="text-danger">*</span></label>
                                 <input type="password" id="password" name="old_password" class="form-control" >
                             @if ($errors->has('old_password'))
                                 <span class="text-danger">
@@ -25,7 +25,7 @@
                         <div class="col-md-6"></div>
 
                         <div class="form-group mb-3 col-md-6">
-                            <label for="password">New Password *</label>
+                            <label for="password">New Password <span class="text-danger">*</span></label>
                             <input type="password" id="password" name="password" class="form-control" >
                             @if ($errors->has('password'))
                                 <span class="text-danger">
@@ -36,7 +36,7 @@
                         <div class="col-md-6"></div>
 
                         <div class="form-group mb-3 col-md-6">
-                            <label for="password_confirmation">Confirm Password *</label>
+                            <label for="password_confirmation">Confirm Password <span class="text-danger">*</span></label>
                             <input type="password" id="password-confirm" name="password_confirmation" class="form-control" >
                             @if ($errors->has('password_confirmation'))
                                 <span class="text-danger">

@@ -16,16 +16,16 @@
                         <hr>
                         <div class="form-row">
                             <div class="form-group mb-3 col-md-6">
-                                <label for="name">Name *</label>
+                                <label for="name">Name <span class="text-danger">*</span></label>
                                 {!! Form::text('name', null, ['class' => 'form-control','id'=>'name']) !!}
                                 @if ($errors->has('name'))
                                     <span class="text-danger">
-                                    <strong>{{ $errors->first('name') }}</strong>
-                                </span>
+                                        <strong>{{ $errors->first('name') }}</strong>
+                                    </span>
                                 @endif
                             </div>
                             <div class="form-group mb-3 col-md-6">
-                                <label for="email">Email *</label>
+                                <label for="email">Email <span class="text-danger">*</span></label>
                                 {!! Form::text('email', null, ['class' => 'form-control','id'=>'email']) !!}
                                 @if ($errors->has('email'))
                                     <span class="text-danger">

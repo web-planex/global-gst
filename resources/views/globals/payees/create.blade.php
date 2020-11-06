@@ -37,7 +37,7 @@
                          <div class="row @if(isset($payee) && $payee['type'] != 1) hide @endif " id="Suppliers">
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="first_name" class="col-md-12 col-form-label">First Name *</label>
+                                     <label for="first_name" class="col-md-12 col-form-label">First Name <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('first_name', null, ['class' => 'form-control','id'=>'sf_name']) !!}
                                          <span class="text-danger hide" id="sf_name_msg"></span>
@@ -52,7 +52,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="last_name" class="col-md-12 col-form-label">Last Name *</label>
+                                     <label for="last_name" class="col-md-12 col-form-label">Last Name <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('last_name', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('last_name'))
@@ -66,7 +66,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="email" class="col-md-12 col-form-label">Email *</label>
+                                     <label for="email" class="col-md-12 col-form-label">Email <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('email', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('email'))
@@ -108,7 +108,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="mobile" class="col-md-12 col-form-label">Mobile *</label>
+                                     <label for="mobile" class="col-md-12 col-form-label">Mobile <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('mobile', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('mobile'))
@@ -122,7 +122,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="display_name" class="col-md-12 col-form-label">Display Name *</label>
+                                     <label for="display_name" class="col-md-12 col-form-label">Display Name <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('display_name', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('display_name'))
@@ -150,7 +150,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="street" class="col-md-12 col-form-label">Street *</label>
+                                     <label for="street" class="col-md-12 col-form-label">Street <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('street', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('street'))
@@ -164,7 +164,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="city" class="col-md-12 col-form-label">City *</label>
+                                     <label for="city" class="col-md-12 col-form-label">City <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('city', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('city'))
@@ -178,7 +178,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="state" class="col-md-12 col-form-label">State *</label>
+                                     <label for="state" class="col-md-12 col-form-label">State <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('state', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('state'))
@@ -192,7 +192,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="pincode" class="col-md-12 col-form-label">Pincode *</label>
+                                     <label for="pincode" class="col-md-12 col-form-label">Pincode <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('pincode', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('pincode'))
@@ -206,7 +206,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="country" class="col-md-12 col-form-label">Country *</label>
+                                     <label for="country" class="col-md-12 col-form-label">Country <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('country', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('country'))
@@ -318,7 +318,7 @@
                          <div class="row @if(isset($payee) && $payee['type'] == 2) show @else hide @endif" id="Employees">
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="first_name" class="col-md-12 col-form-label">First Name *</label>
+                                     <label for="first_name" class="col-md-12 col-form-label">First Name <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('first_name', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('first_name'))
@@ -332,7 +332,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="last_name" class="col-md-12 col-form-label">Last Name *</label>
+                                     <label for="last_name" class="col-md-12 col-form-label">Last Name <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('last_name', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('last_name'))
@@ -346,7 +346,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="email" class="col-md-12 col-form-label">Email *</label>
+                                     <label for="email" class="col-md-12 col-form-label">Email <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('email', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('email'))
@@ -360,7 +360,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="display_name" class="col-md-12 col-form-label">Display Name *</label>
+                                     <label for="display_name" class="col-md-12 col-form-label">Display Name <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('display_name', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('display_name'))
@@ -388,7 +388,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="mobile" class="col-md-12 col-form-label">Mobile *</label>
+                                     <label for="mobile" class="col-md-12 col-form-label">Mobile <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('mobile', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('mobile'))
@@ -402,7 +402,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="street" class="col-md-12 col-form-label">Street *</label>
+                                     <label for="street" class="col-md-12 col-form-label">Street <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('street', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('street'))
@@ -416,7 +416,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="city" class="col-md-12 col-form-label">City *</label>
+                                     <label for="city" class="col-md-12 col-form-label">City <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('city', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('city'))
@@ -430,7 +430,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="state" class="col-md-12 col-form-label">State *</label>
+                                     <label for="state" class="col-md-12 col-form-label">State <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('state', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('state'))
@@ -444,7 +444,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="pincode" class="col-md-12 col-form-label">Pincode *</label>
+                                     <label for="pincode" class="col-md-12 col-form-label">Pincode <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('pincode', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('pincode'))
@@ -458,7 +458,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="country" class="col-md-12 col-form-label">Country *</label>
+                                     <label for="country" class="col-md-12 col-form-label">Country <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('country', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('country'))
@@ -472,7 +472,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="gender" class="col-md-12 col-form-label">Gender *</label>
+                                     <label for="gender" class="col-md-12 col-form-label">Gender <span class="text-danger">*</span></label>
                                      @foreach(\App\Models\Globals\Employees::$gender as $key2 =>$value2)
                                          <?php $checked = $key2 == 1 ?'checked':'';?>
                                          <div class="col-md-2">
@@ -492,7 +492,7 @@
 
                              <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="hire_date" class="col-md-12 col-form-label">Hire Date *</label>
+                                     <label for="hire_date" class="col-md-12 col-form-label">Hire Date <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('hire_date', null, ['class' => 'form-control','id'=>'hire_date']) !!}
                                          @if ($errors->has('hire_date'))
@@ -562,7 +562,7 @@
                         <div class="row @if(isset($payee) && $payee['type'] == 3) show @else hide @endif" id="Customers">
                             <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="first_name" class="col-md-12 col-form-label">First Name *</label>
+                                     <label for="first_name" class="col-md-12 col-form-label">First Name <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('first_name', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('first_name'))
@@ -576,7 +576,7 @@
 
                             <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="last_name" class="col-md-12 col-form-label">Last Name *</label>
+                                     <label for="last_name" class="col-md-12 col-form-label">Last Name <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('last_name', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('last_name'))
@@ -590,7 +590,7 @@
 
                             <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="email" class="col-md-12 col-form-label">Email *</label>
+                                     <label for="email" class="col-md-12 col-form-label">Email <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('email', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('email'))
@@ -632,7 +632,7 @@
 
                             <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="mobile" class="col-md-12 col-form-label">Mobile *</label>
+                                     <label for="mobile" class="col-md-12 col-form-label">Mobile <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('mobile', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('mobile'))
@@ -646,7 +646,7 @@
 
                             <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="display_name" class="col-md-12 col-form-label">Display Name *</label>
+                                     <label for="display_name" class="col-md-12 col-form-label">Display Name <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('display_name', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('display_name'))
@@ -702,7 +702,7 @@
 
                             <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="billing_street" class="col-md-12 col-form-label">Billing Street *</label>
+                                     <label for="billing_street" class="col-md-12 col-form-label">Billing Street <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('billing_street', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('billing_street'))
@@ -716,7 +716,7 @@
 
                             <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="billing_city" class="col-md-12 col-form-label">Billing City *</label>
+                                     <label for="billing_city" class="col-md-12 col-form-label">Billing City <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('billing_city', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('billing_city'))
@@ -730,7 +730,7 @@
 
                             <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="billing_state" class="col-md-12 col-form-label">Billing State *</label>
+                                     <label for="billing_state" class="col-md-12 col-form-label">Billing State <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('billing_state', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('billing_state'))
@@ -744,7 +744,7 @@
 
                             <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="billing_pincode" class="col-md-12 col-form-label">Billing Pincode *</label>
+                                     <label for="billing_pincode" class="col-md-12 col-form-label">Billing Pincode <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('billing_pincode', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('billing_pincode'))
@@ -758,7 +758,7 @@
 
                             <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="billing_country" class="col-md-12 col-form-label">Billing Country *</label>
+                                     <label for="billing_country" class="col-md-12 col-form-label">Billing Country <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('billing_country', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('billing_country'))
@@ -774,7 +774,7 @@
 
                             <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="shipping_street" class="col-md-12 col-form-label">Shipping Street *</label>
+                                     <label for="shipping_street" class="col-md-12 col-form-label">Shipping Street <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('shipping_street', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('shipping_street'))
@@ -788,7 +788,7 @@
 
                             <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="shipping_city" class="col-md-12 col-form-label">Shipping City *</label>
+                                     <label for="shipping_city" class="col-md-12 col-form-label">Shipping City <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('shipping_city', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('shipping_city'))
@@ -802,7 +802,7 @@
 
                             <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="shipping_state" class="col-md-12 col-form-label">Shipping State *</label>
+                                     <label for="shipping_state" class="col-md-12 col-form-label">Shipping State <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('shipping_state', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('shipping_state'))
@@ -816,7 +816,7 @@
 
                             <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="shipping_pincode" class="col-md-12 col-form-label">Shipping Pincode *</label>
+                                     <label for="shipping_pincode" class="col-md-12 col-form-label">Shipping Pincode <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('shipping_pincode', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('shipping_pincode'))
@@ -830,7 +830,7 @@
 
                             <div class="col-md-6">
                                  <div class="form-group mb-3 row">
-                                     <label for="shipping_country" class="col-md-12 col-form-label">Shipping Country *</label>
+                                     <label for="shipping_country" class="col-md-12 col-form-label">Shipping Country <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
                                          {!! Form::text('shipping_country', null, ['class' => 'form-control']) !!}
                                          @if ($errors->has('shipping_country'))

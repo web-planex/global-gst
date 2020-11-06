@@ -24,7 +24,9 @@ class UserController extends Controller
     public function update(Request $request, $id){
         $this->validate($request, [
             'name' => 'required',
-            'email' => 'required',
+            'email' => 'required|email',
+            'company_email' => 'nullable|email',
+            'company_phone' => 'nullable|numeric',
         ]);
         $input = $request->all();
         $user = User::where('id',$id)->first();

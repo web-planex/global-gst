@@ -14,7 +14,7 @@
                     @csrf
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
-                            <label for="accountType">Account Type *</label>
+                            <label for="accountType">Account Type <span class="text-danger">*</span></label>
                             {!! Form::select('account_type', \App\Models\Globals\PaymentAccount::$account_type, null, ['class' => 'form-control', 'id' => 'accountType']) !!}
                             @if ($errors->has('account_type'))
                                 <span class="text-danger">
@@ -23,7 +23,7 @@
                             @endif
                         </div>
                         <div class="form-group mb-3 col-md-6">
-                            <label for="detailType">Detail Type *</label>
+                            <label for="detailType">Detail Type <span class="text-danger">*</span></label>
                             {!! Form::select('detail_type', \App\Models\Globals\PaymentAccount::$current_assets, null, ['class' => 'form-control', 'id' => 'detailType']) !!}
                             @if ($errors->has('detail_type'))
                                 <span class="text-danger">
@@ -34,7 +34,7 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
-                            <label for="name">Name *</label>
+                            <label for="name">Name <span class="text-danger">*</span></label>
                             {!! Form::text('name', null, ['class' => 'form-control','id'=>'name']) !!}
                             @if ($errors->has('name'))
                                 <span class="text-danger">
