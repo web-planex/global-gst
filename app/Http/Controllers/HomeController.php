@@ -6,6 +6,7 @@ use App\Models\Globals\Expense;
 use App\Models\Globals\Payees;
 use App\Models\Globals\PaymentAccount;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -27,9 +28,9 @@ class HomeController extends Controller
     public function index()
     {
         $data['menu'] = 'Dashboard';
-        $data['total_expense'] = Expense::count();
-        $data['total_payee'] = Payees::count();
-        $data['total_payment_account'] = PaymentAccount::count();
+        $data['total_expense'] = Expense::where('user_id',Auth::user()->id)->count();
+        $data['total_payee'] = Payees::where('user_id',Auth::user()->id)->count();
+        $data['total_payment_account'] = PaymentAccount::where('user_id',Auth::user()->id)->count();
         return view('dashboard',$data);
     }
 }

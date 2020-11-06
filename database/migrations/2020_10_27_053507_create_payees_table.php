@@ -15,6 +15,7 @@ class CreatePayeesTable extends Migration
     {
         Schema::create('payees', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id');
             $table->string('name',45);
             $table->string('type',20);
             $table->integer('type_id');

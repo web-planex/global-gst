@@ -23,13 +23,6 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 Auth::routes();
 
 //Forgot Password
-
-
-
-
-
-
-
 Route::get('/reset-password', 'Globals\UserController@reset_password')->name('reset-password');
 Route::post('/reset_password', 'Globals\UserController@change_password')->name('reset_password');
 

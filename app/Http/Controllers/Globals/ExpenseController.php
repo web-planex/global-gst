@@ -8,6 +8,7 @@ use App\Models\Globals\Payees;
 use App\Models\Globals\PaymentAccount;
 use App\Models\Globals\Taxes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ExpenseController extends Controller
 {
@@ -17,7 +18,7 @@ class ExpenseController extends Controller
 
     public function index(){
         $data['menu'] = 'Expense';
-        $data['expense'] = Expense::orderBy('id','DESC')->paginate($this->pagination);
+        $data['expense'] = Expense::where('user_id',Auth::user()->id)->orderBy('id','DESC')->paginate($this->pagination);
         return view('globals.expense.index',$data);
     }
 
