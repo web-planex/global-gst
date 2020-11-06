@@ -137,7 +137,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th width="50%">Total</th>
-                                                    <td width="50%">&nbsp;</td>
+                                                    <td width="50%"><input type="text" class="form-control" id="total" readonly="" /></td>
                                                 </tr>
                                             </table>
                                             <button type="button" id="addItem" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>&nbsp;Add Lines</button>
@@ -155,7 +155,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $(document).on('change','#amounts_are',function(){
-            tax_type = $(this).find(":selected").val();
+            taxCalculation();
         });
 
         $("#addItem").click(function () {
@@ -165,7 +165,7 @@
             var row = $("<tr>").addClass("itemTr");
 
             $("#items_list_body").append(row);
-            var tax_options = $('#taxes').html();
+
             var html = "<tr class=\"itemNewCheckTr\">";
             html += "<td>" + i + "</td>";
             html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name[]\"></td>";
@@ -178,27 +178,28 @@
             $("#items_list_body").append(html);
         });
 
-        $(document).on('change','.rate-input',function(){
+        $(document).on('keyup change','.rate-input',function(){
             var qty = $(this).parent('td').siblings('td').find('.quantity-input').val();
             var amount = $(this).val() * qty;
             $(this).parent('td').next('td').find('.amount-input').val(amount);
             taxCalculation(this)
         });
 
-        $(document).on('change','.quantity-input',function(){
+        $(document).on('keyup change','.quantity-input',function(){
             var rate = $(this).parent('td').next('td').find('.rate-input').val();
             var amount = $(this).val() * rate;
             $(this).parent('td').next('td').next('td').find('.amount-input').val(amount);
-            subTotal();
-            //taxCalculation(this)
+            if($(this).val() == 0) {
+                $(this).parent('td').next('td').find('.rate-input').val(0);
+            }
+            taxCalculation();
         });
 
-        $(document).on('change','.amount-input',function(){
+        $(document).on('keyup change','.amount-input',function(){
             var qty = $(this).parent('td').prev('td').prev('td').find('.quantity-input').val();
             var rate = $(this).val() / qty;
             $(this).parent('td').prev('td').find('.rate-input').val(rate);
-            subTotal();
-            //taxCalculation(this)
+            taxCalculation();
         });
 
         $(document).on('click', '.remove-line-item', function(){
@@ -209,14 +210,19 @@
                 $(this).children('td:first-child').html(i);
                 i++;
             });
+            taxCalculation();
         });
 
         function subTotal() {
             amount = 0;
             $('.amount-input').each(function(){
-                amount += parseInt($(this).val());
+                var val = $(this).val();
+                if(val == null || val == '') {
+                    val = 0;
+                }
+                amount += parseFloat(val);
             });
-            $('#subtotal').val(amount.toFixed(2));
+            $('#subtotal').val('Rs. ' + amount.toFixed(2));
 
             $('.tax-label').html(amount.toFixed(2));
             return amount.toFixed(2);
@@ -226,23 +232,27 @@
             var subtotal = subTotal();
             var tax_rate = $('.tax-input').find(":selected").val();
             var tax_text = $('.tax-input').find(":selected").text();
-
             var tax_raw_html = '<tr><th width="50%" colspan="2" style="display:block;margin-top:10px;width:100%;padding:0;border:none;">' + tax_text + ' on ' + subtotal + '</th>';
             var tax_type = $('#amounts_are').find(":selected").val();
-
             var tax = 0;
-
+            var total = 0;
             if(tax_type == 'exclusive') {
                 tax = subtotal * tax_rate / 100;
+                var tax_raw_html = '<tr><th width="50%" colspan="2" style="display:block;margin-top:10px;width:100%;padding:0;border:none;">' + tax_text + ' on Rs. ' + parseFloat(subtotal).toFixed(2) + '</th>';
+                total = parseFloat(subtotal) + parseFloat(tax);
             } else if(tax_type == 'inclusive') {
-                tax = subtotal * tax_rate / (100 + tax_rate);
+                tax = subtotal * tax_rate / (parseInt(100) + parseInt(tax_rate));
+                var new_subtotal = parseFloat(subtotal) - parseFloat(tax);
+                var tax_raw_html = '<tr><th width="50%" colspan="2" style="display:block;margin-top:10px;width:100%;padding:0;border:none;">' + tax_text + ' on Rs. ' + parseFloat(new_subtotal).toFixed(2) + '</th>';
+                total = subtotal;
             }
-            tax_raw_html += '<td width="50%" style="padding-left:30px;border:none;">' + tax + '</td>';
+            tax_raw_html += '<td width="50%" style="padding:10px 0 10px 15px;border:none;"><input type="text" class="form-control" name="tax-amount" value="Rs. ' + tax.toFixed(2) + '" readonly=""></td>';
             $('#subtotal_row').siblings('tr').find('table').html(tax_raw_html);
+            $('#total').val('Rs. '+ parseFloat(total).toFixed(2));
         }
 
         $(document).on('change','.tax-input', function(){
-            var tax = $(this).val();
+            taxCalculation();
         });
     });
 </script>
