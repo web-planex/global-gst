@@ -31,4 +31,16 @@ class Payees extends Model
         self::GST_OVERSEAS => 'Overseas',
         self::GST_SEZ => 'SEZ',
     ];
+
+    public function Suppliers(){
+        return $this->belongsTo('App\Models\Globals\Suppliers','type_id');
+    }
+
+    public function Employees(){
+        return $this->belongsTo('App\Models\Globals\Employees','type_id');
+    }
+
+    public function Customers(){
+        return $this->belongsTo('App\Models\Globals\Customers','type_id');
+    }
 }

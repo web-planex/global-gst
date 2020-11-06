@@ -94,30 +94,30 @@
     <div class="page-wrapper">
         <div class="container-fluid">
             @yield('content')
-            <div class="row">
-                <div class="col-12 text-center">
-                    <div class="card">
-                        <div class="card-body other-useful">
-                            <h2><strong>Other Useful Applications from Webplanex Team</strong></h2>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="other-useful-box">
-                                        <a href="https://apps.shopify.com/cashback-sale-booster" data-toggle="tooltip" title="Cashback Rewards Program" target="_blanck">
-                                            <img src="{{ asset('assets/images/banner.jpg') }}" alt="" class="img-fluid">
-                                        </a>
-                                        <a href="https://apps.shopify.com/social-card" data-toggle="tooltip" title="Social Card" target="_blanck">
-                                            <img src="{{ asset('assets/images/banner-social-card.jpg') }}" alt="" class="img-fluid">
-                                        </a>
-                                        <a href="https://apps.shopify.com/mobidesign-android-app-builder" data-toggle="tooltip" title="Webplanex Native App Builder" target="_blanck">
-                                            <img src="{{ asset('assets/images/banner-native-appbuilder.jpg') }}" alt="" class="img-fluid">
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+{{--            <div class="row">--}}
+{{--                <div class="col-12 text-center">--}}
+{{--                    <div class="card">--}}
+{{--                        <div class="card-body other-useful">--}}
+{{--                            <h2><strong>Other Useful Applications from Webplanex Team</strong></h2>--}}
+{{--                            <div class="row">--}}
+{{--                                <div class="col-md-12">--}}
+{{--                                    <div class="other-useful-box">--}}
+{{--                                        <a href="https://apps.shopify.com/cashback-sale-booster" data-toggle="tooltip" title="Cashback Rewards Program" target="_blanck">--}}
+{{--                                            <img src="{{ asset('assets/images/banner.jpg') }}" alt="" class="img-fluid">--}}
+{{--                                        </a>--}}
+{{--                                        <a href="https://apps.shopify.com/social-card" data-toggle="tooltip" title="Social Card" target="_blanck">--}}
+{{--                                            <img src="{{ asset('assets/images/banner-social-card.jpg') }}" alt="" class="img-fluid">--}}
+{{--                                        </a>--}}
+{{--                                        <a href="https://apps.shopify.com/mobidesign-android-app-builder" data-toggle="tooltip" title="Webplanex Native App Builder" target="_blanck">--}}
+{{--                                            <img src="{{ asset('assets/images/banner-native-appbuilder.jpg') }}" alt="" class="img-fluid">--}}
+{{--                                        </a>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
         </div>
     </div>
     <footer class="footer text-center">

@@ -39,6 +39,8 @@ Route::get('/expense/create', 'Globals\ExpenseController@create')->name('expense
 Route::get('/payees', 'Globals\PayeeController@index')->name('payees');
 Route::get('/payees/create', 'Globals\PayeeController@create')->name('payees-add');
 Route::post('/payees', 'Globals\PayeeController@store')->name('payees-store');
+Route::get('/payees/edit/{id}', 'Globals\PayeeController@edit')->name('payees-edit');
+Route::patch('/payees/update/{id}', 'Globals\PayeeController@update')->name('payees-update');
 Route::get('/payees/delete/{id}', 'Globals\PayeeController@delete')->name('payees-delete');
 
 //Payment

@@ -36,7 +36,7 @@
                                         <td>@if($list['type']==1) Suppliers @elseif($list['type']==2) Employees @else Customers @endif</td>
                                         <td>
                                             <div class="btn-group table-icons-box" role="group" aria-label="Basic example">
-                                                <a href="#" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Update Payee"><i class="fas fa-edit"></i></a>
+                                                <a href="{{url('/payees/edit/'.$list['id'])}}" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Update Payee"><i class="fas fa-edit"></i></a>
                                                 <a href="javascript:;" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Delete Payee" onclick="delete_report_records({{$list['id']}});"><i class="fas fa-trash"></i></a>
                                             </div>
                                         </td>

@@ -64,8 +64,63 @@ class PayeeController extends Controller
         return redirect('payees');
     }
 
+    public function edit($id){
+        $data['menu'] = 'Payees';
+        $data['payee'] = Payees::findOrFail($id);
+        if($data['payee']['type']==1){
+            $data['user'] = Suppliers::where('id',$data['payee']['type_id'])->first();
+        }elseif($data['payee']['type']==2){
+            $data['user'] = Employees::where('id',$data['payee']['type_id'])->first();
+        }else{
+            $data['user'] = Customers::where('id',$data['payee']['type_id'])->first();
+        }
+        return view('globals.payees.create',$data);
+    }
+
+    public function update(Request $request,$id){
+        $input = $request->all();
+        $payees = Payees::where('id',$id)->first();
+        if($request['type']==1){
+            $input['apply_tds_for_supplier'] = isset($request['apply_tds_for_supplier'])&&!empty($request['apply_tds_for_supplier'])?1:0;
+            $supplier = Suppliers::where('id',$payees['type_id'])->first();
+            $supplier->update($input);
+
+            $payee['name'] = $supplier['first_name'].' '.$supplier['last_name'];
+        }elseif ($request['type']==2){
+            $input['hire_date'] = !empty($request['hire_date'])?date('y-m-d',strtotime($request['hire_date'])):"";
+            if(!empty($request['released'])){
+                $input['released'] = date('y-m-d',strtotime($request['released']));
+            }
+            if(!empty($request['date_of_birth'])){
+                $input['date_of_birth'] = date('y-m-d',strtotime($request['date_of_birth']));
+            }
+            $employees = Employees::where('id',$payees['type_id'])->first();
+            $employees->update($input);
+
+            $payee['name'] = $employees['first_name'].' '.$employees['last_name'];
+        }else{
+            $customer = Customers::where('id',$payees['type_id'])->first();
+            $customer->update($input);
+
+            $payee['name'] = $customer['first_name'].' '.$customer['last_name'];
+        }
+        $payees->update($payee);
+        \Session::flash('message', 'Payee has been updated successfully!');
+        return redirect('payees');
+    }
+
     public function delete($id){
         $payee = Payees::where('id',$id)->first();
+        if($payee['type']==1){
+            $user = Suppliers::where('id',$payee['type_id'])->first();
+        }elseif($payee['type']==2){
+            $user = Employees::where('id',$payee['type_id'])->first();
+        }else{
+            $user = Customers::where('id',$payee['type_id'])->first();
+        }
+        if(!empty($user)){
+            $user->delete();
+        }
         $payee->delete();
         \Session::flash('error-message', 'Payee has been deleted successfully!');
         return redirect('payees');
