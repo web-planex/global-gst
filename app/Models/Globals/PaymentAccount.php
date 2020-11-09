@@ -81,4 +81,8 @@ class PaymentAccount extends Model
     public static $credit_card = [
         self::CREDIT_CARD => 'Credit card'
     ];
+
+    public function DefaultTax(){
+        return $this->belongsTo('App\Models\Globals\Taxes','default_tax_code');
+    }
 }

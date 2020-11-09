@@ -44,7 +44,7 @@
                                             @endif
                                             <td>{{$payment_account['name']}}</td>
                                             <td>{{$payment_account['description']}}</td>
-                                            <td>{{$payment_account['default_tax_code']}}</td>
+                                            <td>{{$payment_account['DefaultTax']['tax_name']}}</td>
                                             <td>{{number_format($payment_account['balance'],2)}}</td>
                                             <td>{{date('d F Y', strtotime($payment_account['as_of']))}}</td>
                                             <td>
