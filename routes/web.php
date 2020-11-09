@@ -46,6 +46,8 @@ Route::get('/payees/delete/{id}', 'Globals\PayeeController@delete')->name('payee
 //Payment
 Route::get('/payment-account', 'Globals\PaymentAccountController@index')->name('payment-account');
 Route::get('/payment-account/create', 'Globals\PaymentAccountController@create')->name('payment-account-add');
+Route::get('/payment-account/edit/{id}', 'Globals\PaymentAccountController@edit')->name('payment-account-edit');
 Route::any('/payment-account/addedit', 'Globals\PaymentAccountController@addedit')->name('payment-account-insert');
+Route::any('/payment-account/addedit/{id}', 'Globals\PaymentAccountController@addedit')->name('payment-account-update');
 Route::any('/payment-account/delete/{id}', 'Globals\PaymentAccountController@delete')->name('payment-account-delete');
 Route::post('/ajax/get-account-type', 'Globals\PaymentAccountController@ajaxGetAccountType')->name('ajax-get-account-type');

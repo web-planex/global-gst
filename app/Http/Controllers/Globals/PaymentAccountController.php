@@ -27,8 +27,14 @@ class PaymentAccountController extends Controller
         return view('globals.payment-account.create', $data);
     }
 
-    public function addedit($id = '') {
+    public function edit($id){
+        $data['menu'] = 'payment-account';
+        $data['payment_account'] = PaymentAccount::findOrFail($id);
+        $data['taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
+        return view('globals.payment-account.create', $data);
+    }
 
+    public function addedit($id = '') {
         $message = '';
         $validator = Validator::make(Request::all(), [
             'account_type' => 'required',

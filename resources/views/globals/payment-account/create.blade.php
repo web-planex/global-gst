@@ -10,7 +10,11 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="box card">
-                <form action="{{route('payment-account-insert')}}" method="POST">
+                @if(isset($payment_account) && !empty($payment_account))
+                    {!! Form::model($payment_account,['url' => url('payment-account/addedit/'.$payment_account->id),'method'=>'patch' ,'class' => 'form-horizontal','files'=>true,'id'=>'signupSuppliersForm']) !!}
+                @else
+                    {!! Form::open(['url' => url('payment-account/addedit'), 'class' => 'form-horizontal','files'=>true,'id'=>'signupSuppliersForm']) !!}
+                @endif
                     @csrf
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
@@ -82,7 +86,7 @@
                         </div>
                     </div>
                     <button type="submit" name="submit" class="btn btn-default btn-lg btn-primary">Submit</button>
-                </form>
+                {!! Form::close() !!}
             </div>
         </div>
     </div>
