@@ -32,8 +32,10 @@ Route::patch('/profile_update/{id}', 'Globals\UserController@update')->name('upd
 Route::get('/change-password/{id}', 'Globals\UserController@edit_password')->name('change-password');
 Route::patch('/update_password/{id}', 'Globals\UserController@update_password')->name('update-password');
 
+//Expense
 Route::get('/expense', 'Globals\ExpenseController@index')->name('expense');
 Route::get('/expense/create', 'Globals\ExpenseController@create')->name('expense-add');
+Route::post('/expense/insert', 'Globals\ExpenseController@insert')->name('expense-insert');
 
 //Payees
 Route::get('/payees', 'Globals\PayeeController@index')->name('payees');

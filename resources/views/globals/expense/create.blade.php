@@ -11,12 +11,12 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="box card">
-                <form action="{{route('payment-account-insert')}}" method="POST">
+                <form action="{{route('expense-insert')}}" method="POST">
                     @csrf
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-3 pull-right">
                             <label>Amounts are</label>
-                            <select class="form-control" id="amounts_are">
+                            <select class="form-control" name="tax_type" id="amounts_are">
                                 <option value="exclusive">Exclusive of Tax</option>
                                 <option value="inclusive">Inclusive of Tax</option>
                                 <option value="out_of_scope">Out of scope of Tax</option>
@@ -63,11 +63,11 @@
                             @endif
                         </div>
                         <div class="form-group mb-3 col-md-4">
-                            <label for="red_no">Ref no.</label>
-                            {!! Form::text('red_no', null, ['class' => 'form-control','id'=>'red_no']) !!}
-                            @if ($errors->has('red_no'))
+                            <label for="ref_no">Ref no.</label>
+                            {!! Form::text('ref_no', null, ['class' => 'form-control','id'=>'ref_no']) !!}
+                            @if ($errors->has('ref_no'))
                                 <span class="text-danger">
-                                    <strong>{{ $errors->first('red_no') }}</strong>
+                                    <strong>{{ $errors->first('ref_no') }}</strong>
                                 </span>
                             @endif
                         </div>
@@ -131,7 +131,7 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="2">
+                                                    <td colspan="2" style="padding-bottom: 0;padding-top: 0;">
                                                         <table width="100%"><tr></tr></table>
                                                     </td>
                                                 </tr>
@@ -147,6 +147,7 @@
                             </div>
                         </div>
                     </div>
+                    <button type="submit" name="submit" class="btn btn-default btn-lg btn-primary">Submit</button>
                 </form>
             </div>
         </div>
@@ -247,6 +248,10 @@
                 total = subtotal;
             }
             tax_raw_html += '<td width="50%" style="padding:10px 0 10px 15px;border:none;"><input type="text" class="form-control" name="tax-amount" value="Rs. ' + tax.toFixed(2) + '" readonly=""></td>';
+            if(tax_type == 'out_of_scope') {
+                tax_raw_html = '';
+                total = subtotal;
+            }
             $('#subtotal_row').siblings('tr').find('table').html(tax_raw_html);
             $('#total').val('Rs. '+ parseFloat(total).toFixed(2));
         }

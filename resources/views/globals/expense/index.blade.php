@@ -26,7 +26,6 @@
                                     <th>Payment Date</th>
                                     <th>Payment Method</th>
                                     <th>Ref No</th>
-                                    <th>Category</th>
                                     <th>Item</th>
                                     <th>Action</th>
                                 </tr>
@@ -41,7 +40,6 @@
                                         <td>{{$list['payment_date']}}</td>
                                         <td>{{$list['payment_method']}}</td>
                                         <td>{{$list['ref_no']}}</td>
-                                        <td>{{$list['expense_category_id']}}</td>
                                         <td>{{$list['item_id']}}</td>
                                         <td>Action</td>
                                     </tr>
