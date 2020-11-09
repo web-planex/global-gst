@@ -16,13 +16,13 @@ class CreateExpensesTable extends Migration
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->integer('tax_type');
             $table->integer('payee_id');
             $table->integer('payment_account_id');
-            $table->dateTime('payment_date');
+            $table->date('payment_date');
             $table->string('payment_method',50);
             $table->string('ref_no',50);
-            $table->integer('expense_category');
-            $table->integer('item_id');
+            $table->integer('expense_category')->default(null);
             $table->timestamps();
         });
     }
