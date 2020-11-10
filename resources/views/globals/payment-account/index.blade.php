@@ -49,8 +49,8 @@
                                             <td>{{date('d F Y', strtotime($payment_account['as_of']))}}</td>
                                             <td>
                                                 <div class="btn-group table-icons-box" role="group" aria-label="Basic example">
-                                                     <a href="{{url('payment-account/edit/'.$payment_account['id'])}}" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Update Payment Account"><i class="fas fa-edit"></i></a>
-                                                    <a href="javascript:;" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Delete Payment Account" onclick="delete_report_records({{$payment_account['id']}});"><i class="fas fa-trash"></i></a>
+                                                     <a href="{{url('payment-account/edit/'.$payment_account['id'])}}" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Update"><i class="fas fa-edit"></i></a>
+                                                    <a href="javascript:;" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Delete" onclick="delete_report_records({{$payment_account['id']}});"><i class="fas fa-trash"></i></a>
                                                 </div>
                                             </td>
                                         </tr>

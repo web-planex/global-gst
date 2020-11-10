@@ -23,7 +23,7 @@ class CreateExpensesTable extends Migration
             $table->date('payment_date');
             $table->string('payment_method',50);
             $table->string('ref_no',50);
-            $table->integer('expense_category')->default(null);
+            $table->integer('expense_category')->nullable();
             $table->string('amount_before_tax',20);
             $table->string('tax_amount',20);
             $table->string('total',20);
