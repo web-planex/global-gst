@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,13 +19,8 @@ Route::get('/', 'Auth\LoginController@showLoginForm');
 Route::get('/dashboard', 'HomeController@index')->name('home');
 
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
 Auth::routes();
-
-//Forgot Password
-Route::get('/reset-password', 'Globals\UserController@reset_password')->name('reset-password');
-Route::post('/reset_password', 'Globals\UserController@change_password')->name('reset_password');
-
-Route::post('/forgot_password', 'Globals\UserController@forgot_password')->name('forgot-password');
 
 //User
 Route::get('/edit-profile/{id}', 'Globals\UserController@edit')->name('edit-profile');
@@ -53,3 +49,11 @@ Route::any('/payment-account/addedit', 'Globals\PaymentAccountController@addedit
 Route::any('/payment-account/addedit/{id}', 'Globals\PaymentAccountController@addedit')->name('payment-account-update');
 Route::any('/payment-account/delete/{id}', 'Globals\PaymentAccountController@delete')->name('payment-account-delete');
 Route::post('/ajax/get-account-type', 'Globals\PaymentAccountController@ajaxGetAccountType')->name('ajax-get-account-type');
+
+Route::get('/clear-cache-all', function() {
+    Artisan::call('cache:clear');
+    Artisan::call('config:cache');
+    Artisan::call('config:clear');
+    dd("All Clear");
+});
+

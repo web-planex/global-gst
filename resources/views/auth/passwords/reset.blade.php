@@ -1,7 +1,9 @@
 @extends('layouts.app_admin')
 @section('content')
-    <form class="form-horizontal form-material" id="resetpasswordform" action="{{url('/reset_password')}}" method="post">
+    @include('inc.message')
+    <form class="form-horizontal form-material" id="resetpasswordform" action="{{ route('password.request') }}" method="post">
         {{ csrf_field() }}
+        <input type="hidden" name="token" value="{{ $token }}">
         <div class="text-center">
             <a href="javascript:void(0)" class="db"><img src="{{url('assets/images/logo-light-icon_old.png')}}" alt="Home" /></a>
         </div>
