@@ -20,29 +20,35 @@
                         <table id="myTable0" class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>User</th>
+                                    <th>#</th>
                                     <th>Payee</th>
-                                    <th>Payment Account Id</th>
+                                    <th>Payment Account</th>
                                     <th>Payment Date</th>
                                     <th>Payment Method</th>
                                     <th>Ref No</th>
-                                    <th>Item</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                             @if($expense->count()>0)
+                                @php $i=1; @endphp
                                 @foreach($expense as $list)
                                     <tr>
-                                        <td>{{$list['id']}}</td>
-                                        <td>{{$list['payee_id']}}</td>
-                                        <td>{{$list['payment_account_id']}}</td>
-                                        <td>{{$list['payment_date']}}</td>
-                                        <td>{{$list['payment_method']}}</td>
+                                        <td>{{$i}}</td>
+                                        <td>{{$list['name']}}</td>
+                                        <td>{{$list['payment_account_name']}}</td>
+                                        <td>{{date('d F Y', strtotime($list['payment_date']))}}</td>
+                                        <td>{{App\Models\Globals\Expense::$payment_method[$list['payment_method']]}}</td>
                                         <td>{{$list['ref_no']}}</td>
-                                        <td>{{$list['item_id']}}</td>
-                                        <td>Action</td>
+                                        <td>
+                                            <div class="btn-group table-icons-box" role="group" aria-label="Basic example">
+                                                <a href="{{route('expense-edit',$list['id'])}}" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Update"><i class="fas fa-edit"></i></a>
+                                                <a href="javascript:;" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Delete" onclick="delete_expense_records({{$list['id']}})"><i class="fas fa-trash"></i></a>
+                                                <form name="frm_delete_{{$list['id']}}" id="frm_delete_{{$list['id']}}" action="{{route('expense-delete',$list['id'])}}" method="get"></form>
+                                            </div>
+                                        </td>
                                     </tr>
+                                    @php $i++; @endphp
                                 @endforeach
                             @endif
                             </tbody>
@@ -57,4 +63,20 @@
             </div>
         </div>
     </div>
+<script type='text/javascript'>
+    function delete_expense_records(expense_id){
+        Swal.fire({
+            title: 'Are you want to delete this?',
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#01c0c8",
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                $('#frm_delete_'+expense_id).submit();
+            }
+        })
+    }
+</script>
 @endsection

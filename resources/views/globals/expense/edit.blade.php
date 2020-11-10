@@ -3,7 +3,7 @@
 
 <div class="row page-titles">
     <div class="col-sm-6 align-self-center">
-        <h4 class="text-themecolor">Add Expense</h4>
+        <h4 class="text-themecolor">Edit Expense</h4>
     </div>
 </div>
 <div class="content">
@@ -11,22 +11,23 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="box card">
-                <form action="{{route('expense-insert')}}" method="POST">
+                <form action="{{route('expense-update',$expense['id'])}}" method="post">
                     @csrf
+                    @method('patch')
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-3 pull-right">
                             <label>Amounts are</label>
                             <select class="form-control" name="tax_type" id="amounts_are">
-                                <option value="exclusive">Exclusive of Tax</option>
-                                <option value="inclusive">Inclusive of Tax</option>
-                                <option value="out_of_scope">Out of scope of Tax</option>
+                                <option value="exclusive" {{$expense['tax_type'] == 1 ? 'selected' : ''}}>Exclusive of Tax</option>
+                                <option value="inclusive" {{$expense['tax_type'] == 2 ? 'selected' : ''}}>Inclusive of Tax</option>
+                                <option value="out_of_scope" {{$expense['tax_type'] == 3 ? 'selected' : ''}}>Out of scope of Tax</option>
                             </select>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
                             <label for="payee">Payee <span class="text-danger">*</span></label>
-                            {!! Form::select('payee', $payees, null, ['class' => 'form-control', 'id' => 'payee']) !!}
+                            {!! Form::select('payee', $payees, $expense['payee_id'], ['class' => 'form-control', 'id' => 'payee']) !!}
                             @if ($errors->has('payee'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('payee') }}</strong>
@@ -35,7 +36,7 @@
                         </div>
                         <div class="form-group mb-3 col-md-6">
                             <label for="payment_account">Payment account <span class="text-danger">*</span></label>
-                            {!! Form::select('payment_account', $payment_accounts, null, ['class' => 'form-control', 'id' => 'payment_account']) !!}
+                            {!! Form::select('payment_account', $payment_accounts, $expense['payment_account_id'], ['class' => 'form-control', 'id' => 'payment_account']) !!}
                             @if ($errors->has('payment_account'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('payment_account') }}</strong>
@@ -46,7 +47,7 @@
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-4">
                             <label for="payment_date">Payment date <span class="text-danger">*</span></label>
-                            {!! Form::text('payment_date', null, ['class' => 'form-control','id'=>'payment_date']) !!}
+                            {!! Form::text('payment_date', date('d-m-Y',strtotime($expense['payment_date'])), ['class' => 'form-control','id'=>'payment_date']) !!}
                             @if ($errors->has('payment_date'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('payment_date') }}</strong>
@@ -55,7 +56,7 @@
                         </div>
                         <div class="form-group mb-3 col-md-4">
                             <label for="payment_method">Payment method</label>
-                            {!! Form::select('payment_method', \App\Models\Globals\Expense::$payment_method, null, ['class' => 'form-control', 'id' => 'payment_method']) !!}
+                            {!! Form::select('payment_method', \App\Models\Globals\Expense::$payment_method, $expense['payment_method'], ['class' => 'form-control', 'id' => 'payment_method']) !!}
                             @if ($errors->has('payment_method'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('payment_method') }}</strong>
@@ -64,7 +65,7 @@
                         </div>
                         <div class="form-group mb-3 col-md-4">
                             <label for="ref_no">Ref no.</label>
-                            {!! Form::text('ref_no', null, ['class' => 'form-control','id'=>'ref_no']) !!}
+                            {!! Form::text('ref_no', $expense['ref_no'], ['class' => 'form-control','id'=>'ref_no']) !!}
                             @if ($errors->has('ref_no'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('ref_no') }}</strong>
@@ -92,25 +93,36 @@
                                                     <th width="5%">&nbsp;</th>
                                                 </thead>
                                                 <tbody id="items_list_body">
-                                                    <tr class="itemTr">
-                                                        <td>1</td>
+                                                    @php $i=1; @endphp
+                                                    @foreach($expense_items as $item)
+                                                    @if($i > 1)
+                                                    <tr class="itemTr"></tr>
+                                                    @endif
+                                                    <tr class="{{$i > 1 ? 'itemNewCheckTr' : 'itemTr'}}">
+                                                        <td>{{$i}}</td>
                                                         <td>
-                                                            <input type="text" class="form-control" name="item_name[]">
+                                                            <input type="text" class="form-control" name="item_name[]" value="{{$item['item_name']}}">
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control" name="description[]">
+                                                            <input type="text" class="form-control" name="description[]" value="{{$item['description']}}">
                                                         </td>
                                                         <td>
-                                                            <input type="number" min="0" class="form-control quantity-input" name="quantity[]">
+                                                            <input type="number" min="0" class="form-control quantity-input" name="quantity[]" value="{{$item['quantity']}}">
                                                         </td>
                                                         <td>
-                                                            <input type="number" min="0" class="form-control rate-input" name="rate[]">
+                                                            <input type="number" min="0" class="form-control rate-input" name="rate[]" value="{{$item['rate']}}">
                                                         </td>
                                                         <td>
-                                                            <input type="number" min="0" class="form-control amount-input" name="amount[]">
+                                                            <input type="number" min="0" class="form-control amount-input" name="amount[]" value="{{$item['amount']}}">
                                                         </td>
-                                                        <td></td>
+                                                        <td>
+                                                            @if($i>1)
+                                                            <button type="button" class="btn btn-danger btn-circle remove-line-item"><i class="fa fa-times"></i></button>
+                                                            @endif
+                                                        </td>
                                                     </tr>
+                                                    @php $i++; @endphp
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                             <table class="table table-hover" style="width: 40%;float: right;">
@@ -150,7 +162,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" name="submit" class="btn btn-default btn-lg btn-primary">Submit</button>
+                    <button type="submit" name="submit" class="btn btn-default btn-lg btn-primary">Update</button>
                 </form>
             </div>
         </div>
@@ -158,6 +170,7 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
+        taxCalculation();
         $(document).on('change','#amounts_are',function(){
             taxCalculation();
         });

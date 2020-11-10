@@ -32,6 +32,9 @@ Route::patch('/update_password/{id}', 'Globals\UserController@update_password')-
 Route::get('/expense', 'Globals\ExpenseController@index')->name('expense');
 Route::get('/expense/create', 'Globals\ExpenseController@create')->name('expense-add');
 Route::post('/expense/insert', 'Globals\ExpenseController@insert')->name('expense-insert');
+Route::get('/expense/edit/{id}', 'Globals\ExpenseController@edit')->name('expense-edit');
+Route::patch('/expense/update/{id}', 'Globals\ExpenseController@update')->name('expense-update');
+Route::get('/expense/delete/{id}', 'Globals\ExpenseController@delete')->name('expense-delete');
 
 //Payees
 Route::get('/payees', 'Globals\PayeeController@index')->name('payees');
