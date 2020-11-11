@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="box card">
-                <form action="{{route('expense-insert')}}" method="POST">
+                <form id="formExpense" action="{{route('expense-insert')}}" method="POST">
                     @csrf
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-3 pull-right">
@@ -96,18 +96,23 @@
                                                         <td>1</td>
                                                         <td>
                                                             <input type="text" class="form-control" name="item_name[]">
+                                                            <span class="multi-error"><label class="error"></label></span>
                                                         </td>
                                                         <td>
                                                             <input type="text" class="form-control" name="description[]">
+                                                            <span class="multi-error"><label class="error"></label></span>
                                                         </td>
                                                         <td>
                                                             <input type="number" min="0" class="form-control quantity-input" name="quantity[]">
+                                                            <span class="multi-error"><label class="error"></label></span>
                                                         </td>
                                                         <td>
                                                             <input type="number" min="0" class="form-control rate-input" name="rate[]">
+                                                            <span class="multi-error"><label class="error"></label></span>
                                                         </td>
                                                         <td>
                                                             <input type="number" min="0" class="form-control amount-input" name="amount[]">
+                                                            <span class="multi-error"><label class="error"></label></span>
                                                         </td>
                                                         <td></td>
                                                     </tr>
@@ -150,7 +155,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" name="submit" class="btn btn-default btn-lg btn-primary">Submit</button>
+                    <button type="submit" name="submit" id="submit" class="btn btn-default btn-lg btn-primary">Submit</button>
                 </form>
             </div>
         </div>
@@ -162,6 +167,57 @@
             taxCalculation();
         });
 
+        $('#formExpense').on('submit', function(e){
+            var has_item_name_error = true;
+            var has_description_error = true;
+            var has_quantity_error = true;
+            var has_rate_error = true;
+            var has_amount_error = true;
+            
+            $('input[name="item_name[]"]').each(function(){
+                if($(this).val().trim() == '') {
+                    $(this).focus();
+                    $(this).css('border','2px solid #fb9678');
+                    return false;
+                } else {
+                    $(this).removeAttr('style');
+                }
+            });
+            
+            $('input[name="description[]"]').each(function(){
+                has_description_error = customValidation($(this));
+            });
+            
+            $('input[name="quantity[]"]').each(function(){
+                has_quantity_error = customValidation($(this));
+            });
+            
+            $('input[name="rate[]"]').each(function(){
+                has_rate_error = customValidation($(this));
+            });
+            
+            $('input[name="amount[]"]').each(function(){
+                has_amount_error = customValidation($(this));
+            });
+            
+//            if(has_item_name_error == false && has_description_error == false && has_quantity_error == false && 
+//               has_rate_error == false && has_amount_error == false) {
+//                return true;
+//            } else {
+//                return false;
+//            }
+        });
+        
+        function customValidation(ele) {
+            if($(ele).val().trim() == '') {
+                $(ele).focus();
+                $(ele).css('border','2px solid #fb9678');
+                return false;
+            } else {
+                $(ele).removeAttr('style');
+                return true;
+            }
+        }
         $("#addItem").click(function () {
             var numItems = $('.itemTr').length;
             var i = numItems + 1;
@@ -172,11 +228,11 @@
 
             var html = "<tr class=\"itemNewCheckTr\">";
             html += "<td>" + i + "</td>";
-            html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name[]\"></td>";
-            html += "<td><input type=\"text\" class=\"form-control\" name=\"description[]\"></td>";
-            html += "<td><input type=\"number\" min=\"0\" class=\"form-control quantity-input\" name=\"quantity[]\"></td>";
-            html += "<td><input type=\"number\" min=\"0\" class=\"form-control rate-input\" name=\"rate[]\"></td>";
-            html += "<td><input type=\"number\" min=\"0\" class=\"form-control amount-input\" name=\"amount[]\"></td>";
+            html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name[]\"><span class=\"multi-error\"></span></td>";
+            html += "<td><input type=\"text\" class=\"form-control\" name=\"description[]\"><span class=\"multi-error\"></span></td>";
+            html += "<td><input type=\"number\" min=\"0\" class=\"form-control quantity-input\" name=\"quantity[]\"><span class=\"multi-error\"></span></td>";
+            html += "<td><input type=\"number\" min=\"0\" class=\"form-control rate-input\" name=\"rate[]\"><span class=\"multi-error\"></span></td>";
+            html += "<td><input type=\"number\" min=\"0\" class=\"form-control amount-input\" name=\"amount[]\"><span class=\"multi-error\"></span></td>";
             html += "<td><button type=\"button\" class=\"btn btn-danger btn-circle remove-line-item \"><i class=\"fa fa-times\"></i> </button></td>";
             html += "</tr>";
             $("#items_list_body").append(html);

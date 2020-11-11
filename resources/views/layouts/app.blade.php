@@ -23,10 +23,6 @@
     <!--Validation Jquery File-->
     <script src="{{ asset('assets/dist/js/jquery.js') }}"></script>
     <script src="{{ asset('assets/dist/js/jquery.validate.js') }}"></script>
-
-    <style>
-        .error{color: #ff0000;}
-    </style>
 </head>
 <body class="skin-megna fixed-layout skin-default-dark">
 <div class="preloader">

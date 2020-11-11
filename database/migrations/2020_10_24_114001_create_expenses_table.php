@@ -22,8 +22,8 @@ class CreateExpensesTable extends Migration
             $table->integer('payment_account_id');
             $table->date('payment_date');
             $table->string('payment_method',50);
-            $table->string('ref_no',50)->nullable();
-            $table->integer('expense_category')->nullable();
+            $table->string('ref_no',50);
+            $table->integer('expense_category')->default(null);
             $table->string('amount_before_tax',20);
             $table->string('tax_amount',20);
             $table->string('total',20);

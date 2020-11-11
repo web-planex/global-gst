@@ -133,6 +133,21 @@ return [
         'email' => [
             'invalid_email' => 'Entered email address is invalid!',
         ],
+        'item_name.*' => [
+            'required' => 'Please enter item name!',
+        ],
+        'description.*' => [
+            'required' => 'Please enter description!',
+        ],
+        'quantity.*' => [
+            'required' => 'Please enter quantity!',
+        ],
+        'rate.*' => [
+            'required' => 'Please enter rate!',
+        ],
+        'amount.*' => [
+            'required' => 'Please enter amount!',
+        ]
     ],
 
     /*
