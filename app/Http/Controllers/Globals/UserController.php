@@ -36,7 +36,7 @@ class UserController extends Controller
 
         $in['user_id'] = $id;
         if($photo = $request->file('company_logo')){
-            $in['company_logo'] = $this->image($photo,'company');
+            $in['company_logo'] = $this->image($photo,$id.'/company');
         }
         $in['company_name'] = !empty($request['company_name'])?$request['company_name']:'';
         $in['pan_no'] = !empty($request['pan_no'])?$request['pan_no']:'';

@@ -66,13 +66,13 @@
 
 .gstinvoice-table-data .tabs-table-box > div {
 
-  padding:0 !important; 
+  padding:0 !important;
 
 }
 
 .td-padding {
 
-  padding:7px 1rem 0 1rem!important; 
+  padding:7px 1rem 0 1rem!important;
 
 }
 
@@ -80,7 +80,7 @@
 
   min-width: auto;
 
-  padding:0; 
+  padding:0;
 
 }
 
@@ -104,13 +104,13 @@
 
 .sync-orders-btn {
 
-  margin-right:0; 
+  margin-right:0;
 
 }
 
 .data-table-gst {
 
-  padding:0; 
+  padding:0;
 
 }
 
@@ -126,7 +126,7 @@
 
   margin-bottom:20px;
 
-  font-weight:500;  
+  font-weight:500;
 
 }
 
@@ -134,7 +134,7 @@
 
   width:72px;
 
-  border-radius: 6px; 
+  border-radius: 6px;
 
 }
 
@@ -148,7 +148,7 @@
 
 .products-table {
 
-  margin:0; 
+  margin:0;
 
 }
 
@@ -158,31 +158,31 @@
 
   background-color:#f8f9fa;
 
-  padding:15px 15px 15px 40px;   
+  padding:15px 15px 15px 40px;
 
 }
 
 .tablesaw-table {
 
-  margin:0; 
+  margin:0;
 
 }
 
 .tablesaw-table table thead tr th {
 
-  vertical-align: middle; 
+  vertical-align: middle;
 
 }
 
 .tablesaw-table table tbody tr td {
 
-  vertical-align: middle; 
+  vertical-align: middle;
 
 }
 
 .customers-table {
 
-  padding:0; 
+  padding:0;
 
 }
 
@@ -194,25 +194,25 @@
 
 .custom-file-csv-file {
 
-  margin-left:10px; 
+  margin-left:10px;
 
 }
 
 .custom-file-csv-file p {
 
-    font-size:12px ; 
+    font-size:12px ;
 
 }
 
 .report-builder-table {
 
-  padding:0; 
+  padding:0;
 
 }
 
 .report-builder-table table tbody tr td {
 
-  white-space: inherit; 
+  white-space: inherit;
 
 }
 
@@ -224,7 +224,7 @@
 
 /*.thumbnail-box-main.standard-template .media .media-left img {
 
-  width:120px; 
+  width:120px;
 
 }
 
@@ -242,7 +242,7 @@
 
   float: left;
 
-  margin-right:20px; 
+  margin-right:20px;
 
 }
 
@@ -252,7 +252,7 @@
 
   margin:0;
 
-  font-size:15px; 
+  font-size:15px;
 
 }
 
@@ -264,13 +264,13 @@
 
   font-size:15px;
 
-  color:  
+  /*color:  */
 
 }
 
 .pickup-address-main {
 
-  padding:20px; 
+  padding:20px;
 
 }
 
@@ -278,7 +278,7 @@
 
   width:100%;
 
-  display: inline-block; 
+  display: inline-block;
 
 }
 
@@ -286,13 +286,13 @@
 
   float: left;
 
-  width:25%; 
+  width:25%;
 
 }
 
 .shipping-method-checkbox .float-left label {
 
-    line-height:24px;  
+    line-height:24px;
 
   }
 
@@ -310,19 +310,19 @@
 
   float: left;
 
-  width:33.33%; 
+  width:33.33%;
 
 }
 
 .shipping-method-section {
 
-  margin-bottom:20px; 
+  margin-bottom:20px;
 
 }
 
 .shipping-method-main {
 
-  padding:0; 
+  padding:0;
 
 }
 
@@ -344,13 +344,13 @@
 
 .form-control-fix-width {
 
-    width:92%; 
+    width:92%;
 
 }
 
 .middle-row-icons {
 
-  margin:0; 
+  margin:0;
 
 }
 
@@ -358,7 +358,7 @@
 
   width:40px;
 
-  height:35px;  
+  height:35px;
 
 }
 
@@ -376,7 +376,7 @@
 
 #edit, #undo {
 
-  padding-right:0 !important; 
+  padding-right:0 !important;
 
 }
 
@@ -388,7 +388,7 @@
 
 .fulfilled-font {
 
-  font-size:11px; 
+  font-size:11px;
 
 }
 
@@ -404,7 +404,7 @@
 
   float: left;
 
-  margin-right:10px;  
+  margin-right:10px;
 
 }
 
@@ -414,7 +414,7 @@
 
   float: left;
 
-  margin-right:10px; 
+  margin-right:10px;
 
 }
 
@@ -450,19 +450,19 @@
 
     float: left;
 
-    padding:0 10px; 
+    padding:0 10px;
 
 }
 
 .code-snippet {
 
-  width: 100%; 
+  width: 100%;
 
-  background-color:#f9f9f9 !important; 
+  background-color:#f9f9f9 !important;
 
-  padding-top:40px !important; 
+  padding-top:40px !important;
 
-  height: 316px; 
+  height: 316px;
 
 }
 
@@ -470,25 +470,25 @@
 
 .code-snippet:hover {
 
-  color:#fff; 
+  color:#fff;
 
 }
 
 .signature-image-bg {
 
-  min-height:267px; 
+  min-height:267px;
 
-} 
+}
 
 .email-notifications-bg {
 
-  min-height:256px; 
+  min-height:256px;
 
 }
 
 #swal2-title {
 
-  font-size:18px !important; 
+  font-size:18px !important;
 
 }
 
@@ -500,7 +500,7 @@
 
   text-align: center;
 
-  min-height: 316px; 
+  min-height: 316px;
 
 }
 
@@ -522,13 +522,13 @@ label.product-price-setting-section span.switchery > small {
 
   width: 25px;
 
-  height:25px; 
+  height:25px;
 
 }
 
 .terms-and-conditions-textarea {
 
-  min-height:140px; 
+  min-height:140px;
 
 }
 
@@ -556,7 +556,7 @@ label.test-mode span.switchery > small {
 
   width: 25px;
 
-  height:25px; 
+  height:25px;
 
 }
 
@@ -582,7 +582,7 @@ label.test-mode span.switchery > small {
 
 .headre-bg .card-header.bg-primary h4 {
 
-  font-size:16px; 
+  font-size:16px;
 
 }
 
@@ -592,7 +592,7 @@ label.test-mode span.switchery > small {
 
 .pricing-plan-box {
 
-  margin:0; 
+  margin:0;
 
 }
 
@@ -664,7 +664,7 @@ label.test-mode span.switchery > small {
 
     padding-bottom:15px;
 
-    color:#fff;   
+    color:#fff;
 
 }
 
@@ -686,13 +686,13 @@ label.test-mode span.switchery > small {
 
   border-radius:4px;
 
-  font-weight: 600;  
+  font-weight: 600;
 
 }
 
 .pricing-plan-box .panel-body .the-price h1 b.highlight-cashback-given  {
 
-  color: #008000; 
+  color: #008000;
 
   background-color: #e9f7e2;
 
@@ -709,7 +709,7 @@ label.test-mode span.switchery > small {
 .plan-active-badge {
 
     display: inline-block;
-    
+
     /*color: #333;*/
     color: #fff;
     font-size: 11px;
@@ -731,7 +731,7 @@ label.test-mode span.switchery > small {
 
 .change-plan-Basic {
 
-  background-color:#f2f7f2; 
+  background-color:#f2f7f2;
 
 }
 
@@ -753,10 +753,10 @@ label.test-mode span.switchery > small {
 .generate-shipping-lable-box {
   float: left;
   margin-right:15px;
-  margin-bottom:15px;  
+  margin-bottom:15px;
 }
 .generate-shipping-lable-box p {
-  margin:7px 0 0 0; 
+  margin:7px 0 0 0;
 }
 .generate-shipping-table {}
 .generate-shipping-table .tablesaw-table table tbody tr td .input-group {
@@ -770,7 +770,7 @@ label.test-mode span.switchery > small {
 }
 
 .detail-page-section {
-  padding:0; 
+  padding:0;
 }
 .detail-page-section form .col {
   padding-right: 0;
@@ -835,11 +835,11 @@ ul.gst-detail-list-box li a {
     text-decoration: none;
 }
 ul.gst-detail-list-box li a:hover {
-  color:#03a9f3;  
+  color:#03a9f3;
 }
 
 .gst-detail-box {
-  margin:0; 
+  margin:0;
 }
 .gst-detail-box h2 {
   color: #212529;
@@ -864,17 +864,17 @@ ul.gst-detailList {
 ul.gst-detailList li {
   margin:4px 0 4px 15px;
   padding:0;
-  list-style: disc;  
+  list-style: disc;
   color:#4b505e;
   font-size:15px;
-  font-weight: normal; 
+  font-weight: normal;
 }
 ul.gst-detailList li.imgBox {
   margin:15px 0 35px 15px;
-  list-style: none; 
+  list-style: none;
 }
 ul.gst-detailList li.imgBox.border {
-  border-color:#ccc!important; 
+  border-color:#ccc!important;
 }
 ul.gst-detailList li.imgBox.MarginNone {
   margin-bottom:0;
@@ -884,7 +884,7 @@ ul.gst-detailList li.imgBox.MarginNone {
 }
 
 .donwload-invoice-font {
-  font-size:12px; 
+  font-size:12px;
 }
 .orders-list-td {
   margin-bottom: 0;
@@ -966,9 +966,9 @@ table.product-gst-table tbody td {
 @media (max-width: 575px) {
 .generate-shipping-lable-box {
     float: none;
-    width:100%; 
+    width:100%;
     margin-right:0;
-    margin-bottom:15px;  
+    margin-bottom:15px;
   }
 }
 /*** sumanbhai 02-06-2020 ***/
@@ -986,7 +986,7 @@ table.product-gst-table tbody td {
 
   .standard-template-left h4 {
 
-    margin-bottom:8px !important; 
+    margin-bottom:8px !important;
 
   }
 
@@ -1050,13 +1050,13 @@ table.product-gst-table tbody td {
 
   .code-snippet {
 
-    padding:10px 0; 
+    padding:10px 0;
 
   }
 
   .email-notifications-bg {
 
-    min-height:273px; 
+    min-height:273px;
 
   }
 
@@ -1104,13 +1104,13 @@ table.product-gst-table tbody td {
 
   .code-snippet {
 
-    padding:10px 0; 
+    padding:10px 0;
 
   }
 
   .email-notifications-bg {
 
-    min-height:294px; 
+    min-height:294px;
 
   }
 
@@ -1118,7 +1118,7 @@ table.product-gst-table tbody td {
 
     width:33%;
 
-    margin-bottom:10px; 
+    margin-bottom:10px;
 
   }
 
@@ -1130,9 +1130,9 @@ table.product-gst-table tbody td {
 
 @media (min-width: 992px) {
 
-  
 
-  
+
+
 
 }
 
@@ -1140,7 +1140,7 @@ table.product-gst-table tbody td {
 
   .custom-file-csv-file {
 
-    margin-bottom:15px;   
+    margin-bottom:15px;
 
   }
 
@@ -1148,7 +1148,7 @@ table.product-gst-table tbody td {
 
     float: left;
 
-    width:33%; 
+    width:33%;
 
   }
 
@@ -1156,9 +1156,9 @@ table.product-gst-table tbody td {
 
     width:100%;
 
-    margin-top:10px; 
+    margin-top:10px;
 
-    margin-bottom:15px;  
+    margin-bottom:15px;
 
 }
 
@@ -1166,31 +1166,31 @@ table.product-gst-table tbody td {
 
   float:left;
 
-  margin:15px 5px; 
+  margin:15px 5px;
 
 }
 
 .get-collections-btn {
 
-  margin-bottom:15px; 
+  margin-bottom:15px;
 
 }
 
 .signature-image-bg {
 
-  min-height:inherit; 
+  min-height:inherit;
 
 }
 
 .email-notifications-bg {
 
-  min-height:inherit; 
+  min-height:inherit;
 
 }
 
 .terms-and-conditions-textarea {
 
-  min-height:100px; 
+  min-height:100px;
 
 }
 
@@ -1242,7 +1242,7 @@ table.product-gst-table tbody td {
 
   .table-responsive.data-table-gst-box  #myTable_wrapper {
 
-    overflow:inherit !important; 
+    overflow:inherit !important;
 
   }
 
@@ -1256,13 +1256,13 @@ table.product-gst-table tbody td {
 
     margin-top:20px;
 
-    margin-bottom:20px;  
+    margin-bottom:20px;
 
   }
 
   /*.cart-page-view-section {
 
-    margin-top:20px; 
+    margin-top:20px;
 
   }*/
 
@@ -1290,7 +1290,7 @@ table.product-gst-table tbody td {
 
     width:100%;
 
-    margin-bottom:15px; 
+    margin-bottom:15px;
 
   }
 
@@ -1298,7 +1298,7 @@ table.product-gst-table tbody td {
 
     margin-left:0;
 
-    margin-top:15px;  
+    margin-top:15px;
 
   }
 
@@ -1320,7 +1320,7 @@ table.product-gst-table tbody td {
 
   /*.other-useful .other-useful-box img {
 
-    width:165px; 
+    width:165px;
 
   }*/
 
@@ -1342,7 +1342,7 @@ table.product-gst-table tbody td {
 
     font-size:13px;
 
-    margin-top:3px;  
+    margin-top:3px;
 
   }
 
@@ -1360,7 +1360,7 @@ table.product-gst-table tbody td {
 
     font-weight: bold;
 
-    color:#ffd700 !important; 
+    color:#ffd700 !important;
 
   }
 
@@ -1376,7 +1376,7 @@ table.product-gst-table tbody td {
 
     font-weight: bold;
 
-    color:#ffd700 !important; 
+    color:#ffd700 !important;
 
   }
 
@@ -1408,7 +1408,7 @@ table.product-gst-table tbody td {
 
     min-width: 260px;
 
-    padding: 0; 
+    padding: 0;
 
   }
 
@@ -1416,7 +1416,7 @@ table.product-gst-table tbody td {
 
     /*width:300px;*/
 
-    margin-bottom:10px;  
+    margin-bottom:10px;
 
   }
 
@@ -1444,7 +1444,7 @@ table.product-gst-table tbody td {
 
 .thumbnail-box-main.standard-template .media .media-body a.current-template-btn {
 
-  margin-top:10px; 
+  margin-top:10px;
 
 }
 
@@ -1456,7 +1456,7 @@ table.product-gst-table tbody td {
 
   .thumbnail-box-main.standard-template .media .media-left {
 
-    margin-bottom:20px; 
+    margin-bottom:20px;
 
   }
 
@@ -1474,7 +1474,7 @@ table.product-gst-table tbody td {
 
   .start-date-export {
 
-    margin-bottom:15px; 
+    margin-bottom:15px;
 
   }
 
@@ -1486,7 +1486,7 @@ table.product-gst-table tbody td {
 
   .shipping-method-checkbox .float-left {
 
-    margin-bottom:10px; 
+    margin-bottom:10px;
 
   }
 
@@ -1502,7 +1502,7 @@ table.product-gst-table tbody td {
 
   .standard-template-left h4 {
 
-    margin-bottom:8px !important; 
+    margin-bottom:8px !important;
 
   }
 
@@ -1554,11 +1554,11 @@ table.product-gst-table tbody td {
 
   .import-customers-csv-File {
 
-    font-size:12px; 
+    font-size:12px;
 
   }
 
-  
+
 
 }
 
@@ -1566,8 +1566,11 @@ table.product-gst-table tbody td {
 
   .preview-current-box a.btn-success {
 
-    margin-bottom:15px; 
+    margin-bottom:15px;
 
   }
 
 }
+
+.card-header{padding: 10px 1.25rem!important;}
+.card-header.bg-primary h4{font-size: 16px;}

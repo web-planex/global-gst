@@ -53,6 +53,10 @@ Route::any('/payment-account/addedit/{id}', 'Globals\PaymentAccountController@ad
 Route::any('/payment-account/delete/{id}', 'Globals\PaymentAccountController@delete')->name('payment-account-delete');
 Route::post('/ajax/get-account-type', 'Globals\PaymentAccountController@ajaxGetAccountType')->name('ajax-get-account-type');
 
+//Invoice Setting
+Route::get('/invoice-setting', 'Globals\InvoiceSettingController@index')->name('invoice-setting');
+Route::any('/invoice-setting/addedit', 'Globals\InvoiceSettingController@store')->name('invoice-setting-add');
+
 Route::get('/clear-cache-all', function() {
     Artisan::call('cache:clear');
     Artisan::call('config:cache');
