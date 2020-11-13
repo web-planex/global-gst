@@ -87,7 +87,7 @@ class ExpenseController extends Controller
                 ];
                 ExpenseItems::create($data);
             }
-            return redirect()->back()->with('message','Expense has been created successfully!');
+            return redirect('expense')->with('message','Expense has been created successfully!');
         }
     }
     

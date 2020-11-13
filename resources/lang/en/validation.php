@@ -133,7 +133,7 @@ return [
         'email' => [
             'invalid_email' => 'Entered email address is invalid!',
         ],
-    ],
+        ],
 
     /*
     |--------------------------------------------------------------------------
