@@ -19,6 +19,7 @@
     <link href="{{ asset('assets/switchery/dist/switchery.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/prism/prism.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/select2/dist/select2.css') }}" rel="stylesheet">
     <script src="{{ asset('assets/jquery/jquery-3.2.1.min.js') }}"></script>
     <!--Validation Jquery File-->
     <script src="{{ asset('assets/dist/js/jquery.js') }}"></script>
@@ -145,6 +146,7 @@
 <script src="{{ asset('assets/switchery/dist/switchery.min.js') }}"></script>
 <script src="{{ asset('assets/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
 <script src="{{ asset('assets/sweetalert2/sweet-alert.init.js') }}"></script>
+<script src="{{ asset('assets/select2/dist/select2.js')}}"></script>
 <script>
     $(document).ready(function() {
         if ($("#message_body").length > 0) {
@@ -161,6 +163,17 @@
 
             });
         }
+        $('.amounts-are-select2').select2();
+        var flg = 0;
+
+        $('.amounts-are-select2').on("select2:open", function () {
+            flg++;
+            if (flg == 1) {
+                $this_html = jQuery('#wrp').html();
+                $(".select2-results").prepend("<div class='select2-results__option'>" + 
+                $this_html + "</div>");
+            }
+        });
     });
 </script>
 <script>
