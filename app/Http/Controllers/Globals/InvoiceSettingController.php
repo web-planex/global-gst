@@ -38,7 +38,7 @@ class InvoiceSettingController extends Controller
         if($photo = $request->file('logo_image')){
             $detail = getimagesize($request['logo_image']);
             if($detail[0] > 100 && $detail[1] > 100){
-                throw ValidationException::withMessages([
+                    throw ValidationException::withMessages([
                     'logo_image' => [trans('The logo image file has invalid image dimensions.')],
                 ]);
             }else{
@@ -49,7 +49,7 @@ class InvoiceSettingController extends Controller
             $detail2 = getimagesize($request['signature_image']);
             if($detail2[0] > 150 && $detail2[1] > 80){
                 throw ValidationException::withMessages([
-                    'logo_image' => [trans('The signature image file has invalid image dimensions.')],
+                    'signature_image' => [trans('The signature image file has invalid image dimensions.')],
                 ]);
             }else{
                 $input['signature_image'] = $this->image($photo2,$user->id.'/invoice_setting');

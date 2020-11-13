@@ -133,10 +133,6 @@ return [
         'email' => [
             'invalid_email' => 'Entered email address is invalid!',
         ],
-
-        'logo_image' => [
-            'invalid_size' => 'Entered email address is invalid!',
-        ],
     ],
 
     /*
