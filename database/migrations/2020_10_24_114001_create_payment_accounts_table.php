@@ -14,7 +14,7 @@ class CreatePaymentAccountsTable extends Migration
     public function up()
     {
         Schema::create('payment_accounts', function (Blueprint $table) {
-            $table->id();
+            $table->integer('id',1);
             $table->integer('user_id');
             $table->integer('account_type');
             $table->integer('detail_type');

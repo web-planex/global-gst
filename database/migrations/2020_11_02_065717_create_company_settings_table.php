@@ -14,7 +14,7 @@ class CreateCompanySettingsTable extends Migration
     public function up()
     {
         Schema::create('company_settings', function (Blueprint $table) {
-            $table->id();
+            $table->integer('id',1);
             $table->integer('user_id');
             $table->string('company_name',50)->nullable();
             $table->text('company_logo')->nullable();
