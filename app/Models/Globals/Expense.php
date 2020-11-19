@@ -30,4 +30,14 @@ class Expense extends Model
         self::PAYMENT_METHOD_CHEQUE => 'Cheque',
         self::PAYMENT_METHOD_CREDIT_CARD => 'Credit Card',
     ];
+
+    const USER_1 = 1;
+    const USER_2 = 2;
+    const USER_3 = 3;
+
+    public static $user_type = [
+        self::USER_1 => 'Suppliers',
+        self::USER_2 => 'Employees',
+        self::USER_3 => 'Customers',
+    ];
 }

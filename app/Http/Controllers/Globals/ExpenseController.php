@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Globals;
 
 use App\Http\Controllers\Controller;
+use App\Models\Globals\Customers;
+use App\Models\Globals\Employees;
 use App\Models\Globals\Expense;
 use App\Models\Globals\Payees;
 use App\Models\Globals\PaymentAccount;
+use App\Models\Globals\Suppliers;
 use App\Models\Globals\Taxes;
 use App\Models\Globals\ExpenseItems;
 use Illuminate\Http\Request;
@@ -33,13 +36,13 @@ class ExpenseController extends Controller
         $payees = payees::where('user_id',$user->id)->pluck('name','id')->toArray();
         $payment_accounts = PaymentAccount::where('user_id',$user->id)->pluck('name','id')->toArray();
         $data['taxes'] = Taxes::where('status', 1)->get();
+        $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
         $data['payees'] = $payees;
         $data['payment_accounts'] = $payment_accounts;
         return view('globals.expense.create',$data);
     }
-    
+
     public function insert(Request $request) {
-        
         $user = Auth::user();
         $validator = Validator::make($request->all(), [
             'payee' => 'required',
@@ -90,7 +93,7 @@ class ExpenseController extends Controller
             return redirect('expense')->with('message','Expense has been created successfully!');
         }
     }
-    
+
     public function edit($id) {
         $user = Auth::user();
         $data['menu'] = 'Expense';
@@ -99,11 +102,16 @@ class ExpenseController extends Controller
         $data['payees'] = payees::where('user_id',$user->id)->pluck('name','id')->toArray();
         $data['payment_accounts'] = PaymentAccount::where('user_id',$user->id)->pluck('name','id')->toArray();
         $data['taxes'] = Taxes::where('status', 1)->get();
+        $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
         return view('globals.expense.edit',$data);
     }
-    
+
     public function update(Request $request, $id) {
         $expense = Expense::findOrFail($id);
+
+        return $request->all();
+
+
         $expense->tax_id = $request['taxes'];
 
         if($request['tax_type'] == 'exclusive') {
@@ -135,7 +143,7 @@ class ExpenseController extends Controller
         if($request->has('submit')) {
             $expense->update();
             ExpenseItems::where('expense_id',$id)->delete();
-            
+
             $data = [];
             for($i=0;$i<count($request['item_name']);$i++) {
                 $data = [
@@ -151,11 +159,62 @@ class ExpenseController extends Controller
             return redirect('expense')->with('message','Expense has been updated successfully!');
         }
     }
-    
+
     public function delete($id){
         $expense = Expense::where('id',$id)->first();
         $expense->delete();
         \Session::flash('error-message', 'Expense has been deleted successfully!');
         return redirect('expense');
+    }
+
+    public function payee_store(Request $request){
+        $payeeValue = $request->all();
+        $input=  array();
+        $user = Auth::user();
+        parse_str($payeeValue['data'], $input);
+        $input['user_id'] = $user->id;
+        if($payeeValue['user_type']==1){
+            $input['apply_tds_for_supplier'] = isset($input['apply_tds_for_supplier'])&&!empty($input['apply_tds_for_supplier'])?1:0;
+            $user_type = Suppliers::create($input);
+
+            $payee['type'] = 1;
+        }elseif ($payeeValue['user_type']==2){
+            $input['hire_date'] = !empty($input['hire_date'])?date('y-m-d',strtotime($input['hire_date'])):"";
+            $input['released'] =  !empty($input['released'])?date('y-m-d',strtotime($input['released'])):null;
+            $input['date_of_birth'] =  !empty($input['date_of_birth'])?date('y-m-d',strtotime($input['date_of_birth'])):null;
+
+            $user_type = Employees::create($input);
+
+            $payee['type'] = 2;
+        }else{
+            $user_type = Customers::create($input);
+
+            $payee['type'] = 3;
+        }
+
+        $payee['user_id'] = $user->id;
+        $payee['name'] = $user_type['first_name'].' '.$user_type['last_name'];
+        $payee['type_id'] = $user_type['id'];
+        $new_payee = Payees::create($payee);
+
+        $data['id'] = $new_payee['id'];
+        $data['name'] = $new_payee['name'];
+
+        return $data;
+    }
+
+    public function payment_account_store(Request $request){
+        $paymentValue = $request->all();
+        $input=  array();
+        $user = Auth::user();
+        parse_str($paymentValue['data'], $input);
+        $input['user_id'] = $user->id;
+        $input['as_of'] = !empty($input['as_of'])?date("Y-m-d", strtotime($input['as_of'])):"";
+        $paymentAccount = PaymentAccount::create($input);
+
+        $data['id'] = $paymentAccount['id'];
+        $data['name'] = $paymentAccount['name'];
+
+        return $data;
     }
 }

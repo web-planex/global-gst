@@ -19,6 +19,7 @@
     <link href="{{ asset('assets/switchery/dist/switchery.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/prism/prism.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/select2/dist/select2.css') }}" rel="stylesheet">
     <script src="{{ asset('assets/jquery/jquery-3.2.1.min.js') }}"></script>
     <!--Validation Jquery File-->
     <script src="{{ asset('assets/dist/js/jquery.js') }}"></script>
@@ -145,6 +146,7 @@
 <script src="{{ asset('assets/switchery/dist/switchery.min.js') }}"></script>
 <script src="{{ asset('assets/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
 <script src="{{ asset('assets/sweetalert2/sweet-alert.init.js') }}"></script>
+<script src="{{ asset('assets/select2/dist/select2.js')}}"></script>
 <script>
     $(document).ready(function() {
         if ($("#message_body").length > 0) {
@@ -158,10 +160,10 @@
                     "save table contextmenu directionality emoticons template paste textcolor"
                 ],
                 toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
-
             });
         }
-        });
+        $('.amounts-are-select2').select2();
+    });
 </script>
 <script>
     $('#start_date_orderlist, #end_date_orderlist').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false });
