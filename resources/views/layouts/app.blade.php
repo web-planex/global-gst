@@ -160,20 +160,9 @@
                     "save table contextmenu directionality emoticons template paste textcolor"
                 ],
                 toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
-
             });
         }
         $('.amounts-are-select2').select2();
-        var flg = 0;
-
-        $('.amounts-are-select2').on("select2:open", function () {
-            flg++;
-            if (flg == 1) {
-                $this_html = jQuery('#wrp').html();
-                $(".select2-results").prepend("<div class='select2-results__option'>" + 
-                $this_html + "</div>");
-            }
-        });
     });
 </script>
 <script>
