@@ -15,7 +15,13 @@ class UserController extends Controller
     public function edit($id){
         $data['menu'] = 'Profile';
         $data['user'] = User::where('id',$id)->first();
-        $data['company'] = CompanySettings::where('user_id',$id)->first();
+        $session_company = Session::get('company');
+
+        if(!empty($session_company)){
+            $data['company'] = CompanySettings::where('id',$session_company)->first();
+        }else{
+            $data['company'] = CompanySettings::where('user_id',$id)->first();
+        }
         if(!empty($data['company'])){
             $logo = url($data['company']['company_logo']);
             $data['company']['company_logo'] = implode('/',array_unique(explode('/', $logo)));;
