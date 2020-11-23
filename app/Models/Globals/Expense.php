@@ -8,7 +8,6 @@ class Expense extends Model
 {
     protected $fillable = [
         'user_id',
-        'tax_id',
         'tax_type',
         'payee_id',
         'payment_account_id',

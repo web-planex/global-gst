@@ -650,8 +650,10 @@
                 var tax_text = $(this).parent('td').next('td').find('.tax-input').find(":selected").text();
                 var amount = parseFloat($(this).val());
             });
-            for(var a=0; a < tax_arr.length; a++) {
-                $("."+tax_arr[a]).removeClass("hide");
+            if(tax_type != 'out_of_scope') {
+                for(var a=0; a < tax_arr.length; a++) {
+                    $("."+tax_arr[a]).removeClass("hide");
+                }
             }
 
             for (var key in tax_total_arr) {
@@ -680,6 +682,8 @@
                         var new_tax_value = tax_amount / 2;
                         $("#input_1_"+key).val("Rs. "+new_tax_value.toFixed(2));
                         $("#input_2_"+key).val("Rs. "+new_tax_value.toFixed(2));
+                    } else {
+                        
                     }
 
                     
@@ -703,6 +707,10 @@
             if(tax_type == 'exclusive') {
                 total = parseFloat(subtotal) + parseFloat(total_tax);
             } else if(tax_type == 'inclusive') {
+                total = parseFloat(subtotal);
+            } else {
+                total_tax = 0;
+                amount_before_tax = parseFloat(subtotal).toFixed(2);
                 total = parseFloat(subtotal);
             }
 

@@ -8,6 +8,7 @@ class ExpenseItems extends Model
 {
     protected $fillable = [
         'expense_id',
+        'tax_id',
         'item_name',
         'description',
         'quantity',

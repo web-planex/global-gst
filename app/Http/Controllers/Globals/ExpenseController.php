@@ -52,7 +52,6 @@ class ExpenseController extends Controller
 
         $expense = new Expense();
         $expense->user_id = $user->id;
-        $expense->tax_id = $request['taxes'];
 
         if($request['tax_type'] == 'exclusive') {
             $expense->tax_type = 1;
@@ -82,6 +81,7 @@ class ExpenseController extends Controller
             for($i=0;$i<count($request['item_name']);$i++) {
                 $data = [
                     'expense_id' => $expense_id,
+                    'tax_id' => $request['taxes'][$i],
                     'item_name' => $request['item_name'][$i],
                     'description' => $request['description'][$i],
                     'quantity' => $request['quantity'][$i],
