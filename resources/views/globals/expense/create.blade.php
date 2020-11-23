@@ -19,15 +19,19 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="box card">
-                {!! Form::open(['url' => url('expense/insert'), 'class' => 'form-horizontal','files'=>true,'id'=>'formExpense']) !!}
+                @if(isset($expense) && !empty($expense))
+                    {!! Form::model($expense,['url' => url('expense/update/'.$expense->id),'method'=>'patch' ,'class' => 'form-horizontal','files'=>true,'id'=>'formExpense']) !!}
+                @else
+                    {!! Form::open(['url' => url('expense/insert'), 'class' => 'form-horizontal','files'=>true,'id'=>'formExpense']) !!}
+                @endif
                     @csrf
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-3 pull-right">
                             <label>Amounts are</label>
                             <select class="form-control amounts-are-select2" name="tax_type" id="amounts_are">
-                                <option value="exclusive">Exclusive of Tax</option>
-                                <option value="inclusive">Inclusive of Tax</option>
-                                <option value="out_of_scope">Out of scope of Tax</option>
+                                <option value="exclusive" @if(isset($expense) && $expense['tax_type']==1)) selected @endif>Exclusive of Tax</option>
+                                <option value="inclusive" @if(isset($expense) && $expense['tax_type']==2)) selected @endif>Inclusive of Tax</option>
+                                <option value="out_of_scope" @if(isset($expense) && $expense['tax_type']==3)) selected @endif>Out of scope of Tax</option>
                             </select>
                         </div>
                     </div>
@@ -107,6 +111,45 @@
                                                     <th width="5%">&nbsp;</th>
                                                 </thead>
                                                 <tbody id="items_list_body">
+                                                @php $i=1; @endphp
+                                                @if(!empty($expense_items))
+                                                    @foreach($expense_items as $item)
+                                                        @if($i > 1)
+                                                            <tr class="itemTr"></tr>
+                                                        @endif
+                                                        <tr class="{{$i > 1 ? 'itemNewCheckTr' : 'itemTr'}}">
+                                                            <td>{{$i}}</td>
+                                                            <td>
+                                                                <input type="text" class="form-control" name="item_name[]" value="{{$item['item_name']}}">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" name="description[]" value="{{$item['description']}}">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" min="0" class="form-control quantity-input" name="quantity[]" value="{{$item['quantity']}}">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" min="0" class="form-control rate-input" name="rate[]" value="{{$item['rate']}}">
+                                                            </td>
+                                                            <td>
+                                                                <input type="number" min="0" class="form-control amount-input" name="amount[]" value="{{$item['amount']}}">
+                                                            </td>
+                                                            <td id="taxes">
+                                                                <select id="taxes" class="form-control tax-input" name="taxes[]">
+                                                                    @foreach($taxes as $tax)
+                                                                        <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name']}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                @if($i>1)
+                                                                    <button type="button" class="btn btn-danger btn-circle remove-line-item"><i class="fa fa-times"></i></button>
+                                                                @endif
+                                                            </td>
+                                                        </tr>
+                                                        @php $i++; @endphp
+                                                    @endforeach
+                                                @else
                                                     <tr class="itemTr">
                                                         <td>1</td>
                                                         <td>
@@ -133,6 +176,7 @@
                                                         </td>
                                                         <td></td>
                                                     </tr>
+                                                @endif
                                                 </tbody>
                                             </table>
                                             <table class="table table-hover" style="width: 40%;float: right;">
@@ -571,155 +615,6 @@
             taxCalculationNew();
         });
 
-        function subTotal() {
-            amount = 0;
-            $('.amount-input').each(function(){
-                var val = $(this).val();
-                if(val == null || val == '') {
-                    val = 0;
-                }
-                amount += parseFloat(val);
-            });
-            $('#subtotal').val('Rs. ' + amount.toFixed(2));
-
-            $('.tax-label').html(amount.toFixed(2));
-            return amount.toFixed(2);
-        }
-        
-        function getTotalTax() {
-            
-            amount = 0;
-            $('.tax-input-row').each(function() {
-                var val = $(this).val();
-                    if(!$(this).parent('td').parent('tr').hasClass('hide')){
-                    val = val.replace('Rs. ','');
-                    if(val == null || val == '') {
-                        val = 0;
-                    }
-                    amount += parseFloat(val);
-                }
-            });
-            console.log(amount);
-            return amount;
-        }
-
-        function taxCalculationNew() {
-            
-            var subtotal = subTotal();
-            var tax_type = $('#amounts_are').find(":selected").val();
-            var tax = 0;
-            var total = 0;
-            var amount_before_tax = 0;
-
-            var tax_arr = [];
-            var tax_total_arr = [];
-            var i = 0;
-            
-            $('.tax-input').find('option').each(function() {
-                var str = $(this).filter(":selected").text();
-                var opt = $(this).text();
-                var opt_str = opt.replace("% ", "_");
-                var tax_str = str.replace("% ", "_");
-                var amount = 0;
-                amount = $(this).parent('select').parent('td').prev('td').find('.amount-input').val();
-                
-                var tax_name = tax_str.split('_').pop();
-                var tax_rate = tax_str.substr(0, tax_str.indexOf('_'));
-                var tax_raw_html = '';
-                var tax_id = $(this).val();
-                if(tax_str != '') {
-                    var tax_hidden = 0;
-                    tax_hidden += parseFloat(amount);
-                    $("#id_"+ tax_str).val(tax_hidden);
-                }
-
-                var cls_opt_str = "." + opt_str;
-                $(cls_opt_str).addClass("hide");
-                if(tax_str != '' && tax_str !=  null) {
-                    tax_arr[i] = tax_str;
-                    if(tax_total_arr.hasOwnProperty(tax_str)) {
-                        tax_total_arr[tax_str] += parseFloat(amount);
-                    } else {
-                        tax_total_arr[tax_str] = parseFloat(amount);
-                    }
-                    i++;
-                }
-                
-            });
-            $('.amount-input').each(function() {
-                var tax_text = $(this).parent('td').next('td').find('.tax-input').find(":selected").text();
-                var amount = parseFloat($(this).val());
-            });
-            if(tax_type != 'out_of_scope') {
-                for(var a=0; a < tax_arr.length; a++) {
-                    $("."+tax_arr[a]).removeClass("hide");
-                }
-            }
-
-            for (var key in tax_total_arr) {
-                
-                var value = parseFloat(tax_total_arr[key]);
-                var tax = key.split('_')[1];
-                var tax_rate = key.substr(0, key.indexOf('_'));
-                var tax_amount = 0;
-
-                if(tax == 'GST') {
-                    if(tax_type == 'exclusive') {
-                        var tax_rate_gst = tax_rate / 2;
-                        $("#label_1_"+key).html(value.toFixed(2));
-                        $("#label_2_"+key).html(value.toFixed(2));
-                        tax_amount = value * tax_rate_gst / 100;
-                        amount_before_tax = parseFloat(subtotal).toFixed(2);
-                        $("#input_1_"+key).val("Rs. "+tax_amount.toFixed(2));
-                    $("#input_2_"+key).val("Rs. "+tax_amount.toFixed(2));
-                    } else if(tax_type == 'inclusive') {
-                        var tax_rate_gst = tax_rate / 2;
-                        tax_amount = value * tax_rate / (parseInt(100) + parseInt(tax_rate));
-                        var new_value = parseFloat(value) - parseFloat(tax_amount);
-                        amount_before_tax = parseFloat(new_value).toFixed(2);
-                        $("#label_1_"+key).html(new_value.toFixed(2));
-                        $("#label_2_"+key).html(new_value.toFixed(2));
-                        var new_tax_value = tax_amount / 2;
-                        $("#input_1_"+key).val("Rs. "+new_tax_value.toFixed(2));
-                        $("#input_2_"+key).val("Rs. "+new_tax_value.toFixed(2));
-                    } else {
-                        
-                    }
-
-                    
-                } else {
-                    
-                    if(tax_type == 'exclusive') {
-                        tax_amount = value * tax_rate / 100;
-                        amount_before_tax = parseFloat(subtotal).toFixed(2);
-                        $("#label_"+key).html(value.toFixed(2));
-                    } else if(tax_type == 'inclusive') {
-                        tax_amount = value * tax_rate / (parseInt(100) + parseInt(tax_rate));
-                        
-                        var new_value = parseFloat(value) - parseFloat(tax_amount);
-                        amount_before_tax = parseFloat(new_value).toFixed(2);
-                        $("#label_"+key).html(new_value.toFixed(2));
-                    }
-                    $("#input_"+key).val("Rs. "+tax_amount.toFixed(2));
-                }
-            }
-            var total_tax = getTotalTax();
-            if(tax_type == 'exclusive') {
-                total = parseFloat(subtotal) + parseFloat(total_tax);
-            } else if(tax_type == 'inclusive') {
-                total = parseFloat(subtotal);
-            } else {
-                total_tax = 0;
-                amount_before_tax = parseFloat(subtotal).toFixed(2);
-                total = parseFloat(subtotal);
-            }
-
-            $('#total').val('Rs. '+ parseFloat(total).toFixed(2));
-            $('#amount_before_tax').val(amount_before_tax);
-            $('#tax_amount').val(total_tax.toFixed(2));
-            $('#total_amount').val(parseFloat(total).toFixed(2));
-        }
-
         function taxCalculation() {
             var subtotal = subTotal();
             var tax_str = $('.tax-input').find(":selected").text();
@@ -764,5 +659,160 @@
         });
         $('form.formExpense').validate();
     });
+
+    function subTotal() {
+        amount = 0;
+        $('.amount-input').each(function(){
+            var val = $(this).val();
+            if(val == null || val == '') {
+                val = 0;
+            }
+            amount += parseFloat(val);
+        });
+        $('#subtotal').val('Rs. ' + amount.toFixed(2));
+
+        $('.tax-label').html(amount.toFixed(2));
+        return amount.toFixed(2);
+    }
+
+    function getTotalTax() {
+
+        amount = 0;
+        $('.tax-input-row').each(function() {
+            var val = $(this).val();
+            if(!$(this).parent('td').parent('tr').hasClass('hide')){
+                val = val.replace('Rs. ','');
+                if(val == null || val == '') {
+                    val = 0;
+                }
+                amount += parseFloat(val);
+            }
+        });
+        console.log(amount);
+        return amount;
+    }
+
+    function taxCalculationNew() {
+
+        var subtotal = subTotal();
+        var tax_type = $('#amounts_are').find(":selected").val();
+        var tax = 0;
+        var total = 0;
+        var amount_before_tax = 0;
+
+        var tax_arr = [];
+        var tax_total_arr = [];
+        var i = 0;
+
+        $('.tax-input').find('option').each(function() {
+            var str = $(this).filter(":selected").text();
+            var opt = $(this).text();
+            var opt_str = opt.replace("% ", "_");
+            var tax_str = str.replace("% ", "_");
+            var amount = 0;
+            amount = $(this).parent('select').parent('td').prev('td').find('.amount-input').val();
+
+            var tax_name = tax_str.split('_').pop();
+            var tax_rate = tax_str.substr(0, tax_str.indexOf('_'));
+            var tax_raw_html = '';
+            var tax_id = $(this).val();
+            if(tax_str != '') {
+                var tax_hidden = 0;
+                tax_hidden += parseFloat(amount);
+                $("#id_"+ tax_str).val(tax_hidden);
+            }
+
+            var cls_opt_str = "." + opt_str;
+            $(cls_opt_str).addClass("hide");
+            if(tax_str != '' && tax_str !=  null) {
+                tax_arr[i] = tax_str;
+                if(tax_total_arr.hasOwnProperty(tax_str)) {
+                    tax_total_arr[tax_str] += parseFloat(amount);
+                } else {
+                    tax_total_arr[tax_str] = parseFloat(amount);
+                }
+                i++;
+            }
+
+        });
+        $('.amount-input').each(function() {
+            var tax_text = $(this).parent('td').next('td').find('.tax-input').find(":selected").text();
+            var amount = parseFloat($(this).val());
+        });
+        if(tax_type != 'out_of_scope') {
+            for(var a=0; a < tax_arr.length; a++) {
+                $("."+tax_arr[a]).removeClass("hide");
+            }
+        }
+
+        for (var key in tax_total_arr) {
+
+            var value = parseFloat(tax_total_arr[key]);
+            var tax = key.split('_')[1];
+            var tax_rate = key.substr(0, key.indexOf('_'));
+            var tax_amount = 0;
+
+            if(tax == 'GST') {
+                if(tax_type == 'exclusive') {
+                    var tax_rate_gst = tax_rate / 2;
+                    $("#label_1_"+key).html(value.toFixed(2));
+                    $("#label_2_"+key).html(value.toFixed(2));
+                    tax_amount = value * tax_rate_gst / 100;
+                    amount_before_tax = parseFloat(subtotal).toFixed(2);
+                    $("#input_1_"+key).val("Rs. "+tax_amount.toFixed(2));
+                    $("#input_2_"+key).val("Rs. "+tax_amount.toFixed(2));
+                } else if(tax_type == 'inclusive') {
+                    var tax_rate_gst = tax_rate / 2;
+                    tax_amount = value * tax_rate / (parseInt(100) + parseInt(tax_rate));
+                    var new_value = parseFloat(value) - parseFloat(tax_amount);
+                    amount_before_tax = parseFloat(new_value).toFixed(2);
+                    $("#label_1_"+key).html(new_value.toFixed(2));
+                    $("#label_2_"+key).html(new_value.toFixed(2));
+                    var new_tax_value = tax_amount / 2;
+                    $("#input_1_"+key).val("Rs. "+new_tax_value.toFixed(2));
+                    $("#input_2_"+key).val("Rs. "+new_tax_value.toFixed(2));
+                } else {
+
+                }
+
+
+            } else {
+
+                if(tax_type == 'exclusive') {
+                    tax_amount = value * tax_rate / 100;
+                    amount_before_tax = parseFloat(subtotal).toFixed(2);
+                    $("#label_"+key).html(value.toFixed(2));
+                } else if(tax_type == 'inclusive') {
+                    tax_amount = value * tax_rate / (parseInt(100) + parseInt(tax_rate));
+
+                    var new_value = parseFloat(value) - parseFloat(tax_amount);
+                    amount_before_tax = parseFloat(new_value).toFixed(2);
+                    $("#label_"+key).html(new_value.toFixed(2));
+                }
+                $("#input_"+key).val("Rs. "+tax_amount.toFixed(2));
+            }
+        }
+        var total_tax = getTotalTax();
+        if(tax_type == 'exclusive') {
+            total = parseFloat(subtotal) + parseFloat(total_tax);
+        } else if(tax_type == 'inclusive') {
+            total = parseFloat(subtotal);
+        } else {
+            total_tax = 0;
+            amount_before_tax = parseFloat(subtotal).toFixed(2);
+            total = parseFloat(subtotal);
+        }
+
+        $('#total').val('Rs. '+ parseFloat(total).toFixed(2));
+        $('#amount_before_tax').val(amount_before_tax);
+        $('#tax_amount').val(total_tax.toFixed(2));
+        $('#total_amount').val(parseFloat(total).toFixed(2));
+    }
+
+    @if(isset($expense) && !empty($expense))
+        $(document).ready(function(){
+            taxCalculationNew();
+        });
+    @endif
 </script>
 @endsection

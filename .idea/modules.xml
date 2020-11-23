@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/gstapp.iml" filepath="$PROJECT_DIR$/.idea/gstapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/global-gst.iml" filepath="$PROJECT_DIR$/.idea/global-gst.iml" />
     </modules>
   </component>
 </project>

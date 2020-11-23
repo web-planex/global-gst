@@ -103,16 +103,19 @@ class ExpenseController extends Controller
         $data['payment_accounts'] = PaymentAccount::where('user_id',$user->id)->pluck('name','id')->toArray();
         $data['taxes'] = Taxes::where('status', 1)->get();
         $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
-        return view('globals.expense.edit',$data);
+        return view('globals.expense.create',$data);
     }
 
     public function update(Request $request, $id) {
-        $expense = Expense::findOrFail($id);
+        $user = Auth::user();
+        $validator = Validator::make($request->all(), [
+            'payee' => 'required',
+            'payment_account' => 'required',
+            'payment_date' => 'required'
+        ]);
 
-        return $request->all();
-
-
-        $expense->tax_id = $request['taxes'];
+        $expense = Expense::where('id',$id)->first();
+        $expense->user_id = $user->id;
 
         if($request['tax_type'] == 'exclusive') {
             $expense->tax_type = 1;
@@ -130,24 +133,22 @@ class ExpenseController extends Controller
         $expense->tax_amount = $request['tax_amount'];
         $expense->total = $request['total'];
 
-        $validator = Validator::make($request->all(), [
-            'payee' => 'required',
-            'payment_account' => 'required',
-            'payment_date' => 'required'
-        ]);
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         }
         if($request->has('submit')) {
-            $expense->update();
-            ExpenseItems::where('expense_id',$id)->delete();
+            $expense->save();
 
+            ExpenseItems::where('expense_id',$expense['id'])->delete();
+
+            $expense_id = $expense->id;
             $data = [];
             for($i=0;$i<count($request['item_name']);$i++) {
                 $data = [
-                    'expense_id' => $id,
+                    'expense_id' => $expense_id,
+                    'tax_id' => $request['taxes'][$i],
                     'item_name' => $request['item_name'][$i],
                     'description' => $request['description'][$i],
                     'quantity' => $request['quantity'][$i],

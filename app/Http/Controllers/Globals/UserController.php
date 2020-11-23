@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -16,7 +17,8 @@ class UserController extends Controller
         $data['user'] = User::where('id',$id)->first();
         $data['company'] = CompanySettings::where('user_id',$id)->first();
         if(!empty($data['company'])){
-            $data['company']['company_logo'] = substr($data['company']['company_logo'],6);
+            $logo = url($data['company']['company_logo']);
+            $data['company']['company_logo'] = implode('/',array_unique(explode('/', $logo)));;
         }
         return view('user.edit_profile',$data);
     }
@@ -130,5 +132,11 @@ class UserController extends Controller
             \Session::flash('message', 'Your password is successfully changed!');
             return redirect('/login');
         }
+    }
+
+    public function set_company(Request $request){
+        Session::forget('company');
+        session(['company'=>$request['data']]);
+        return;
     }
 }

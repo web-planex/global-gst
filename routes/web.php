@@ -22,6 +22,9 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Auth::routes();
 
+//SET COMPANY
+Route::post('ajax/set_company', 'Globals\UserController@set_company');
+
 //User
 Route::get('/edit-profile/{id}', 'Globals\UserController@edit')->name('edit-profile');
 Route::patch('/profile_update/{id}', 'Globals\UserController@update')->name('update-profile');
@@ -58,6 +61,10 @@ Route::post('/ajax/get-account-type', 'Globals\PaymentAccountController@ajaxGetA
 //Invoice Setting
 Route::get('/invoice-setting', 'Globals\InvoiceSettingController@index')->name('invoice-setting');
 Route::any('/invoice-setting/addedit', 'Globals\InvoiceSettingController@store')->name('invoice-setting-add');
+
+//Company Management
+Route::resource('/companies', 'Globals\CompanyController');
+Route::get('/companies/delete/{id}', 'Globals\CompanyController@destroy');
 
 Route::get('/clear-cache-all', function() {
     Artisan::call('cache:clear');

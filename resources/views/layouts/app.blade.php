@@ -1,3 +1,8 @@
+<?php
+    $user_detail = \Illuminate\Support\Facades\Auth::user();
+    $all_companies = \App\CompanySettings::where('user_id',$user_detail->id)->select('company_name','id')->get();
+    $set_company = \Illuminate\Support\Facades\Session::get('company');
+?>
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -55,13 +60,23 @@
                             class="nav-link sidebartoggler d-none d-lg-block d-md-block waves-effect waves-dark"
                             href="javascript:void(0)"><i class="icon-menu"></i></a> </li>
                 </ul>
-                <?php $user_detail = \Illuminate\Support\Facades\Auth::user(); ?>
+
+                <div class="dropdown u-pro mr-5">
+                    <select class="form-control amounts-are-select2" name="company" id="company_list">
+                        <option value="0">Select Company</option>
+                        @foreach($all_companies as $com)
+                            <option value="{{$com['id']}}" @if(isset($set_company) && $set_company==$com['id']) selected @endif >{{$com['company_name']}}</option>
+                        @endforeach
+                    </select>
+                </div>
+
                 <div class="dropdown u-pro mr-3">
                     <span class="dropdown-toggle text-white" style="cursor: pointer" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="hidden-md-down">{{$user_detail->name}} &nbsp;<i class="fa fa-angle-down"></i></span>
                     </span>
                     <div class="dropdown-menu dropdown-menu-header animated flipInY" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="{{url('edit-profile/'.$user_detail->id)}}"><i class="ti-user pr-2"></i>My Profile</a>
+                        <a class="dropdown-item" href="{{url('companies/'.$user_detail->id)}}"><i class="ti-briefcase pr-2"></i>My Companies</a>
                         <a class="dropdown-item" href="{{url('change-password/'.$user_detail->id)}}"><i class="ti-settings pr-2"></i>Change Password</a>
                         <a class="dropdown-item" href="{{url('logout')}}"><i class="fa fa-power-off pr-2"></i>Logout</a>
                     </div>
@@ -229,6 +244,20 @@
             ]
         });
         $('.buttons-copy, .buttons-csv, .buttons-print, .buttons-pdf, .buttons-excel').addClass('btn btn-primary mr-1');
+    });
+
+    $('#company_list').change(function(){
+       var cid = $(this).val();
+       if(cid>0){
+           $.ajax({
+               url: '{{url('ajax/set_company')}}',
+               type: 'POST',
+               data:  {'data':cid},
+               success: function (result) {
+                    window.location.reload();
+               }
+           });
+       }
     });
 </script>
 </body>

@@ -16,6 +16,7 @@ class CreateExpenseItemsTable extends Migration
         Schema::create('expense_items', function (Blueprint $table) {
             $table->integer('id',1);
             $table->integer('expense_id');
+            $table->integer('tax_id');
             $table->string('item_name', 50);
             $table->text('description');
             $table->string('quantity', 10);
