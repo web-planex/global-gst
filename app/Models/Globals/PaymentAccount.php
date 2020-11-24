@@ -8,7 +8,7 @@ class PaymentAccount extends Model
 {
     //protected $connection = 'new_db';
 
-    protected $fillable = ['user_id','account_type', 'detail_type','name','description','default_tax_code','balance','as_of'];
+    protected $fillable = ['user_id','company_id','account_type', 'detail_type','name','description','default_tax_code','balance','as_of'];
 
     const ACCOUNT_TYPE_CURRENT_ASSETS = 1;
     const ACCOUNT_TYPE_BANK = 2;

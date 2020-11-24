@@ -1,8 +1,3 @@
-<?php
-    $user_detail = \Illuminate\Support\Facades\Auth::user();
-    $all_companies = \App\CompanySettings::where('user_id',$user_detail->id)->select('company_name','id')->get();
-    $set_company = \Illuminate\Support\Facades\Session::get('company');
-?>
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -64,20 +59,20 @@
                 <div class="dropdown u-pro mr-5">
                     <select class="form-control amounts-are-select2" name="company" id="company_list">
                         <option value="0">Select Company</option>
-                        @foreach($all_companies as $com)
-                            <option value="{{$com['id']}}" @if(isset($set_company) && $set_company==$com['id']) selected @endif >{{$com['company_name']}}</option>
+                        @foreach(\App\Http\Controllers\Controller::AllCompanies()  as $com)
+                            <option value="{{$com['id']}}" @if(\App\Http\Controllers\Controller::SetCompany() && \App\Http\Controllers\Controller::SetCompany()==$com['id']) selected @endif >{{$com['company_name']}}</option>
                         @endforeach
                     </select>
                 </div>
 
                 <div class="dropdown u-pro mr-3">
                     <span class="dropdown-toggle text-white" style="cursor: pointer" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="hidden-md-down">{{$user_detail->name}} &nbsp;<i class="fa fa-angle-down"></i></span>
+                        <span class="hidden-md-down">{{\App\Http\Controllers\Controller::AuthUser()->name}} &nbsp;<i class="fa fa-angle-down"></i></span>
                     </span>
                     <div class="dropdown-menu dropdown-menu-header animated flipInY" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="{{url('edit-profile/'.$user_detail->id)}}"><i class="ti-user pr-2"></i>My Profile</a>
-                        <a class="dropdown-item" href="{{url('companies/'.$user_detail->id)}}"><i class="ti-briefcase pr-2"></i>My Companies</a>
-                        <a class="dropdown-item" href="{{url('change-password/'.$user_detail->id)}}"><i class="ti-settings pr-2"></i>Change Password</a>
+                        <a class="dropdown-item" href="{{url('edit-profile/'.\App\Http\Controllers\Controller::AuthUser()->id)}}"><i class="ti-user pr-2"></i>My Profile</a>
+                        <a class="dropdown-item" href="{{url('companies/'.\App\Http\Controllers\Controller::AuthUser()->id)}}"><i class="ti-briefcase pr-2"></i>My Companies</a>
+                        <a class="dropdown-item" href="{{url('change-password/'.\App\Http\Controllers\Controller::AuthUser()->id)}}"><i class="ti-settings pr-2"></i>Change Password</a>
                         <a class="dropdown-item" href="{{url('logout')}}"><i class="fa fa-power-off pr-2"></i>Logout</a>
                     </div>
                 </div>

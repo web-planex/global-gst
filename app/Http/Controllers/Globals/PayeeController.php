@@ -18,7 +18,7 @@ class PayeeController extends Controller
 
     public function index(Request $request){
         $data['menu'] = 'Payees';
-        $data['payees'] = Payees::where('user_id',Auth::user()->id)->orderBy('id','DESC')->paginate($this->pagination);
+        $data['payees'] = Payees::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->orderBy('id','DESC')->paginate($this->pagination);
         return view('globals.payees.index',$data);
     }
 
@@ -31,7 +31,10 @@ class PayeeController extends Controller
         $input = $request->all();
         $user = Auth::user();
         $input['user_id'] = $user->id;
+        $input['company_id'] = $this->Company();
+
         $payee['user_id'] = $user->id;
+        $payee['company_id'] = $this->Company();
         if($request['type']==1){
             $input['apply_tds_for_supplier'] = isset($request['apply_tds_for_supplier'])&&!empty($request['apply_tds_for_supplier'])?1:0;
             $supplier = Suppliers::create($input);

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payees extends Model
 {
-    protected $fillable = ['user_id','name','type','type_id'];
+    protected $fillable = ['user_id','company_id','name','type','type_id'];
 
     const TYPE_SUPPLIERS = 1;
     const TYPE_EMPLOYEES = 2;

@@ -17,7 +17,7 @@ class PaymentAccountController extends Controller
 
     public function index(){
         $data['menu'] = 'payment-account';
-        $data['payment_accounts'] = PaymentAccount::where('user_id',Auth::user()->id)->orderBy('id','DESC')->paginate($this->pagination);
+        $data['payment_accounts'] = PaymentAccount::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->orderBy('id','DESC')->paginate($this->pagination);
         return view('globals.payment-account.index', $data);
     }
 
@@ -59,6 +59,7 @@ class PaymentAccountController extends Controller
 
         if (Request::has('submit')) {
             $payment_account->user_id = Auth::user()->id;
+            $payment_account->compapny_id = $this->Company();
             $payment_account->account_type = Request::input('account_type');
             $payment_account->detail_type = Request::input('detail_type');
             $payment_account->name = Request::input('name');

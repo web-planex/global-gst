@@ -35,8 +35,8 @@
                                 @foreach($expense as $list)
                                     <tr>
                                         <td>{{$i}}</td>
-                                        <td>{{$list['name']}}</td>
-                                        <td>{{$list['payment_account_name']}}</td>
+                                        <td>{{$list['Payee']['name']}}</td>
+                                        <td>{{$list['PaymentAccount']['name']}}</td>
                                         <td>{{date('d F Y', strtotime($list['payment_date']))}}</td>
                                         <td>{{App\Models\Globals\Expense::$payment_method[$list['payment_method']]}}</td>
                                         <td>{{$list['ref_no']}}</td>

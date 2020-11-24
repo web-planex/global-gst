@@ -24,7 +24,9 @@ class UserController extends Controller
         }
         if(!empty($data['company'])){
             $logo = url($data['company']['company_logo']);
-            $data['company']['company_logo'] = implode('/',array_unique(explode('/', $logo)));;
+            if(!empty($data['company']['company_logo'])){
+                $data['company']['company_logo'] = implode('/',array_unique(explode('/', $logo)));
+            }
         }
         return view('user.edit_profile',$data);
     }

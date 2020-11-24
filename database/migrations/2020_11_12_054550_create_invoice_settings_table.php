@@ -16,6 +16,7 @@ class CreateInvoiceSettingsTable extends Migration
         Schema::create('invoice_settings', function (Blueprint $table) {
             $table->integer('id',1);
             $table->integer('user_id');
+            $table->integer('company_id');
             $table->text('logo_image')->nullable();
             $table->text('signature_image')->nullable();
             $table->string('store_name',20)->nullable();

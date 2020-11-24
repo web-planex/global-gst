@@ -8,6 +8,7 @@ class Expense extends Model
 {
     protected $fillable = [
         'user_id',
+        'company_id',
         'tax_type',
         'payee_id',
         'payment_account_id',
@@ -39,4 +40,12 @@ class Expense extends Model
         self::USER_2 => 'Employees',
         self::USER_3 => 'Customers',
     ];
+
+    public function Payee(){
+        return $this->belongsTo('App\Models\Globals\Payees','payee_id');
+    }
+
+    public function PaymentAccount(){
+        return $this->belongsTo('App\Models\Globals\PaymentAccount','payment_account_id');
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\CompanySettings;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
@@ -53,6 +54,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'company_name' => ['required', 'string', 'max:255'],
         ]);
     }
 
@@ -74,6 +76,12 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+        ]);
+
+        //Company Entry
+        CompanySettings::create([
+            'user_id' => $user['id'],
+            'company_name' => $data['company_name'],
         ]);
 
         $root = base_path() . '/public/upload/'.$user['id'];

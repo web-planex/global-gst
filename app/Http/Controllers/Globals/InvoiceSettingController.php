@@ -6,13 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Globals\InvoiceSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 
 class InvoiceSettingController extends Controller
 {
     public function index(){
         $data['menu'] = 'Invoice Setting';
-        $data['invoice_setting'] = InvoiceSetting::where('user_id',Auth::user()->id)->first();
+        $data['invoice_setting'] = InvoiceSetting::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->first();
         return view('globals.invoice-setting.form',$data);
     }
 
@@ -30,6 +31,7 @@ class InvoiceSettingController extends Controller
         $invoice_setting = InvoiceSetting::where('user_id',$user->id)->first();
         $input = $request->all();
         $input['user_id'] = $user->id;
+        $input['company_id'] = $this->Company();
         $input['product_price_gst'] = isset($request['product_price_gst'])&&!empty($request['product_price_gst'])?1:0;
         $input['shipping_price_gst'] = isset($request['shipping_price_gst'])&&!empty($request['shipping_price_gst'])?1:0;
         $input['shipping_gst'] = isset($request['shipping_gst'])&&!empty($request['shipping_gst'])?1:0;

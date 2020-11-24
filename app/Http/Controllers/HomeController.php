@@ -31,9 +31,9 @@ class HomeController extends Controller
     public function index()
     {
         $data['menu'] = 'Dashboard';
-        $data['total_expense'] = Expense::where('user_id',Auth::user()->id)->count();
-        $data['total_payee'] = Payees::where('user_id',Auth::user()->id)->count();
-        $data['total_payment_account'] = PaymentAccount::where('user_id',Auth::user()->id)->count();
+        $data['total_expense'] = Expense::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->count();
+        $data['total_payee'] = Payees::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->count();
+        $data['total_payment_account'] = PaymentAccount::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->count();
         $session = Session::get('company');
         if(empty($session)){
             $company = CompanySettings::where('user_id',Auth::user()->id)->orderBy('id','DESC')->first();

@@ -28,6 +28,26 @@
         </div>
         <div class="form-group ">
             <div class="col-xs-12">
+                <input class="form-control" type="text" name="company_name" required="" placeholder="Company Name">
+                @error('company_name')
+                <span class="text-danger" role="alert" style="color: #a94442!important;">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+            </div>
+        </div>
+{{--        <div class="form-group ">--}}
+{{--            <div class="col-xs-12">--}}
+{{--                <input class="form-control" type="text" name="company_email" required="" placeholder="Company Email">--}}
+{{--                @error('company_email')--}}
+{{--                <span class="text-danger" role="alert" style="color: #a94442!important;">--}}
+{{--                    <strong>{{ $message }}</strong>--}}
+{{--                </span>--}}
+{{--                @enderror--}}
+{{--            </div>--}}
+{{--        </div>--}}
+        <div class="form-group ">
+            <div class="col-xs-12">
                 <input class="form-control" type="password" name="password" required="" placeholder="Password">
                 @error('password')
                 <span class="text-danger" role="alert" style="color: #a94442!important;">

@@ -16,6 +16,7 @@ class CreateExpensesTable extends Migration
         Schema::create('expenses', function (Blueprint $table) {
             $table->integer('id',1);
             $table->integer('user_id');
+            $table->integer('company_id');
             $table->integer('tax_type')->comment('(1 => Exclusive, 2 => Inclusive, 3 => Out of scope)');
             $table->integer('payee_id');
             $table->integer('payment_account_id');

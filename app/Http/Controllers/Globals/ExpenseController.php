@@ -13,6 +13,7 @@ use App\Models\Globals\Taxes;
 use App\Models\Globals\ExpenseItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class ExpenseController extends Controller
@@ -23,18 +24,15 @@ class ExpenseController extends Controller
 
     public function index(){
         $data['menu'] = 'Expense';
-        $data['expense'] = Expense::join('payees', 'payees.id', '=', 'expenses.payee_id')
-                ->join('payment_accounts','payment_accounts.id','=','expenses.payment_account_id')
-                ->select('expenses.*','payees.name','payment_accounts.name as payment_account_name')->where('expenses.user_id',Auth::user()->id)
-                ->orderBy('expenses.id','DESC')->paginate($this->pagination);
+        $data['expense'] = Expense::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->orderBy('id','DESC')->paginate($this->pagination);
         return view('globals.expense.index',$data);
     }
 
     public function create(){
         $user = Auth::user();
         $data['menu'] = 'Expense';
-        $payees = payees::where('user_id',$user->id)->pluck('name','id')->toArray();
-        $payment_accounts = PaymentAccount::where('user_id',$user->id)->pluck('name','id')->toArray();
+        $payees = payees::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
+        $payment_accounts = PaymentAccount::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
         $data['taxes'] = Taxes::where('status', 1)->get();
         $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
         $data['payees'] = $payees;
@@ -52,6 +50,7 @@ class ExpenseController extends Controller
 
         $expense = new Expense();
         $expense->user_id = $user->id;
+        $expense->company_id = $this->Company();
 
         if($request['tax_type'] == 'exclusive') {
             $expense->tax_type = 1;
@@ -174,6 +173,7 @@ class ExpenseController extends Controller
         $user = Auth::user();
         parse_str($payeeValue['data'], $input);
         $input['user_id'] = $user->id;
+        $input['company_id'] = $this->Company();
         if($payeeValue['user_type']==1){
             $input['apply_tds_for_supplier'] = isset($input['apply_tds_for_supplier'])&&!empty($input['apply_tds_for_supplier'])?1:0;
             $user_type = Suppliers::create($input);
@@ -194,6 +194,7 @@ class ExpenseController extends Controller
         }
 
         $payee['user_id'] = $user->id;
+        $payee['company_id'] = $this->Company();
         $payee['name'] = $user_type['first_name'].' '.$user_type['last_name'];
         $payee['type_id'] = $user_type['id'];
         $new_payee = Payees::create($payee);
@@ -210,6 +211,7 @@ class ExpenseController extends Controller
         $user = Auth::user();
         parse_str($paymentValue['data'], $input);
         $input['user_id'] = $user->id;
+        $input['company_id'] = $this->Company();
         $input['as_of'] = !empty($input['as_of'])?date("Y-m-d", strtotime($input['as_of'])):"";
         $paymentAccount = PaymentAccount::create($input);
 
