@@ -15,13 +15,8 @@ class UserController extends Controller
     public function edit($id){
         $data['menu'] = 'Profile';
         $data['user'] = User::where('id',$id)->first();
-        $session_company = Session::get('company');
+        $data['company'] = CompanySettings::where('id',$this->Company())->first();
 
-        if(!empty($session_company)){
-            $data['company'] = CompanySettings::where('id',$session_company)->first();
-        }else{
-            $data['company'] = CompanySettings::where('user_id',$id)->first();
-        }
         return view('user.edit_profile',$data);
     }
 
@@ -36,7 +31,7 @@ class UserController extends Controller
         $user = User::where('id',$id)->first();
         $user->update($input);
 
-        $company = CompanySettings::where('user_id',$id)->first();
+        $company = CompanySettings::where('user_id',$id)->where('id',$this->Company())->first();
 
         $in['user_id'] = $id;
         if($photo = $request->file('company_logo')){
@@ -54,7 +49,11 @@ class UserController extends Controller
         $in['pincode'] = !empty($request['pincode'])?$request['pincode']:'';
         $in['country'] = !empty($request['country'])?$request['country']:'';
 
-        empty($company)?CompanySettings::create($in):$company->update($in);
+        if(empty($company)){
+            CompanySettings::create($in);
+        }else{
+            $company->update($in);
+        }
 
         \Session::flash('message', 'Profile has been updated successfully!');
         return redirect()->back();
