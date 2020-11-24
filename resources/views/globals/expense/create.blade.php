@@ -291,8 +291,7 @@
        }else{
            $('#CustomersModal').modal('show');
        }
-        $('html, body').css('overflowY', 'hidden');
-        $('.user_type').each(function(){
+       $('.user_type').each(function(){
             $(this).prop('checked',false);
         });
     });
