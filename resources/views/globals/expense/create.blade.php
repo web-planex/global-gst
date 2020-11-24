@@ -536,7 +536,7 @@
             flg++;
             if (flg == 1) {
                 $this_html = jQuery('#wrp').html();
-                $(".select2-results").prepend("<div class='select2-results__option'>" +
+                    $(".select2-results").prepend("<div class='select2-results__option'>" +
                     $this_html + "</div>");
             }
         });
@@ -545,14 +545,13 @@
             flg2++;
             if (flg2 == 1) {
                 $this_html = jQuery('#wrp2').html();
-                $(".select2-results").prepend("<div class='select2-results__option'>" +
+                    $(".select2-results").prepend("<div class='select2-results__option'>" +
                     $this_html + "</div>");
             }
         });
 
         $(document).on('change', '#amounts_are',function(){
-            //taxCalculation();
-            taxCalculationNew();
+            taxCalculation();
         });
 
         $("#addItem").click(function () {
@@ -583,7 +582,7 @@
             }
             var amount = $(this).val() * qty;
             $(this).parent('td').next('td').find('.amount-input').val(amount);
-            taxCalculationNew();
+            taxCalculation();
         });
 
         $(document).on('keyup change','.quantity-input',function(){
@@ -600,7 +599,7 @@
             if(val == 0 || val == '') {
                 $(this).parent('td').next('td').find('.rate-input').val(0);
             }
-            taxCalculationNew();
+            taxCalculation();
         });
 
         $(document).on('keyup change','.amount-input',function(){
@@ -617,7 +616,7 @@
                 rate = 0;
             }
             $(this).parent('td').prev('td').find('.rate-input').val(rate);
-            taxCalculationNew();
+            taxCalculation();
         });
 
         $(document).on('click', '.remove-line-item', function(){
@@ -628,50 +627,11 @@
                 $(this).children('td:first-child').html(i);
                 i++;
             });
-            taxCalculationNew();
+            taxCalculation();
         });
 
-        function taxCalculation() {
-            var subtotal = subTotal();
-            var tax_str = $('.tax-input').find(":selected").text();
-            var tax_rate = tax_str.substr(0, tax_str.indexOf('%'));
-            var tax_text = $('.tax-input').find(":selected").text();
-            var tax_raw_html = '<tr><th width="50%" colspan="2" class="tr-tax-lable">' + tax_text + ' on ' + subtotal + '</th>';
-            var tax_type = $('#amounts_are').find(":selected").val();
-            var tax = 0;
-            var total = 0;
-            var amount_before_tax = 0;
-
-            if(tax_type == 'exclusive') {
-                tax = subtotal * tax_rate / 100;
-                var tax_raw_html = '<tr><th width="50%" colspan="2" class="tr-tax-lable">' + tax_text + ' on Rs. ' + parseFloat(subtotal).toFixed(2) + '</th>';
-                amount_before_tax = parseFloat(subtotal).toFixed(2);
-                total = parseFloat(subtotal) + parseFloat(tax);
-            } else if(tax_type == 'inclusive') {
-                tax = subtotal * tax_rate / (parseInt(100) + parseInt(tax_rate));
-                var new_subtotal = parseFloat(subtotal) - parseFloat(tax);
-                var tax_raw_html = '<tr><th width="50%" colspan="2" class="tr-tax-lable">' + tax_text + ' on Rs. ' + parseFloat(new_subtotal).toFixed(2) + '</th>';
-                amount_before_tax = parseFloat(new_subtotal).toFixed(2);
-                total = subtotal;
-            }
-
-            tax_raw_html += '<td width="50%" style="padding:10px 0 10px 15px;border:none;"><input type="text" class="form-control" name="tax-amount" value="Rs. ' + tax.toFixed(2) + '" readonly=""></td>';
-
-            if(tax_type == 'out_of_scope') {
-                tax = 0;
-                tax_raw_html = '';
-                amount_before_tax = parseFloat(subtotal).toFixed(2);
-                total = subtotal;
-            }
-            $('#subtotal_row').siblings('tr').find('table').html(tax_raw_html);
-            $('#total').val('Rs. '+ parseFloat(total).toFixed(2));
-            $('#amount_before_tax').val(amount_before_tax);
-            $('#tax_amount').val(tax.toFixed(2));
-            $('#total_amount').val(parseFloat(total).toFixed(2));
-        }
-
         $(document).on('change','.tax-input', function(){
-            taxCalculationNew();
+            taxCalculation();
         });
         $('form.formExpense').validate();
     });
@@ -708,7 +668,7 @@
         return amount;
     }
 
-    function taxCalculationNew() {
+    function taxCalculation() {
 
         var subtotal = subTotal();
         var tax_type = $('#amounts_are').find(":selected").val();
@@ -749,12 +709,13 @@
                 }
                 i++;
             }
-
         });
+
         $('.amount-input').each(function() {
             var tax_text = $(this).parent('td').next('td').find('.tax-input').find(":selected").text();
             var amount = parseFloat($(this).val());
         });
+
         if(tax_type != 'out_of_scope') {
             for(var a=0; a < tax_arr.length; a++) {
                 $("."+tax_arr[a]).removeClass("hide");
@@ -842,7 +803,7 @@
 
     @if(isset($expense) && !empty($expense))
         $(document).ready(function(){
-            taxCalculationNew();
+            taxCalculation();
         });
     @endif
     (function($) {
