@@ -73,7 +73,7 @@
                         </div>
                         <div class="form-group mb-3 col-md-4">
                             <label for="payment_method">Payment method</label>
-                            {!! Form::select('payment_method', \App\Models\Globals\Expense::$payment_method, null, ['class' => 'form-control', 'id' => 'payment_method']) !!}
+                            {!! Form::select('payment_method', \App\Models\Globals\Expense::$payment_method, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method']) !!}
                             @if ($errors->has('payment_method'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('payment_method') }}</strong>
@@ -126,13 +126,13 @@
                                                                 <input type="text" class="form-control" name="description[]" value="{{$item['description']}}">
                                                             </td>
                                                             <td>
-                                                                <input type="number" min="0" class="form-control quantity-input" name="quantity[]" value="{{$item['quantity']}}">
+                                                                <input type="text" min="0" class="form-control quantity-input floatTextBox" name="quantity[]" value="{{$item['quantity']}}">
                                                             </td>
                                                             <td>
-                                                                <input type="number" min="0" class="form-control rate-input" name="rate[]" value="{{$item['rate']}}">
+                                                                <input type="text" min="0" class="form-control rate-input floatTextBox" name="rate[]" value="{{$item['rate']}}">
                                                             </td>
                                                             <td>
-                                                                <input type="number" min="0" class="form-control amount-input" name="amount[]" value="{{$item['amount']}}">
+                                                                <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[]" value="{{$item['amount']}}">
                                                             </td>
                                                             <td id="taxes">
                                                                 <select id="taxes" class="form-control tax-input" name="taxes[]">
@@ -159,13 +159,13 @@
                                                             <input type="text" class="form-control" name="description[0]" required>
                                                         </td>
                                                         <td>
-                                                            <input type="text" min="0" class="form-control quantity-input" name="quantity[0]" required>
+                                                            <input type="text" min="0" class="form-control quantity-input floatTextBox" name="quantity[0]" required>
                                                         </td>
                                                         <td>
-                                                            <input type="text" min="0" class="form-control rate-input" name="rate[0]" required>
+                                                            <input type="text" min="0" class="form-control rate-input floatTextBox" name="rate[0]" required>
                                                         </td>
                                                         <td>
-                                                            <input type="text" min="0" class="form-control amount-input" name="amount[0]" required>
+                                                            <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[0]" required>
                                                         </td>
                                                         <td id="taxes">
                                                             <select class="form-control tax-input" name="taxes[]" required>
@@ -567,9 +567,9 @@
             html += "<td>" + i + "</td>";
             html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
             html += "<td><input type=\"text\" class=\"form-control\" name=\"description["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
-            html += "<td><input type=\"text\" min=\"0\" class=\"form-control quantity-input\" name=\"quantity["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
-            html += "<td><input type=\"text\" min=\"0\" class=\"form-control rate-input\" name=\"rate["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
-            html += "<td><input type=\"text\" min=\"0\" class=\"form-control amount-input\" name=\"amount["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
+            html += "<td><input type=\"text\" min=\"0\" class=\"form-control quantity-input floatTextBox\" name=\"quantity["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
+            html += "<td><input type=\"text\" min=\"0\" class=\"form-control rate-input floatTextBox\" name=\"rate["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
+            html += "<td><input type=\"text\" min=\"0\" class=\"form-control amount-input floatTextBox\" name=\"amount["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
             html += "<td>"+tax_input+"</td>";
             html += "<td><button type=\"button\" class=\"btn btn-danger btn-circle remove-line-item \"><i class=\"fa fa-times\"></i> </button></td>";
             html += "</tr>";
@@ -578,28 +578,45 @@
 
         $(document).on('keyup change','.rate-input',function(){
             var qty = $(this).parent('td').siblings('td').find('.quantity-input').val();
+            if(qty == null || qty == '') {
+                qty = 0;
+            }
             var amount = $(this).val() * qty;
             $(this).parent('td').next('td').find('.amount-input').val(amount);
-            //taxCalculation();
             taxCalculationNew();
         });
 
         $(document).on('keyup change','.quantity-input',function(){
             var rate = $(this).parent('td').next('td').find('.rate-input').val();
-            var amount = $(this).val() * rate;
+            var val = $(this).val();
+            if(rate == null || rate == '') {
+                rate = 0;
+            }
+            if(val == null || val == '') {
+                val = 0;
+            }
+            var amount = val * rate;
             $(this).parent('td').next('td').next('td').find('.amount-input').val(amount);
-            if($(this).val() == 0) {
+            if(val == 0 || val == '') {
                 $(this).parent('td').next('td').find('.rate-input').val(0);
             }
-            //taxCalculation();
             taxCalculationNew();
         });
 
         $(document).on('keyup change','.amount-input',function(){
             var qty = $(this).parent('td').prev('td').prev('td').find('.quantity-input').val();
-            var rate = $(this).val() / qty;
+            var val = $(this).val();
+            if(qty == null || qty == '') {
+                qty = 0;
+            }
+            if(val == null || val == '') {
+                val = 0;
+            }
+            var rate = val / qty;
+            if(isNaN(rate)) {
+                rate = 0;
+            }
             $(this).parent('td').prev('td').find('.rate-input').val(rate);
-            //taxCalculation();
             taxCalculationNew();
         });
 
@@ -611,7 +628,6 @@
                 $(this).children('td:first-child').html(i);
                 i++;
             });
-            //taxCalculation();
             taxCalculationNew();
         });
 
@@ -755,39 +771,54 @@
             if(tax == 'GST') {
                 if(tax_type == 'exclusive') {
                     var tax_rate_gst = tax_rate / 2;
+                    if(isNaN(value)) {
+                        value=0;
+                    }
                     $("#label_1_"+key).html(value.toFixed(2));
                     $("#label_2_"+key).html(value.toFixed(2));
                     tax_amount = value * tax_rate_gst / 100;
                     amount_before_tax = parseFloat(subtotal).toFixed(2);
+                    if(isNaN(tax_amount)) {
+                        tax_amount=0;
+                    }
                     $("#input_1_"+key).val("Rs. "+tax_amount.toFixed(2));
                     $("#input_2_"+key).val("Rs. "+tax_amount.toFixed(2));
                 } else if(tax_type == 'inclusive') {
                     var tax_rate_gst = tax_rate / 2;
                     tax_amount = value * tax_rate / (parseInt(100) + parseInt(tax_rate));
                     var new_value = parseFloat(value) - parseFloat(tax_amount);
+                    if(isNaN(new_value)) {
+                        new_value=0;
+                    }
                     amount_before_tax = parseFloat(new_value).toFixed(2);
                     $("#label_1_"+key).html(new_value.toFixed(2));
                     $("#label_2_"+key).html(new_value.toFixed(2));
                     var new_tax_value = tax_amount / 2;
+                    if(isNaN(new_tax_value)) {
+                        new_tax_value=0;
+                    }
                     $("#input_1_"+key).val("Rs. "+new_tax_value.toFixed(2));
                     $("#input_2_"+key).val("Rs. "+new_tax_value.toFixed(2));
-                } else {
-
                 }
-
-
             } else {
-
                 if(tax_type == 'exclusive') {
                     tax_amount = value * tax_rate / 100;
                     amount_before_tax = parseFloat(subtotal).toFixed(2);
+                    if(isNaN(value)) {
+                        value=0;
+                    }
                     $("#label_"+key).html(value.toFixed(2));
                 } else if(tax_type == 'inclusive') {
                     tax_amount = value * tax_rate / (parseInt(100) + parseInt(tax_rate));
-
                     var new_value = parseFloat(value) - parseFloat(tax_amount);
+                    if(isNaN(new_value)) {
+                        new_value=0;
+                    }
                     amount_before_tax = parseFloat(new_value).toFixed(2);
                     $("#label_"+key).html(new_value.toFixed(2));
+                }
+                if(isNaN(tax_amount)) {
+                    tax_amount=0;
                 }
                 $("#input_"+key).val("Rs. "+tax_amount.toFixed(2));
             }
@@ -814,5 +845,24 @@
             taxCalculationNew();
         });
     @endif
+    (function($) {
+        $.fn.inputFilter = function(inputFilter) {
+            return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
+                if (inputFilter(this.value)) {
+                    this.oldValue = this.value;
+                    this.oldSelectionStart = this.selectionStart;
+                    this.oldSelectionEnd = this.selectionEnd;
+                } else if (this.hasOwnProperty("oldValue")) {
+                    this.value = this.oldValue;
+                    this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                } else {
+                    this.value = "";
+                }
+            });
+        };
+    }(jQuery));
+    $(".floatTextBox").inputFilter(function(value) {
+        return /^-?\d*[.,]?\d*$/.test(value);
+    });
 </script>
 @endsection
