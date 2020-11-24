@@ -26,7 +26,7 @@ class Controller extends BaseController
             mkdir($root, 0777, true);
         }
         $photo->move($root, $name);
-        return $path = "public/upload/" . $path . "/" . $name;
+        return $path = "upload/" . $path . "/" . $name;
     }
 
     public function Company(){

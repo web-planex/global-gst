@@ -66,10 +66,10 @@ class CompanyController extends Controller
     {
         $data['menu'] = 'Company';
         $data['companies'] = CompanySettings::findOrFail($id);
-        if(!empty($data['companies'])){
-            $logo = url($data['companies']['company_logo']);
-            $data['companies']['company_logo'] = implode('/',array_unique(explode('/', $logo)));;
-        }
+//        if(!empty($data['companies'])){
+//            $logo = url($data['companies']['company_logo']);
+//            $data['companies']['company_logo'] = implode('/',array_unique(explode('/', $logo)));;
+//        }
         return view('globals.company.create',$data);
     }
 

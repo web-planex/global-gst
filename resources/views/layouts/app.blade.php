@@ -59,7 +59,7 @@
                 <div class="dropdown u-pro mr-5">
                     <select class="form-control amounts-are-select2" name="company" id="company_list">
                         <option value="0">Select Company</option>
-                        @foreach(\App\Http\Controllers\Controller::AllCompanies()  as $com)
+                        @foreach(\App\Http\Controllers\Controller::AllCompanies() as $com)
                             <option value="{{$com['id']}}" @if(\App\Http\Controllers\Controller::SetCompany() && \App\Http\Controllers\Controller::SetCompany()==$com['id']) selected @endif >{{$com['company_name']}}</option>
                         @endforeach
                     </select>

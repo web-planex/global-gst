@@ -536,17 +536,17 @@
             flg++;
             if (flg == 1) {
                 $this_html = jQuery('#wrp').html();
-                    $(".select2-results").prepend("<div class='select2-results__option'>" +
-                    $this_html + "</div>");
+                $(".select2-results").prepend("<div class='select2-results__option'>" +
+                $this_html + "</div>");
             }
         });
 
         $('#payment_account').on("select2:open", function () {
             flg2++;
             if (flg2 == 1) {
-                $this_html = jQuery('#wrp2').html();
-                    $(".select2-results").prepend("<div class='select2-results__option'>" +
-                    $this_html + "</div>");
+                $this_html2 = jQuery('#wrp2').html();
+                $(".select2-results").last().prepend("<div class='select2-results__option'>" +
+                    $this_html2 + "</div>");
             }
         });
 
@@ -806,6 +806,7 @@
             taxCalculation();
         });
     @endif
+
     (function($) {
         $.fn.inputFilter = function(inputFilter) {
             return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
