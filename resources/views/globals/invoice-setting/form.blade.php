@@ -39,8 +39,8 @@
                                     </div>
 
                                     <div class="form-group mb-0">
-                                        @if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['logo_image']) && file_exists(substr($invoice_setting['logo_image'],7)))
-                                            <img src="{{url(substr($invoice_setting['logo_image'],7))}}" id="DisplayImage1" height="60px" width="60px">
+                                        @if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['logo_image']) && file_exists($invoice_setting['logo_image']))
+                                            <img src="{{url($invoice_setting['logo_image'])}}" id="DisplayImage1" height="60px" width="60px">
                                         @else
                                             <img src="" id="DisplayImage1" height="60px" width="60px" style="display: none;">
                                         @endif
@@ -76,8 +76,8 @@
                                     </div>
 
                                     <div class="form-group mb-0">
-                                        @if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['signature_image']) && file_exists(substr($invoice_setting['signature_image'],7)))
-                                            <img src="{{url(substr($invoice_setting['signature_image'],7))}}" id="DisplayImage2" height="30px" width="120px">
+                                        @if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['signature_image']) && file_exists($invoice_setting['signature_image']))
+                                            <img src="{{url($invoice_setting['signature_image'])}}" id="DisplayImage2" height="30px" width="120px">
                                         @else
                                             <img src="" id="DisplayImage2" height="30px" width="120px" style="display: none;">
                                         @endif
