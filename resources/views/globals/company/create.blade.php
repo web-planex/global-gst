@@ -18,7 +18,7 @@
                     <div class="row" id="Suppliers">
                         <div class="form-group mb-3 col-md-12">
                             <label for="company_logo">Company Logo</label><br>
-                            @if(isset($companies)&&!empty($companies))
+                            @if(isset($companies)&&!empty($companies) && !empty($companies['company_logo']))
                                 <div id="imagePreview" style="background-image: url({{url($companies['company_logo'])}});" class="form-control mt-2"></div>
                             @else
                                 <div id="imagePreview" src="" class="form-control mt-2"></div>

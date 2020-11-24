@@ -59,7 +59,7 @@ class PaymentAccountController extends Controller
 
         if (Request::has('submit')) {
             $payment_account->user_id = Auth::user()->id;
-            $payment_account->compapny_id = $this->Company();
+            $payment_account->company_id = $this->Company();
             $payment_account->account_type = Request::input('account_type');
             $payment_account->detail_type = Request::input('detail_type');
             $payment_account->name = Request::input('name');

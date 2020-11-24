@@ -175,6 +175,7 @@ class ExpenseController extends Controller
         $input['user_id'] = $user->id;
         $input['company_id'] = $this->Company();
         if($payeeValue['user_type']==1){
+            $input['billing_rate'] = isset($input['billing_rate'])&&!empty($input['billing_rate'])?$input['billing_rate']:0;
             $input['apply_tds_for_supplier'] = isset($input['apply_tds_for_supplier'])&&!empty($input['apply_tds_for_supplier'])?1:0;
             $user_type = Suppliers::create($input);
 
