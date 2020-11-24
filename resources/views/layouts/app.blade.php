@@ -249,7 +249,7 @@
                type: 'POST',
                data:  {'data':cid},
                success: function (result) {
-                    window.location.reload();
+                    window.location.href = '{{url('/dashboard')}}';
                }
            });
        }
