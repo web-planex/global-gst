@@ -805,7 +805,7 @@
             amount_before_tax = parseFloat(subtotal).toFixed(2);
             total = parseFloat(subtotal);
         }
-        
+
         $('#total').val('Rs. '+ parseFloat(total).toFixed(2));
         $('#amount_before_tax').val(amount_before_tax);
         $('#tax_amount').val(total_tax.toFixed(2));
