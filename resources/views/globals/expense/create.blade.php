@@ -652,7 +652,6 @@
         } else if(tax_type == 'inclusive') {
             var total_tax_amount = getTotalTax();
             final_amount = parseFloat(amount) - parseFloat(total_tax_amount);
-            console.log(parseFloat(amount)+' - '+parseFloat(total_tax_amount));
         } else {
             final_amount = amount;
         }
