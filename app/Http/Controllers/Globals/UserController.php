@@ -23,8 +23,8 @@ class UserController extends Controller
     public function update(Request $request, $id){
         $this->validate($request, [
             'name' => 'required',
-            'email' => 'required|email',
-            'company_email' => 'nullable|email',
+            'email' => 'required|email|unique:users,email,'.$id.',id',
+            'company_email' => 'nullable|email|unique:company_settings,company_email,'.$this->Company().',id',
             'company_phone' => 'nullable|numeric',
         ]);
         $input = $request->all();
