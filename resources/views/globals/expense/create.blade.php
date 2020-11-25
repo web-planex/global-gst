@@ -38,7 +38,7 @@
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
                             <label for="payee">Payee <span class="text-danger">*</span></label>
-                            {!! Form::select('payee', $payees, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payee']) !!}
+                            {!! Form::select('payee', $payees, isset($expense)&&!empty($expense)?$expense['payee_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payee']) !!}
                             <div class="wrapper" id="wrp" style="display: none;">
                                 <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
                             </div>
@@ -50,7 +50,7 @@
                         </div>
                         <div class="form-group mb-3 col-md-6">
                             <label for="payment_account">Payment account <span class="text-danger">*</span></label>
-                            {!! Form::select('payment_account', $payment_accounts, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_account']) !!}
+                            {!! Form::select('payment_account', $payment_accounts, isset($expense)&&!empty($expense)?$expense['payment_account_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_account']) !!}
                             <div class="wrapper" id="wrp2" style="display: none;">
                                 <a href="javascript:;" id="type2" class="font-weight-300" onclick="OpenPaymentAccountModal()"><i class="fa fa-plus-circle"></i> Add New</a>
                             </div>

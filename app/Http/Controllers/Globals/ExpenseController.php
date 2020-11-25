@@ -98,8 +98,8 @@ class ExpenseController extends Controller
         $data['menu'] = 'Expense';
         $data['expense'] = Expense::findOrFail($id);
         $data['expense_items'] = ExpenseItems::where('expense_id',$id)->get()->toArray();
-        $data['payees'] = payees::where('user_id',$user->id)->pluck('name','id')->toArray();
-        $data['payment_accounts'] = PaymentAccount::where('user_id',$user->id)->pluck('name','id')->toArray();
+        $data['payees'] = payees::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
+        $data['payment_accounts'] = PaymentAccount::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
         $data['taxes'] = Taxes::where('status', 1)->get();
         $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
         return view('globals.expense.create',$data);
