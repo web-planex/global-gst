@@ -645,15 +645,26 @@
             }
             amount += parseFloat(val);
         });
-        $('#subtotal').val('Rs. ' + amount.toFixed(2));
 
-        $('.tax-label').html(amount.toFixed(2));
-        return amount.toFixed(2);
+        var tax_type = $('#amounts_are').find(":selected").val();
+        var final_amount = 0;
+        if(tax_type == 'exclusive') {
+            final_amount = amount;
+        } else if(tax_type == 'inclusive') {
+            var total_tax_amount = getTotalTax();
+            final_amount = parseFloat(amount) - parseFloat(total_tax_amount);
+            console.log(parseFloat(amount)+' - '+parseFloat(total_tax_amount));
+        } else {
+            final_amount = amount;
+        }
+        $('#subtotal').val('Rs. ' + final_amount.toFixed(2));
+
+        $('.tax-label').html(final_amount.toFixed(2));
+        return final_amount.toFixed(2);
     }
 
     function getTotalTax() {
-
-        amount = 0;
+        total_tax_amount = 0;
         $('.tax-input-row').each(function() {
             var val = $(this).val();
             if(!$(this).parent('td').parent('tr').hasClass('hide')){
@@ -661,11 +672,10 @@
                 if(val == null || val == '') {
                     val = 0;
                 }
-                amount += parseFloat(val);
+                total_tax_amount += parseFloat(val);
             }
         });
-        console.log(amount);
-        return amount;
+        return total_tax_amount;
     }
 
     function taxCalculation() {
@@ -788,13 +798,15 @@
         if(tax_type == 'exclusive') {
             total = parseFloat(subtotal) + parseFloat(total_tax);
         } else if(tax_type == 'inclusive') {
-            total = parseFloat(subtotal);
+            subtotal = subTotal();
+            amount_before_tax = parseFloat(subtotal);
+            total = parseFloat(subtotal) + parseFloat(total_tax);
         } else {
             total_tax = 0;
             amount_before_tax = parseFloat(subtotal).toFixed(2);
             total = parseFloat(subtotal);
         }
-
+        
         $('#total').val('Rs. '+ parseFloat(total).toFixed(2));
         $('#amount_before_tax').val(amount_before_tax);
         $('#tax_amount').val(total_tax.toFixed(2));
