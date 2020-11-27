@@ -179,7 +179,6 @@
                                                 @endif
                                                 </tbody>
                                             </table>
-                                            
                                             <table class="table table-hover" style="width: 40%;float: right;">
                                                 <tr id="subtotal_row">
                                                     <th width="50%">Subtotal</th>
@@ -213,18 +212,6 @@
                                             <input type="hidden" name="tax_amount" id="tax_amount" />
                                             <input type="hidden" name="total" id="total_amount" />
                                             <button type="button" id="addItem" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>&nbsp;Add Lines</button>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="form-group mb-0">
-                                                    {!! Form::textarea('memo', null, ['class' => 'form-control','id'=>'memo','rows' => '3','placeholder' => 'Memo']) !!}
-                                                    @if ($errors->has('memo'))
-                                                        <span class="text-danger">
-                                                            <strong>{{ $errors->first('memo') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -585,9 +572,6 @@
             html += "<td><button type=\"button\" class=\"btn btn-danger btn-circle remove-line-item \"><i class=\"fa fa-times\"></i> </button></td>";
             html += "</tr>";
             $("#items_list_body").append(html);
-            $(".floatTextBox").inputFilter(function(value) {
-                return /^-?\d*[.,]?\d*$/.test(value);
-            });
         });
 
         $(document).on('keyup change','.rate-input',function(){
