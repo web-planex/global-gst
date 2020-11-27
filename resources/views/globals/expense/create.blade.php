@@ -221,12 +221,12 @@
                                                             <strong>{{ $errors->first('memo') }}</strong>
                                                         </span>
                                                     @endif
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
                             </div>
                         </div>
                     </div>
