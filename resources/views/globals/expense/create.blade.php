@@ -212,9 +212,21 @@
                                             <input type="hidden" name="tax_amount" id="tax_amount" />
                                             <input type="hidden" name="total" id="total_amount" />
                                             <button type="button" id="addItem" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>&nbsp;Add Lines</button>
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="form-group mb-0">
+                                                    {!! Form::textarea('memo', null, ['class' => 'form-control','id'=>'memo','rows' => '3','placeholder' => 'Memo']) !!}
+                                                    @if ($errors->has('memo'))
+                                                        <span class="text-danger">
+                                                            <strong>{{ $errors->first('memo') }}</strong>
+                                                        </span>
+                                                    @endif
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
                             </div>
                         </div>
                     </div>

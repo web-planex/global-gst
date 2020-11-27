@@ -27,6 +27,7 @@ class CreateExpensesTable extends Migration
             $table->string('amount_before_tax',20);
             $table->string('tax_amount',20);
             $table->string('total',20);
+            $table->text('memo')->nullable();
             $table->timestamps();
         });
     }

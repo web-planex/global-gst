@@ -67,6 +67,7 @@ class ExpenseController extends Controller
         $expense->amount_before_tax = $request['amount_before_tax'];
         $expense->tax_amount = $request['tax_amount'];
         $expense->total = $request['total'];
+        $expense->memo = $request['memo'];
 
         if ($validator->fails()) {
             return redirect()->back()
@@ -131,6 +132,7 @@ class ExpenseController extends Controller
         $expense->amount_before_tax = $request['amount_before_tax'];
         $expense->tax_amount = $request['tax_amount'];
         $expense->total = $request['total'];
+        $expense->memo = $request['memo'];
 
         if ($validator->fails()) {
             return redirect()->back()

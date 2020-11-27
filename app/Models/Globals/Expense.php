@@ -18,7 +18,8 @@ class Expense extends Model
         'expense_category_id',
         'amount_before_tax',
         'tax_amount',
-        'total'
+        'total',
+        'memo'
     ];
 
     const PAYMENT_METHOD_CASH = 1;
