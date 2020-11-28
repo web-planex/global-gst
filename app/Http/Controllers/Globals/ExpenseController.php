@@ -263,8 +263,8 @@ class ExpenseController extends Controller
         
         $data['name']  = 'Expense Voucher';
         $data['content'] = 'This is test pdf.';
-//        $pdf = \PDF::loadView('globals.expense.pdf_invoice', $data);
-//        return $pdf->download('invoice.pdf');
-        return view('globals.expense.pdf_invoice', $data);
+        $pdf = \PDF::loadView('globals.expense.pdf_invoice', $data);
+        return $pdf->download('invoice.pdf');
+        //return view('globals.expense.pdf_invoice', $data);
     }
 }
