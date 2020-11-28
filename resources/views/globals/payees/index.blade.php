@@ -22,6 +22,8 @@
                             <tr>
                                 <th>#</th>
                                 <th style="width: 30%">Name</th>
+                                <th>Email</th>
+                                <th>Mobile</th>
                                 <th>Type</th>
                                 <th>Action</th>
                             </tr>
@@ -33,6 +35,16 @@
                                     <tr>
                                         <td>{{$i}}</td>
                                         <td>{{$list['name']}}</td>
+                                        @if($list['type'] == 1)
+                                        <td>{{$list['Suppliers']['email']}}</td>
+                                        <td>{{$list['Suppliers']['mobile']}}</td>
+                                        @elseif($list['type'] == 2)
+                                        <td>{{$list['Employees']['email']}}</td>
+                                        <td>{{$list['Employees']['mobile']}}</td>
+                                        @else
+                                        <td>{{$list['Customers']['email']}}</td>
+                                        <td>{{$list['Customers']['mobile']}}</td>
+                                        @endif
                                         <td>@if($list['type']==1) Suppliers @elseif($list['type']==2) Employees @else Customers @endif</td>
                                         <td>
                                             <div class="btn-group table-icons-box" role="group" aria-label="Basic example">
