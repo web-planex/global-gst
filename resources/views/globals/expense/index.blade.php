@@ -41,11 +41,18 @@
                                         <td>{{App\Models\Globals\Expense::$payment_method[$list['payment_method']]}}</td>
                                         <td>{{$list['ref_no']}}</td>
                                         <td>
-                                            <div class="btn-group table-icons-box" role="group" aria-label="Basic example">
-                                                <a href="{{route('expense-edit',$list['id'])}}" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Update"><i class="fas fa-edit"></i></a>
-                                                <a href="javascript:;" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Delete" onclick="delete_expense_records({{$list['id']}})"><i class="fas fa-trash"></i></a>
-                                                <form name="frm_delete_{{$list['id']}}" id="frm_delete_{{$list['id']}}" action="{{route('expense-delete',$list['id'])}}" method="get"></form>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Action
+                                                </button>
+                                                <div class="dropdown-menu" style="will-change: transform;">
+                                                    <a class="dropdown-item" href="{{route('expense-edit',$list['id'])}}">Edit</a>
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="delete_expense_records({{$list['id']}})">Delete</a>
+                                                    <a class="dropdown-item" href="{{url('expense/download_pdf/'.$list['id'])}}">Download PDF</a>
+                                                </div>
                                             </div>
+
+                                            <form name="frm_delete_{{$list['id']}}" id="frm_delete_{{$list['id']}}" action="{{route('expense-delete',$list['id'])}}" method="get"></form>
                                         </td>
                                     </tr>
                                     @php $i++; @endphp

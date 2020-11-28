@@ -9,6 +9,7 @@ use App\Models\Globals\Expense;
 use App\Models\Globals\Payees;
 use App\Models\Globals\PaymentAccount;
 use App\Models\Globals\Suppliers;
+use App\CompanySettings;
 use App\Models\Globals\Taxes;
 use App\Models\Globals\ExpenseItems;
 use Illuminate\Http\Request;
@@ -220,5 +221,42 @@ class ExpenseController extends Controller
         $data['name'] = $paymentAccount['name'];
 
         return $data;
+    }
+    
+    public function download_pdf($id){
+//        return \PDF::loadFile('http://localhost/global-gst/public/dashboard')->download('github.pdf');
+        $data['menu']  = 'Expense Voucher PDF';
+        $data['company'] = CompanySettings::where('id',$this->Company())->first();
+        $data['expense'] = Expense::with('ExpenseItems')->where('id',$id)->first();
+        
+        if(!empty($data['expense']['ExpenseItems'])){
+            foreach($data['expense']['ExpenseItems'] as $exp){
+                    $tax = Taxes::where('id',$exp['tax_id'])->first();
+                    $exp['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'];
+            }
+        }
+        
+        $data['expense']['total_in_word'] = $this->convert_digit_to_words($data['expense']['total']);
+        
+        
+        $payee = Payees::where('id',$data['expense']['payee_id'])->first();
+        if(!empty($payee)){
+            if($payee['type']==1){
+                $data['user'] = Suppliers::where('id',$payee['type_id'])->first();
+            }elseif($payee['type']==2){
+                $data['user'] = Employees::where('id',$payee['type_id'])->first();
+            }else{
+                $data['user'] = Customers::where('id',$payee['type_id'])->first();
+            }
+        }
+        
+//        $html = "123";
+//        
+//        return \PDF::loadHTML($html)->setPaper('a4')->setOrientation('landscape')->setOption('margin-bottom', 0)->save('myfile1.pdf');
+        
+        $data['name']  = 'Expense Voucher';
+        $data['content'] = 'This is test pdf.';
+        $pdf = \PDF::loadView('globals.expense.pdf_invoice', $data);
+        return $pdf->download('invoice.pdf');
     }
 }
