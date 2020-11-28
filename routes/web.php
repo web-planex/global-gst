@@ -40,6 +40,7 @@ Route::post('/expense/insert', 'Globals\ExpenseController@insert')->name('expens
 Route::get('/expense/edit/{id}', 'Globals\ExpenseController@edit')->name('expense-edit');
 Route::patch('/expense/update/{id}', 'Globals\ExpenseController@update')->name('expense-update');
 Route::get('/expense/delete/{id}', 'Globals\ExpenseController@delete')->name('expense-delete');
+Route::get('/expense/download_pdf/{id}', 'Globals\ExpenseController@download_pdf')->name('expense-download_pdf');
 
 //Payees
 Route::get('/payees', 'Globals\PayeeController@index')->name('payees');

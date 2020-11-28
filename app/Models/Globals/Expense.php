@@ -41,6 +41,10 @@ class Expense extends Model
         self::USER_2 => 'Employees',
         self::USER_3 => 'Customers',
     ];
+    
+    public function ExpenseItems(){
+        return $this->hasMany('App\Models\Globals\ExpenseItems','expense_id');
+    }
 
     public function Payee(){
         return $this->belongsTo('App\Models\Globals\Payees','payee_id');

@@ -30,19 +30,19 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $data['menu'] = 'Dashboard';
-        $data['total_expense'] = Expense::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->count();
-        $data['total_payee'] = Payees::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->count();
-        $data['total_payment_account'] = PaymentAccount::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->count();
-        $data['total_companies'] = CompanySettings::where('user_id',Auth::user()->id)->count();
-        $data['user_id'] = Auth::user()->id;
-        $session = Session::get('company');
         if(empty($session)){
             $company = CompanySettings::where('user_id',Auth::user()->id)->orderBy('id','DESC')->first();
             if(!empty($company)){
-                $data['session_company'] = session(['company'=>$company['id']]);
+                 session(['company'=>$company['id']]);
+                 $data['session_company'] = Session::get('company');
             }
+        }else{
+            $data['session_company'] = $this->Company();
         }
+        $data['menu'] = 'Dashboard';
+        $data['total_expense'] = Expense::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
+        $data['total_payee'] = Payees::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
+        $data['total_payment_account'] = PaymentAccount::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
         return view('dashboard',$data);
     }
 }
