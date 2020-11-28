@@ -30,6 +30,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+         $session = Session::get('company');
         if(empty($session)){
             $company = CompanySettings::where('user_id',Auth::user()->id)->orderBy('id','DESC')->first();
             if(!empty($company)){

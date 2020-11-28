@@ -136,7 +136,6 @@ class UserController extends Controller
     }
 
     public function set_company(Request $request){
-        Session::forget('company');
         session(['company'=>$request['data']]);
         return;
     }
