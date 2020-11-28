@@ -2,7 +2,7 @@
 @section('content')
     <div class="row page-titles">
         <div class="col-sm-6 align-self-center">
-            <h4 class="text-themecolor">Companies Add</h4>
+            <h4 class="text-themecolor">Companies</h4>
         </div>
     </div>
 

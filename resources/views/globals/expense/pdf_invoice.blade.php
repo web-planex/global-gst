@@ -68,7 +68,7 @@
       <tr>
         <td><table width="100%" border="1" cellspacing="0" cellpadding="0" id="table-top2">
           <tr>
-            <td bgcolor="#eeeeee" height="30" align="center" style="padding:0 5px;" >BILL TO PARTY</td>
+            <td bgcolor="#eeeeee" height="30" align="center" style="padding:0 5px;" >Payment To</td>
             <td  bgcolor="#eeeeee" align="center" style="padding:0 5px;">SHIP TO PARTY / DELIVERY ADDRESS</td>
           </tr>
           <tr>
