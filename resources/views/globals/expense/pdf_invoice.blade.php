@@ -212,7 +212,7 @@
             <td height="30" colspan="2" align="right" style="padding:0 5px;">&nbsp;</td>
           </tr>-->
           <tr>
-            <td height="30" colspan="2" style="padding:0 5px;">Total Amount After Taxl</td>
+            <td height="30" colspan="2" style="padding:0 5px;">Total Amount After Tax</td>
             <td height="30" colspan="2" align="right" style="padding:0 5px;">{{$expense['total']}}</td>
           </tr>
           <tr>
