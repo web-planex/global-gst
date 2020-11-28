@@ -11,7 +11,7 @@
 </style>
 <div class="row page-titles">
     <div class="col-sm-6 align-self-center">
-        <h4 class="text-themecolor">Add Expense</h4>
+        <h4 class="text-themecolor">@if(isset($expense)) Edit @else Add @endif Expense</h4>
     </div>
 </div>
 <div class="content">

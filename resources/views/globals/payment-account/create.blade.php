@@ -2,7 +2,7 @@
 @section('content')
 <div class="row page-titles">
     <div class="col-sm-6 align-self-center">
-        <h4 class="text-themecolor">Account</h4>
+        <h4 class="text-themecolor">@if(isset($payment_account)) Edit @else Add @endif Account</h4>
     </div>
 </div>
 <div class="content">
