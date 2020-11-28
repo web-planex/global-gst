@@ -230,7 +230,8 @@ class ExpenseController extends Controller
         $data['menu']  = 'Expense Voucher PDF';
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
         $data['expense'] = Expense::with('ExpenseItems')->where('id',$id)->first();
-        
+        $data['taxes'] = Taxes::where('status', 1)->get();
+
         if(!empty($data['expense']['ExpenseItems'])){
             foreach($data['expense']['ExpenseItems'] as $exp){
                     $tax = Taxes::where('id',$exp['tax_id'])->first();
@@ -260,5 +261,6 @@ class ExpenseController extends Controller
         $data['content'] = 'This is test pdf.';
         $pdf = \PDF::loadView('globals.expense.pdf_invoice', $data);
         return $pdf->download('invoice.pdf');
+        //return view('globals.expense.pdf_invoice', $data);
     }
 }
