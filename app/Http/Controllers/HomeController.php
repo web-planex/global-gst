@@ -43,6 +43,8 @@ class HomeController extends Controller
         $data['total_expense'] = Expense::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
         $data['total_payee'] = Payees::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
         $data['total_payment_account'] = PaymentAccount::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
+        $data['total_companies'] = CompanySettings::where('user_id',Auth::user()->id)->count();
+        $data['user_id'] = Auth::user()->id;
         return view('dashboard',$data);
     }
 }
