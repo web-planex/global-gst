@@ -97,8 +97,8 @@
         <td><table width="100%" border="1" cellspacing="0" cellpadding="0" >
           <tr>
             <td width="5%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Sr.<br/> No.</td>
-            <td width="24%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Item Name</td>
-            <td width="22%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Description</td>
+            <td width="23%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Item Name</td>
+            <td width="23%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Description</td>
             <td width="15%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Tax</td>
             <td width="9%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Quantity</td>
             <td width="17%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Rate</td>
