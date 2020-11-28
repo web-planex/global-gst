@@ -133,7 +133,7 @@
                     @endforeach
            @endif
           <tr>
-            <td colspan="3" rowspan="10" align="left" valign="top">
+            <td colspan="3" rowspan="{{$tax_count}}" align="left" valign="top">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                             <tr>
                               <td height="123" style="padding:0 10px; border-bottom:solid 1px #000;">
