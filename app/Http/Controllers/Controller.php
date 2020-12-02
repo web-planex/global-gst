@@ -15,8 +15,8 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     protected $pagination = 15;
-    public function image($photo, $path)
-    {
+    
+    public function image($photo, $path){
         $root = base_path() . '/public/upload/' . $path;
         $name = str_random(20) . "." . $photo->getClientOriginalExtension();
         $mimetype = $photo->getMimeType();
@@ -87,5 +87,15 @@ class Controller extends BaseController
                 return $words["$ten"]." ".$words["$unit"]." ".$novalue." ".$this->convert_digit_to_words($remainno).$decimalstr; //recursion
             }
         }
+    }
+    
+    public function globalPdfOption() {
+         $global_options = [
+            'binary' => 'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf',
+//            'header-html' => $header_html,
+//            'footer-html' => $footer_html,
+            'minimum-font-size' => 12
+        ]; 
+        return $global_options ;
     }
 }

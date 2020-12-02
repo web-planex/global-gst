@@ -12,6 +12,7 @@ use App\Models\Globals\Suppliers;
 use App\CompanySettings;
 use App\Models\Globals\Taxes;
 use App\Models\Globals\ExpenseItems;
+use WKPDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -226,7 +227,6 @@ class ExpenseController extends Controller
     }
     
     public function download_pdf($id){
-//        return \PDF::loadFile('http://localhost/global-gst/public/dashboard')->download('github.pdf');
         $data['menu']  = 'Expense Voucher PDF';
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
         $data['expense'] = Expense::with('ExpenseItems')->where('id',$id)->first();
@@ -236,16 +236,15 @@ class ExpenseController extends Controller
             $tax['tax_name'] == 'GST' ? $tax_count += 2 : $tax_count += 1;
         }
         $data['tax_count'] = $tax_count;
+        
         if(!empty($data['expense']['ExpenseItems'])){
             foreach($data['expense']['ExpenseItems'] as $exp){
                     $tax = Taxes::where('id',$exp['tax_id'])->first();
                     $exp['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'];
             }
-        }
-        
+        }        
         $data['expense']['total_in_word'] = $this->convert_digit_to_words($data['expense']['total']);
-        
-        
+                
         $payee = Payees::where('id',$data['expense']['payee_id'])->first();
         if(!empty($payee)){
             if($payee['type']==1){
@@ -257,14 +256,13 @@ class ExpenseController extends Controller
             }
         }
         
-//        $html = "123";
-//        
-//        return \PDF::loadHTML($html)->setPaper('a4')->setOrientation('landscape')->setOption('margin-bottom', 0)->save('myfile1.pdf');
-        
         $data['name']  = 'Expense Voucher';
         $data['content'] = 'This is test pdf.';
-        $pdf = \PDF::loadView('globals.expense.pdf_invoice', $data);
-        return $pdf->download('invoice.pdf');
-        //return view('globals.expense.pdf_invoice', $data);
+        $pdf = new WKPDF($this->globalPdfOption());        
+        $pdf->addPage(view('globals.expense.pdf_invoice',$data));        
+        if (!$pdf->send('expense_invoice.pdf')) {
+            $error = $pdf->getError();
+            return $error;
+        }
     }
 }
