@@ -50,8 +50,8 @@
                                                     <a class="dropdown-item" href="{{route('expense-edit',$list['id'])}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="delete_expense_records({{$list['id']}})">Delete</a>
                                                     <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" target="_blank" href="{{route('expense-print-pdf',$list['id'])}}">Print</a>
-                                                    <a class="dropdown-item" href="{{route('expense-download_pdf',$list['id'])}}">Download</a>
+                                                    <a class="dropdown-item" target="_blank" href="{{route('expense-download_pdf',['id'=>$list['id'],'output'=>'print'])}}">Print</a>
+                                                    <a class="dropdown-item" href="{{route('expense-download_pdf',['id'=>$list['id'],'output'=>'download'])}}">Download</a>
                                                 </div>
                                             </div>
                                         <!--<div class="btn-group">
