@@ -297,8 +297,11 @@ class ExpenseController extends Controller
         
         $data['name']  = 'Expense Voucher';
         $data['content'] = 'This is test pdf.';
-        $pdf = \PDF::loadView('globals.expense.pdf_invoice', $data);
-        return $pdf->inline('invoice.pdf');
+//        $pdf = \PDF::loadView('globals.expense.pdf_invoice', $data);
+        $pdf = new WKPDF($this->globalPdfOption());        
+        $pdf->addPage(view('globals.expense.pdf_invoice',$data));        
+        return $pdf->send();
+//        return $pdf->inline('invoice.pdf');
 //        return view('globals.expense.pdf_invoice', $data);
     }
 }
