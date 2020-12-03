@@ -215,7 +215,8 @@
                                             <div class="card">
                                                 <div class="card-body">
                                                     <div class="form-group mb-0">
-                                                    {!! Form::textarea('memo', null, ['class' => 'form-control','id'=>'memo','rows' => '3','placeholder' => 'Memo']) !!}
+                                                    <label for="memo">Memo</label>
+                                                    {!! Form::textarea('memo', null, ['class' => 'form-control','id'=>'memo','rows' => '3']) !!}
                                                     @if ($errors->has('memo'))
                                                         <span class="text-danger">
                                                             <strong>{{ $errors->first('memo') }}</strong>
