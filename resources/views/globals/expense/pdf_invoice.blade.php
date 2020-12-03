@@ -140,8 +140,8 @@
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                             <tr>
                               <td height="123" style="padding:0 10px; border-bottom:solid 1px #000;">
-                                  <strong>Payment Account</strong> :{{$expense['PaymentAccount']['payment_account']}}<br/>
-                                  <strong>Payment Method</strong> :{{$expense['Payee']['payment_method']}}
+                                  <strong>Payment Account</strong> : {{$expense['PaymentAccount']['name']}}<br/>
+                                  <strong>Payment Method</strong> : {{App\Models\Globals\Expense::$payment_method[$expense['payment_method']]}}
                               </td>
                             </tr>
                             <tr>

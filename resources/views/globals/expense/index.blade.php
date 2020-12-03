@@ -1,5 +1,17 @@
 @extends('layouts.app')
 @section('content')
+<style>
+@media (max-width: 767px) {
+    .table-responsive .dropdown-menu {
+        overflow-x: auto;
+    }
+}
+@media (min-width: 768px) {
+    .table-responsive {
+        overflow-x: visible;
+    }
+}
+</style>
     <div class="row page-titles">
         <div class="col-sm-6 align-self-center">
             <h4 class="text-themecolor">Expense</h4>
@@ -49,7 +61,6 @@
                                                 <div class="dropdown-menu">
                                                     <a class="dropdown-item" href="{{route('expense-edit',$list['id'])}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="delete_expense_records({{$list['id']}})">Delete</a>
-                                                    <div class="dropdown-divider"></div>
                                                     <a class="dropdown-item" target="_blank" href="{{route('expense-download_pdf',['id'=>$list['id'],'output'=>'print'])}}">Print</a>
                                                     <a class="dropdown-item" href="{{route('expense-download_pdf',['id'=>$list['id'],'output'=>'download'])}}">Download</a>
                                                 </div>
