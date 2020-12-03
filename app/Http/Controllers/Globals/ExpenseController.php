@@ -226,7 +226,7 @@ class ExpenseController extends Controller
         return $data;
     }
     
-    public function download_pdf($id){
+    public function download_pdf(Request $request, $id){
         $data['menu']  = 'Expense Voucher PDF';
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
         $data['expense'] = Expense::with('ExpenseItems')->where('id',$id)->first();
@@ -255,53 +255,22 @@ class ExpenseController extends Controller
                 $data['user'] = Customers::where('id',$payee['type_id'])->first();
             }
         }
-        
-        $data['name']  = 'Expense Voucher';
-        $data['content'] = 'This is test pdf.';
-        $pdf = new WKPDF($this->globalPdfOption());        
-        $pdf->addPage(view('globals.expense.pdf_invoice',$data));        
-        if (!$pdf->send('expense_invoice.pdf')) {
-            $error = $pdf->getError();
-            return $error;
-        }
-    }
-    
-    public function print_pdf($id) {
-        $data['menu']  = 'Expense Voucher PDF';
-        $data['company'] = CompanySettings::where('id',$this->Company())->first();
-        $data['expense'] = Expense::with('ExpenseItems')->where('id',$id)->first();
-        $data['taxes'] = Taxes::where('status', 1)->get();
-        $tax_count = 5;
-        foreach($data['taxes'] as $tax) {
-            $tax['tax_name'] == 'GST' ? $tax_count += 2 : $tax_count += 1;
-        }
-        $data['tax_count'] = $tax_count;
-        if(!empty($data['expense']['ExpenseItems'])){
-            foreach($data['expense']['ExpenseItems'] as $exp){
-                    $tax = Taxes::where('id',$exp['tax_id'])->first();
-                    $exp['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'];
-            }
-        }
-        $data['expense']['total_in_word'] = $this->convert_digit_to_words($data['expense']['total']);
 
-        $payee = Payees::where('id',$data['expense']['payee_id'])->first();
-        if(!empty($payee)){
-            if($payee['type']==1){
-                $data['user'] = Suppliers::where('id',$payee['type_id'])->first();
-            }elseif($payee['type']==2){
-                $data['user'] = Employees::where('id',$payee['type_id'])->first();
-            }else{
-                $data['user'] = Customers::where('id',$payee['type_id'])->first();
-            }
-        }
-        
         $data['name']  = 'Expense Voucher';
         $data['content'] = 'This is test pdf.';
-//        $pdf = \PDF::loadView('globals.expense.pdf_invoice', $data);
         $pdf = new WKPDF($this->globalPdfOption());        
-        $pdf->addPage(view('globals.expense.pdf_invoice',$data));        
-        return $pdf->send();
-//        return $pdf->inline('invoice.pdf');
-//        return view('globals.expense.pdf_invoice', $data);
+        $pdf->addPage(view('globals.expense.pdf_invoice',$data));
+
+        if($request->output == 'download') {
+            if (!$pdf->send('expense_invoice.pdf')) {
+                $error = $pdf->getError();
+                return $error;
+            }
+        } else {
+            if (!$pdf->send()) {
+                $error = $pdf->getError();
+                return $error;
+            }
+        }
     }
 }
