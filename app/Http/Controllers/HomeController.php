@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\CompanySettings;
+use App\Models\Globals\CompanySettings;
 use App\Models\Globals\Expense;
 use App\Models\Globals\Payees;
 use App\Models\Globals\PaymentAccount;
@@ -44,7 +44,7 @@ class HomeController extends Controller
         $data['total_expense'] = Expense::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
         $data['total_payee'] = Payees::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
         $data['total_payment_account'] = PaymentAccount::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
-        $data['total_companies'] = CompanySettings::where('user_id',Auth::user()->id)->count();
+        $data['total_companies'] =CompanySettings::where('user_id',Auth::user()->id)->count();
         $data['user_id'] = Auth::user()->id;
         return view('dashboard',$data);
     }

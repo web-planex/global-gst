@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\CompanySettings;
+use App\Models\Globals\CompanySettings;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -38,7 +38,7 @@ class Controller extends BaseController
     }
 
     public static function AllCompanies(){
-        return $all_companies = CompanySettings::where('user_id',Auth::user()->id)->select('company_name','id')->get();
+        return $all_companies =CompanySettings::where('user_id',Auth::user()->id)->select('company_name','id')->get();
     }
 
     public static function SetCompany(){

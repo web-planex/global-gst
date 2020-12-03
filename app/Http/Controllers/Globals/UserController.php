@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Globals;
 
-use App\CompanySettings;
+use App\Models\Globals\CompanySettings;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;

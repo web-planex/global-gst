@@ -9,7 +9,7 @@ use App\Models\Globals\Expense;
 use App\Models\Globals\Payees;
 use App\Models\Globals\PaymentAccount;
 use App\Models\Globals\Suppliers;
-use App\CompanySettings;
+use App\Models\Globals\CompanySettings;
 use App\Models\Globals\Taxes;
 use App\Models\Globals\ExpenseItems;
 use WKPDF;
