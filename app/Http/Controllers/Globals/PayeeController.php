@@ -18,7 +18,49 @@ class PayeeController extends Controller
 
     public function index(Request $request){
         $data['menu'] = 'Payees';
-        $data['payees'] = Payees::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->orderBy('id','DESC')->paginate($this->pagination);
+        $query = Payees::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->select();
+        $search = '';
+        if(isset($request['search']) && !empty($request['search'])){
+             $uid = '';
+             $sup = Suppliers::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->where(function($q1) use($request){
+               $q1->orwhere('email',$request['search']);
+               $q1->orwhere('mobile',$request['search']); 
+             })->select('id')->get();
+             if(!empty($sup)){
+                foreach($sup as $sp){
+                        $uid .= $sp['id'].',';
+                 }
+            }
+            
+             $emp = Employees::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->where(function($q1) use($request){
+               $q1->orwhere('email',$request['search']);
+               $q1->orwhere('mobile',$request['search']); 
+             })->select('id')->get();
+             if(!empty($emp)){
+                foreach($emp as $ep){
+                        $uid .= $ep['id'].',';
+                 }
+            }
+            
+             $cust = Customers::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->where(function($q1) use($request){
+               $q1->orwhere('email',$request['search']);
+               $q1->orwhere('mobile',$request['search']); 
+              })->select('id')->get();
+              if(!empty($cust)){
+                    foreach($cust as $ct){
+                            $uid .= $ct['id'].',';
+                     }
+              }
+             
+             $query->where(function($q) use($request, $uid){
+                        $q->orwhere('name','like','%'.$request['search'].'%');
+                        $q->orwhereIn('type_id', explode(',',$uid));                    
+              });
+             $search = $request['search'];
+        }
+        
+        $data['payees'] =  $query->orderBy('id','DESC')->paginate($this->pagination);
+        $data['search'] = $search;
         return view('globals.payees.index',$data);
     }
 

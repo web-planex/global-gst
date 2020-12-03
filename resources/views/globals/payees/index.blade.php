@@ -14,6 +14,19 @@
     <div class="row">
         <div class="col-12 page-min-height">
             @include('inc.message')
+            {!! Form::open(['url' => url('payees'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
+                <div class="row">
+                           <div class="col-md-3">
+                                <div class="form-group">
+                                        {!! Form::text('search', isset($search)&&!empty($search)?$search:null, ['class' => 'form-control','id'=>'sf_name', 'placeholder'=>'Search']) !!}
+                                </div>
+                            </div>
+
+                           <div class="col-md-3">
+                                    <button type="submit" class="btn btn-primary">Search</button>
+                            </div>
+                </div>                
+             {!! Form::close() !!}
             <div class="card">
                 <div class="gstinvoice-table-data">
                     <div class="table-responsive data-table-gst-box pb-3">
