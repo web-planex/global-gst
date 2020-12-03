@@ -41,7 +41,7 @@ Route::get('/expense/edit/{id}', 'Globals\ExpenseController@edit')->name('expens
 Route::patch('/expense/update/{id}', 'Globals\ExpenseController@update')->name('expense-update');
 Route::get('/expense/delete/{id}', 'Globals\ExpenseController@delete')->name('expense-delete');
 Route::get('/expense/download_pdf/{id}', 'Globals\ExpenseController@download_pdf')->name('expense-download_pdf');
-
+Route::get('/expense/print-pdf/{id}', 'Globals\ExpenseController@print_pdf')->name('expense-print-pdf');
 //Payees
 Route::get('/payees', 'Globals\PayeeController@index')->name('payees');
 Route::get('/payees/create', 'Globals\PayeeController@create')->name('payees-add');

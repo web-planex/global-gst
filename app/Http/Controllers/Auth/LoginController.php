@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use App\CompanySettings;
 
 class LoginController extends Controller
 {
@@ -39,4 +41,15 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    protected function authenticated(Request $request, $user) {
+        $session = Session::get('company');
+        if(empty($session)){
+            $company = CompanySettings::where('user_id',$user->id)->orderBy('id','DESC')->first();
+            if(!empty($company)){
+                 session(['company'=>$company['id']]);
+            }
+        }
+    }
+
 }
