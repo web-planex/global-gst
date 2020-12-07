@@ -56,14 +56,14 @@ class PaymentAccount extends Model
         self::UNDEPOSITED_FUNDS => 'Undeposited funds'
     ];
 
-    const CASH_AND_CASH_EQUIVALENTS = 1;
-    const CASH_ON_HAND = 2;
-    const CLIENT_TRUST_ACCOUNTS = 3;
-    const CURRENT = 4;
-    const MONEY_MARKET = 5;
-    const OTHER_EARMARKED_BANK_ACCOUNTS = 6;
-    const RENTS_HELD_IN_TRUST = 7;
-    const SAVINGS = 8;
+    const CASH_AND_CASH_EQUIVALENTS = 17;
+    const CASH_ON_HAND = 18;
+    const CLIENT_TRUST_ACCOUNTS = 19;
+    const CURRENT = 20;
+    const MONEY_MARKET = 21;
+    const OTHER_EARMARKED_BANK_ACCOUNTS = 22;
+    const RENTS_HELD_IN_TRUST = 23;
+    const SAVINGS = 24;
 
     public static $bank = [
         self::CASH_AND_CASH_EQUIVALENTS => 'Cash and Cash Equivalents',

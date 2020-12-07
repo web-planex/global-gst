@@ -16,8 +16,63 @@ class PaymentAccountController extends Controller
     }
 
     public function index(){
+        $input_search = Request::input('search');
+        $start_date = !empty(Request::input('start_date'))?date('Y-m-d', strtotime(Request::input('start_date'))) :"";
+        $end_date =  !empty(Request::input('end_date'))?date('Y-m-d', strtotime(Request::input('end_date'))):"";
+        
         $data['menu'] = 'payment-account';
-        $data['payment_accounts'] = PaymentAccount::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->orderBy('id','DESC')->paginate($this->pagination);
+        $query = PaymentAccount::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->select();
+         $search = '';
+        if(isset($input_search) && !empty($input_search)){
+             $atypes = '';
+             $cassets = '';
+             $tid = '';
+             
+             foreach (PaymentAccount::$account_type as $key => $type){
+                 if(preg_grep('~'. strtolower($input_search).'~', array(strtolower($type)))){
+                     $atypes .= $key.',';
+                 }
+             }
+             
+             foreach (PaymentAccount::$current_assets as $key1 => $type1){
+                 if(preg_grep('~'. strtolower($input_search).'~', array(strtolower($type1)))){
+                     $cassets .= $key1.',';
+                 }
+             }
+             
+             foreach (PaymentAccount::$bank as $key2 => $type2){
+                 if(preg_grep('~'. strtolower($input_search).'~', array(strtolower($type2)))){
+                     $cassets .= $key2.',';
+                 }
+             }
+             
+             $tax_ids = Taxes::where('tax_name',$input_search)->select('id')->get();
+             foreach ($tax_ids as $ids){
+                 $tid .= $ids['id'].',';
+             }
+             
+             $query->where(function($q) use($input_search, $atypes, $cassets,  $tid){
+                        $q->orwhere('name','like','%'.$input_search.'%');
+                        $q->orwhereIn('account_type', explode(',', $atypes));
+                        $q->orwhereIn('detail_type', explode(',', $cassets));
+                        $q->orwhereIn('default_tax_code', explode(',', $tid));
+                        $q->orwhere('balance', str_replace(',', '', $input_search));
+              });
+             $search = $input_search;
+        }
+        
+        if(isset($start_date) && !empty($start_date)){
+            $query->where('as_of','>=',$start_date);
+        }
+        
+        if(isset($end_date) && !empty($end_date)){
+            $query->where('as_of','<=',$end_date);
+        }
+        
+        $data['search'] = $search;
+        $data['start_date'] =Request::input('start_date');
+        $data['end_date'] = Request::input('end_date');
+        $data['payment_accounts'] = $query->orderBy('id','DESC')->paginate($this->pagination);
         return view('globals.payment-account.index', $data);
     }
 

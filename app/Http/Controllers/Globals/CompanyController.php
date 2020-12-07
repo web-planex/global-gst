@@ -13,19 +13,31 @@ class CompanyController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
-    {
-        //
+    public function index(Request $request){
+         $user = Auth::user()->id;
+        $data['menu'] = 'Company';
+        $search = '';
+        $query = CompanySettings::where('user_id',$user)->select();
+        if(isset($request['search']) && !empty($request['search'])){
+            $query->where(function ($q) use($request){
+                $q->orwhere('company_name','like','%'.$request['search'].'%');
+                $q->orwhere('gstin','like','%'.$request['search'].'%');
+                $q->orwhere('company_email','like','%'.$request['search'].'%');
+                $q->orwhere('company_phone','like','%'.$request['search'].'%');
+            });
+            $search = $request['search'];
+        }
+        $data['search'] = $search;
+        $data['companies'] = $query->Paginate($this->pagination);
+        return view('globals.company.index',$data);
     }
 
-    public function create()
-    {
+    public function create(){
         $data['menu'] = 'Company';
         return view('globals.company.create',$data);
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $this->validate($request, [
             'company_logo' => 'mimes:jpg,jpeg,png,bmp',
             'company_name' => 'required',
@@ -50,8 +62,7 @@ class CompanyController extends Controller
         return redirect('companies/'.$user->id);
     }
 
-    public function show($id)
-    {
+    public function show($id){
         $user = Auth::user()->id;
         if($id != $user){
             \Session::flash('error-message', "You have not permission for access other user's companies!");
@@ -62,15 +73,13 @@ class CompanyController extends Controller
         return view('globals.company.index',$data);
     }
 
-    public function edit($id)
-    {
+    public function edit($id){
         $data['menu'] = 'Company';
         $data['companies'] = CompanySettings::findOrFail($id);
         return view('globals.company.create',$data);
     }
 
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
         $this->validate($request, [
             'company_logo' => 'mimes:jpg,jpeg,png,bmp',
             'company_name' => 'required',
@@ -96,8 +105,7 @@ class CompanyController extends Controller
         return redirect('companies/'.$user->id);
     }
 
-    public function destroy($id)
-    {
+    public function destroy($id){
         $user = Auth::user();
         $company = CompanySettings::where('id',$id)->first();
         $company->delete();
