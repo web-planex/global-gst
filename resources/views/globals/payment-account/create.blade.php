@@ -108,6 +108,7 @@
                 data: { name: name }
             }).done(function(data) {
                 $("#detailType").empty();
+                $.each(data.response, function(i, val) {
                     $("#detailType").append("<option value='"+i+"'>"+val+"</option>");
                 });
                 var val = $('#detailType').find(":selected").text();
