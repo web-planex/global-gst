@@ -59,8 +59,13 @@ class PayeeController extends Controller
              $search = $request['search'];
         }
         
-        $data['payees'] =  $query->orderBy('id','DESC')->paginate($this->pagination);
+        if(isset($request['type']) && !empty($request['type'])){
+            $query->where('type',$request['type']);
+        }
+        
+        $data['payees'] = $query->orderBy('id','DESC')->paginate($this->pagination);
         $data['search'] = $search;
+        $data['select_user_type'] = $request['type'];
         return view('globals.payees.index',$data);
     }
 

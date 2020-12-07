@@ -24,9 +24,56 @@ class ExpenseController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(){
+    public function index(Request $request){
         $data['menu'] = 'Expense';
-        $data['expense'] = Expense::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->orderBy('id','DESC')->paginate($this->pagination);
+        $input_search = $request['search'];
+        $start_date = !empty($request['start_date'])?date('Y-m-d', strtotime($request['start_date'])) :"";
+        $end_date =  !empty($request['end_date'])?date('Y-m-d', strtotime($request['end_date'])):"";
+        $search = '';
+        $query = Expense::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->select();
+        
+        if(isset($input_search) && !empty($input_search)){
+             $method = '';
+             $payee_id = '';
+             $pay_account = '';
+             
+             foreach (Expense::$payment_method as $key => $type){
+                 if(preg_grep('~'. strtolower($input_search).'~', array(strtolower($type)))){
+                     $method .= $key.',';
+                 }
+             }
+             
+             $payees = Payees::where('name','like','%'.$input_search.'%')->select('id')->get();
+             foreach($payees as $pid){
+                 $payee_id .= $pid['id'].',';
+             }
+             
+             $payment = PaymentAccount::where('name','like','%'.$input_search.'%')->select('id')->get();
+             foreach($payment as $paid){
+                 $pay_account .= $paid['id'].',';
+             }
+             
+             $query->where(function($q) use($input_search, $method,$payee_id, $pay_account){
+                        $q->orwhere('ref_no','like','%'.$input_search.'%');
+                        $q->orwhereIn('payee_id', explode(',', $payee_id));
+                        $q->orwhereIn('payment_account_id', explode(',', $pay_account));
+                        $q->orwhereIn('payment_method', explode(',', $method));
+              });
+             $search = $input_search;
+        }
+        
+        if(isset($start_date) && !empty($start_date)){
+            $query->where('payment_date','>=',$start_date);
+        }
+        
+        if(isset($end_date) && !empty($end_date)){
+            $query->where('payment_date','<=',$end_date);
+        }
+        
+        $data['search'] = $search;
+        $data['start_date'] =$request['start_date'];
+        $data['end_date'] = $request['end_date'];
+        $data['expense'] = $query->orderBy('id','DESC')->paginate($this->pagination);
         return view('globals.expense.index',$data);
     }
 

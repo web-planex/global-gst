@@ -8,6 +8,22 @@
     </div>
     <div class="row mb-1">
         <div class="col-lg-3 col-md-6">
+            <a href="{{url('products')}}" class="text-dark">
+                <div class="card mr-1">
+                    <div class="card-body">
+                        <div class="d-flex no-block">
+                            <div class="round align-self-center round-primary"><i class="fab  fa-product-hunt"></i></div>
+                            <div class="m-l-10 align-self-center">
+                                <h3 class="m-b-0">{{$total_product}}</h3>
+                                <h5 class="text-muted m-b-0">Products</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
             <a href="{{url('expense')}}" class="text-dark">
                 <div class="card mr-1">
                     <div class="card-body">
@@ -44,7 +60,7 @@
                 <div class="card mr-1">
                     <div class="card-body">
                         <div class="d-flex no-block">
-                            <div class="round align-self-center round-primary"><i class="fa fa-credit-card"></i></div>
+                            <div class="round align-self-center round-warning"><i class="fa fa-credit-card"></i></div>
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0">{{$total_payment_account}}</h3>
                                 <h5 class="text-muted m-b-0">Payment Accounts</h5>
@@ -54,12 +70,13 @@
                 </div>
             </a>
         </div>
+        
         <div class="col-lg-3 col-md-6">
-            <a href="{{url('companies/'.$user_id)}}" class="text-dark">
+            <a href="{{url('companies')}}" class="text-dark">
                 <div class="card mr-1">
                     <div class="card-body">
                         <div class="d-flex no-block">
-                            <div class="round align-self-center round-warning"><i class="fa fa-building"></i></div>
+                            <div class="round align-self-center round-primary"><i class="fa fa-building"></i></div>
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0">{{$total_companies}}</h3>
                                 <h5 class="text-muted m-b-0">Companies</h5>

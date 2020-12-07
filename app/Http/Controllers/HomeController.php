@@ -41,6 +41,7 @@ class HomeController extends Controller
             $data['session_company'] = $this->Company();
         }
         $data['menu'] = 'Dashboard';
+        $data['total_product'] = \App\Models\Globals\Product::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
         $data['total_expense'] = Expense::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
         $data['total_payee'] = Payees::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
         $data['total_payment_account'] = PaymentAccount::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();

@@ -42,6 +42,7 @@ Route::patch('/expense/update/{id}', 'Globals\ExpenseController@update')->name('
 Route::get('/expense/delete/{id}', 'Globals\ExpenseController@delete')->name('expense-delete');
 Route::get('/expense/download_pdf/{id}', 'Globals\ExpenseController@download_pdf')->name('expense-download_pdf');
 //Route::get('/expense/print-pdf/{id}', 'Globals\ExpenseController@print_pdf')->name('expense-print-pdf');
+
 //Payees
 Route::get('/payees', 'Globals\PayeeController@index')->name('payees');
 Route::get('/payees/create', 'Globals\PayeeController@create')->name('payees-add');
@@ -66,6 +67,11 @@ Route::any('/invoice-setting/addedit', 'Globals\InvoiceSettingController@store')
 //Company Management
 Route::resource('/companies', 'Globals\CompanyController');
 Route::get('/companies/delete/{id}', 'Globals\CompanyController@destroy');
+
+//Product Management
+Route::resource('/products', 'Globals\ProductController');
+Route::get('/products/delete/{id}', 'Globals\ProductController@destroy');
+
 
 Route::get('/clear-cache-all', function() {
     Artisan::call('cache:clear');
