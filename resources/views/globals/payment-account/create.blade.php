@@ -28,7 +28,15 @@
                         </div>
                         <div class="form-group mb-3 col-md-6">
                             <label for="detailType">Detail Type <span class="text-danger">*</span></label>
-                            {!! Form::select('detail_type', \App\Models\Globals\PaymentAccount::$current_assets, null, ['class' => 'form-control', 'id' => 'detailType']) !!}
+                           @if(isset($payment_account) && !empty($payment_account) && $payment_account['account_type']==1)
+                                {!! Form::select('detail_type', \App\Models\Globals\PaymentAccount::$current_assets, null, ['class' => 'form-control', 'id' => 'detailType']) !!}
+                           @elseif(isset($payment_account) && !empty($payment_account) && $payment_account['account_type']==2)     
+                                {!! Form::select('detail_type', \App\Models\Globals\PaymentAccount::$bank, null, ['class' => 'form-control', 'id' => 'detailType']) !!}
+                           @elseif(isset($payment_account) && !empty($payment_account) && $payment_account['account_type']==3)
+                                {!! Form::select('detail_type', \App\Models\Globals\PaymentAccount::$credit_card, null, ['class' => 'form-control', 'id' => 'detailType']) !!}
+                           @else     
+                                {!! Form::select('detail_type', \App\Models\Globals\PaymentAccount::$current_assets, null, ['class' => 'form-control', 'id' => 'detailType']) !!}
+                           @endif     
                             @if ($errors->has('detail_type'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('detail_type') }}</strong>
