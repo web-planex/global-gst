@@ -76,7 +76,7 @@ class PaymentAccount extends Model
         self::SAVINGS => 'Savings'
     ];
 
-    const CREDIT_CARD = 1;
+    const CREDIT_CARD = 25;
 
     public static $credit_card = [
         self::CREDIT_CARD => 'Credit card'
