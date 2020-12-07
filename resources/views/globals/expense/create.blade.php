@@ -585,6 +585,9 @@
             html += "<td><button type=\"button\" class=\"btn btn-danger btn-circle remove-line-item \"><i class=\"fa fa-times\"></i> </button></td>";
             html += "</tr>";
             $("#items_list_body").append(html);
+            $(".floatTextBox").inputFilter(function(value) {
+                return /^-?\d*[.,]?\d*$/.test(value);
+            });
         });
 
         $(document).on('keyup change','.rate-input',function(){
