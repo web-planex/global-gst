@@ -12,6 +12,7 @@ use App\Models\Globals\Suppliers;
 use App\Models\Globals\CompanySettings;
 use App\Models\Globals\Taxes;
 use App\Models\Globals\ExpenseItems;
+use App\Models\Globals\Product;
 use WKPDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -86,6 +87,8 @@ class ExpenseController extends Controller
         $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
         $data['payees'] = $payees;
         $data['payment_accounts'] = $payment_accounts;
+        $data['products'] =Product::where('status',1)->get();
+        $data['first_product'] =Product::where('status',1)->first();
         return view('globals.expense.create',$data);
     }
 
@@ -127,12 +130,13 @@ class ExpenseController extends Controller
             $expense->save();
             $expense_id = $expense->id;
             $data = [];
-            for($i=0;$i<count($request['item_name']);$i++) {
+            for($i=0;$i<count($request['product']);$i++) {
                 $data = [
                     'expense_id' => $expense_id,
                     'tax_id' => $request['taxes'][$i],
-                    'item_name' => $request['item_name'][$i],
+                    'product' => $request['product'][$i],
                     'description' => $request['description'][$i],
+                    'hsn_code' => $request['hsn_code'][$i],
                     'quantity' => $request['quantity'][$i],
                     'rate' => $request['rate'][$i],
                     'amount' => $request['amount'][$i],
@@ -152,6 +156,8 @@ class ExpenseController extends Controller
         $data['payment_accounts'] = PaymentAccount::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
         $data['taxes'] = Taxes::where('status', 1)->get();
         $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
+        $data['products'] =Product::where('status',1)->get();
+        $data['first_product'] =Product::where('status',1)->first();        
         return view('globals.expense.create',$data);
     }
 
@@ -190,17 +196,17 @@ class ExpenseController extends Controller
         }
         if($request->has('submit')) {
             $expense->save();
-
             ExpenseItems::where('expense_id',$expense['id'])->delete();
-
+            
             $expense_id = $expense->id;
             $data = [];
-            for($i=0;$i<count($request['item_name']);$i++) {
+            for($i=0;$i<count($request['product']);$i++) {
                 $data = [
                     'expense_id' => $expense_id,
                     'tax_id' => $request['taxes'][$i],
-                    'item_name' => $request['item_name'][$i],
+                    'product' => $request['product'][$i],
                     'description' => $request['description'][$i],
+                    'hsn_code' => $request['hsn_code'][$i],
                     'quantity' => $request['quantity'][$i],
                     'rate' => $request['rate'][$i],
                     'amount' => $request['amount'][$i],
@@ -319,5 +325,13 @@ class ExpenseController extends Controller
                 return $error;
             }
         }
+    }
+    
+    public function get_product(Request $request) {
+        $product = Product::where('id',$request['data'])->first();
+        $data['description'] = $product['description'];
+        $data['hsn_code'] = $product['hsn_code'];
+        $data['price'] = $product['price'];
+        return $data;
     }
 }

@@ -102,13 +102,14 @@
                                             <table id="" class="table table-hover">
                                                 <thead>
                                                     <th width="3%">#</th>
-                                                    <th width="20%">Item Name <span class="text-danger">*</span></th>
+                                                    <th width="17%">Item Name <span class="text-danger">*</span></th>
                                                     <th width="20%">Description <span class="text-danger">*</span></th>
-                                                    <th width="10%">QTY <span class="text-danger">*</span></th>
+                                                    <th width="13%">HSN Code<span class="text-danger">*</span></th>
+                                                    <th width="9%">QTY <span class="text-danger">*</span></th>
                                                     <th width="13%">Rate <span class="text-danger">*</span></th>
                                                     <th width="13%">Amount <span class="text-danger">*</span></th>
                                                     <th width="16%">Tax <span class="text-danger">*</span></th>
-                                                    <th width="5%">&nbsp;</th>
+                                                    <th width="10%">&nbsp;</th>
                                                 </thead>
                                                 <tbody id="items_list_body">
                                                 @php $i=1; @endphp
@@ -119,11 +120,19 @@
                                                         @endif
                                                         <tr class="{{$i > 1 ? 'itemNewCheckTr' : 'itemTr'}}">
                                                             <td>{{$i}}</td>
-                                                            <td>
-                                                                <input type="text" class="form-control" name="item_name[]" value="{{$item['item_name']}}">
+                                                            <td id="pro_list">
+<!--                                                                <input type="text" class="form-control" name="product[]" value="{{$item['product']}}">-->
+                                                                <select name="product[]" class="form-control product_select" required="">
+                                                                    @foreach($products as $pro)
+                                                                         <option value="{{$pro['id']}}" @if($pro['id'] == $item['product']) selected @endif  >{{$pro['title']}}</option>
+                                                                    @endforeach
+                                                                </select>
                                                             </td>
                                                             <td>
-                                                                <input type="text" class="form-control" name="description[]" value="{{$item['description']}}">
+                                                                <input type="text" class="form-control description_input" name="description[]" value="{{$item['description']}}">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control hsn_code__input" name="hsn_code[]" value="{{$item['hsn_code']}}">
                                                             </td>
                                                             <td>
                                                                 <input type="text" min="0" class="form-control quantity-input floatTextBox" name="quantity[]" value="{{$item['quantity']}}">
@@ -152,17 +161,25 @@
                                                 @else
                                                     <tr class="itemTr">
                                                         <td>1</td>
-                                                        <td>
-                                                            <input type="text" class="form-control" name="item_name[0]" required>
+                                                        <td id="pro_list">
+                                                            <!--<input type="text" class="form-control" name="item_name[0]" required>-->
+                                                            <select name="product[0]" class="form-control product_select" required="">
+                                                                @foreach($products as $pro)
+                                                                     <option value="{{$pro['id']}}">{{$pro['title']}}</option>
+                                                                @endforeach
+                                                            </select>
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control" name="description[0]" required>
+                                                            <input type="text" class="form-control description_input" name="description[0]" id="description_0" value="{{$first_product['description']}}" required>
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control hsn_code_input" name="hsn_code[0]" id="hsn_code_0" value="{{$first_product['hsn_code']}}" required>
                                                         </td>
                                                         <td>
                                                             <input type="text" min="0" class="form-control quantity-input floatTextBox" name="quantity[0]" required>
                                                         </td>
                                                         <td>
-                                                            <input type="text" min="0" class="form-control rate-input floatTextBox" name="rate[0]" required>
+                                                            <input type="text" min="0" class="form-control rate-input floatTextBox" id="rate_0"  name="rate[0]" value="{{$first_product['price']}}" required>
                                                         </td>
                                                         <td>
                                                             <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[0]" required>
@@ -574,20 +591,38 @@
 
             $("#items_list_body").append(row);
             var tax_input = $('#taxes').html();
+            var products = $('#pro_list').html();
             var html = "<tr class=\"itemNewCheckTr\">";
             html += "<td>" + i + "</td>";
-            html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
-            html += "<td><input type=\"text\" class=\"form-control\" name=\"description["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
+//            html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
+            html += "<td><select name=\"product["+numItems+"]\" class='form-control product_select' required>@foreach($products as $pro) <option value='{{$pro['id']}}'>{{$pro['title']}}</option> @endforeach</select></td>";
+            html += "<td><input type=\"text\" class=\"form-control description_input\" name=\"description["+numItems+"]\" id=\"description_"+numItems+"\" value='{{$first_product['description']}}' required><span class=\"multi-error\"></span></td>";
+            html += "<td><input type=\"text\" class=\"form-control hsn_code_input\" name=\"hsn_code["+numItems+"]\" id=\"hsn_code_"+numItems+"\" value='{{$first_product['hsn_code']}}' required><span class=\"multi-error\"></span></td>";
             html += "<td><input type=\"text\" min=\"0\" class=\"form-control quantity-input floatTextBox\" name=\"quantity["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
-            html += "<td><input type=\"text\" min=\"0\" class=\"form-control rate-input floatTextBox\" name=\"rate["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
+            html += "<td><input type=\"text\" min=\"0\" class=\"form-control rate-input floatTextBox\" id=\"rate_"+numItems+"\" name=\"rate["+numItems+"]\" value='{{$first_product['price']}}' required><span class=\"multi-error\"></span></td>";
             html += "<td><input type=\"text\" min=\"0\" class=\"form-control amount-input floatTextBox\" name=\"amount["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
-            html += "<td>"+tax_input+"</td>";
+            html += "<td><select class='form-control tax-input' name=\"taxes["+numItems+"]\">@foreach($taxes as $tax) <option value='{{$tax['id']}}'>{{$tax['rate'].'% '.$tax['tax_name']}}</option> @endforeach</select></td>";
             html += "<td><button type=\"button\" class=\"btn btn-danger btn-circle remove-line-item \"><i class=\"fa fa-times\"></i> </button></td>";
             html += "</tr>";
             $("#items_list_body").append(html);
             $(".floatTextBox").inputFilter(function(value) {
                 return /^-?\d*[.,]?\d*$/.test(value);
             });
+        });
+        
+        $(document).on('change','.product_select',function(){
+              var pid = $(this) .val();
+              var that = $(this);
+              $.ajax({
+               url: '{{url('ajax/get_product')}}',
+               type: 'POST',
+               data:  {'data':pid},
+               success: function (result) {
+                     $(that).parent('td').next('td').find('.description_input').val(result['description']);
+                     $(that).parent('td').next('td').next('td').find('.hsn_code_input').val(result['hsn_code']);
+                     $(that).parent('td').next('td').next('td').next('td').next('td').find('.rate-input').val(result['price']);
+               }
+           });            
         });
 
         $(document).on('keyup change','.rate-input',function(){

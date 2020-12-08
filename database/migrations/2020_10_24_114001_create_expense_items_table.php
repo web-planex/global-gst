@@ -17,8 +17,9 @@ class CreateExpenseItemsTable extends Migration
             $table->integer('id',1);
             $table->integer('expense_id');
             $table->integer('tax_id');
-            $table->string('item_name', 50);
+            $table->integer('product');
             $table->text('description');
+            $table->string('hsn_code',8);
             $table->string('quantity', 10);
             $table->string('rate', 15);
             $table->string('amount', 15);
