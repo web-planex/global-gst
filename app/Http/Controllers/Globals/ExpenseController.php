@@ -87,8 +87,8 @@ class ExpenseController extends Controller
         $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
         $data['payees'] = $payees;
         $data['payment_accounts'] = $payment_accounts;
-        $data['products'] =Product::where('status',1)->get();
-        $data['first_product'] =Product::where('status',1)->first();
+        $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
+        $data['first_product'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         return view('globals.expense.create',$data);
     }
 
