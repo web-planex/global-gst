@@ -102,7 +102,7 @@
                                             <table id="" class="table table-hover">
                                                 <thead>
                                                     <th width="3%">#</th>
-                                                    <th width="20%">Item Name <span class="text-danger">*</span></th>
+                                                    <th width="20%">Product <span class="text-danger">*</span></th>
                                                     <!--<th width="20%">Description <span class="text-danger">*</span></th>-->
                                                     <th width="13%">HSN Code<span class="text-danger">*</span></th>
                                                     <th width="8%">QTY <span class="text-danger">*</span></th>
