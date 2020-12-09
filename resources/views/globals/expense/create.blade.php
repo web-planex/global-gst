@@ -132,7 +132,7 @@
                                                                 <input type="text" class="form-control description_input" name="description[]" value="{{$item['description']}}">
                                                             </td>
                                                             <td>
-                                                                <input type="text" class="form-control hsn_code__input" name="hsn_code[]" value="{{$item['hsn_code']}}">
+                                                                <input type="text" class="form-control hsn_code_input" name="hsn_code[]" value="{{$item['hsn_code']}}">
                                                             </td>
                                                             <td>
                                                                 <input type="text" min="0" class="form-control quantity-input floatTextBox" name="quantity[]" value="{{$item['quantity']}}">
