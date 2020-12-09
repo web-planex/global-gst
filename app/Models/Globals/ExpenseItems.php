@@ -10,7 +10,6 @@ class ExpenseItems extends Model
         'expense_id',
         'tax_id',
         'product',
-        'description',
         'hsn_code',
         'quantity',
         'rate',

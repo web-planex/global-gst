@@ -102,14 +102,14 @@
                                             <table id="" class="table table-hover">
                                                 <thead>
                                                     <th width="3%">#</th>
-                                                    <th width="17%">Item Name <span class="text-danger">*</span></th>
-                                                    <th width="20%">Description <span class="text-danger">*</span></th>
+                                                    <th width="20%">Item Name <span class="text-danger">*</span></th>
+                                                    <!--<th width="20%">Description <span class="text-danger">*</span></th>-->
                                                     <th width="13%">HSN Code<span class="text-danger">*</span></th>
-                                                    <th width="9%">QTY <span class="text-danger">*</span></th>
+                                                    <th width="8%">QTY <span class="text-danger">*</span></th>
                                                     <th width="13%">Rate <span class="text-danger">*</span></th>
                                                     <th width="13%">Amount <span class="text-danger">*</span></th>
-                                                    <th width="16%">Tax <span class="text-danger">*</span></th>
-                                                    <th width="10%">&nbsp;</th>
+                                                    <th width="20%">Tax <span class="text-danger">*</span></th>
+                                                    <th width="4%">&nbsp;</th>
                                                 </thead>
                                                 <tbody id="items_list_body">
                                                 @php $i=1; @endphp
@@ -127,9 +127,6 @@
                                                                          <option value="{{$pro['id']}}" @if($pro['id'] == $item['product']) selected @endif  >{{$pro['title']}}</option>
                                                                     @endforeach
                                                                 </select>
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control description_input" name="description[]" value="{{$item['description']}}">
                                                             </td>
                                                             <td>
                                                                 <input type="text" class="form-control hsn_code_input" name="hsn_code[]" value="{{$item['hsn_code']}}">
@@ -172,9 +169,6 @@
                                                                      <option value="{{$pro['id']}}">{{$pro['title']}}</option>
                                                                 @endforeach
                                                             </select>
-                                                        </td>
-                                                        <td>
-                                                            <input type="text" class="form-control description_input" name="description[0]" id="description_0" value="{{$first_product['description']}}" required>
                                                         </td>
                                                         <td>
                                                             <input type="text" class="form-control hsn_code_input" name="hsn_code[0]" id="hsn_code_0" value="{{$first_product['hsn_code']}}" required>
@@ -609,7 +603,7 @@
             html += "<td>" + i + "</td>";
 //            html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
             html += "<td><select name=\"product["+numItems+"]\" class='form-control product_select' required>@foreach($products as $pro) <option value='{{$pro['id']}}'>{{$pro['title']}}</option> @endforeach</select></td>";
-            html += "<td><input type=\"text\" class=\"form-control description_input\" name=\"description["+numItems+"]\" id=\"description_"+numItems+"\" value='{{$first_product['description']}}' required><span class=\"multi-error\"></span></td>";
+            //html += "<td><input type=\"text\" class=\"form-control description_input\" name=\"description["+numItems+"]\" id=\"description_"+numItems+"\" value='{{$first_product['description']}}' required><span class=\"multi-error\"></span></td>";
             html += "<td><input type=\"text\" class=\"form-control hsn_code_input\" name=\"hsn_code["+numItems+"]\" id=\"hsn_code_"+numItems+"\" value='{{$first_product['hsn_code']}}' required><span class=\"multi-error\"></span></td>";
             html += "<td><input type=\"text\" min=\"0\" class=\"form-control quantity-input floatTextBox\" name=\"quantity["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
             html += "<td><input type=\"text\" min=\"0\" class=\"form-control rate-input floatTextBox\" id=\"rate_"+numItems+"\" name=\"rate["+numItems+"]\" value='{{$first_product['price']}}' required><span class=\"multi-error\"></span></td>";
@@ -631,11 +625,12 @@
                type: 'POST',
                data:  {'data':pid},
                success: function (result) {
-                     $(that).parent('td').next('td').find('.description_input').val(result['description']);
-                     $(that).parent('td').next('td').next('td').find('.hsn_code_input').val(result['hsn_code']);
-                     $(that).parent('td').next('td').next('td').next('td').next('td').find('.rate-input').val(result['price']);
+                     //$(that).parent('td').next('td').find('.description_input').val(result['description']);
+                     $(that).parent('td').next('td').find('.hsn_code_input').val(result['hsn_code']);
+                     $(that).parent('td').next('td').next('td').next('td').find('.rate-input').val(result['price']);
+                     $(that).parent('td').next('td').next('td').next('td').find('.rate-input').trigger('change');
                }
-           });            
+           });
         });
 
         $(document).on('keyup change','.rate-input',function(){
