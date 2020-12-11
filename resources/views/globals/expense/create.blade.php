@@ -701,7 +701,6 @@
         });
 
         $(document).on('change','.ex-product',function(){
->>>>>>> mukund
               var pid = $(this) .val();
               var that = $(this);
               $.ajax({
