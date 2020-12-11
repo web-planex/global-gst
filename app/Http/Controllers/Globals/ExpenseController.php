@@ -84,6 +84,32 @@ class ExpenseController extends Controller
         $payees = payees::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
         $payment_accounts = PaymentAccount::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
         $data['taxes'] = Taxes::where('status', 1)->get();
+        $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
+        $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
+        $taxes_without_cess_arr = [];
+        $taxes_with_cess_arr = [];
+        
+        $a=0;
+        foreach($taxes_without_cess as $tax) {
+            $taxes_without_cess_arr[$a] = $tax['rate'].'_'.$tax['tax_name'];
+            $a++;
+        }
+        $i=0;
+        foreach($taxes_with_cess as $tax) {
+            $taxes_with_cess_arr[$i] = $tax['rate'].'_'.$tax['tax_name'];
+            $taxes_with_cess_arr[$i+1] = $tax['cess'].'_CESS';
+            $i = $i+2;
+        }
+        $data['all_tax_labels'] = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
+//        $final_tax_arr = [];
+//        foreach($combine_tax_arr as $str) {
+//            $arr = explode("_", $str, 2);
+//            $rate = $arr[0];
+//            $tax_name = $arr[1];
+//            $final_tax_arr[(string)$rate] = $tax_name;
+//        }
+//        return $final_tax_arr;
+        $tax_without_cess = Taxes::where('is_cess',0)->where('status',1)->get();
         $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
         $data['payees'] = $payees;
         $data['payment_accounts'] = $payment_accounts;
@@ -154,6 +180,23 @@ class ExpenseController extends Controller
         $data['payees'] = payees::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
         $data['payment_accounts'] = PaymentAccount::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
         $data['taxes'] = Taxes::where('status', 1)->get();
+        $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
+        $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
+        $taxes_without_cess_arr = [];
+        $taxes_with_cess_arr = [];
+        
+        $a=0;
+        foreach($taxes_without_cess as $tax) {
+            $taxes_without_cess_arr[$a] = $tax['rate'].'_'.$tax['tax_name'];
+            $a++;
+        }
+        $i=0;
+        foreach($taxes_with_cess as $tax) {
+            $taxes_with_cess_arr[$i] = $tax['rate'].'_'.$tax['tax_name'];
+            $taxes_with_cess_arr[$i+1] = $tax['cess'].'_CESS';
+            $i = $i+2;
+        }
+        $data['all_tax_labels'] = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
         $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
         $data['products'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $data['first_product'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();        

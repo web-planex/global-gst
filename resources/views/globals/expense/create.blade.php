@@ -205,25 +205,25 @@
                                                         <input type="text" class="form-control" id="subtotal" readonly="" />
                                                     </td>
                                                 </tr>
-                                                @foreach($taxes as $tax)
-                                                    @if($tax['tax_name'] == 'GST' && $tax['is_cess'] == 0)
-                                                    <tr class="{{$tax['rate'].'_'.$tax['tax_name']}} hide">
-                                                        <th width='50%'>{{$tax['rate'] / 2}}% CGST on Rs. <span id="label_1_{{$tax['rate'].'_'.$tax['tax_name']}}">0.00</span></th>
-                                                        <td width='50%'><input type="text" id="input_1_{{$tax['rate'].'_'.$tax['tax_name']}}" class="form-control tax-input-row" readonly></td>
+                                                @foreach($all_tax_labels as $tax)
+                                                    @php
+                                                    $arr = explode("_", $tax, 2);
+                                                    $rate = $arr[0];
+                                                    $tax_name = $arr[1];
+                                                    @endphp
+                                                    @if($tax_name == 'GST')
+                                                    <tr class="{{$rate.'_'.$tax_name}} hide">
+                                                        <th width='50%'>{{$rate / 2}}% CGST on Rs. <span id="label_1_{{$rate.'_'.$tax_name}}">0.00</span></th>
+                                                        <td width='50%'><input type="text" id="input_1_{{$rate.'_'.$tax_name}}" class="form-control tax-input-row" readonly></td>
                                                     </tr>
-                                                    <tr class="{{$tax['rate'].'_'.$tax['tax_name']}} hide">
-                                                        <th width='50%'>{{$tax['rate'] / 2}}% SGST on Rs. <span id="label_2_{{$tax['rate'].'_'.$tax['tax_name']}}">0.00</span></th>
-                                                        <td width='50%'><input type="text" id="input_2_{{$tax['rate'].'_'.$tax['tax_name']}}" class="form-control tax-input-row" readonly></td>
-                                                    </tr>
-                                                    @elseif($tax['is_cess'] == 1)
-                                                    <tr class="{{$tax['cess'].'_CESS'}} hide">
-                                                        <th width='50%'>{{$tax['cess'].'% CESS'}} on Rs. <span id="label_{{$tax['cess'].'_CESS'}}">0.00</span></th>
-                                                        <td width='50%'><input type="text" id="input_{{$tax['cess'].'_CESS'}}" class="form-control tax-input-row" readonly></td>
+                                                    <tr class="{{$rate.'_'.$tax_name}} hide">
+                                                        <th width='50%'>{{$rate / 2}}% SGST on Rs. <span id="label_2_{{$rate.'_'.$tax_name}}">0.00</span></th>
+                                                        <td width='50%'><input type="text" id="input_2_{{$rate.'_'.$tax_name}}" class="form-control tax-input-row" readonly></td>
                                                     </tr>
                                                     @else
-                                                    <tr class="{{$tax['rate'].'_'.$tax['tax_name']}} hide">
-                                                        <th width='50%'>{{$tax['rate'].'% '.$tax['tax_name']}} on Rs. <span id="label_{{$tax['rate'].'_'.$tax['tax_name']}}">0.00</span></th>
-                                                        <td width='50%'><input type="text" id="input_{{$tax['rate'].'_'.$tax['tax_name']}}" class="form-control tax-input-row" readonly></td>
+                                                    <tr class="{{$rate.'_'.$tax_name}} hide">
+                                                        <th width='50%'>{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{$rate.'_'.$tax_name}}">0.00</span></th>
+                                                        <td width='50%'><input type="text" id="input_{{$rate.'_'.$tax_name}}" class="form-control tax-input-row" readonly></td>
                                                     </tr>
                                                     @endif
                                                 @endforeach
@@ -759,13 +759,14 @@
                 is_cess = true;
                 cess_arr = tax_str.split("+");
             }
+            var amount = 0;
+            amount = $(this).parent('select').parent('td').prev('td').find('.amount-input').val();
 
             if(cess_arr.length > 0 && is_cess) {
-                var amount = 0;
-                amount = $(this).parent('select').parent('td').prev('td').find('.amount-input').val();
                 for(var r=0;r < cess_arr.length;r++){
                     tax_str = cess_arr[r];
-                    opt_str = opt_str.split('+').pop();
+                    var opt1_str = opt_str.substr(0, opt_str.indexOf('+'));
+                    var opt2_str = opt_str.split('+').pop();
                     var tax_name = tax_str.split('_').pop();
                     var tax_rate = tax_str.substr(0, tax_str.indexOf('_'));
                     var tax_raw_html = '';
@@ -776,9 +777,12 @@
                         $("#id_"+ tax_str).val(tax_hidden);
                     }
                     
-                    var cls_opt_str = "." + opt_str;
-                    console.log(cls_opt_str)
-                    $(cls_opt_str).addClass("hide");
+                    var cls_opt_str1 = "." + opt1_str;
+                    var cls_opt_str2 = "." + opt2_str;
+
+                    $(cls_opt_str1).addClass("hide");
+                    $(cls_opt_str2).addClass("hide");
+
                     if(tax_str != '' && tax_str !=  null) {
                         tax_arr[i] = tax_str;
                         if(tax_total_arr.hasOwnProperty(tax_str)) {
@@ -790,26 +794,26 @@
                     }
                 }
             } else {
-                var amount = 0;
-                amount = $(this).parent('select').parent('td').prev('td').find('.amount-input').val();
-
                 var tax_name = tax_str.split('_').pop();
                 var tax_rate = tax_str.substr(0, tax_str.indexOf('_'));
                 var tax_raw_html = '';
                 var tax_id = $(this).val();
+
                 if(tax_str != '') {
                     var tax_hidden = 0;
                     tax_hidden += parseFloat(amount);
                     $("#id_"+ tax_str).val(tax_hidden);
                 }
                 if (opt_str.indexOf('CESS') > -1) {
+                    var opt_str2 = opt_str.substr(0, opt_str.indexOf('+'));
                     opt_str = opt_str.split('+').pop();
+                    console.log(opt_str2)
+                    $('.'+opt_str2).addClass("hide");
                 }
-                console.log(opt_str)
+                //console.log(opt_str)
                 var cls_opt_str = "." + opt_str;
                 $(cls_opt_str).addClass("hide");
                 if(tax_str != '' && tax_str !=  null) {
-                    
                     tax_arr[i] = tax_str;
                     if(tax_total_arr.hasOwnProperty(tax_str)) {
                         tax_total_arr[tax_str] += parseFloat(amount);
@@ -819,7 +823,6 @@
                     i++;
                 }
             }
-            
         });
         $('.amount-input').each(function() {
             var tax_text = $(this).parent('td').next('td').find('.tax-input').find(":selected").text();
