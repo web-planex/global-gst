@@ -369,10 +369,15 @@ class ExpenseController extends Controller
     }
     
     public function get_product(Request $request) {
-        $product = Product::where('id',$request['data'])->first();
-        $data['description'] = $product['description'];
-        $data['hsn_code'] = $product['hsn_code'];
-        $data['price'] = $product['price'];
+        if($request['data'] != 0){
+            $product = Product::where('id',$request['data'])->first();
+            $data['description'] = $product['description'];
+            $data['hsn_code'] = $product['hsn_code'];
+            $data['price'] = $product['price'];
+        }else{
+            $user = Auth::user();
+            $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->select('title','id')->get()->toArray();
+        }
         return $data;
     }
 

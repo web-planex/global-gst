@@ -662,39 +662,52 @@
             var i = numItems + 1;
 
             var row = $("<tr>").addClass("itemTr");
+            var product_select = "<select name=\"product["+numItems+"]\" id=\"product_select"+i+"\" class='product_select ex-product form-control amounts-are-select3' required>";
+            /*Product Get*/
+            $.ajax({
+                url: '{{url('ajax/get_product')}}',
+                type: 'POST',
+                data: {'data': 0},
+                success: function (result) {
+                    var j;
+                    for(j=0; j<result['products'].length; j++ ){
+                        product_select += "<option value='"+result['products'][j]['id']+"'>"+result['products'][j]['title']+"</option>";
+                    }
+                    product_select += "</select>";
 
-            $("#items_list_body").append(row);
-            var tax_input = $('#taxes').html();
-            var products = $('#pro_list').html();
-            var html = "<tr class=\"itemNewCheckTr\">";
-            html += "<td>" + i + "</td>";
+                    $("#items_list_body").append(row);
+                    var tax_input = $('#taxes').html();
+                    var products = $('#pro_list').html();
+                    var html = "<tr class=\"itemNewCheckTr\">";
+                    html += "<td>" + i + "</td>";
 //            html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
-            html += "<td>" +
-                "<select name=\"product["+numItems+"]\" id=\"product_select"+i+"\" class='product_select ex-product form-control amounts-are-select3' required>@foreach($products as $pro) <option value='{{$pro['id']}}'>{{$pro['title']}}</option> @endforeach</select>" +
-                    "<div class=\"wrapper\" id=\"prowrp"+i+"\" style=\"display: none;\">"+
+                    html += "<td>" + product_select +
+                        "<div class=\"wrapper\" id=\"prowrp"+i+"\" style=\"display: none;\">"+
                         "<a href=\"javascript:;\" id=\"type2\" class=\"font-weight-300\" onclick=\"OpenProductModel('product_select"+i+"')\"><i class=\"fa fa-plus-circle\"></i> Add New</a>"+
-                    "</div>"+
-                "</td>";
-            //html += "<td><input type=\"text\" class=\"form-control description_input\" name=\"description["+numItems+"]\" id=\"description_"+numItems+"\" value='{{$first_product['description']}}' required><span class=\"multi-error\"></span></td>";
-            html += "<td><input type=\"text\" class=\"form-control hsn_code_input\" name=\"hsn_code["+numItems+"]\" id=\"hsn_code_"+numItems+"\" value='{{$first_product['hsn_code']}}' required><span class=\"multi-error\"></span></td>";
-            html += "<td><input type=\"number\" min=\"1\" class=\"form-control quantity-input floatTextBox\" name=\"quantity["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
-            html += "<td><input type=\"text\" min=\"0\" class=\"form-control rate-input floatTextBox\" id=\"rate_"+numItems+"\" name=\"rate["+numItems+"]\" value='{{$first_product['price']}}' required><span class=\"multi-error\"></span></td>";
-            html += "<td><input type=\"text\" min=\"0\" class=\"form-control amount-input floatTextBox\" name=\"amount["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
-            {{--html += "<td><select class='form-control tax-input' name=\"taxes["+numItems+"]\">@foreach($taxes as $tax) <option value='{{$tax['id']}}'>{{$tax['rate'].'% '.$tax['tax_name']}}</option> @endforeach</select></td>";--}}
-            html += "<td><select class='form-control tax-input' name=\"taxes["+numItems+"]\">@foreach($taxes as $tax) @if($tax['is_cess'] == 0)<option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name']}}</option> @else <option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option> @endif @endforeach</select></td>";
-            html += "<td><button type=\"button\" class=\"btn btn-danger btn-circle remove-line-item \"><i class=\"fa fa-times\"></i> </button></td>";
-            html += "</tr>";
-            $("#items_list_body").append(html);
-            $(".floatTextBox").inputFilter(function(value) {
-                return /^-?\d*[.,]?\d*$/.test(value);
-            });
+                        "</div>"+
+                        "</td>";
+                    //html += "<td><input type=\"text\" class=\"form-control description_input\" name=\"description["+numItems+"]\" id=\"description_"+numItems+"\" value='{{$first_product['description']}}' required><span class=\"multi-error\"></span></td>";
+                    html += "<td><input type=\"text\" class=\"form-control hsn_code_input\" name=\"hsn_code["+numItems+"]\" id=\"hsn_code_"+numItems+"\" value='{{$first_product['hsn_code']}}' required><span class=\"multi-error\"></span></td>";
+                    html += "<td><input type=\"number\" min=\"1\" class=\"form-control quantity-input floatTextBox\" name=\"quantity["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
+                    html += "<td><input type=\"text\" min=\"0\" class=\"form-control rate-input floatTextBox\" id=\"rate_"+numItems+"\" name=\"rate["+numItems+"]\" value='{{$first_product['price']}}' required><span class=\"multi-error\"></span></td>";
+                    html += "<td><input type=\"text\" min=\"0\" class=\"form-control amount-input floatTextBox\" name=\"amount["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
+                    {{--html += "<td><select class='form-control tax-input' name=\"taxes["+numItems+"]\">@foreach($taxes as $tax) <option value='{{$tax['id']}}'>{{$tax['rate'].'% '.$tax['tax_name']}}</option> @endforeach</select></td>";--}}
+                        html += "<td><select class='form-control tax-input' name=\"taxes["+numItems+"]\">@foreach($taxes as $tax) @if($tax['is_cess'] == 0)<option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name']}}</option> @else <option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option> @endif @endforeach</select></td>";
+                    html += "<td><button type=\"button\" class=\"btn btn-danger btn-circle remove-line-item \"><i class=\"fa fa-times\"></i> </button></td>";
+                    html += "</tr>";
+                    $("#items_list_body").append(html);
+                    $(".floatTextBox").inputFilter(function(value) {
+                        return /^-?\d*[.,]?\d*$/.test(value);
+                    });
 
-            $('#product_select'+i).on('select2:open',function(){
-                $("#select2-product_select"+i+"-results").siblings('div').remove();
-                $("#select2-product_select"+i+"-results").parent('span').prepend("<div class='select2-results__option'>" + jQuery('#prowrp'+i).html() + "</div>");
-            });
+                    $('#product_select'+i).on('select2:open',function(){
+                        $("#select2-product_select"+i+"-results").siblings('div').remove();
+                        $("#select2-product_select"+i+"-results").parent('span').prepend("<div class='select2-results__option'>" + jQuery('#prowrp'+i).html() + "</div>");
+                    });
 
-            $('.amounts-are-select3').select2();
+                    $('.amounts-are-select3').select2();
+                }
+            });
         });
 
         $(document).on('change','.ex-product',function(){
