@@ -307,18 +307,14 @@
 <!--PRODUCT MODAL-->
 @include('globals.expense.product_model')
 
-
 <script type="text/javascript">
     @if(!empty($expense_items))
         $(document).ready(function(){
-            //$('.product_select_edit').each(function(){
-                //console.log("#select2-product_select_"+c+"-results")
-                $('.product_select_edit').on('select2:open',function(){
-                    var id = $(this).data('id');
-                    $("#select2-product_select_"+id+"-results").siblings('div').remove();
-                    $("#select2-product_select_"+id+"-results").parent('span').prepend("<div class='select2-results__option'>" + jQuery('#prowrp'+id).html() + "</div>");
-                });
-            //});
+            $('.product_select_edit').on('select2:open',function(){
+                var id = $(this).data('id');
+                $("#select2-product_select_"+id+"-results").siblings('div').remove();
+                $("#select2-product_select_"+id+"-results").parent('span').prepend("<div class='select2-results__option'>" + jQuery('#prowrp'+id).html() + "</div>");
+            });
         });
     @endif
     function OpenUserTypeModal(){
@@ -620,6 +616,7 @@
                         $('#ProductModal').modal('hide');
                         $('html, body').css('overflowY', 'auto');
                         $("#ProductForm")[0].reset();
+                        $('.ex-product').trigger('change');
                     }
                 });
             }
