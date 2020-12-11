@@ -644,7 +644,7 @@
             $('.amounts-are-select3').select2();
         });
 
-        $(document).on('change','.product_select',function(){
+        $(document).on('change','.product_select, #product_select',function(){
               var pid = $(this) .val();
               var that = $(this);
               $.ajax({
