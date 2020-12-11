@@ -127,7 +127,7 @@
                                                                     @endforeach
                                                                 </select>
                                                                 <div class="wrapper" id="prowrp{{$i}}" style="display: none;">
-                                                                    <a href="javascript:;" class="font-weight-300"><i class="fa fa-plus-circle"></i> Add New</a>
+                                                                    <a href="javascript:;" class="font-weight-300" onclick="OpenProductModel('product_select_{{$i}}')"><i class="fa fa-plus-circle"></i> Add New</a>
                                                                 </div>
                                                             </td>
                                                             <td>
