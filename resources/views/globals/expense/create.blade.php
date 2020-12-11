@@ -121,13 +121,13 @@
                                                         <tr class="{{$i > 1 ? 'itemNewCheckTr' : 'itemTr'}}">
                                                             <td>{{$i}}</td>
                                                             <td id="pro_list">
-                                                                <select name="product[]" id="product_select" class="form-control amounts-are-select2" required="">
+                                                                <select name="product[]" id="product_select_{{$i}}" class="form-control product_select_edit amounts-are-select2" data-id="{{$i}}" required="">
                                                                     @foreach($products as $pro)
-                                                                         <option value="{{$pro['id']}}" @if($pro['id'] == $item['product_id']) selected @endif  >{{$pro['title']}}</option>
+                                                                         <option value="{{$pro['id']}}" @if($pro['id'] == $item['product_id']) selected @endif>{{$pro['title']}}</option>
                                                                     @endforeach
                                                                 </select>
-                                                                <div class="wrapper" id="prowrp" style="display: none;">
-                                                                    <a href="javascript:;" id="type2" class="font-weight-300"><i class="fa fa-plus-circle"></i> Add New</a>
+                                                                <div class="wrapper" id="prowrp{{$i}}" style="display: none;">
+                                                                    <a href="javascript:;" class="font-weight-300"><i class="fa fa-plus-circle"></i> Add New</a>
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -306,6 +306,18 @@
 
 
 <script type="text/javascript">
+    @if(!empty($expense_items))
+        $(document).ready(function(){
+            //$('.product_select_edit').each(function(){
+                //console.log("#select2-product_select_"+c+"-results")
+                $('.product_select_edit').on('select2:open',function(){
+                    var id = $(this).data('id');
+                    $("#select2-product_select_"+id+"-results").siblings('div').remove();
+                    $("#select2-product_select_"+id+"-results").parent('span').prepend("<div class='select2-results__option'>" + jQuery('#prowrp'+id).html() + "</div>");
+                });
+            //});
+        });
+    @endif
     function OpenUserTypeModal(){
         $('#UserTypeModal').modal('show');
         $('#payee').select2('close');
@@ -644,7 +656,7 @@
             $('.amounts-are-select3').select2();
         });
 
-        $(document).on('change','.product_select, #product_select',function(){
+        $(document).on('change','.product_select, .product_select_edit, #product_select',function(){
               var pid = $(this) .val();
               var that = $(this);
               $.ajax({
