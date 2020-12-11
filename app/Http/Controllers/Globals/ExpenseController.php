@@ -160,7 +160,7 @@ class ExpenseController extends Controller
                 $data = [
                     'expense_id' => $expense_id,
                     'tax_id' => $request['taxes'][$i],
-                    'product' => $request['product'][$i],
+                    'product_id' => $request['product'][$i],
                     'hsn_code' => $request['hsn_code'][$i],
                     'quantity' => $request['quantity'][$i],
                     'rate' => $request['rate'][$i],
@@ -246,7 +246,7 @@ class ExpenseController extends Controller
                 $data = [
                     'expense_id' => $expense_id,
                     'tax_id' => $request['taxes'][$i],
-                    'product' => $request['product'][$i],
+                    'product_id' => $request['product'][$i],
                     'hsn_code' => $request['hsn_code'][$i],
                     'quantity' => $request['quantity'][$i],
                     'rate' => $request['rate'][$i],

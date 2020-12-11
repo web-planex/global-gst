@@ -121,10 +121,9 @@
                                                         <tr class="{{$i > 1 ? 'itemNewCheckTr' : 'itemTr'}}">
                                                             <td>{{$i}}</td>
                                                             <td id="pro_list">
-<!--                                                                <input type="text" class="form-control" name="product[]" value="{{$item['product']}}">-->
                                                                 <select name="product[]" class="form-control product_select" required="">
                                                                     @foreach($products as $pro)
-                                                                         <option value="{{$pro['id']}}" @if($pro['id'] == $item['product']) selected @endif  >{{$pro['title']}}</option>
+                                                                         <option value="{{$pro['id']}}" @if($pro['id'] == $item['product_id']) selected @endif  >{{$pro['title']}}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </td>
