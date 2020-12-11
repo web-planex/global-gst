@@ -121,7 +121,7 @@
                                                         <tr class="{{$i > 1 ? 'itemNewCheckTr' : 'itemTr'}}">
                                                             <td>{{$i}}</td>
                                                             <td id="pro_list">
-                                                                <select name="product[]" class="form-control product_select amounts-are-select2" required="">
+                                                                <select name="product[]" id="product_select" class="form-control amounts-are-select2" required="">
                                                                     @foreach($products as $pro)
                                                                          <option value="{{$pro['id']}}" @if($pro['id'] == $item['product_id']) selected @endif  >{{$pro['title']}}</option>
                                                                     @endforeach
@@ -166,11 +166,14 @@
                                                         <td>1</td>
                                                         <td id="pro_list">
                                                             <!--<input type="text" class="form-control" name="item_name[0]" required>-->
-                                                            <select name="product[0]" class="form-control product_select" required="">
+                                                            <select name="product[0]" id="product_select" class="form-control amounts-are-select2" required="">
                                                                 @foreach($products as $pro)
                                                                      <option value="{{$pro['id']}}">{{$pro['title']}}</option>
                                                                 @endforeach
                                                             </select>
+                                                            <div class="wrapper" id="prowrp" style="display: none;">
+                                                                <a href="javascript:;" id="type2" class="font-weight-300"><i class="fa fa-plus-circle"></i> Add New</a>
+                                                            </div>
                                                         </td>
                                                         <td>
                                                             <input type="text" class="form-control hsn_code_input" name="hsn_code[0]" id="hsn_code_0" value="{{$first_product['hsn_code']}}" required>
@@ -571,14 +574,6 @@
         var flg = 0;
         var flg2 = 0;
         var flg3 = 0;
-
-        $('.product_select').on("select2:open", function () {
-            flg3++;
-            $this_html = jQuery('#prowrp').html();
-            $(".select2-results").prepend("<div class='select2-results__option'>" + $this_html + "</div>");
-        });
-
-
         $('#payee').on("select2:open", function () {
             flg++;
             if (flg == 1) {
@@ -594,6 +589,14 @@
                 $this_html2 = jQuery('#wrp2').html();
                 $(".select2-results").last().prepend("<div class='select2-results__option'>" +
                     $this_html2 + "</div>");
+            }
+        });
+        
+        $('#product_select').on("select2:open", function () {
+            flg3++;
+            if (flg3 == 1) {
+                $this_html = jQuery('#prowrp').html();
+                $(".select2-results").prepend("<div class='select2-results__option'>" + $this_html + "</div>");
             }
         });
 
@@ -614,8 +617,8 @@
             html += "<td>" + i + "</td>";
 //            html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
             html += "<td>" +
-                "<select name=\"product["+numItems+"]\" class='form-control product_select amounts-are-select2' required>@foreach($products as $pro) <option value='{{$pro['id']}}'>{{$pro['title']}}</option> @endforeach</select>" +
-                    "<div class=\"wrapper\" id=\"Newprowrp\" style=\"display: none;\">"+
+                "<select name=\"product["+numItems+"]\" id=\"product_select"+i+"\" class='product_select form-control amounts-are-select3' required>@foreach($products as $pro) <option value='{{$pro['id']}}'>{{$pro['title']}}</option> @endforeach</select>" +
+                    "<div class=\"wrapper\" id=\"prowrp"+i+"\" style=\"display: none;\">"+
                         "<a href=\"javascript:;\" id=\"type2\" class=\"font-weight-300\"><i class=\"fa fa-plus-circle\"></i> Add New</a>"+
                     "</div>"+
                 "</td>";
@@ -632,9 +635,15 @@
             $(".floatTextBox").inputFilter(function(value) {
                 return /^-?\d*[.,]?\d*$/.test(value);
             });
-            $('.amounts-are-select2').select2();
+
+            $('#product_select'+i).on('select2:open',function(){
+                $("#select2-product_select"+i+"-results").siblings('div').remove();
+                $("#select2-product_select"+i+"-results").parent('span').prepend("<div class='select2-results__option'>" + jQuery('#prowrp'+i).html() + "</div>");
+            });
+
+            $('.amounts-are-select3').select2();
         });
-        
+
         $(document).on('change','.product_select',function(){
               var pid = $(this) .val();
               var that = $(this);
