@@ -807,10 +807,8 @@
                 if (opt_str.indexOf('CESS') > -1) {
                     var opt_str2 = opt_str.substr(0, opt_str.indexOf('+'));
                     opt_str = opt_str.split('+').pop();
-                    console.log(opt_str2)
                     $('.'+opt_str2).addClass("hide");
                 }
-                //console.log(opt_str)
                 var cls_opt_str = "." + opt_str;
                 $(cls_opt_str).addClass("hide");
                 if(tax_str != '' && tax_str !=  null) {
