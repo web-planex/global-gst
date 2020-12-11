@@ -122,11 +122,14 @@
                                                             <td>{{$i}}</td>
                                                             <td id="pro_list">
 <!--                                                                <input type="text" class="form-control" name="product[]" value="{{$item['product']}}">-->
-                                                                <select name="product[]" class="form-control product_select" required="">
+                                                                <select name="product[]" class="form-control product_select amounts-are-select2" required="">
                                                                     @foreach($products as $pro)
                                                                          <option value="{{$pro['id']}}" @if($pro['id'] == $item['product']) selected @endif  >{{$pro['title']}}</option>
                                                                     @endforeach
                                                                 </select>
+                                                                <div class="wrapper" id="prowrp" style="display: none;">
+                                                                    <a href="javascript:;" id="type2" class="font-weight-300"><i class="fa fa-plus-circle"></i> Add New</a>
+                                                                </div>
                                                             </td>
                                                             <td>
                                                                 <input type="text" class="form-control hsn_code_input" name="hsn_code[]" value="{{$item['hsn_code']}}">
@@ -568,6 +571,15 @@
     $(document).ready(function(){
         var flg = 0;
         var flg2 = 0;
+        var flg3 = 0;
+
+        $('.product_select').on("select2:open", function () {
+            flg3++;
+            $this_html = jQuery('#prowrp').html();
+            $(".select2-results").prepend("<div class='select2-results__option'>" + $this_html + "</div>");
+        });
+
+
         $('#payee').on("select2:open", function () {
             flg++;
             if (flg == 1) {
@@ -602,7 +614,12 @@
             var html = "<tr class=\"itemNewCheckTr\">";
             html += "<td>" + i + "</td>";
 //            html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
-            html += "<td><select name=\"product["+numItems+"]\" class='form-control product_select' required>@foreach($products as $pro) <option value='{{$pro['id']}}'>{{$pro['title']}}</option> @endforeach</select></td>";
+            html += "<td>" +
+                "<select name=\"product["+numItems+"]\" class='form-control product_select amounts-are-select2' required>@foreach($products as $pro) <option value='{{$pro['id']}}'>{{$pro['title']}}</option> @endforeach</select>" +
+                    "<div class=\"wrapper\" id=\"Newprowrp\" style=\"display: none;\">"+
+                        "<a href=\"javascript:;\" id=\"type2\" class=\"font-weight-300\"><i class=\"fa fa-plus-circle\"></i> Add New</a>"+
+                    "</div>"+
+                "</td>";
             //html += "<td><input type=\"text\" class=\"form-control description_input\" name=\"description["+numItems+"]\" id=\"description_"+numItems+"\" value='{{$first_product['description']}}' required><span class=\"multi-error\"></span></td>";
             html += "<td><input type=\"text\" class=\"form-control hsn_code_input\" name=\"hsn_code["+numItems+"]\" id=\"hsn_code_"+numItems+"\" value='{{$first_product['hsn_code']}}' required><span class=\"multi-error\"></span></td>";
             html += "<td><input type=\"text\" min=\"0\" class=\"form-control quantity-input floatTextBox\" name=\"quantity["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
@@ -616,6 +633,7 @@
             $(".floatTextBox").inputFilter(function(value) {
                 return /^-?\d*[.,]?\d*$/.test(value);
             });
+            $('.amounts-are-select2').select2();
         });
         
         $(document).on('change','.product_select',function(){
