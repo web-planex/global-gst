@@ -375,4 +375,18 @@ class ExpenseController extends Controller
         $data['price'] = $product['price'];
         return $data;
     }
+
+    public function product_store(Request $request){
+        $productValue = $request->all();
+        $input=  array();
+        $user = Auth::user();
+        parse_str($productValue['data'], $input);
+        $input['user_id'] = $user->id;
+        $input['company_id'] = $this->Company();
+        $product = Product::create($input);
+
+        $data['id'] = $product['id'];
+        $data['name'] = $product['title'];
+        return $data;
+    }
 }
