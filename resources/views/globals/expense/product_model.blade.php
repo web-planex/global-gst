@@ -49,7 +49,7 @@
                             @endif
                         </div>
 
-                        <div class="form-group mb-3 col-md-6">
+                        <div class="form-group mb-3 col-md-12">
                             <label for="memo">Description<span class="text-danger">*</span></label>
                             {!! Form::textarea('description', null, ['class' => 'form-control','id'=>'description','rows' => '3']) !!}
                             @if ($errors->has('description'))
@@ -57,26 +57,6 @@
                                     <strong>{{ $errors->first('description') }}</strong>
                                 </span>
                             @endif
-                        </div>
-
-                        <div class="form-group mb-3 col-md-6">
-                            <div class="row">
-                                <label for="status" class="col-md-12">Status <span class="text-danger">*</span></label>
-                                @foreach(\App\Models\Globals\Product::$status as $key2 =>$value2)
-                                    <?php $checked = $key2 == 1 ?'checked':'';?>
-                                    <div class="col-md-3">
-                                        <div class="custom-control custom-radio mb-2">
-                                            {!! Form::radio('status', $key2, $key2==1?true:null, ['class' => 'custom-control-input', 'id'=>'status_'.$key2]) !!}
-                                            <label for="status_{{$key2}}" class="custom-control-label"> {{$value2}}</label>
-                                        </div>
-                                    </div>
-                                @endforeach
-                                @if ($errors->has('status'))
-                                    <span class="text-danger">
-                                       <strong>{{ $errors->first('status') }}</strong>
-                                   </span>
-                                @endif
-                            </div>
                         </div>
 
                         <div class="form-group col-md-12 mb-0">

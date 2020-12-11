@@ -383,6 +383,7 @@ class ExpenseController extends Controller
         parse_str($productValue['data'], $input);
         $input['user_id'] = $user->id;
         $input['company_id'] = $this->Company();
+        $input['status'] = 1;
         $product = Product::create($input);
 
         $data['id'] = $product['id'];
