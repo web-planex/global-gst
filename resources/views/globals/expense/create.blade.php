@@ -706,6 +706,7 @@
                     });
 
                     $('.amounts-are-select3').select2();
+                    $('.ex-product').trigger('change')
                 }
             });
         });
