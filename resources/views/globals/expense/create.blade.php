@@ -121,7 +121,7 @@
                                                         <tr class="{{$i > 1 ? 'itemNewCheckTr' : 'itemTr'}}">
                                                             <td>{{$i}}</td>
                                                             <td id="pro_list">
-                                                                <select name="product[]" id="product_select" class="form-control amounts-are-select2" required="">
+                                                                <select name="product[]" id="product_select" class="form-control ex-product amounts-are-select2" required="">
                                                                     @foreach($products as $pro)
                                                                          <option value="{{$pro['id']}}" @if($pro['id'] == $item['product_id']) selected @endif  >{{$pro['title']}}</option>
                                                                     @endforeach
@@ -166,13 +166,13 @@
                                                         <td>1</td>
                                                         <td id="pro_list">
                                                             <!--<input type="text" class="form-control" name="item_name[0]" required>-->
-                                                            <select name="product[0]" id="product_select" class="form-control amounts-are-select2" required="">
+                                                            <select name="product[0]" id="product_select" class="form-control ex-product amounts-are-select2" required="">
                                                                 @foreach($products as $pro)
                                                                      <option value="{{$pro['id']}}">{{$pro['title']}}</option>
                                                                 @endforeach
                                                             </select>
                                                             <div class="wrapper" id="prowrp" style="display: none;">
-                                                                <a href="javascript:;" id="type2" class="font-weight-300"><i class="fa fa-plus-circle"></i> Add New</a>
+                                                                <a href="javascript:;" id="type2" class="font-weight-300" onclick="OpenProductModel('product_select')"><i class="fa fa-plus-circle"></i> Add New</a>
                                                             </div>
                                                         </td>
                                                         <td>
@@ -304,6 +304,9 @@
 <!--PAYMENT ACCOUNT MODAL-->
 @include('globals.expense.payment_account_modal')
 
+<!--PRODUCT MODAL-->
+@include('globals.expense.product_model')
+
 
 <script type="text/javascript">
     function OpenUserTypeModal(){
@@ -323,6 +326,11 @@
         $('#payment_account').select2('close');
     }
 
+    function OpenProductModel(selectID){
+        $('#ProductModal').modal('show');
+        $('#'+selectID).select2('close');
+    }
+
     $('.user_type').change(function(){
        var user_type = $(this).val();
        $('#UserTypeModal').modal('hide');
@@ -335,7 +343,7 @@
        }
        $('.user_type').each(function(){
             $(this).prop('checked',false);
-        });
+       });
     });
 
     $(document).ready(function() {
@@ -568,6 +576,42 @@
                 });
             }
         });
+
+        $("#ProductForm").validate({
+            rules: {
+                title: "required",
+                hsn_code: "required",
+                sku: "required",
+                price: "required",
+                description: "required",
+                status: "required",
+            },
+            messages: {
+                title: "The title field is required",
+                hsn_code: "The hsn code field is required",
+                sku: "The sku field is required",
+                price: "The price field is required",
+                description: "The description field is required",
+                status: "The status field is required",
+            },
+
+            submitHandler:function(){
+                var data2 = $('#ProductForm').serialize();
+                $.ajax({
+                    url: '{{url('ajax/product-store')}}',
+                    type: 'POST',
+                    data: {'data':data2},
+                    success: function (result) {
+                        optionValue = result['id'];
+                        optionText = result['name'];
+                        $('.ex-product').append(`<option value="${optionValue}">${optionText}</option>`);
+                        $('#ProductModal').modal('hide');
+                        $('html, body').css('overflowY', 'auto');
+                        $("#ProductForm")[0].reset();
+                    }
+                });
+            }
+        });
     });
 
     $(document).ready(function(){
@@ -617,9 +661,9 @@
             html += "<td>" + i + "</td>";
 //            html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
             html += "<td>" +
-                "<select name=\"product["+numItems+"]\" id=\"product_select"+i+"\" class='product_select form-control amounts-are-select3' required>@foreach($products as $pro) <option value='{{$pro['id']}}'>{{$pro['title']}}</option> @endforeach</select>" +
+                "<select name=\"product["+numItems+"]\" id=\"product_select"+i+"\" class='product_select ex-product form-control amounts-are-select3' required>@foreach($products as $pro) <option value='{{$pro['id']}}'>{{$pro['title']}}</option> @endforeach</select>" +
                     "<div class=\"wrapper\" id=\"prowrp"+i+"\" style=\"display: none;\">"+
-                        "<a href=\"javascript:;\" id=\"type2\" class=\"font-weight-300\"><i class=\"fa fa-plus-circle\"></i> Add New</a>"+
+                        "<a href=\"javascript:;\" id=\"type2\" class=\"font-weight-300\" onclick=\"OpenProductModel('product_select"+i+"')\"><i class=\"fa fa-plus-circle\"></i> Add New</a>"+
                     "</div>"+
                 "</td>";
             //html += "<td><input type=\"text\" class=\"form-control description_input\" name=\"description["+numItems+"]\" id=\"description_"+numItems+"\" value='{{$first_product['description']}}' required><span class=\"multi-error\"></span></td>";
@@ -644,7 +688,7 @@
             $('.amounts-are-select3').select2();
         });
 
-        $(document).on('change','.product_select, #product_select',function(){
+        $(document).on('change','.ex-product',function(){
               var pid = $(this) .val();
               var that = $(this);
               $.ajax({
