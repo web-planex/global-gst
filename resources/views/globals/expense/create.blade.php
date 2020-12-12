@@ -103,7 +103,6 @@
                                                 <thead>
                                                     <th width="3%">#</th>
                                                     <th width="20%">Product <span class="text-danger">*</span></th>
-                                                    <!--<th width="20%">Description <span class="text-danger">*</span></th>-->
                                                     <th width="13%">HSN Code <span class="text-danger">*</span></th>
                                                     <th width="8%">QTY <span class="text-danger">*</span></th>
                                                     <th width="13%">Rate <span class="text-danger">*</span></th>
@@ -127,7 +126,7 @@
                                                                     @endforeach
                                                                 </select>
                                                                 <div class="wrapper" id="prowrp{{$i}}" style="display: none;">
-                                                                    <a href="javascript:;" class="font-weight-300" onclick="OpenProductModel('product_select_{{$i}}')"><i class="fa fa-plus-circle"></i> Add New</a>
+                                                                    <a href="javascript:;" class="font-weight-300 add-new-prod-link" data-id="product_select_{{$i}}" onclick="OpenProductModel('product_select_{{$i}}')"><i class="fa fa-plus-circle"></i> Add New</a>
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -172,7 +171,7 @@
                                                                 @endforeach
                                                             </select>
                                                             <div class="wrapper" id="prowrp" style="display: none;">
-                                                                <a href="javascript:;" id="type2" class="font-weight-300" onclick="OpenProductModel('product_select')"><i class="fa fa-plus-circle"></i> Add New</a>
+                                                                <a href="javascript:;" id="type2" data-id="product_select" class="font-weight-300 add-new-prod-link" onclick="OpenProductModel('product_select')"><i class="fa fa-plus-circle"></i> Add New</a>
                                                             </div>
                                                         </td>
                                                         <td>
@@ -361,6 +360,11 @@
     });
 
     $(document).ready(function() {
+        
+        $(document).on('click', '.add-new-prod-link', function(){
+            dropdown_id = $(this).data('id');
+        });
+        
         $("#SuppliersForm").validate({
             rules: {
                 first_name: "required",
@@ -632,6 +636,7 @@
                         $('#ProductModal').modal('hide');
                         $('html, body').css('overflowY', 'auto');
                         $("#ProductForm")[0].reset();
+                        $('#'+dropdown_id+' option:last').attr("selected", "selected");
                         $('.ex-product').trigger('change');
                     }
                 });
@@ -695,7 +700,7 @@
 //            html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
                     html += "<td>" + product_select +
                         "<div class=\"wrapper\" id=\"prowrp"+i+"\" style=\"display: none;\">"+
-                        "<a href=\"javascript:;\" id=\"type2\" class=\"font-weight-300\" onclick=\"OpenProductModel('product_select"+i+"')\"><i class=\"fa fa-plus-circle\"></i> Add New</a>"+
+                        "<a href=\"javascript:;\" class=\"font-weight-300 add-new-prod-link\" data-id=\"product_select"+i+"\" onclick=\"OpenProductModel('product_select"+i+"')\"><i class=\"fa fa-plus-circle\"></i> Add New</a>"+
                         "</div>"+
                         "</td>";
                     //html += "<td><input type=\"text\" class=\"form-control description_input\" name=\"description["+numItems+"]\" id=\"description_"+numItems+"\" value='{{$first_product['description']}}' required><span class=\"multi-error\"></span></td>";
