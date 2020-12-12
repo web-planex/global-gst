@@ -116,7 +116,7 @@ class ExpenseController extends Controller
         $data['payment_accounts'] = $payment_accounts;
         $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $data['first_product'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
-        $data['states'] = States::pluck('state_name','id');
+        $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         return view('globals.expense.create',$data);
     }
 
@@ -202,7 +202,7 @@ class ExpenseController extends Controller
         $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
         $data['products'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $data['first_product'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
-        $data['states'] = States::pluck('state_name','id');
+        $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         return view('globals.expense.create',$data);
     }
 

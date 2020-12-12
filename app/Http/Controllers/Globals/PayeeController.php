@@ -72,7 +72,7 @@ class PayeeController extends Controller
 
     public function create(){
         $data['menu'] = 'Payees';
-        $data['states'] = States::pluck('state_name','id');
+        $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         return view('globals.payees.create',$data);
     }
 
@@ -119,7 +119,7 @@ class PayeeController extends Controller
     public function edit($id){
         $data['menu'] = 'Payees';
         $data['payee'] = Payees::findOrFail($id);
-        $data['states'] = States::pluck('state_name','id');
+        $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         if($data['payee']['type']==1){
             $data['user'] = Suppliers::where('id',$data['payee']['type_id'])->first();
         }elseif($data['payee']['type']==2){
