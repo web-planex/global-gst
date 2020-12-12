@@ -179,7 +179,7 @@
                                                             <input type="text" class="form-control hsn_code_input" name="hsn_code[0]" id="hsn_code_0" value="{{$first_product['hsn_code']}}" required>
                                                         </td>
                                                         <td>
-                                                            <input type="number" min="1" class="form-control quantity-input floatTextBox" name="quantity[0]" required>
+                                                            <input type="number" min="1" value="1" class="form-control quantity-input floatTextBox" name="quantity[0]" required>
                                                         </td>
                                                         <td>
                                                             <input type="text" min="0" class="form-control rate-input floatTextBox" id="rate_0"  name="rate[0]" value="{{$first_product['price']}}" required>
@@ -308,7 +308,7 @@
 @include('globals.expense.product_model')
 
 <script type="text/javascript">
-    @if(!empty($expense_items))
+    @if(isset($expense) && !empty($expense))
         $(document).ready(function(){
             $('.product_select_edit').on('select2:open',function(){
                 var id = $(this).data('id');
@@ -316,6 +316,12 @@
                 $("#select2-product_select_"+id+"-results").parent('span').prepend("<div class='select2-results__option'>" + jQuery('#prowrp'+id).html() + "</div>");
             });
         });
+    @else
+        $(document).ready(function(){
+            setTimeout(function(){
+                $('.ex-product').trigger('change');
+            },500);
+        }); 
     @endif
     function OpenUserTypeModal(){
         $('#UserTypeModal').modal('show');
@@ -387,7 +393,9 @@
                 pincode: "The pincode field is required",
                 country: "The country field is required",
             },
-
+            normalizer: function(value) {
+                return $.trim(value);
+            },
             submitHandler:function(){
                 var data = $('#SuppliersForm').serialize();
                 $.ajax({
@@ -463,7 +471,9 @@
                 shipping_country: "The shipping country field is required",
 
             },
-
+            normalizer: function(value) {
+                return $.trim(value);
+            },
             submitHandler:function(){
                 var data1 = $('#EmployeesForm').serialize();
                 $.ajax({
@@ -538,7 +548,9 @@
                 shipping_pincode: "The shipping pincode field is required",
                 shipping_country: "The shipping country field is required",
             },
-
+            normalizer: function(value) {
+                return $.trim(value);
+            },
             submitHandler:function(){
                 var data2 = $('#CustomersForm').serialize();
                 $.ajax({
@@ -566,7 +578,9 @@
                 name: "The name field is required",
                 balance: "The balance field is required",
             },
-
+            normalizer: function(value) {
+                return $.trim(value);
+            },
             submitHandler:function(){
                 var data3 = $('#PaymentAccountForm').serialize();
                 $.ajax({
@@ -602,7 +616,9 @@
                 description: "The description field is required",
                 status: "The status field is required",
             },
-
+            normalizer: function(value) {
+                return $.trim(value);
+            },
             submitHandler:function(){
                 var data2 = $('#ProductForm').serialize();
                 $.ajax({
@@ -627,7 +643,7 @@
         var flg = 0;
         var flg2 = 0;
         var flg3 = 0;
-        $('#payee').on("select2:open", function () {
+        $('#payee').on("select2:open", function() {
             flg++;
             if (flg == 1) {
                 $this_html = jQuery('#wrp').html();
@@ -636,7 +652,7 @@
             }
         });
 
-        $('#payment_account').on("select2:open", function () {
+        $('#payment_account').on("select2:open", function() {
             flg2++;
             if (flg2 == 1) {
                 $this_html2 = jQuery('#wrp2').html();
@@ -645,7 +661,7 @@
             }
         });
         
-        $('#product_select').on("select2:open", function () {
+        $('#product_select').on("select2:open", function() {
             flg3++;
             if (flg3 == 1) {
                 $this_html = jQuery('#prowrp').html();
@@ -653,11 +669,7 @@
             }
         });
 
-        $(document).on('change', '#amounts_are',function(){
-            taxCalculation();
-        });
-
-        $("#addItem").click(function () {
+        $("#addItem").click(function() {
             var numItems = $('.itemTr').length;
             var i = numItems + 1;
 
@@ -688,7 +700,7 @@
                         "</td>";
                     //html += "<td><input type=\"text\" class=\"form-control description_input\" name=\"description["+numItems+"]\" id=\"description_"+numItems+"\" value='{{$first_product['description']}}' required><span class=\"multi-error\"></span></td>";
                     html += "<td><input type=\"text\" class=\"form-control hsn_code_input\" name=\"hsn_code["+numItems+"]\" id=\"hsn_code_"+numItems+"\" value='{{$first_product['hsn_code']}}' required><span class=\"multi-error\"></span></td>";
-                    html += "<td><input type=\"number\" min=\"1\" class=\"form-control quantity-input floatTextBox\" name=\"quantity["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
+                    html += "<td><input type=\"number\" min=\"1\" value=\"1\" class=\"form-control quantity-input floatTextBox\" name=\"quantity["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
                     html += "<td><input type=\"text\" min=\"0\" class=\"form-control rate-input floatTextBox\" id=\"rate_"+numItems+"\" name=\"rate["+numItems+"]\" value='{{$first_product['price']}}' required><span class=\"multi-error\"></span></td>";
                     html += "<td><input type=\"text\" min=\"0\" class=\"form-control amount-input floatTextBox\" name=\"amount["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
                     {{--html += "<td><select class='form-control tax-input' name=\"taxes["+numItems+"]\">@foreach($taxes as $tax) <option value='{{$tax['id']}}'>{{$tax['rate'].'% '.$tax['tax_name']}}</option> @endforeach</select></td>";--}}
@@ -719,10 +731,10 @@
                type: 'POST',
                data:  {'data':pid},
                success: function (result) {
-                     //$(that).parent('td').next('td').find('.description_input').val(result['description']);
-                     $(that).parent('td').next('td').find('.hsn_code_input').val(result['hsn_code']);
-                     $(that).parent('td').next('td').next('td').next('td').find('.rate-input').val(result['price']);
-                     $(that).parent('td').next('td').next('td').next('td').find('.rate-input').trigger('change');
+                    //$(that).parent('td').next('td').find('.description_input').val(result['description']);
+                    $(that).parent('td').next('td').find('.hsn_code_input').val(result['hsn_code']);
+                    $(that).parent('td').next('td').next('td').next('td').find('.rate-input').val(result['price']);
+                    $(that).parent('td').next('td').next('td').next('td').find('.rate-input').trigger('change');
                }
            });
         });
@@ -782,7 +794,7 @@
             taxCalculation();
         });
 
-        $(document).on('change','.tax-input', function(){
+        $(document).on('change','.tax-input, #amounts_are', function(){
             taxCalculation();
         });
         $('form.formExpense').validate();
