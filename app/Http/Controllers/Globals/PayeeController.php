@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Globals\Customers;
 use App\Models\Globals\Employees;
 use App\Models\Globals\Payees;
+use App\Models\Globals\States;
 use App\Models\Globals\Suppliers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -71,6 +72,7 @@ class PayeeController extends Controller
 
     public function create(){
         $data['menu'] = 'Payees';
+        $data['states'] = States::pluck('state_name','id');
         return view('globals.payees.create',$data);
     }
 
@@ -117,6 +119,7 @@ class PayeeController extends Controller
     public function edit($id){
         $data['menu'] = 'Payees';
         $data['payee'] = Payees::findOrFail($id);
+        $data['states'] = States::pluck('state_name','id');
         if($data['payee']['type']==1){
             $data['user'] = Suppliers::where('id',$data['payee']['type_id'])->first();
         }elseif($data['payee']['type']==2){

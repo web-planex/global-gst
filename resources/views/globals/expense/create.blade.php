@@ -1,13 +1,14 @@
 @extends('layouts.app')
 @section('content')
 <style>
-.tr-tax-lable {
-    display:block;
-    margin-top:10px;
-    width:100%;
-    padding:5px 0 !important;
-    border:none;
-}
+    .tr-tax-lable {
+        display:block;
+        margin-top:10px;
+        width:100%;
+        padding:5px 0 !important;
+        border:none;
+    }
+    .select2{width: 100%!important;}
 </style>
 <div class="row page-titles">
     <div class="col-sm-6 align-self-center">
@@ -398,6 +399,7 @@
                         optionValue = result['id'];
                         optionText = result['name'];
                         $('#payee').append(`<option value="${optionValue}">${optionText}</option>`);
+                        $('#payee').val(optionValue).change();
                         $('#SuppliersModal').modal('hide');
                         $('html, body').css('overflowY', 'auto');
                         $("#SuppliersForm")[0].reset();
@@ -474,6 +476,7 @@
                         optionValue = result['id'];
                         optionText = result['name'];
                         $('#payee').append(`<option value="${optionValue}">${optionText}</option>`);
+                        $('#payee').val(optionValue).change();
                         $('#EmployeeModal').modal('hide');
                         $('html, body').css('overflowY', 'auto');
                         $("#EmployeesForm")[0].reset();
@@ -549,6 +552,7 @@
                         optionValue = result['id'];
                         optionText = result['name'];
                         $('#payee').append(`<option value="${optionValue}">${optionText}</option>`);
+                        $('#payee').val(optionValue).change();
                         $('#CustomersModal').modal('hide');
                         $('html, body').css('overflowY', 'auto');
                         $("#CustomersForm")[0].reset();
@@ -577,6 +581,7 @@
                         optionValue = result['id'];
                         optionText = result['name'];
                         $('#payment_account').append(`<option value="${optionValue}">${optionText}</option>`);
+                        $('#payment_account').val(optionValue).change();
                         $('#PaymentAccountModal').modal('hide');
                         $('html, body').css('overflowY', 'auto');
                         $("#PaymentAccountForm")[0].reset();

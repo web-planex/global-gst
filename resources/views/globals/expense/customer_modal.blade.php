@@ -1,4 +1,4 @@
-<div class="modal fade bs-example-modal-lg" id="CustomersModal" tabindex="-1" role="dialog" aria-labelledby="CustomersModal">
+<div class="modal fade bs-example-modal-lg" id="CustomersModal" role="dialog" aria-labelledby="CustomersModal">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -125,7 +125,7 @@
                             <div class="form-group mb-3 row">
                                 <label for="gst_registration_type_id" class="col-md-12 col-form-label">Gst Registration Type</label>
                                 <div class="col-md-12">
-                                    {!! Form::select('gst_registration_type_id', \App\Models\Globals\Payees::$get_type, null, ['class' => 'form-control']) !!}
+                                    {!! Form::select('gst_registration_type_id', \App\Models\Globals\Payees::$get_type, null, ['class' => 'form-control amounts-are-select2']) !!}
                                     @if ($errors->has('gst_registration_type_id'))
                                         <span class="text-danger">
                                                 <strong>{{ $errors->first('gst_registration_type_id') }}</strong>
@@ -196,7 +196,7 @@
                                             <div class="form-group mb-3 row">
                                                 <label for="billing_state" class="col-md-12 col-form-label">Billing State <span class="text-danger">*</span></label>
                                                 <div class="col-md-9">
-                                                    {!! Form::text('billing_state', null, ['class' => 'form-control','id'=>'billing_state']) !!}
+                                                    {!! Form::select('billing_state', $states, null, ['class' => 'form-control amounts-are-select2', 'id'=>'billing_state']) !!}
                                                     @if ($errors->has('billing_state'))
                                                         <span class="text-danger">
                                                                 <strong>{{ $errors->first('billing_state') }}</strong>
@@ -280,7 +280,7 @@
                                             <div class="form-group mb-3 row">
                                                 <label for="shipping_state" class="col-md-12 col-form-label">Shipping State <span class="text-danger">*</span></label>
                                                 <div class="col-md-9">
-                                                    {!! Form::text('shipping_state', null, ['class' => 'form-control','id'=>'shipping_state']) !!}
+                                                    {!! Form::select('shipping_state', $states, null, ['class' => 'form-control amounts-are-select2', 'id'=>'shipping_state']) !!}
                                                     @if ($errors->has('shipping_state'))
                                                         <span class="text-danger">
                                                                 <strong>{{ $errors->first('shipping_state') }}</strong>
@@ -337,13 +337,18 @@
         if($(this).prop('checked')){
             $('#shipping_street').val($('#billing_street').val());
             $('#shipping_city').val($('#billing_city').val());
-            $('#shipping_state').val($('#billing_state').val());
+
+
+            $('#shipping_state').val($('#billing_state').val()).change();
+
+
+
             $('#shipping_pincode').val($('#billing_pincode').val());
             $('#shipping_country').val($('#billing_country').val());
         }else{
             $('#shipping_street').val('');
             $('#shipping_city').val('');
-            $('#shipping_state').val('');
+            $('#shipping_state').val('').change();
             $('#shipping_pincode').val('');
             $('#shipping_country').val('');
         }

@@ -8,6 +8,7 @@ use App\Models\Globals\Employees;
 use App\Models\Globals\Expense;
 use App\Models\Globals\Payees;
 use App\Models\Globals\PaymentAccount;
+use App\Models\Globals\States;
 use App\Models\Globals\Suppliers;
 use App\Models\Globals\CompanySettings;
 use App\Models\Globals\Taxes;
@@ -115,6 +116,7 @@ class ExpenseController extends Controller
         $data['payment_accounts'] = $payment_accounts;
         $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $data['first_product'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
+        $data['states'] = States::pluck('state_name','id');
         return view('globals.expense.create',$data);
     }
 
@@ -199,7 +201,8 @@ class ExpenseController extends Controller
         $data['all_tax_labels'] = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
         $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
         $data['products'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
-        $data['first_product'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();        
+        $data['first_product'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
+        $data['states'] = States::pluck('state_name','id');
         return view('globals.expense.create',$data);
     }
 
@@ -343,12 +346,24 @@ class ExpenseController extends Controller
         if(!empty($payee)){
             if($payee['type']==1){
                 $data['user'] = Suppliers::where('id',$payee['type_id'])->first();
+                $state = States::where('id',$data['user']['state'])->first();
+                $data['user']['state'] = $state['state_name'];
+                $data['user']['state_code'] = $state['state_number'];
             }elseif($payee['type']==2){
                 $data['user'] = Employees::where('id',$payee['type_id'])->first();
+                $state = States::where('id',$data['user']['state'])->first();
+                $data['user']['state'] = $state['state_name'];
+                $data['user']['state_code'] = $state['state_number'];
             }else{
                 $data['user'] = Customers::where('id',$payee['type_id'])->first();
+                $state = States::where('id',$data['user']['billing_state'])->first();
+                $data['user']['state'] = $state['state_name'];
+                $data['user']['state_code'] = $state['state_number'];
             }
         }
+
+
+
 
         $data['name']  = 'Expense Voucher';
         $data['content'] = 'This is test pdf.';

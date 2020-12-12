@@ -57,9 +57,9 @@
           <tr>
             <td height="30" v><table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                  <td width="68%" height="30" style="padding:0 5px;">State : GUJARAT </td>
+                  <td width="68%" height="30" style="padding:0 5px;">State : {{$user['state']}} </td>
                   <td width="16%" style="border-left: solid 1px #000;" align="center">Code</td>
-                  <td width="16%" style="border-left: solid 1px #000;" align="center">24</td>
+                  <td width="16%" style="border-left: solid 1px #000;" align="center">{{$user['state_code']}}</td>
                 </tr>
               </table></td>
             <!--<td style="padding:0 5px;">Place of Supply : VARANASI (UP)</td>-->
@@ -89,14 +89,14 @@
               <tr>
                 <td width="68%" height="30" style="padding:0 5px;">State : {{$user['state']}} </td>
                 <td width="16%" style="border-left: solid 1px #000;" align="center">Code</td>
-                <td width="16%" style="border-left: solid 1px #000;" align="center">09</td>
+                <td width="16%" style="border-left: solid 1px #000;" align="center">{{$user['state_code']}}</td>
               </tr>
             </table></td>
 <!--            <td ><table width="100%" border="0" cellspacing="0" cellpadding="0">
               <tr>
                 <td width="68%" height="30" style="padding:0 5px;">State : {{$user['state']}} </td>
                 <td width="16%" style="border-left: solid 1px #000;" align="center">Code</td>
-                <td width="16%" style="border-left: solid 1px #000;" align="center">09</td>
+                <td width="16%" style="border-left: solid 1px #000;" align="center">{{$user['state_code']}}</td>
               </tr>
             </table></td>-->
           </tr>

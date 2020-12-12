@@ -1,4 +1,4 @@
-<div class="modal fade bs-example-modal-lg" id="EmployeeModal" tabindex="-1" role="dialog" aria-labelledby="EmployeeModal">
+<div class="modal fade bs-example-modal-lg" id="EmployeeModal" role="dialog" aria-labelledby="EmployeeModal">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -125,11 +125,11 @@
                             <div class="form-group mb-3 row">
                                 <label for="state" class="col-md-12 col-form-label">State <span class="text-danger">*</span></label>
                                 <div class="col-md-12">
-                                    {!! Form::text('state', null, ['class' => 'form-control']) !!}
+                                    {!! Form::select('state', $states, null, ['class' => 'form-control amounts-are-select2', 'id'=>'emp_state']) !!}
                                     @if ($errors->has('state'))
                                         <span class="text-danger">
-                                                <strong>{{ $errors->first('state') }}</strong>
-                                            </span>
+                                            <strong>{{ $errors->first('state') }}</strong>
+                                        </span>
                                     @endif
                                 </div>
                             </div>

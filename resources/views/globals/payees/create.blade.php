@@ -1,5 +1,8 @@
 @extends('layouts.app')
 @section('content')
+    <style>
+        .select2{width: 100%!important;}
+    </style>
     <div class="row page-titles">
         <div class="col-sm-6 align-self-center">
             <h4 class="text-themecolor">@if(isset($payee)) Edit @else Add @endif Payees</h4>
@@ -16,7 +19,7 @@
                              <div class="form-group mb-3 row">
                                  <label for="type" class="col-md-12 col-form-label">Type</label>
                                  <div class="col-md-9">
-                                     {!! Form::select('type', \App\Models\Globals\Payees::$type, null, ['class' => 'form-control', 'id'=>'type_selection']) !!}
+                                     {!! Form::select('type', \App\Models\Globals\Payees::$type, null, ['class' => 'form-control amounts-are-select2', 'id'=>'type_selection']) !!}
                                      @if ($errors->has('type'))
                                          <span class="text-danger">
                                             <strong>{{ $errors->first('type') }}</strong>
@@ -180,7 +183,7 @@
                                  <div class="form-group mb-3 row">
                                      <label for="state" class="col-md-12 col-form-label">State <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
-                                         {!! Form::text('state', null, ['class' => 'form-control']) !!}
+                                         {!! Form::select('state', $states, null, ['class' => 'form-control amounts-are-select2', 'id'=>'state_sup']) !!}
                                          @if ($errors->has('state'))
                                              <span class="text-danger">
                                                 <strong>{{ $errors->first('state') }}</strong>
@@ -278,7 +281,7 @@
                                  <div class="form-group mb-3 row">
                                      <label for="gst_registration_type_id" class="col-md-12 col-form-label">Gst Registration Type</label>
                                      <div class="col-md-9">
-                                         {!! Form::select('gst_registration_type_id', \App\Models\Globals\Payees::$get_type, null, ['class' => 'form-control', 'id'=>'type_selection']) !!}
+                                         {!! Form::select('gst_registration_type_id', \App\Models\Globals\Payees::$get_type, null, ['class' => 'form-control amounts-are-select2', 'id'=>'gst_registration_type_id']) !!}
                                          @if ($errors->has('gst_registration_type_id'))
                                              <span class="text-danger">
                                                 <strong>{{ $errors->first('gst_registration_type_id') }}</strong>
@@ -432,7 +435,7 @@
                                  <div class="form-group mb-3 row">
                                      <label for="state" class="col-md-12 col-form-label">State <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
-                                         {!! Form::text('state', null, ['class' => 'form-control']) !!}
+                                         {!! Form::select('state', $states, null, ['class' => 'form-control amounts-are-select2', 'id'=>'state']) !!}
                                          @if ($errors->has('state'))
                                              <span class="text-danger">
                                                 <strong>{{ $errors->first('state') }}</strong>
@@ -676,7 +679,7 @@
                                  <div class="form-group mb-3 row">
                                      <label for="gst_registration_type_id" class="col-md-12 col-form-label">Gst Registration Type</label>
                                      <div class="col-md-9">
-                                         {!! Form::select('gst_registration_type_id', \App\Models\Globals\Payees::$get_type, null, ['class' => 'form-control']) !!}
+                                         {!! Form::select('gst_registration_type_id', \App\Models\Globals\Payees::$get_type, null, ['class' => 'form-control amounts-are-select2']) !!}
                                          @if ($errors->has('gst_registration_type_id'))
                                              <span class="text-danger">
                                                 <strong>{{ $errors->first('gst_registration_type_id') }}</strong>
@@ -747,7 +750,7 @@
                                                 <div class="form-group mb-3 row">
                                                     <label for="billing_state" class="col-md-12 col-form-label">Billing State <span class="text-danger">*</span></label>
                                                     <div class="col-md-9">
-                                                        {!! Form::text('billing_state', null, ['class' => 'form-control','id'=>'billing_state']) !!}
+                                                        {!! Form::select('billing_state', $states, null, ['class' => 'form-control amounts-are-select2', 'id'=>'billing_state']) !!}
                                                         @if ($errors->has('billing_state'))
                                                             <span class="text-danger">
                                                                 <strong>{{ $errors->first('billing_state') }}</strong>
@@ -831,7 +834,7 @@
                                                 <div class="form-group mb-3 row">
                                                     <label for="shipping_state" class="col-md-12 col-form-label">Shipping State <span class="text-danger">*</span></label>
                                                     <div class="col-md-9">
-                                                        {!! Form::text('shipping_state', null, ['class' => 'form-control','id'=>'shipping_state']) !!}
+                                                        {!! Form::select('shipping_state', $states, null, ['class' => 'form-control amounts-are-select2', 'id'=>'shipping_state']) !!}
                                                         @if ($errors->has('shipping_state'))
                                                             <span class="text-danger">
                                                                 <strong>{{ $errors->first('shipping_state') }}</strong>
@@ -1079,16 +1082,17 @@
         });
 
         $('#same_as_billing').change(function(){
+            var bstate = $('#billing_state').val();
            if($(this).prop('checked')){
                $('#shipping_street').val($('#billing_street').val());
                $('#shipping_city').val($('#billing_city').val());
-               $('#shipping_state').val($('#billing_state').val());
+               $('#shipping_state').val($('#billing_state').val()).change();
                $('#shipping_pincode').val($('#billing_pincode').val());
                $('#shipping_country').val($('#billing_country').val());
            }else{
                $('#shipping_street').val('');
                $('#shipping_city').val('');
-               $('#shipping_state').val('');
+               $('#shipping_state').val('').change();
                $('#shipping_pincode').val('');
                $('#shipping_country').val('');
            }
