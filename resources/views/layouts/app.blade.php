@@ -96,6 +96,10 @@
                         <a class="waves-effect waves-dark" href="{{ url('expense')}}"><i class="fa fa-money"></i><span class="hide-menu">Expense</span></a>
                     </li>
 
+                    <li class="@if($menu == 'Sales' ) active @endif">
+                        <a class="waves-effect waves-dark" href="{{ url('sales')}}"><i class="fa fa-line-chart"></i><span class="hide-menu">Sales</span></a>
+                    </li>
+
                     <li class="@if($menu == 'Payees' ) active @endif">
                         <a class="waves-effect waves-dark" href="{{ url('payees')}}"><i class="fa fa-user-plus"></i><span class="hide-menu">Payees</span></a>
                     </li>
@@ -182,7 +186,7 @@
 </script>
 <script>
     $('#start_date_orderlist, #end_date_orderlist').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false });
-    $('#start_date, #end_date, #hire_date, #released, #date_of_birth, #as_of, #payment_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false });
+    $('#start_date, #end_date, #hire_date, #released, #date_of_birth, #as_of, #payment_date, #invoice_date, #due_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false});
     $('#timepicker').bootstrapMaterialDatePicker({ format: 'HH:mm', time: true, date: false });
     $('#date-format').bootstrapMaterialDatePicker({ format: 'DD MMMM YYYY' });
     $('#min-date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', minDate: new Date() });

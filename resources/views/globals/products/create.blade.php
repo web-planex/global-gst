@@ -27,7 +27,7 @@
                         </div>
 
                         <div class="form-group mb-3 col-md-6">
-                            <label for="hsn_code">HSN Code<span class="text-danger">*</span></label>
+                            <label for="hsn_code">HSN Code<span class="text-danger"></span></label>
                             {!! Form::text('hsn_code', null, ['class' => 'form-control','id'=>'hsn_code']) !!}
                             @if ($errors->has('hsn_code'))
                                 <span class="text-danger">
@@ -37,7 +37,7 @@
                         </div>
 
                         <div class="form-group mb-3 col-md-6">
-                            <label for="sku">SKU <span class="text-danger">*</span></label>
+                            <label for="sku">SKU <span class="text-danger"></span></label>
                             {!! Form::text('sku', null, ['class' => 'form-control','id'=>'sku']) !!}
                             @if ($errors->has('sku'))
                                 <span class="text-danger">
@@ -57,7 +57,7 @@
                         </div>
 
                         <div class="form-group mb-3 col-md-6">
-                            <label for="memo">Description<span class="text-danger">*</span></label>
+                            <label for="memo">Description<span class="text-danger"></span></label>
                             {!! Form::textarea('description', null, ['class' => 'form-control','id'=>'description','rows' => '3']) !!}
                             @if ($errors->has('description'))
                                 <span class="text-danger">
@@ -124,33 +124,5 @@
             $('#uploadFile').click();
         });
 
-        $().ready(function() {
-            $("#CompaniesForm").validate({
-                rules: {
-                    company_name: "required",
-                    pan_no: "required",
-                    gstin: "required",
-                    company_email: "required",
-                    company_phone: "required",
-                    street: "required",
-                    city: "required",
-                    state: "required",
-                    pincode: "required",
-                    country: "required",
-                },
-                messages: {
-                    company_name: "The company name field is required",
-                    pan_no: "The pan number field is required",
-                    gstin: "The gstin field is required",
-                    company_email: "Please enter a valid email address",
-                    company_phone: "The company phone field is required",
-                    street: "The street field is required",
-                    city: "The city field is required",
-                    state: "The state field is required",
-                    pincode: "The pincode field is required",
-                    country: "The country field is required",
-                }
-            });
-        });
     </script>
 @endsection

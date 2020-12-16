@@ -74,6 +74,12 @@ Route::get('/companies/delete/{id}', 'Globals\CompanyController@destroy');
 Route::resource('/products', 'Globals\ProductController');
 Route::get('/products/delete/{id}', 'Globals\ProductController@destroy');
 
+//Invoice Management
+Route::post('ajax/getEmail', 'Globals\InvoiceController@getEmail');
+Route::get('/sales/download_pdf/{id}', 'Globals\InvoiceController@download_pdf')->name('sales-download_pdf');
+Route::resource('/sales', 'Globals\InvoiceController');
+Route::get('/sales/delete/{id}', 'Globals\InvoiceController@destroy')->name('sales-delete');
+
 
 Route::get('/clear-cache-all', function() {
     Artisan::call('cache:clear');

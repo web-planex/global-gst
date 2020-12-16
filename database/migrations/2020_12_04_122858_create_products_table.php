@@ -18,9 +18,9 @@ class CreateProductsTable extends Migration
             $table->integer('user_id');
             $table->integer('company_id');
             $table->string('title', 20);
-            $table->longText('description');
-            $table->string('hsn_code',15);
-            $table->string('sku',15);
+            $table->longText('description')->nullable();
+            $table->string('hsn_code',15)->nullable();
+            $table->string('sku',15)->nullable();
             $table->string('price',15);
             $table->string('status')->default(1);            
             $table->timestamps();

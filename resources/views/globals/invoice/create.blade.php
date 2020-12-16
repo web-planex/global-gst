@@ -12,85 +12,88 @@
 </style>
 <div class="row page-titles">
     <div class="col-sm-6 align-self-center">
-        <h4 class="text-themecolor">@if(isset($expense)) Edit @else Add @endif Expense</h4>
+        <h4 class="text-themecolor">@if(isset($invoice)) Edit @else Add @endif {{$menu}}</h4>
     </div>
 </div>
 <div class="content">
-    @include('inc.message')
+    @include('inc.message2')
     <div class="row">
         <div class="col-lg-12">
             <div class="box card">
-                @if(isset($expense) && !empty($expense))
-                    {!! Form::model($expense,['url' => url('expense/update/'.$expense->id),'method'=>'patch' ,'class' => 'form-horizontal','files'=>true,'id'=>'formExpense']) !!}
+                @if(isset($invoice) && !empty($invoice))
+                    {!! Form::model($invoice,['url' => url('sales/'.$invoice->id),'method'=>'patch' ,'class' => 'form-horizontal','files'=>true,'id'=>'Salesform']) !!}
                 @else
-                    {!! Form::open(['url' => url('expense/insert'), 'class' => 'form-horizontal','files'=>true,'id'=>'formExpense']) !!}
+                    {!! Form::open(['url' => url('sales'), 'class' => 'form-horizontal','files'=>true,'id'=>'Salesform']) !!}
                 @endif
                     @csrf
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-3 pull-right">
                             <label>Amounts are</label>
                             <select class="form-control amounts-are-select2" name="tax_type" id="amounts_are">
-                                <option value="exclusive" @if(isset($expense) && $expense['tax_type']==1)) selected @endif>Exclusive of Tax</option>
-                                <option value="inclusive" @if(isset($expense) && $expense['tax_type']==2)) selected @endif>Inclusive of Tax</option>
-                                <option value="out_of_scope" @if(isset($expense) && $expense['tax_type']==3)) selected @endif>Out of scope of Tax</option>
+                                <option value="exclusive" @if(isset($invoice) && $invoice['tax_type']==1)) selected @endif>Exclusive of Tax</option>
+                                <option value="inclusive" @if(isset($invoice) && $invoice['tax_type']==2)) selected @endif>Inclusive of Tax</option>
+                                <option value="out_of_scope" @if(isset($invoice) && $invoice['tax_type']==3)) selected @endif>Out of scope of Tax</option>
                             </select>
                         </div>
                     </div>
+
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
-                            <label for="payee">Payee <span class="text-danger">*</span></label>
-                            {!! Form::select('payee', $payees, isset($expense)&&!empty($expense)?$expense['payee_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payee']) !!}
+                            <label for="customer">Customer <span class="text-danger">*</span></label>
+                            {!! Form::select('customer', $payees, isset($invoice)&&!empty($invoice)?$invoice['customer_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'customer', 'onchange'=>'getEmail(this.value)']) !!}
                             <div class="wrapper" id="wrp" style="display: none;">
                                 <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
                             </div>
-                            @if ($errors->has('payee'))
+                            @if ($errors->has('customer'))
                                 <span class="text-danger">
-                                    <strong>{{ $errors->first('payee') }}</strong>
+                                    <strong>{{ $errors->first('customer') }}</strong>
                                 </span>
                             @endif
                         </div>
                         <div class="form-group mb-3 col-md-6">
-                            <label for="payment_account">Payment account <span class="text-danger">*</span></label>
-                            {!! Form::select('payment_account', $payment_accounts, isset($expense)&&!empty($expense)?$expense['payment_account_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_account']) !!}
-                            <div class="wrapper" id="wrp2" style="display: none;">
-                                <a href="javascript:;" id="type2" class="font-weight-300" onclick="OpenPaymentAccountModal()"><i class="fa fa-plus-circle"></i> Add New</a>
-                            </div>
-                            @if ($errors->has('payment_account'))
+                            <label for="customer_email">Customer Email<span class="text-danger">*</span></label>
+                            {!! Form::text('customer_email', null, ['class' => 'form-control','id'=>'customer_email']) !!}
+                            @if ($errors->has('customer_email'))
                                 <span class="text-danger">
-                                    <strong>{{ $errors->first('payment_account') }}</strong>
+                                    <strong>{{ $errors->first('customer_email') }}</strong>
                                 </span>
                             @endif
                         </div>
                     </div>
+
                     <div class="form-row">
-                        <div class="form-group mb-3 col-md-4">
-                            <label for="payment_date">Payment date <span class="text-danger">*</span></label>
-                            {!! Form::text('payment_date', isset($expense)&&!empty($expense)?date('d-m-Y',strtotime($expense['payment_date'])):null, ['class' => 'form-control','id'=>'payment_date']) !!}
-                            @if ($errors->has('payment_date'))
+                        <div class="form-group mb-3 col-md-6">
+                            <label for="invoice_date">Invoice Date <span class="text-danger">*</span></label>
+                            {!! Form::text('invoice_date', isset($invoice)&&!empty($invoice)?date('d-m-Y',strtotime($invoice['invoice_date'])):null, ['class' => 'form-control','id'=>'invoice_date']) !!}
+                            @if ($errors->has('invoice_date'))
                                 <span class="text-danger">
-                                    <strong>{{ $errors->first('payment_date') }}</strong>
+                                    <strong>{{ $errors->first('invoice_date') }}</strong>
                                 </span>
                             @endif
                         </div>
-                        <div class="form-group mb-3 col-md-4">
-                            <label for="payment_method">Payment method</label>
-                            {!! Form::select('payment_method', \App\Models\Globals\Expense::$payment_method, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method']) !!}
-                            @if ($errors->has('payment_method'))
+                        <div class="form-group mb-3 col-md-6">
+                            <label for="due_date">Due Date <span class="text-danger">*</span></label>
+                            {!! Form::text('due_date', isset($invoice)&&!empty($invoice)?date('d-m-Y',strtotime($invoice['due_date'])):null, ['class' => 'form-control','id'=>'due_date']) !!}
+                            @if ($errors->has('due_date'))
                                 <span class="text-danger">
-                                    <strong>{{ $errors->first('payment_method') }}</strong>
-                                </span>
-                            @endif
-                        </div>
-                        <div class="form-group mb-3 col-md-4">
-                            <label for="ref_no">Ref no.</label>
-                            {!! Form::text('ref_no', null, ['class' => 'form-control','id'=>'ref_no']) !!}
-                            @if ($errors->has('ref_no'))
-                                <span class="text-danger">
-                                    <strong>{{ $errors->first('ref_no') }}</strong>
+                                    <strong>{{ $errors->first('due_date') }}</strong>
                                 </span>
                             @endif
                         </div>
                     </div>
+
+                    <div class="form-row">
+                        <div class="form-group mb-3 col-md-6">
+                            <label for="place_of_supply">Place Of Supply <span class="text-danger">*</span></label>
+                            {!! Form::text('place_of_supply', null, ['class' => 'form-control','id'=>'place_of_supply']) !!}
+                            @if ($errors->has('place_of_supply'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('place_of_supply') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
@@ -113,8 +116,8 @@
                                                 </thead>
                                                 <tbody id="items_list_body">
                                                 @php $i=1; @endphp
-                                                @if(!empty($expense_items))
-                                                    @foreach($expense_items as $item)
+                                                @if(!empty($invoice_items))
+                                                    @foreach($invoice_items as $item)
                                                         @if($i > 1)
                                                             <tr class="itemTr"></tr>
                                                         @endif
@@ -191,9 +194,9 @@
                                                             <select class="form-control tax-input" name="taxes[]" required>
                                                                 @foreach($taxes as $tax)
                                                                     @if($tax['is_cess'] == 0)
-                                                                    <option value="{{$tax['id']}}">{{$tax['rate'].'% '.$tax['tax_name']}}</option>
+                                                                        <option value="{{$tax['id']}}">{{$tax['rate'].'% '.$tax['tax_name']}}</option>
                                                                     @else
-                                                                    <option value="{{$tax['id']}}">{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option>
+                                                                        <option value="{{$tax['id']}}">{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option>
                                                                     @endif
                                                                 @endforeach
                                                             </select>
@@ -244,8 +247,11 @@
                                             <div class="card">
                                                 <div class="card-body">
                                                     <div class="form-group mb-0">
-                                                    <label for="memo">Memo</label>
-                                                    {!! Form::textarea('memo', null, ['class' => 'form-control','id'=>'memo','rows' => '3']) !!}
+                                                    <label for="memo">Attachments</label>
+                                                    {!! Form::file('files', ['class' => 'form-control', 'id'=> 'image']) !!}
+                                                    @if(isset($invoice) && !empty($invoice['files']) && file_exists($invoice['files']))
+                                                        <a href="{{url($invoice['files'])}}" target="_blank"><span>{{$invoice['file_name']}}</span></a>
+                                                    @endif
                                                     @if ($errors->has('memo'))
                                                         <span class="text-danger">
                                                             <strong>{{ $errors->first('memo') }}</strong>
@@ -268,47 +274,14 @@
     </div>
 </div>
 
-<!--PAYEE MODEL USER TYPE SELECTION-->
-<div class="modal fade bs-example-modal-sm" id="UserTypeModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="mySmallModalLabel">Select User Type</h4>
-                <button type="button" class="close" onclick="CloseUserModal()">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group mb-0">
-                    @foreach(\App\Models\Globals\Expense::$user_type as $key2 =>$value2)
-                        <div class="col-md-12">
-                            <div class="custom-control custom-radio mb-2">
-                                {!! Form::radio('user_type', $key2, null, ['class' => 'custom-control-input user_type', 'id'=>'user_'.$key2]) !!}
-                                <label for="user_{{$key2}}" class="custom-control-label"> {{$value2}}</label>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--SUPPLIERS MODAL-->
-@include('globals.expense.suppliers_modal')
-
-<!--EMPLOYEES MODAL-->
-@include('globals.expense.employee_modal')
-
 <!--CUSTOMERS MODAL-->
-@include('globals.expense.customer_modal')
-
-<!--PAYMENT ACCOUNT MODAL-->
-@include('globals.expense.payment_account_modal')
+@include('globals.invoice.customer_modal')
 
 <!--PRODUCT MODAL-->
-@include('globals.expense.product_model')
+@include('globals.invoice.product_model')
 
 <script type="text/javascript">
-    @if(isset($expense) && !empty($expense))
+    @if(isset($invoice) && !empty($invoice))
         $(document).ready(function(){
             $('.product_select_edit').on('select2:open',function(){
                 var id = $(this).data('id');
@@ -323,180 +296,27 @@
             },500);
         }); 
     @endif
+
     function OpenUserTypeModal(){
-        $('#UserTypeModal').modal('show');
-        $('#payee').select2('close');
+        $('#CustomersModal').modal('show');
+        $('#customer').select2('close');
     }
 
     function CloseUserModal(){
-        $('#UserTypeModal').modal('hide');
-        $('.user_type').each(function(){
-            $(this).prop('checked',false);
-        });
+        $('#CustomersModal').modal('hide');
     }
 
-    function OpenPaymentAccountModal(){
-        $('#PaymentAccountModal').modal('show');
-        $('#payment_account').select2('close');
-    }
+
 
     function OpenProductModel(selectID){
         $('#ProductModal').modal('show');
         $('#'+selectID).select2('close');
     }
 
-    $('.user_type').change(function(){
-       var user_type = $(this).val();
-       $('#UserTypeModal').modal('hide');
-       if(user_type==1){
-           $('#SuppliersModal').modal('show');
-       }else if(user_type==2){
-           $('#EmployeeModal').modal('show');
-       }else{
-           $('#CustomersModal').modal('show');
-       }
-       $('.user_type').each(function(){
-            $(this).prop('checked',false);
-       });
-    });
-
     $(document).ready(function() {
         
         $(document).on('click', '.add-new-prod-link', function(){
             dropdown_id = $(this).data('id');
-        });
-        
-        $("#SuppliersForm").validate({
-            rules: {
-                first_name: "required",
-                last_name: "required",
-                display_name: {
-                    required: true,
-                },
-                email: {
-                    required: true,
-                    email: true
-                },
-                mobile: "required",
-                street: "required",
-                city: "required",
-                state: "required",
-                pincode: "required",
-                country: "required",
-            },
-            messages: {
-                first_name: "The firstname field is required",
-                last_name: "The lastname field is required",
-                display_name: {
-                    required: "The displayname field is required",
-                },
-                email: "Please enter a valid email address",
-                mobile: "The mobile field is required",
-                street: "The street field is required",
-                city: "The city field is required",
-                state: "The state field is required",
-                pincode: "The pincode field is required",
-                country: "The country field is required",
-            },
-            normalizer: function(value) {
-                return $.trim(value);
-            },
-            submitHandler:function(){
-                var data = $('#SuppliersForm').serialize();
-                $.ajax({
-                    url: '{{url('ajax/payees-store')}}',
-                    type: 'POST',
-                    data:  {'data':data,'user_type':1},
-                    success: function (result) {
-                        optionValue = result['id'];
-                        optionText = result['name'];
-                        $('#payee').append(`<option value="${optionValue}">${optionText}</option>`);
-                        $('#payee').val(optionValue).change();
-                        $('#SuppliersModal').modal('hide');
-                        $('html, body').css('overflowY', 'auto');
-                        $("#SuppliersForm")[0].reset();
-                    }
-                });
-            }
-        });
-
-        $("#EmployeesForm").validate({
-            rules: {
-                first_name: "required",
-                last_name: "required",
-                display_name: {
-                    required: true,
-                },
-                email: {
-                    required: true,
-                    email: true
-                },
-                mobile: "required",
-                street: "required",
-                city: "required",
-                state: "required",
-                pincode: "required",
-                country: "required",
-                gender: "required",
-                hire_date: "required",
-                billing_street: "required",
-                billing_city: "required",
-                billing_state: "required",
-                billing_pincode: "required",
-                billing_country: "required",
-                shipping_street: "required",
-                shipping_city: "required",
-                shipping_state: "required",
-                shipping_pincode: "required",
-                shipping_country: "required",
-            },
-            messages: {
-                first_name: "The firstname field is required",
-                last_name: "The lastname field is required",
-                display_name: {
-                    required: "The displayname field is required",
-                },
-                email: "Please enter a valid email address",
-                mobile: "The mobile field is required",
-                street: "The street field is required",
-                city: "The city field is required",
-                state: "The state field is required",
-                pincode: "The pincode field is required",
-                country: "The country field is required",
-                gender: "The gender field is required",
-                hire_date: "The hire date field is required",
-                billing_street: "The billing street field is required",
-                billing_city: "The billing city field is required",
-                billing_state: "The billing state field is required",
-                billing_pincode: "The billing pincode field is required",
-                billing_country: "The billing country field is required",
-                shipping_street: "The shipping street field is required",
-                shipping_city: "The shipping city field is required",
-                shipping_state: "The shipping state field is required",
-                shipping_pincode: "The shipping pincode field is required",
-                shipping_country: "The shipping country field is required",
-
-            },
-            normalizer: function(value) {
-                return $.trim(value);
-            },
-            submitHandler:function(){
-                var data1 = $('#EmployeesForm').serialize();
-                $.ajax({
-                    url: '{{url('ajax/payees-store')}}',
-                    type: 'POST',
-                    data:  {'data':data1,'user_type':2},
-                    success: function (result) {
-                        optionValue = result['id'];
-                        optionText = result['name'];
-                        $('#payee').append(`<option value="${optionValue}">${optionText}</option>`);
-                        $('#payee').val(optionValue).change();
-                        $('#EmployeeModal').modal('hide');
-                        $('html, body').css('overflowY', 'auto');
-                        $("#EmployeesForm")[0].reset();
-                    }
-                });
-            }
         });
 
         $("#CustomersForm").validate({
@@ -567,42 +387,12 @@
                     success: function (result) {
                         optionValue = result['id'];
                         optionText = result['name'];
-                        $('#payee').append(`<option value="${optionValue}">${optionText}</option>`);
-                        $('#payee').val(optionValue).change();
+                        $('#customer').append(`<option value="${optionValue}">${optionText}</option>`);
+                        $('#customer').val(optionValue).change();
                         $('#CustomersModal').modal('hide');
                         $('html, body').css('overflowY', 'auto');
                         $("#CustomersForm")[0].reset();
-                    }
-                });
-            }
-        });
-
-        $("#PaymentAccountForm").validate({
-            rules: {
-                name: "required",
-                balance: "required",
-            },
-            messages: {
-                name: "The name field is required",
-                balance: "The balance field is required",
-            },
-            normalizer: function(value) {
-                return $.trim(value);
-            },
-            submitHandler:function(){
-                var data3 = $('#PaymentAccountForm').serialize();
-                $.ajax({
-                    url: '{{url('ajax/payment-account-store')}}',
-                    type: 'POST',
-                    data: {'data':data3},
-                    success: function (result) {
-                        optionValue = result['id'];
-                        optionText = result['name'];
-                        $('#payment_account').append(`<option value="${optionValue}">${optionText}</option>`);
-                        $('#payment_account').val(optionValue).change();
-                        $('#PaymentAccountModal').modal('hide');
-                        $('html, body').css('overflowY', 'auto');
-                        $("#PaymentAccountForm")[0].reset();
+                        getEmail($('#customer').val());
                     }
                 });
             }
@@ -651,9 +441,8 @@
 
     $(document).ready(function(){
         var flg = 0;
-        var flg2 = 0;
         var flg3 = 0;
-        $('#payee').on("select2:open", function() {
+        $('#customer').on("select2:open", function() {
             flg++;
             if (flg == 1) {
                 $this_html = jQuery('#wrp').html();
@@ -662,15 +451,6 @@
             }
         });
 
-        $('#payment_account').on("select2:open", function() {
-            flg2++;
-            if (flg2 == 1) {
-                $this_html2 = jQuery('#wrp2').html();
-                $(".select2-results").last().prepend("<div class='select2-results__option'>" +
-                    $this_html2 + "</div>");
-            }
-        });
-        
         $('#product_select').on("select2:open", function() {
             flg3++;
             if (flg3 == 1) {
@@ -807,7 +587,7 @@
         $(document).on('change','.tax-input, #amounts_are', function(){
             taxCalculation();
         });
-        $('form.formExpense').validate();
+        $('form.formInvoice').validate();
     });
 
     function subTotal() {
@@ -1029,7 +809,7 @@
         $('#total_amount').val(parseFloat(total).toFixed(2));
     }
 
-    @if(isset($expense) && !empty($expense))
+    @if(isset($invoice) && !empty($invoice))
         $(document).ready(function(){
             taxCalculation();
         });
@@ -1054,5 +834,16 @@
     $(".floatTextBox").inputFilter(function(value) {
         return /^-?\d*[.,]?\d*$/.test(value);
     });
+
+    function getEmail(cid) {
+        $.ajax({
+            url: '{{url('ajax/getEmail')}}',
+            type: 'POST',
+            data: {'data':cid},
+            success: function (result) {
+                $('#customer_email').val(result);
+            }
+        });
+    }
 </script>
 @endsection
