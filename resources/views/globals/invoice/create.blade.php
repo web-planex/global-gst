@@ -246,17 +246,17 @@
                                             <button type="button" id="addItem" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>&nbsp;Add Lines</button>
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <div class="form-group mb-0">
                                                     <label for="memo">Attachments</label>
-                                                    {!! Form::file('files', ['class' => 'form-control', 'id'=> 'image']) !!}
-                                                    @if(isset($invoice) && !empty($invoice['files']) && file_exists($invoice['files']))
-                                                        <a href="{{url($invoice['files'])}}" target="_blank"><span>{{$invoice['file_name']}}</span></a>
-                                                    @endif
-                                                    @if ($errors->has('memo'))
-                                                        <span class="text-danger">
-                                                            <strong>{{ $errors->first('memo') }}</strong>
-                                                        </span>
-                                                    @endif
+                                                    <div class="form-group mb-0 border p-2">
+                                                        {!! Form::file('files', ['class' => 'mb-2 border-0', 'id'=> 'image']) !!}
+                                                        @if(isset($invoice) && !empty($invoice['files']) && file_exists($invoice['files']))
+                                                            <br><a href="{{url($invoice['files'])}}" target="_blank"><span>{{$invoice['file_name']}}</span></a>
+                                                        @endif
+                                                        @if ($errors->has('files'))
+                                                            <span class="text-danger">
+                                                                <strong>{{ $errors->first('files') }}</strong>
+                                                            </span>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>

@@ -106,12 +106,13 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        $validator = Validator::make($request->all(), [
+        $this->validate($request, [
             'customer' => 'required',
             'customer_email' => 'required',
             'invoice_date' => 'required',
             'due_date' => 'required',
-            'place_of_supply' => 'required'
+            'place_of_supply' => 'required',
+            'files' => 'mimes:jpg,png,jpeg,pdf,bmp,xlsx,xls,csv,docx,doc,txt'
         ]);
 
         $invoice = new Invoice();
@@ -138,11 +139,6 @@ class InvoiceController extends Controller
             $invoice->files = $this->allFiles($photo,$user->id.'/invoice/invoice_attachment');
         }
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
         if($request->has('submit')) {
             $invoice->save();
             $invoice_id = $invoice->id;
@@ -209,12 +205,13 @@ class InvoiceController extends Controller
     public function update(Request $request, $id)
     {
         $user = Auth::user();
-        $validator = Validator::make($request->all(), [
+        $this->validate($request, [
             'customer' => 'required',
             'customer_email' => 'required',
             'invoice_date' => 'required',
             'due_date' => 'required',
-            'place_of_supply' => 'required'
+            'place_of_supply' => 'required',
+            'files' => 'mimes:jpg,png,jpeg,pdf,bmp,xlsx,xls,csv,docx,doc,txt'
         ]);
 
         $invoice = Invoice::where('id',$id)->first();
@@ -241,11 +238,6 @@ class InvoiceController extends Controller
             $invoice->files = $this->allFiles($photo,$user->id.'/invoice/invoice_attachment');
         }
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
         if($request->has('submit')) {
             $invoice->save();
             InvoiceItems::where('invoice_id',$invoice['id'])->delete();

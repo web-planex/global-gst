@@ -21,7 +21,8 @@ class Expense extends Model
         'discount',
         'discount_type',
         'total',
-        'memo'
+        'memo',
+        'files'
     ];
 
     const PAYMENT_METHOD_CASH = 1;

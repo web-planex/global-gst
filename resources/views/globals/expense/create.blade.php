@@ -16,7 +16,7 @@
     </div>
 </div>
 <div class="content">
-    @include('inc.message')
+    @include('inc.message2')
     <div class="row">
         <div class="col-lg-12">
             <div class="box card">
@@ -265,6 +265,23 @@
                                                             <strong>{{ $errors->first('memo') }}</strong>
                                                         </span>
                                                     @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <label for="memo">Attachments</label>
+                                                    <div class="form-group mb-0 border p-2">
+                                                        {!! Form::file('files', ['class' => 'mb-2 border-0', 'id'=> 'files']) !!}
+                                                        @if(isset($expense) && !empty($expense['files']) && file_exists($expense['files']))
+                                                            <br><a href="{{url($expense['files'])}}" target="_blank"><span>{{$expense['file_name']}}</span></a>
+                                                        @endif
+                                                        @if ($errors->has('files'))
+                                                            <br>
+                                                            <span class="text-danger">
+                                                                <strong>{{ $errors->first('files') }}</strong>
+                                                            </span>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>

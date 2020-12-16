@@ -128,10 +128,11 @@ class ExpenseController extends Controller
 
     public function insert(Request $request) {
         $user = Auth::user();
-        $validator = Validator::make($request->all(), [
+        $this->validate($request, [
             'payee' => 'required',
             'payment_account' => 'required',
-            'payment_date' => 'required'
+            'payment_date' => 'required',
+            'files' => 'mimes:jpg,png,jpeg,pdf,bmp,xlsx,xls,csv,docx,doc,txt'
         ]);
 
         $expense = new Expense();
@@ -162,11 +163,10 @@ class ExpenseController extends Controller
         $expense->total = $request['total'];
         $expense->memo = $request['memo'];
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+        if($photo = $request->file('files')){
+            $expense->files = $this->allFiles($photo,$user->id.'/invoice/invoice_attachment');
         }
+
         if($request->has('submit')) {
             $expense->save();
             $expense_id = $expense->id;
@@ -191,6 +191,11 @@ class ExpenseController extends Controller
         $user = Auth::user();
         $data['menu'] = 'Expense';
         $data['expense'] = Expense::findOrFail($id);
+        $data['expense']['file_name'] = '';
+        if(!empty($data['expense']['files']) && file_exists($data['expense']['files'])){
+            $ext = explode('/',$data['expense']['files']);
+            $data['expense']['file_name'] = $ext[4];
+        }
         $data['expense_items'] = ExpenseItems::where('expense_id',$id)->get()->toArray();
         $data['payees'] = payees::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
         $data['payment_accounts'] = PaymentAccount::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
@@ -221,10 +226,11 @@ class ExpenseController extends Controller
 
     public function update(Request $request, $id) {
         $user = Auth::user();
-        $validator = Validator::make($request->all(), [
+        $this->validate($request, [
             'payee' => 'required',
             'payment_account' => 'required',
-            'payment_date' => 'required'
+            'payment_date' => 'required',
+            'files' => 'mimes:jpg,png,jpeg,pdf,bmp,xlsx,xls,csv,docx,doc,txt'
         ]);
 
         $expense = Expense::where('id',$id)->first();
@@ -253,11 +259,10 @@ class ExpenseController extends Controller
         $expense->total = $request['total'];
         $expense->memo = $request['memo'];
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+        if($photo = $request->file('files')){
+            $expense->files = $this->allFiles($photo,$user->id.'/expense/expense_attachment');
         }
+
         if($request->has('submit')) {
             $expense->save();
             ExpenseItems::where('expense_id',$expense['id'])->delete();
