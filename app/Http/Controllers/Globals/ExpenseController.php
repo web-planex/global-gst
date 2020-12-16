@@ -146,6 +146,13 @@ class ExpenseController extends Controller
         $expense->ref_no = $request['ref_no'];
         $expense->amount_before_tax = $request['amount_before_tax'];
         $expense->tax_amount = $request['tax_amount'];
+        
+        if($request['discount_type'] != '') {
+            $expense->discount = $request['discount'];
+        } else {
+            $expense->discount = '';
+        }
+        $expense->discount_type = $request['discount_type'];
         $expense->total = $request['total'];
         $expense->memo = $request['memo'];
 
@@ -231,6 +238,12 @@ class ExpenseController extends Controller
         $expense->ref_no = $request['ref_no'];
         $expense->amount_before_tax = $request['amount_before_tax'];
         $expense->tax_amount = $request['tax_amount'];
+        if($request['discount_type'] != '') {
+            $expense->discount = $request['discount'];
+        } else {
+             $expense->discount = '';
+        }
+        $expense->discount_type = $request['discount_type'];
         $expense->total = $request['total'];
         $expense->memo = $request['memo'];
 
@@ -324,6 +337,7 @@ class ExpenseController extends Controller
     }
     
     public function download_pdf(Request $request, $id){
+        $user = Auth::user();
         $data['menu']  = 'Expense Voucher PDF';
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
         $data['expense'] = Expense::with('ExpenseItems')->where('id',$id)->first();
@@ -336,8 +350,13 @@ class ExpenseController extends Controller
         
         if(!empty($data['expense']['ExpenseItems'])){
             foreach($data['expense']['ExpenseItems'] as $exp){
-                    $tax = Taxes::where('id',$exp['tax_id'])->first();
+                $tax = Taxes::where('id',$exp['tax_id'])->first();
+                if($tax['is_cess'] == 0) {
                     $exp['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'];
+                } else {
+                    $exp['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS';
+                }
+                
             }
         }        
         $data['expense']['total_in_word'] = $this->convert_digit_to_words($data['expense']['total']);
@@ -362,14 +381,31 @@ class ExpenseController extends Controller
             }
         }
 
-
-
-
+        $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
+        $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
+        $taxes_without_cess_arr = [];
+        $taxes_with_cess_arr = [];
+        
+        $a=0;
+        foreach($taxes_without_cess as $tax) {
+            $taxes_without_cess_arr[$a] = $tax['rate'].'_'.$tax['tax_name'];
+            $a++;
+        }
+        $i=0;
+        foreach($taxes_with_cess as $tax) {
+            $taxes_with_cess_arr[$i] = $tax['rate'].'_'.$tax['tax_name'];
+            $taxes_with_cess_arr[$i+1] = $tax['cess'].'_CESS';
+            $i = $i+2;
+        }
+        $data['all_tax_labels'] = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
+        $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
+        $company = CompanySettings::select('company_name')->where('id',$this->Company())->first();
+        $data['company_name'] = $company['company_name'];
         $data['name']  = 'Expense Voucher';
         $data['content'] = 'This is test pdf.';
         $pdf = new WKPDF($this->globalPdfOption());        
         $pdf->addPage(view('globals.expense.pdf_invoice',$data));
-
+//        return View('globals.expense.pdf_invoice',$data);
         if($request->output == 'download') {
             if (!$pdf->send('expense_invoice.pdf')) {
                 $error = $pdf->getError();

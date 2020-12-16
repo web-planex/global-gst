@@ -20,26 +20,23 @@
 <input type="hidden" id="amounts_are" value="out_of_scope" />
 @endif
 <table width="800" border="0" cellspacing="0" cellpadding="0" align="center" style="border:solid 2px #000;">
-  <tr>
-    <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
-      <tr>
-        <td valign="top" style="padding:5px;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-<!--          <tr>
-            <td align="center">|| Shree Ganeshay namah ||</td>
-          </tr>-->
-          <tr>
+    <tr>
+        <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td valign="top" style="padding:5px;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
             <td align="left"><strong>GSTIN : {{$company['gstin']}}</strong></td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td align="center"><img src="{{url($company['company_logo'])}}" alt="" width="auto" height="auto" style="max-height:50px;"/></td>
-          </tr>
-          <tr>
+        </tr>
+        <tr>
             <td align="center"><strong>{{$company['name']}}</strong><br/>
-              {{$company['street']}}, {{$company['city']}}, - {{$company['pincode']}} ({{$company['state']}}) Phone No. {{$company['company_phone']}}  
-             </td>
-          </tr>
+                {{$company['street']}}, {{$company['city']}}, - {{$company['pincode']}} ({{$company['state']}}) Phone No. {{$company['company_phone']}}  
+            </td>
+        </tr>
         </table></td>
-      </tr>
+        </tr>
       <tr>
         <td><table width="100%" border="1" cellspacing="0" cellpadding="0" id="table-top">
           <tr>
@@ -105,88 +102,101 @@
       <tr>
         <td><table width="100%" border="1" cellspacing="0" cellpadding="0" >
           <tr>
-            <td width="5%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Sr.<br/> No.</td>
-            <td width="23%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Item Name</td>
-            <td width="23%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Description</td>
-            <td width="15%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Tax</td>
-            <td width="9%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Quantity</td>
-            <td width="17%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Rate</td>
-            <td width="17%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Amount</td>            
+            <td width="4%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Sr.<br/> No.</td>
+            <td width="34%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Product</td>
+            <td width="12%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">HSN Code</td>
+            <td width="20%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Tax</td>
+            <td width="5%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Quantity</td>
+            <td width="13%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Rate</td>
+            <td width="21%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Amount</td>            
           </tr>
            @if(!empty($expense))
                     @php $i=1; @endphp
                     @foreach($expense['ExpenseItems'] as $list)
-                            <tr>
+                        <tr>
                             <td height="30" align="center">{{$i}}</td>
-                            <td height="30" align="center">{{$list['item_name']}}</td>
-                            <td height="30" align="center">{{$list['description']}}</td>
-                            <td height="30" align="center" style="padding:0 5px;">{{$list['tax_name']}}</td>
+                            <td height="30" align="left" style="padding:0 5px;">
+                            @foreach($products as $pro)
+                                @if($pro['id'] == $list['product_id']){{$pro['title']}}@endif
+                            @endforeach
+                            </td>
+                            <td height="30" align="center">{{$list['hsn_code']}}</td>
+                            <td height="30" align="left" style="padding:0 5px;">{{$list['tax_name']}}</td>
                             <td height="30" align="center"><span class="quantity-input">{{$list['quantity']}}</span></td>
                             <td height="30" align="center"><span class="rate-input">{{$list['rate']}}</span></td>
                             <td height="30" align="right" style="padding:0 5px;"><span class="amount-input">{{$list['amount']}}</span>/-</td>
                             <td style="display:none;">
-                            <select id="taxes" class="form-control tax-input">
+                            <select id="taxes" class="tax-input">
                                 @foreach($taxes as $tax)
+                                    @if($tax['is_cess'] == 0)
                                     <option value="{{$tax['id']}}" @if(!empty($list['tax_id']) && $list['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name']}}</option>
+                                    @else
+                                    <option value="{{$tax['id']}}" @if(!empty($list['tax_id']) && $list['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option>
+                                    @endif
                                 @endforeach
                             </select>
                             </td>
                           </tr>
                     @php $i++; @endphp
                     @endforeach
-           @endif
-          <tr>
-            <td colspan="3" rowspan="{{$tax_count}}" align="left" valign="top">
+            @endif
+            <tr>
+                <td colspan="3" rowspan="{{$tax_count}}" align="left" valign="top">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                              <td height="123" style="padding:0 10px; border-bottom:solid 1px #000;">
-                                  <strong>Payment Account</strong> : {{$expense['PaymentAccount']['name']}}<br/>
-                                  <strong>Payment Method</strong> : {{App\Models\Globals\Expense::$payment_method[$expense['payment_method']]}}
-                              </td>
-                            </tr>
-                            <tr>
-                                  <td height="123" style="padding:0 10px; border-bottom:solid 1px #000;" valign="bottom">
-                                          <div style="display:block; height:45px;"><strong>Total Expense Amount in Words :</strong></div>
-                                          <table width="99%" border="0" cellspacing="0" cellpadding="0" align="center">
-                                            <tr>
-                                              <td height="35" style="padding:0 5px; border-top:solid 1px #000;">{{ucwords($expense['total_in_word'])}} Only</td>
-                                            </tr>
-                                            <tr>
-                                              <td height="35" style="padding:0 5px; border-top:solid 1px #000;">&nbsp;</td>
-                                            </tr>
-                                          </table>
-                                  </td>
-                            </tr>
-                            <tr>
-                              <td height="60" style="padding:0 10px;">
-                                  <strong>Subject to Rajkot Jurisdiction<br/>E. & O. E.</strong>
-                              </td>
-                            </tr>              
-                </table>
-            </td>
-            <td height="30">&nbsp;</td>
-            <td height="30">&nbsp;</td>
-            <td height="30">&nbsp;</td>
-            <td height="30">&nbsp;</td>
-          </tr>
-          <tr>
-            <td height="30" colspan="2" style="padding:0 5px;">Total Amount before Tax</td>
-            <td height="30" colspan="2" align="right" style="padding:0 5px;">{{$expense['amount_before_tax']}}</td>
-          </tr>
-           @foreach($taxes as $tax)
-                @if($tax['tax_name'] == 'GST')
-                <tr class="{{$tax['rate'].'_'.$tax['tax_name']}} hide">
-                    <td height="30" colspan="2" style="padding:0 5px;">{{$tax['rate'] / 2}}% CGST on <span id="label_1_{{$tax['rate'].'_'.$tax['tax_name']}}">0.00</span></td>
-                    <td height="30" align="right" colspan="2" style="padding:0 5px;"><span id="input_1_{{$tax['rate'].'_'.$tax['tax_name']}}" class="tax-input-row"></td>
+                        <tr>
+                            <td height="123" style="padding:0 10px; border-bottom:solid 1px #000;">
+                                <strong>Payment Account</strong> : {{$expense['PaymentAccount']['name']}}<br/>
+                                <strong>Payment Method</strong> : {{App\Models\Globals\Expense::$payment_method[$expense['payment_method']]}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="123" style="padding:0 10px; border-bottom:solid 1px #000;" valign="bottom">
+                                <div style="display:block; height:45px;"><strong>Total Expense Amount in Words :</strong></div>
+                                <table width="99%" border="0" cellspacing="0" cellpadding="0" align="center">
+                                    <tr>
+                                        <td height="35" style="padding:0 5px; border-top:solid 1px #000;">{{ucwords($expense['total_in_word'])}} Only</td>
+                                    </tr>
+                                    <tr>
+                                          <td height="35" style="padding:0 5px; border-top:solid 1px #000;">&nbsp;</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                          <td height="30" style="padding:0 10px;">
+                              <strong>E. & O. E.</strong>
+                          </td>
+                        </tr>
+                    </table>
+                </td>
+                <td height="30">&nbsp;</td>
+                <td height="30">&nbsp;</td>
+                <td height="30">&nbsp;</td>
+                <td height="30">&nbsp;</td>
+            </tr>
+            <tr>
+                  <td height="30" colspan="2" style="padding:0 5px;">Total Amount before Tax</td>
+                  <td height="30" colspan="2" align="right" style="padding:0 5px;">{{$expense['amount_before_tax']}}</td>
+            </tr>
+            @foreach($all_tax_labels as $tax)
+                @php
+                $arr = explode("_", $tax, 2);
+                $rate = $arr[0];
+                $tax_name = $arr[1];
+                @endphp
+                @if($tax_name == 'GST')
+                <tr class="{{$rate.'_'.$tax_name}} hide">
+                    <td height="30" align="left" colspan="2" style="padding:0 5px;">{{$rate / 2}}% CGST on Rs. <span id="label_1_{{$rate.'_'.$tax_name}}">0.00</span></td>
+                    <td height="30" align="right" colspan="2" style="padding:0 5px;"><span id="input_1_{{$rate.'_'.$tax_name}}" class="tax-input-row"></span></td>
                 </tr>
-                <tr class="{{$tax['rate'].'_'.$tax['tax_name']}} hide">
-                    <td height="30" colspan="2" style="padding:0 5px;">{{$tax['rate'] / 2}}% SGST on <span id="label_2_{{$tax['rate'].'_'.$tax['tax_name']}}">0.00</span></td>
-                    <td height="30" align="right" colspan="2" style="padding:0 5px;"><span id="input_2_{{$tax['rate'].'_'.$tax['tax_name']}}" class="tax-input-row"></td>
+                <tr class="{{$rate.'_'.$tax_name}} hide">
+                    <td height="30" align="left" colspan="2" style="padding:0 5px;">{{$rate / 2}}% SGST on Rs. <span id="label_2_{{$rate.'_'.$tax_name}}">0.00</span></td>
+                    <td height="30" align="right" colspan="2" style="padding:0 5px;"><span id="input_2_{{$rate.'_'.$tax_name}}" class="tax-input-row"></span></td>
                 </tr>
                 @else
-                <tr class="{{$tax['rate'].'_'.$tax['tax_name']}} hide">
-                    <td height="30" colspan="2" style="padding:0 5px;">{{$tax['rate'].'% '.$tax['tax_name']}} on <span id="label_{{$tax['rate'].'_'.$tax['tax_name']}}">0.00</span></td>
-                    <td height="30" align="right" colspan="2" style="padding:0 5px;"><span id="input_{{$tax['rate'].'_'.$tax['tax_name']}}" class="tax-input-row"></td>
+                <tr class="{{$rate.'_'.$tax_name}} hide">
+                    <td height="30" align="left" colspan="2" style="padding:0 5px;">{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{$rate.'_'.$tax_name}}">0.00</span></td>
+                    <td height="30" align="right" colspan="2" style="padding:0 5px;"><span id="input_{{$rate.'_'.$tax_name}}" class="tax-input-row"></span></td>
                 </tr>
                 @endif
             @endforeach
@@ -225,7 +235,7 @@
         </table></td>
       </tr>
       <tr>
-        <td height="72" valign="middle" align="right" style="padding:0 10px; border-top: solid 1px #000;"><div style="display:block; height:50px;"><strong>For, J S K Silver Omaments</strong></div>
+        <td height="72" valign="middle" align="right" style="padding:0 10px; border-top: solid 1px #000;"><div style="display:block; height:50px;"><strong>For, {{$company_name}}</strong></div>
 
 Authorised Signature</td>
       </tr>
@@ -289,31 +299,75 @@ function taxCalculation() {
     $('.tax-input').find('option').each(function() {
         var str = $(this).filter(":selected").text();
         var opt = $(this).text();
-        var opt_str = opt.replace("% ", "_");
-        var tax_str = str.replace("% ", "_");
+        var opt_str = opt.replace("% ", "_").replace(" + ","+").replace(" ", "_").replace("%", "");
+        var tax_str = str.replace("% ", "_").replace(" + ","+").replace(" ", "_").replace("%", "");
+        var is_cess = false;
+        var cess_arr = [];
+        if (tax_str.indexOf('CESS') > -1) {
+            is_cess = true;
+            cess_arr = tax_str.split("+");
+        }
         var amount = 0;
         amount = $(this).parent('select').parent('td').prev('td').find('.amount-input').html();
 
-        var tax_name = tax_str.split('_').pop();
-        var tax_rate = tax_str.substr(0, tax_str.indexOf('_'));
-        var tax_raw_html = '';
-        var tax_id = $(this).val();
-        if(tax_str != '') {
-            var tax_hidden = 0;
-            tax_hidden += parseFloat(amount);
-            $("#id_"+ tax_str).val(tax_hidden);
-        }
+        if(cess_arr.length > 0 && is_cess) {
+            for(var r=0;r < cess_arr.length;r++){
+                tax_str = cess_arr[r];
+                var opt1_str = opt_str.substr(0, opt_str.indexOf('+'));
+                var opt2_str = opt_str.split('+').pop();
+                var tax_name = tax_str.split('_').pop();
+                var tax_rate = tax_str.substr(0, tax_str.indexOf('_'));
+                var tax_raw_html = '';
+                var tax_id = $(this).val();
+                if(tax_str != '') {
+                    var tax_hidden = 0;
+                    tax_hidden += parseFloat(amount);
+                    $("#id_"+ tax_str).val(tax_hidden);
+                }
 
-        var cls_opt_str = "." + opt_str;
-        $(cls_opt_str).addClass("hide");
-        if(tax_str != '' && tax_str !=  null) {
-            tax_arr[i] = tax_str;
-            if(tax_total_arr.hasOwnProperty(tax_str)) {
-                tax_total_arr[tax_str] += parseFloat(amount);
-            } else {
-                tax_total_arr[tax_str] = parseFloat(amount);
+                var cls_opt_str1 = "." + opt1_str;
+                var cls_opt_str2 = "." + opt2_str;
+
+                $(cls_opt_str1).addClass("hide");
+                $(cls_opt_str2).addClass("hide");
+
+                if(tax_str != '' && tax_str !=  null) {
+                    tax_arr[i] = tax_str;
+                    if(tax_total_arr.hasOwnProperty(tax_str)) {
+                        tax_total_arr[tax_str] += parseFloat(amount);
+                    } else {
+                        tax_total_arr[tax_str] = parseFloat(amount);
+                    }
+                    i++;
+                }
             }
-            i++;
+        } else {
+            var tax_name = tax_str.split('_').pop();
+            var tax_rate = tax_str.substr(0, tax_str.indexOf('_'));
+            var tax_raw_html = '';
+            var tax_id = $(this).val();
+
+            if(tax_str != '') {
+                var tax_hidden = 0;
+                tax_hidden += parseFloat(amount);
+                $("#id_"+ tax_str).val(tax_hidden);
+            }
+            if (opt_str.indexOf('CESS') > -1) {
+                var opt_str2 = opt_str.substr(0, opt_str.indexOf('+'));
+                opt_str = opt_str.split('+').pop();
+                $('.'+opt_str2).addClass("hide");
+            }
+            var cls_opt_str = "." + opt_str;
+            $(cls_opt_str).addClass("hide");
+            if(tax_str != '' && tax_str !=  null) {
+                tax_arr[i] = tax_str;
+                if(tax_total_arr.hasOwnProperty(tax_str)) {
+                    tax_total_arr[tax_str] += parseFloat(amount);
+                } else {
+                    tax_total_arr[tax_str] = parseFloat(amount);
+                }
+                i++;
+            }
         }
     });
 

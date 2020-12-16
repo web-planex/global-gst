@@ -24,7 +24,7 @@
     <!--Validation Jquery File-->
     <script src="{{ asset('assets/dist/js/jquery.js') }}"></script>
     <script src="{{ asset('assets/dist/js/jquery.validate.js') }}"></script>
-
+    <script src="{{ asset('js/jquery.inputmask.min.js') }}"></script>
     <style>
         .error{color: #ff0000;}
     </style>
