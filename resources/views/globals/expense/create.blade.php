@@ -100,14 +100,14 @@
                                 <div class="card-body">
                                     <div class="gstinvoice-table-data">
                                         <div class="table-responsive data-table-gst-box pb-3">
-                                            <table id="" class="table table-hover">
+                                            <table class="table table-hover">
                                                 <thead>
                                                     <th width="3%">#</th>
-                                                    <th width="20%">Product <span class="text-danger">*</span></th>
+                                                    <th width="22%">Product <span class="text-danger">*</span></th>
                                                     <th width="13%">HSN Code <span class="text-danger">*</span></th>
-                                                    <th width="8%">QTY <span class="text-danger">*</span></th>
-                                                    <th width="13%">Rate <span class="text-danger">*</span></th>
-                                                    <th width="13%">Amount <span class="text-danger">*</span></th>
+                                                    <th width="10%">QTY <span class="text-danger">*</span></th>
+                                                    <th width="14%">Rate <span class="text-danger">*</span></th>
+                                                    <th width="14%">Amount <span class="text-danger">*</span></th>
                                                     <th width="20%">Tax <span class="text-danger">*</span></th>
                                                     <th width="4%">&nbsp;</th>
                                                 </thead>
@@ -207,7 +207,7 @@
                                                 <tr id="subtotal_row">
                                                     <th width="50%">Subtotal</th>
                                                     <td width="50%">
-                                                        <input type="text" class="form-control" id="subtotal" readonly="" />
+                                                        <input type="text" class="form-control text-right" id="subtotal" readonly="" />
                                                     </td>
                                                 </tr>
                                                 @foreach($all_tax_labels as $tax)
@@ -219,22 +219,36 @@
                                                     @if($tax_name == 'GST')
                                                     <tr class="{{$rate.'_'.$tax_name}} hide">
                                                         <th width='50%'>{{$rate / 2}}% CGST on Rs. <span id="label_1_{{$rate.'_'.$tax_name}}">0.00</span></th>
-                                                        <td width='50%'><input type="text" id="input_1_{{$rate.'_'.$tax_name}}" class="form-control tax-input-row" readonly></td>
+                                                        <td width='50%'><input type="text" id="input_1_{{$rate.'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
                                                     </tr>
                                                     <tr class="{{$rate.'_'.$tax_name}} hide">
                                                         <th width='50%'>{{$rate / 2}}% SGST on Rs. <span id="label_2_{{$rate.'_'.$tax_name}}">0.00</span></th>
-                                                        <td width='50%'><input type="text" id="input_2_{{$rate.'_'.$tax_name}}" class="form-control tax-input-row" readonly></td>
+                                                        <td width='50%'><input type="text" id="input_2_{{$rate.'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
                                                     </tr>
                                                     @else
                                                     <tr class="{{$rate.'_'.$tax_name}} hide">
                                                         <th width='50%'>{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{$rate.'_'.$tax_name}}">0.00</span></th>
-                                                        <td width='50%'><input type="text" id="input_{{$rate.'_'.$tax_name}}" class="form-control tax-input-row" readonly></td>
+                                                        <td width='50%'><input type="text" id="input_{{$rate.'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
                                                     </tr>
                                                     @endif
                                                 @endforeach
                                                 <tr>
+                                                    <th>Discount Type</th>
+                                                    <td>
+                                                        <select name="discount_type" id="discount_type" class="form-control">
+                                                            <option value="">Select</option>
+                                                            <option value="1" @if(isset($expense['discount_type']) && $expense['discount_type'] == '1') selected @endif>Percentage (%)</option>
+                                                            <option value="2" @if(isset($expense['discount_type']) && $expense['discount_type'] == '2') selected @endif>Flat (Rs.)</option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Discount Amount</th>
+                                                    <td>{!! Form::text('discount', null, ['class' => 'form-control','id'=>'discount']) !!}</td>
+                                                </tr>
+                                                <tr>
                                                     <th width="50%">Total</th>
-                                                    <td width="50%"><input type="text" class="form-control" id="total" readonly="" /></td>
+                                                    <td width="50%"><input type="text" class="form-control text-right" id="total" readonly="" /></td>
                                                 </tr>
                                             </table>
                                             <input type="hidden" name="amount_before_tax" id="amount_before_tax" />
@@ -315,6 +329,13 @@
                 $("#select2-product_select_"+id+"-results").siblings('div').remove();
                 $("#select2-product_select_"+id+"-results").parent('span').prepend("<div class='select2-results__option'>" + jQuery('#prowrp'+id).html() + "</div>");
             });
+            if($('#discount_type').find(":selected").val() == '1') {
+                $('#discount').inputmask("percentage");
+                $('#discount').parent('td').siblings('th').html('Discount Percentage');
+            } else if($('#discount_type').find(":selected").val() == '2') {
+                $('#discount').inputmask("currency");
+                $('#discount').parent('td').siblings('th').html('Discount Amount');
+            }
         });
     @else
         $(document).ready(function(){
@@ -361,9 +382,30 @@
     });
 
     $(document).ready(function() {
-        
+
+        Inputmask.extendDefaults({
+            'removeMaskOnSubmit': true
+        });
+
         $(document).on('click', '.add-new-prod-link', function(){
             dropdown_id = $(this).data('id');
+        });
+        //$('.amount-input').inputmask('decimal');
+        //$('.rate-input').inputmask('decimal');
+        //$('#discount').inputmask('percentage');
+        $('#discount_type').change(function(){
+            if($(this).val() == '1') {
+                $('#discount').inputmask("percentage");
+                $('#discount').parent('td').siblings('th').html('Discount Percentage');
+            } else {
+                $('#discount').inputmask("currency");
+                $('#discount').parent('td').siblings('th').html('Discount Amount');
+            }
+            taxCalculation();
+        });
+        
+        $('#discount').on('keyup change', function(){
+            taxCalculation();
         });
         
         $("#SuppliersForm").validate({
@@ -862,6 +904,8 @@
         var tax_arr = [];
         var tax_total_arr = [];
         var i = 0;
+        
+        var discount_type = $('#discount_type').val();
 
         $('.tax-input').find('option').each(function() {
             var str = $(this).filter(":selected").text();
@@ -1021,6 +1065,16 @@
             total_tax = 0;
             amount_before_tax = parseFloat(subtotal).toFixed(2);
             total = parseFloat(subtotal);
+        }
+        if(discount_type != '') {
+            if(discount_type == '1'){
+                var percentage = $('#discount').inputmask('unmaskedvalue');
+                var percentage_amount = (total * percentage) / 100;
+                total = total - percentage_amount;
+            } else if(discount_type == '2'){
+                var discount = $('#discount').inputmask('unmaskedvalue');
+                total = total - discount;
+            }
         }
 
         $('#total').val('Rs. '+ parseFloat(total).toFixed(2));
