@@ -71,10 +71,16 @@ class ExpenseController extends Controller
         if(isset($end_date) && !empty($end_date)){
             $query->where('payment_date','<=',$end_date);
         }
+
+        if(isset($request['payee']) && !empty($request['payee'])){
+            $query->where('payee_id',$request['payee']);
+        }
         
         $data['search'] = $search;
         $data['start_date'] =$request['start_date'];
         $data['end_date'] = $request['end_date'];
+        $data['selected_payee'] = $request['payee'];
+        $data['payees'] = Payees::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->pluck('name','id')->prepend('All Payee','')->toArray();
         $data['expense'] = $query->orderBy('id','DESC')->paginate($this->pagination);
         return view('globals.expense.index',$data);
     }
@@ -316,6 +322,7 @@ class ExpenseController extends Controller
 
         $data['id'] = $new_payee['id'];
         $data['name'] = $new_payee['name'];
+        $data['customer_id'] = $user_type['id'];
 
         return $data;
     }

@@ -26,29 +26,38 @@
     <div class="row">
         <div class="col-12 page-min-height">
             @include('inc.message')
-            {!! Form::open(['url' => url('expense'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="form-group">
-                        {!! Form::text('search', isset($search)&&!empty($search)?$search:null, ['class' => 'form-control','id'=>'search', 'placeholder'=>'Search']) !!}
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        {!! Form::text('start_date', $start_date, ['class' => 'form-control','id'=>'start_date', 'placeholder'=>'Start date']) !!}
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        {!! Form::text('end_date', $end_date, ['class' => 'form-control','id'=>'end_date', 'placeholder'=>'End date']) !!}
-                    </div>
-                </div>
-               <div class="col-md-2">
-                   <button type="submit" class="btn btn-primary mr-2"><i class="ti-search"></i></button>
-                   <a href="{{url('expense')}}"><button type="button" class="btn btn-danger">Clear</button></a>
-                </div>
-            </div>                
-            {!! Form::close() !!}
+             {!! Form::open(['url' => url('expense'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::text('search', isset($search)&&!empty($search)?$search:null, ['class' => 'form-control','id'=>'search', 'placeholder'=>'Search']) !!}
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::text('start_date', $start_date, ['class' => 'form-control','id'=>'start_date', 'placeholder'=>'Start date']) !!}
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::text('end_date', $end_date, ['class' => 'form-control','id'=>'end_date', 'placeholder'=>'End date']) !!}
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::select('payee', $payees, isset($selected_payee)&&!empty($selected_payee)?$selected_payee:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payee']) !!}
+                            </div>
+                        </div>
+
+                       <div class="col-md-2">
+                           <button type="submit" class="btn btn-primary mr-2"><i class="ti-search"></i></button>
+                           <a href="{{url('expense')}}"><button type="button" class="btn btn-danger">Clear</button></a>
+                        </div>
+                    </div>                
+              {!! Form::close() !!}
             <div class="card">
                 <div class="gstinvoice-table-data">
                     <div class="table-responsive data-table-gst-box pb-3">

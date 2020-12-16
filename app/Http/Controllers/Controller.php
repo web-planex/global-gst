@@ -29,6 +29,19 @@ class Controller extends BaseController
         return $path = "upload/" . $path . "/" . $name;
     }
 
+    public function allFiles($photo, $path){
+        $root = base_path() . '/public/upload/' . $path;
+        $name = $photo->getClientOriginalName();
+        $mimetype = $photo->getMimeType();
+        $explode = explode("/", $mimetype);
+        $type = $explode[0];
+        if (!file_exists($root)) {
+            mkdir($root, 0777, true);
+        }
+        $photo->move($root, $name);
+        return $path = "upload/" . $path . "/" . $name;
+    }
+
     public function Company(){
         return Session::get('company');
     }

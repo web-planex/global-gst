@@ -55,4 +55,12 @@ class Expense extends Model
     public function PaymentAccount(){
         return $this->belongsTo('App\Models\Globals\PaymentAccount','payment_account_id');
     }
+
+    protected static function boot() {
+        parent::boot();
+
+        static::deleting(function($comment) {
+            $comment->ExpenseItems()->delete();
+        });
+    }
 }
