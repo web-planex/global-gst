@@ -89,6 +89,9 @@
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="delete_invoice_records({{$list['id']}})">Delete</a>
                                                     <a class="dropdown-item" target="_blank" href="{{route('sales-download_pdf',['id'=>$list['id'],'output'=>'print'])}}">Print</a>
                                                     <a class="dropdown-item" href="{{route('sales-download_pdf',['id'=>$list['id'],'output'=>'download'])}}">Download</a>
+                                                    @if(!empty($list['files']) && file_exists($list['files']))
+                                                        <a class="dropdown-item" href="{{url($list['files'])}}" download>Download Receipt</a>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <form name="frm_delete_{{$list['id']}}" id="frm_delete_{{$list['id']}}" action="{{route('sales-delete',$list['id'])}}" method="get"></form>
