@@ -287,4 +287,10 @@ class InvoiceController extends Controller
         $customer = Customers::where('id',$payee['type_id'])->first();
         return $customer['email'];
     }
+
+    public function delete_attachment(Request $request){
+        $invoice = Invoice::where('id',$request['data'])->first();
+        unlink($invoice['files']);
+        return ;
+    }
 }

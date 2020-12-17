@@ -32,6 +32,7 @@ Route::get('/change-password/{id}', 'Globals\UserController@edit_password')->nam
 Route::patch('/update_password/{id}', 'Globals\UserController@update_password')->name('update-password');
 
 //Expense
+Route::post('ajax/expense_delete_attachment', 'Globals\ExpenseController@delete_attachment');
 Route::post('ajax/get_product', 'Globals\ExpenseController@get_product')->name('get_product');
 Route::post('ajax/product-store', 'Globals\ExpenseController@product_store')->name('product-store');
 Route::post('ajax/payees-store', 'Globals\ExpenseController@payee_store')->name('payee-store');
@@ -75,6 +76,7 @@ Route::resource('/products', 'Globals\ProductController');
 Route::get('/products/delete/{id}', 'Globals\ProductController@destroy');
 
 //Invoice Management
+Route::post('ajax/delete_attachment', 'Globals\InvoiceController@delete_attachment');
 Route::post('ajax/getEmail', 'Globals\InvoiceController@getEmail');
 Route::get('/sales/download_pdf/{id}', 'Globals\InvoiceController@download_pdf')->name('sales-download_pdf');
 Route::resource('/sales', 'Globals\InvoiceController');

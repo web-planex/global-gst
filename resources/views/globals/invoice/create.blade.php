@@ -9,6 +9,12 @@
         border:none;
     }
     .select2{width: 100%!important;}
+
+    .btn-circle.btn-sm, .btn-group-sm>.btn-circle.btn {
+        width: 30px;
+        height: 30px;
+        padding: 4px 5px!important;
+    }
 </style>
 <div class="row page-titles">
     <div class="col-sm-6 align-self-center">
@@ -260,19 +266,46 @@
                                             <button type="button" id="addItem" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>&nbsp;Add Lines</button>
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <label for="memo">Attachments</label>
+                                                    <label for="memo">Receipt</label>
                                                     <div class="form-group mb-0 border p-2">
                                                         {!! Form::file('files', ['class' => 'mb-2 border-0', 'id'=> 'files']) !!}
                                                         @if(isset($invoice) && !empty($invoice['files']) && file_exists($invoice['files']))
                                                             @if(in_array($invoice['file_ext'],['jpg','jpeg','png','bmp']) )
-                                                                <a data-magnify="gallery" href="{{url($invoice['files'])}}">
-                                                                    <img src="{{url($invoice['files'])}}">
-                                                                </a>
+                                                                <br><img src="{{url($invoice['files'])}}" class="img-thumbnail" style=" width: 150px;" id="attachment_file">
+                                                                <div class="button-group mt-2" id="attachment_div">
+                                                                    <button type="button" class="btn btn-sm btn-circle btn-primary" data-magnify="gallery" data-src="{{url($invoice['files'])}}" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                                                    <a href="{{url($invoice['files'])}}" download>
+                                                                        <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
+                                                                    </a>
+                                                                    <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$invoice['id']}})"><i class="fa fa-trash"></i></button>
+                                                                </div>
                                                             @else
-
+                                                                <br><button class="btn btn-link" type="button" id="attachment_file"><i class="fas fa-file-alt fa-5x"></i></button>
+                                                                <div class="button-group mt-2" id="attachment_div">
+                                                                    <button type="button" class="btn btn-sm btn-circle btn-primary" data-toggle="modal" data-target="#attachmentModal" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                                                    <a href="{{url($invoice['files'])}}" download>
+                                                                        <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
+                                                                    </a>
+                                                                    <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$invoice['id']}})"><i class="fa fa-trash"></i></button>
+                                                                </div>
+                                                                <div id="attachmentModal" class="modal fade bs-example-modal-lg" role="dialog">
+                                                                    <div class="modal-dialog modal-xl">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h4 class="modal-title">{{$invoice['file_name']}}</h4>
+                                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <iframe src="{{url($invoice['files'])}}" height="400px" width="100%"></iframe>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             @endif
-
-                                                            <br><a href="{{url($invoice['files'])}}" target="_blank"><span>{{$invoice['file_name']}}</span></a>
+                                                            <div id="att_del_msg" class="text-danger text-bold"></div>
                                                         @endif
                                                         @if ($errors->has('files'))
                                                             <br>
@@ -328,8 +361,6 @@
     function CloseUserModal(){
         $('#CustomersModal').modal('hide');
     }
-
-
 
     function OpenProductModel(selectID){
         $('#ProductModal').modal('show');
@@ -867,6 +898,31 @@
         $(document).ready(function(){
             taxCalculation();
         });
+
+    function deleteAttachment(aid){
+        Swal.fire({
+            title: 'Are you want to delete this receipt?',
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#01c0c8",
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: '{{url('ajax/delete_attachment')}}',
+                    type: 'POST',
+                    data: {'data':aid},
+                    success: function (result) {
+                        $('[data-toggle="tooltip"]').tooltip("hide");
+                        $('#attachment_file').remove();
+                        $('#attachment_div').remove();
+                        $('#att_del_msg').hide().html('Receipt deleted!').fadeIn('slow').delay(5000).hide(1);
+                    }
+                });
+            }
+        })
+    }
     @endif
 
     (function($) {
@@ -899,5 +955,7 @@
             }
         });
     }
+
+
 </script>
 @endsection

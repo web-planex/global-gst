@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Globals\Customers;
 use App\Models\Globals\Employees;
 use App\Models\Globals\Expense;
+use App\Models\Globals\Invoice;
 use App\Models\Globals\Payees;
 use App\Models\Globals\PaymentAccount;
 use App\Models\Globals\States;
@@ -194,9 +195,9 @@ class ExpenseController extends Controller
         $data['expense']['file_name'] = '';
         if(!empty($data['expense']['files']) && file_exists($data['expense']['files'])){
             $ext = explode('/',$data['expense']['files']);
-            $path_info  = pathinfo($ext[4]);
-            $data['extension'] = $path_info['extension'];
             $data['expense']['file_name'] = $ext[4];
+            $file_ext = explode('.',$ext[4]);
+            $data['expense']['file_ext'] = $file_ext[1];
         }
         $data['expense_items'] = ExpenseItems::where('expense_id',$id)->get()->toArray();
         $data['payees'] = payees::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
@@ -459,5 +460,11 @@ class ExpenseController extends Controller
         $data['id'] = $product['id'];
         $data['name'] = $product['title'];
         return $data;
+    }
+
+    public function delete_attachment(Request $request){
+        $expense = Expense::where('id',$request['data'])->first();
+        unlink($expense['files']);
+        return ;
     }
 }
