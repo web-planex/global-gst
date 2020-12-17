@@ -329,6 +329,9 @@
     }
 
     $(document).ready(function() {
+        Inputmask.extendDefaults({
+            'removeMaskOnSubmit': true
+        });
         
         $(document).on('click', '.add-new-prod-link', function(){
             dropdown_id = $(this).data('id');
