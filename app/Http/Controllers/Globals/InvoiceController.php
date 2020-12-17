@@ -133,6 +133,12 @@ class InvoiceController extends Controller
         $invoice->place_of_supply = $request['place_of_supply'];
         $invoice->amount_before_tax = $request['amount_before_tax'];
         $invoice->tax_amount = $request['tax_amount'];
+        if($request['discount_type'] != '') {
+            $invoice->discount = $request['discount'];
+        } else {
+            $invoice->discount = '';
+        }
+        $invoice->discount_type = $request['discount_type'];
         $invoice->total = $request['total'];
 
         if($photo = $request->file('files')){
@@ -232,6 +238,12 @@ class InvoiceController extends Controller
         $invoice->place_of_supply = $request['place_of_supply'];
         $invoice->amount_before_tax = $request['amount_before_tax'];
         $invoice->tax_amount = $request['tax_amount'];
+        if($request['discount_type'] != '') {
+            $invoice->discount = $request['discount'];
+        } else {
+            $invoice->discount = '';
+        }
+        $invoice->discount_type = $request['discount_type'];
         $invoice->total = $request['total'];
         
         if($photo = $request->file('files')){
