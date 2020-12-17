@@ -179,6 +179,8 @@ class InvoiceController extends Controller
         if(!empty($data['invoice']['files']) && file_exists($data['invoice']['files'])){
             $ext = explode('/',$data['invoice']['files']);
             $data['invoice']['file_name'] = $ext[4];
+            $file_ext = explode('.',$ext[4]);
+            $data['invoice']['file_ext'] = $file_ext[1];
         }
         $data['invoice_items'] = InvoiceItems::where('invoice_id',$id)->get()->toArray();
         $data['payees'] = payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->pluck('name','id')->prepend('Select Customer','')->toArray();

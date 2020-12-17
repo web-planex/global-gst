@@ -20,9 +20,11 @@
     <link href="{{ asset('assets/prism/prism.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/select2/dist/select2.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/dist/css/jquery.magnify.css') }}" rel="stylesheet">
     <script src="{{ asset('assets/jquery/jquery-3.2.1.min.js') }}"></script>
     <!--Validation Jquery File-->
     <script src="{{ asset('assets/dist/js/jquery.js') }}"></script>
+    <script src="{{ asset('assets/dist/js/jquery.magnify.js') }}"></script>
     <script src="{{ asset('assets/dist/js/jquery.validate.js') }}"></script>
     <script src="{{ asset('js/jquery.inputmask.min.js') }}"></script>
     <style>

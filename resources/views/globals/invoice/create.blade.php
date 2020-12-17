@@ -264,6 +264,14 @@
                                                     <div class="form-group mb-0 border p-2">
                                                         {!! Form::file('files', ['class' => 'mb-2 border-0', 'id'=> 'files']) !!}
                                                         @if(isset($invoice) && !empty($invoice['files']) && file_exists($invoice['files']))
+                                                            @if(in_array($invoice['file_ext'],['jpg','jpeg','png','bmp']) )
+                                                                <a data-magnify="gallery" href="{{url($invoice['files'])}}">
+                                                                    <img src="{{url($invoice['files'])}}">
+                                                                </a>
+                                                            @else
+
+                                                            @endif
+
                                                             <br><a href="{{url($invoice['files'])}}" target="_blank"><span>{{$invoice['file_name']}}</span></a>
                                                         @endif
                                                         @if ($errors->has('files'))
