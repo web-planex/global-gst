@@ -274,7 +274,48 @@
                                                     <div class="form-group mb-0 border p-2">
                                                         {!! Form::file('files', ['class' => 'mb-2 border-0', 'id'=> 'files']) !!}
                                                         @if(isset($expense) && !empty($expense['files']) && file_exists($expense['files']))
-                                                            <br><a href="{{url($expense['files'])}}" target="_blank"><span>{{$expense['file_name']}}</span></a>
+                                                            <br>
+                                                            @if($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png')
+                                                            <button class="btn btn-link" type="button" data-toggle="modal" data-target="#attachmentModal">{{$expense['file_name']}}</button>
+                                                            <div id="attachmentModal" class="modal fade bs-example-modal-lg" role="dialog">
+                                                                <div class="modal-dialog modal-xl">
+                                                                  <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title">{{$expense['file_name']}}</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <img src="{{url($expense['files'])}}" class="img-responsive">
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                    </div>
+                                                                  </div>
+
+                                                                </div>
+                                                            </div>
+                                                            @elseif($extension == 'pdf')
+                                                            <button class="btn btn-link" type="button" data-toggle="modal" data-target="#attachmentModal">{{$expense['file_name']}}</button>
+                                                            <div id="attachmentModal" class="modal fade bs-example-modal-lg" role="dialog">
+                                                                <div class="modal-dialog modal-xl">
+                                                                  <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title">{{$expense['file_name']}}</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <iframe src="{{url($expense['files'])}}" height="400px" width="100%"></iframe>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                    </div>
+                                                                  </div>
+
+                                                                </div>
+                                                            </div>
+                                                            @else
+                                                            <a href="{{url($expense['files'])}}" target="_blank"><span>{{$expense['file_name']}}</span></a>
+                                                            @endif
                                                         @endif
                                                         @if ($errors->has('files'))
                                                             <br>
