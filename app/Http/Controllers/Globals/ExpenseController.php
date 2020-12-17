@@ -194,6 +194,8 @@ class ExpenseController extends Controller
         $data['expense']['file_name'] = '';
         if(!empty($data['expense']['files']) && file_exists($data['expense']['files'])){
             $ext = explode('/',$data['expense']['files']);
+            $path_info  = pathinfo($ext[4]);
+            $data['extension'] = $path_info['extension'];
             $data['expense']['file_name'] = $ext[4];
         }
         $data['expense_items'] = ExpenseItems::where('expense_id',$id)->get()->toArray();
