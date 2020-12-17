@@ -28,7 +28,7 @@
             @include('inc.message')
              {!! Form::open(['url' => url('expense'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 {!! Form::text('search', isset($search)&&!empty($search)?$search:null, ['class' => 'form-control','id'=>'search', 'placeholder'=>'Search']) !!}
                             </div>
@@ -97,14 +97,6 @@
                                                     <a class="dropdown-item" href="{{route('expense-download_pdf',['id'=>$list['id'],'output'=>'download'])}}">Download</a>
                                                 </div>
                                             </div>
-                                        <!--<div class="btn-group">
-                                                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                                                <div class="dropdown-menu" style="will-change: transform;">
-                                                    <a class="dropdown-item" href="{{route('expense-edit',$list['id'])}}">Edit</a>
-                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="delete_expense_records({{$list['id']}})">Delete</a>
-                                                    <a class="dropdown-item" href="{{url('expense/download_pdf/'.$list['id'])}}">Download PDF</a>
-                                                </div>
-                                            </div>-->
                                             <form name="frm_delete_{{$list['id']}}" id="frm_delete_{{$list['id']}}" action="{{route('expense-delete',$list['id'])}}" method="get"></form>
                                         </td>
                                     </tr>

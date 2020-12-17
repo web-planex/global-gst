@@ -348,6 +348,13 @@
                 $("#select2-product_select_"+id+"-results").siblings('div').remove();
                 $("#select2-product_select_"+id+"-results").parent('span').prepend("<div class='select2-results__option'>" + jQuery('#prowrp'+id).html() + "</div>");
             });
+            if($('#discount_type').find(":selected").val() == '1') {
+                $('#discount').inputmask("percentage");
+                $('#discount').parent('td').siblings('th').html('Discount Percentage');
+            } else if($('#discount_type').find(":selected").val() == '2') {
+                $('#discount').inputmask("currency");
+                $('#discount').parent('td').siblings('th').html('Discount Amount');
+            }
         });
     @else
         $(document).ready(function(){
