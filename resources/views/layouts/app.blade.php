@@ -71,8 +71,7 @@
                     </span>
                     <div class="dropdown-menu dropdown-menu-header animated flipInY" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="{{url('edit-profile/'.\App\Http\Controllers\Controller::AuthUser()->id)}}"><i class="ti-user pr-2"></i>My Profile</a>
-                        <!--<a class="dropdown-item" href="{{url('companies/'.\App\Http\Controllers\Controller::AuthUser()->id)}}"><i class="ti-briefcase pr-2"></i>My Companies</a>-->
-                        <a class="dropdown-item" href="{{url('companies')}}"><i class="ti-briefcase pr-2"></i>My Companies</a>
+                        <a class="dropdown-item" href="{{url('companies')}}"><i class="fa fa-building pr-2"></i>My Companies</a>
                         <a class="dropdown-item" href="{{url('change-password/'.\App\Http\Controllers\Controller::AuthUser()->id)}}"><i class="ti-settings pr-2"></i>Change Password</a>
                         <a class="dropdown-item" href="{{url('logout')}}"><i class="fa fa-power-off pr-2"></i>Logout</a>
                     </div>
