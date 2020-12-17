@@ -282,7 +282,9 @@
                                                             @else
                                                                 <br><button class="btn btn-link" type="button" id="attachment_file"><i class="fas fa-file-alt fa-5x"></i></button>
                                                                 <div class="button-group mt-2" id="attachment_div">
-                                                                    <button type="button" class="btn btn-sm btn-circle btn-primary" data-toggle="modal" data-target="#attachmentModal" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                                                    @if(!in_array($invoice['file_ext'],['xlsx','xls','csv']))
+                                                                        <button type="button" class="btn btn-sm btn-circle btn-primary" data-toggle="modal" data-target="#attachmentModal" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                                                    @endif
                                                                     <a href="{{url($invoice['files'])}}" download>
                                                                         <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
                                                                     </a>
@@ -296,7 +298,9 @@
                                                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                                             </div>
                                                                             <div class="modal-body">
-                                                                                <iframe src="{{url($invoice['files'])}}" height="400px" width="100%"></iframe>
+                                                                                @if(!in_array($invoice['file_ext'],['xlsx','xls','csv']))
+                                                                                    <iframe src="{{url($invoice['files'])}}" height="400px" width="100%"></iframe>
+                                                                                @endif
                                                                             </div>
                                                                             <div class="modal-footer">
                                                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
