@@ -30,6 +30,7 @@ class CreateExpensesTable extends Migration
             $table->string('discount',20);
             $table->integer('discount_type',1);
             $table->text('memo')->nullable();
+            $table->text('files')->nullable();
             $table->timestamps();
         });
     }
