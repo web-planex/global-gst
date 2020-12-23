@@ -22,7 +22,8 @@ class Expense extends Model
         'discount_type',
         'total',
         'memo',
-        'files'
+        'files',
+        'status'
     ];
 
     const PAYMENT_METHOD_CASH = 1;
@@ -45,6 +46,16 @@ class Expense extends Model
         self::USER_3 => 'Customers',
     ];
     
+    const STATUS_PENDING = 1;
+    const STATUS_PAID = 2;
+    const STATUS_VOIDED= 3;
+    
+    public static $expense_status = [
+        self::STATUS_PENDING => 'Pending',
+        self::STATUS_PAID => 'Paid',
+        self::STATUS_VOIDED => 'Voided'
+    ];
+
     public function ExpenseItems(){
         return $this->hasMany('App\Models\Globals\ExpenseItems','expense_id');
     }

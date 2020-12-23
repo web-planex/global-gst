@@ -12,6 +12,11 @@ use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
+    
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
     public function edit($id){
         $data['menu'] = 'Profile';
         $data['user'] = User::where('id',$id)->first();

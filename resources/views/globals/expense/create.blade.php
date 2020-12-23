@@ -8,8 +8,6 @@
         padding:5px 0 !important;
         border:none;
     }
-    .select2{width: 100%!important;}
-
     .btn-circle.btn-sm, .btn-group-sm>.btn-circle.btn {
         width: 30px;
         height: 30px;
@@ -43,7 +41,16 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group mb-3 col-md-6">
+                        <div class="from-group mb-3 col-md-4">
+                            <label for='status'>Status <span class="text-danger">*</span></label>
+                            {!! Form::select('status', [null => 'Select Status'] + \App\Models\Globals\Expense::$expense_status, null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
+                            @if ($errors->has('status'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('status') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                        <div class="form-group mb-3 col-md-4">
                             <label for="payee">Payee <span class="text-danger">*</span></label>
                             {!! Form::select('payee', $payees, isset($expense)&&!empty($expense)?$expense['payee_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payee']) !!}
                             <div class="wrapper" id="wrp" style="display: none;">
@@ -55,7 +62,7 @@
                                 </span>
                             @endif
                         </div>
-                        <div class="form-group mb-3 col-md-6">
+                        <div class="form-group mb-3 col-md-4">
                             <label for="payment_account">Payment account <span class="text-danger">*</span></label>
                             {!! Form::select('payment_account', $payment_accounts, isset($expense)&&!empty($expense)?$expense['payment_account_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_account']) !!}
                             <div class="wrapper" id="wrp2" style="display: none;">
@@ -276,7 +283,7 @@
                                             </div>
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <label for="memo">Receipt</label>
+                                                    <i class="fa fa-paperclip"></i>&nbsp;<label for="memo">Receipt</label>
                                                     <div class="form-group mb-0 border p-2">
                                                         {!! Form::file('files', ['class' => 'mb-2 border-0', 'id'=> 'files']) !!}
                                                         @if(isset($expense) && !empty($expense['files']) && file_exists($expense['files']))
@@ -468,6 +475,17 @@
         
         $('#discount').on('keyup change', function(){
             taxCalculation();
+        });
+        
+        $("#formExpense").validate({
+            rules: {
+                payment_date: "required",
+                status: "required",
+            },
+            messages: {
+                payment_date: "The payment date field is required",
+                status: "The status field is required",
+            }
         });
         
         $("#SuppliersForm").validate({

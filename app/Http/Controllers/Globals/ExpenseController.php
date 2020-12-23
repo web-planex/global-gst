@@ -45,7 +45,7 @@ class ExpenseController extends Controller
                      $method .= $key.',';
                  }
              }
-             
+
              $payees = Payees::where('name','like','%'.$input_search.'%')->select('id')->get();
              foreach($payees as $pid){
                  $payee_id .= $pid['id'].',';
@@ -76,11 +76,15 @@ class ExpenseController extends Controller
         if(isset($request['payee']) && !empty($request['payee'])){
             $query->where('payee_id',$request['payee']);
         }
+        if(isset($request['status']) && !empty($request['status'])){
+            $query->where('status',$request['status']);
+        }
         
         $data['search'] = $search;
         $data['start_date'] =$request['start_date'];
         $data['end_date'] = $request['end_date'];
         $data['selected_payee'] = $request['payee'];
+        $data['status'] = $request['status'];
         $data['payees'] = Payees::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->pluck('name','id')->prepend('All Payee','')->toArray();
         $data['expense'] = $query->orderBy('id','DESC')->paginate($this->pagination);
         return view('globals.expense.index',$data);
@@ -117,7 +121,7 @@ class ExpenseController extends Controller
 //            $final_tax_arr[(string)$rate] = $tax_name;
 //        }
 //        return $final_tax_arr;
-        $tax_without_cess = Taxes::where('is_cess',0)->where('status',1)->get();
+
         $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
         $data['payees'] = $payees;
         $data['payment_accounts'] = $payment_accounts;
@@ -154,7 +158,6 @@ class ExpenseController extends Controller
         $expense->ref_no = $request['ref_no'];
         $expense->amount_before_tax = $request['amount_before_tax'];
         $expense->tax_amount = $request['tax_amount'];
-        
         if($request['discount_type'] != '') {
             $expense->discount = $request['discount'];
         } else {
@@ -167,7 +170,7 @@ class ExpenseController extends Controller
         if($photo = $request->file('files')){
             $expense->files = $this->allFiles($photo,$user->id.'/invoice/invoice_attachment');
         }
-
+        $expense->status = $request['status'];
         if($request->has('submit')) {
             $expense->save();
             $expense_id = $expense->id;
@@ -265,6 +268,8 @@ class ExpenseController extends Controller
         if($photo = $request->file('files')){
             $expense->files = $this->allFiles($photo,$user->id.'/expense/expense_attachment');
         }
+
+        $expense->status = $request['status'];
 
         if($request->has('submit')) {
             $expense->save();
@@ -371,11 +376,10 @@ class ExpenseController extends Controller
                 } else {
                     $exp['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS';
                 }
-                
             }
-        }        
+        }
         $data['expense']['total_in_word'] = $this->convert_digit_to_words($data['expense']['total']);
-                
+
         $payee = Payees::where('id',$data['expense']['payee_id'])->first();
         if(!empty($payee)){
             if($payee['type']==1){
@@ -383,16 +387,59 @@ class ExpenseController extends Controller
                 $state = States::where('id',$data['user']['state'])->first();
                 $data['user']['state'] = $state['state_name'];
                 $data['user']['state_code'] = $state['state_number'];
+                $data['user']['billing_state'] = $state['state_name'];
+                $data['user']['billing_state_code'] = $state['state_number'];
+                $data['user']['is_shipping'] = false;
+                $address_arr = [
+                    $data['user']['street'],
+                    $data['user']['city'],
+                    $data['user']['state'],
+                    $data['user']['pincode'],
+                    $data['user']['country']
+                ];
+                $data['user']['address'] = implode(', ', $address_arr);
             }elseif($payee['type']==2){
                 $data['user'] = Employees::where('id',$payee['type_id'])->first();
                 $state = States::where('id',$data['user']['state'])->first();
                 $data['user']['state'] = $state['state_name'];
+                $data['user']['billing_state'] = $state['state_name'];
+                $data['user']['billing_state_code'] = $state['state_number'];
                 $data['user']['state_code'] = $state['state_number'];
+                $data['user']['is_shipping'] = false;
+                $address_arr = [
+                    $data['user']['street'],
+                    $data['user']['city'],
+                    $data['user']['state'],
+                    $data['user']['pincode'],
+                    $data['user']['country']
+                ];
+                $data['user']['address'] = implode(', ', $address_arr);
             }else{
                 $data['user'] = Customers::where('id',$payee['type_id'])->first();
                 $state = States::where('id',$data['user']['billing_state'])->first();
+                $shipping_state = States::where('id',$data['user']['shipping_state'])->first();
                 $data['user']['state'] = $state['state_name'];
-                $data['user']['state_code'] = $state['state_number'];
+                $data['user']['billing_state'] = $state['state_name'];
+                $data['user']['shipping_state'] = $shipping_state['state_name'];
+                $data['user']['billing_state_code'] = $state['state_number'];
+                $data['user']['shipping_state_code'] = $shipping_state['state_number'];
+                $data['user']['is_shipping'] = true;
+                $billing_address_arr = [
+                    $data['user']['billing_street'],
+                    $data['user']['billing_city'],
+                    $data['user']['billing_state'],
+                    $data['user']['billing_pincode'],
+                    $data['user']['billing_country']
+                ];
+                $data['user']['billing_address'] = implode(', ', $billing_address_arr);
+                $shipping_address_arr = [
+                    $data['user']['shipping_street'],
+                    $data['user']['shipping_city'],
+                    $data['user']['shipping_state'],
+                    $data['user']['shipping_pincode'],
+                    $data['user']['shipping_country']
+                ];
+                $data['user']['shipping_address'] = implode(', ', $shipping_address_arr);
             }
         }
 
@@ -400,7 +447,7 @@ class ExpenseController extends Controller
         $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
         $taxes_without_cess_arr = [];
         $taxes_with_cess_arr = [];
-        
+
         $a=0;
         foreach($taxes_without_cess as $tax) {
             $taxes_without_cess_arr[$a] = $tax['rate'].'_'.$tax['tax_name'];
@@ -416,10 +463,23 @@ class ExpenseController extends Controller
         $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $company = CompanySettings::select('company_name')->where('id',$this->Company())->first();
         $data['company_name'] = $company['company_name'];
+
+        $data['expense']['status_image'] = '';
+
+        if($data['expense']['status'] == 1) {
+            $data['expense']['status_image'] = asset('images/pending_img.png');
+        }elseif($data['expense']['status'] == 2) {
+            $data['expense']['status_image'] = asset('images/paid_imag.png');
+        }elseif($data['expense']['status'] == 3) {
+            $data['expense']['status_image'] = asset('images/voided_imag.png');
+        }
+
         $data['name']  = 'Expense Voucher';
         $data['content'] = 'This is test pdf.';
-        $pdf = new WKPDF($this->globalPdfOption());        
-        $pdf->addPage(view('globals.expense.pdf_invoice',$data));
+        $pdf = new WKPDF($this->globalPdfOption());
+        //return $data;
+        $pdf->addPage(view('globals.expense.pdf_expense',$data));
+        //$pdf->addPage(view('globals.expense.pdf_invoice',$data));
 //        return View('globals.expense.pdf_invoice',$data);
         if($request->output == 'download') {
             if (!$pdf->send('expense_invoice.pdf')) {
@@ -433,7 +493,7 @@ class ExpenseController extends Controller
             }
         }
     }
-    
+
     public function get_product(Request $request) {
         if($request['data'] != 0){
             $product = Product::where('id',$request['data'])->first();
