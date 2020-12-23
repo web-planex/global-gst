@@ -464,7 +464,11 @@ class ExpenseController extends Controller
 
     public function delete_attachment(Request $request){
         $expense = Expense::where('id',$request['data'])->first();
-        unlink($expense['files']);
+        if(!empty($expense['files']) && file_exists($expense['files'])){
+            unlink($expense['files']);
+        }
+        $input['files'] = null;
+        $expense->update($input);
         return ;
     }
 }

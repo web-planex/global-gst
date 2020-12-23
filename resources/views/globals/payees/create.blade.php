@@ -1,8 +1,5 @@
 @extends('layouts.app')
 @section('content')
-    <style>
-        .select2{width: 100%!important;}
-    </style>
     <div class="row page-titles">
         <div class="col-sm-6 align-self-center">
             <h4 class="text-themecolor">@if(isset($payee)) Edit @else Add @endif Payees</h4>
@@ -720,6 +717,48 @@
 
                                             <div class="col-md-12">
                                                 <div class="form-group mb-3 row">
+                                                    <label for="billing_first_name" class="col-md-12 col-form-label">Billing First Name <span class="text-danger">*</span></label>
+                                                    <div class="col-md-9">
+                                                        {!! Form::text('billing_first_name', null, ['class' => 'form-control','id'=>'billing_first_name']) !!}
+                                                        @if ($errors->has('billing_first_name'))
+                                                            <span class="text-danger">
+                                                            <strong>{{ $errors->first('billing_first_name') }}</strong>
+                                                        </span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="form-group mb-3 row">
+                                                    <label for="billing_last_name" class="col-md-12 col-form-label">Billing Last Name <span class="text-danger">*</span></label>
+                                                    <div class="col-md-9">
+                                                        {!! Form::text('billing_last_name', null, ['class' => 'form-control','id'=>'billing_last_name']) !!}
+                                                        @if ($errors->has('billing_last_name'))
+                                                            <span class="text-danger">
+                                                            <strong>{{ $errors->first('billing_last_name') }}</strong>
+                                                        </span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="form-group mb-3 row">
+                                                    <label for="billing_phone" class="col-md-12 col-form-label">Billing Phone <span class="text-danger">*</span></label>
+                                                    <div class="col-md-9">
+                                                        {!! Form::text('billing_phone', null, ['class' => 'form-control','id'=>'billing_phone']) !!}
+                                                        @if ($errors->has('billing_phone'))
+                                                            <span class="text-danger">
+                                                            <strong>{{ $errors->first('billing_phone') }}</strong>
+                                                        </span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="form-group mb-3 row">
                                                     <label for="billing_street" class="col-md-12 col-form-label">Billing Street <span class="text-danger">*</span></label>
                                                     <div class="col-md-9">
                                                         {!! Form::text('billing_street', null, ['class' => 'form-control','id'=>'billing_street']) !!}
@@ -798,6 +837,48 @@
                                                             <input type="checkbox" class="custom-control-input" id="same_as_billing">
                                                             <label class="custom-control-label" for="same_as_billing">Same as Billing Address</label>
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="form-group mb-3 row">
+                                                    <label for="shipping_first_name" class="col-md-12 col-form-label">Shipping First Name <span class="text-danger">*</span></label>
+                                                    <div class="col-md-9">
+                                                        {!! Form::text('shipping_first_name', null, ['class' => 'form-control','id'=>'shipping_first_name']) !!}
+                                                        @if ($errors->has('shipping_first_name'))
+                                                            <span class="text-danger">
+                                                            <strong>{{ $errors->first('shipping_first_name') }}</strong>
+                                                        </span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="form-group mb-3 row">
+                                                    <label for="shipping_last_name" class="col-md-12 col-form-label">Shipping Last Name <span class="text-danger">*</span></label>
+                                                    <div class="col-md-9">
+                                                        {!! Form::text('shipping_last_name', null, ['class' => 'form-control','id'=>'shipping_last_name']) !!}
+                                                        @if ($errors->has('shipping_last_name'))
+                                                            <span class="text-danger">
+                                                            <strong>{{ $errors->first('shipping_last_name') }}</strong>
+                                                        </span>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="form-group mb-3 row">
+                                                    <label for="shipping_phone" class="col-md-12 col-form-label">Shipping Phone <span class="text-danger">*</span></label>
+                                                    <div class="col-md-9">
+                                                        {!! Form::text('shipping_phone', null, ['class' => 'form-control','id'=>'shipping_phone']) !!}
+                                                        @if ($errors->has('shipping_phone'))
+                                                            <span class="text-danger">
+                                                            <strong>{{ $errors->first('shipping_phone') }}</strong>
+                                                        </span>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -1040,11 +1121,17 @@
                     country: "required",
                     gender: "required",
                     hire_date: "required",
+                    billing_first_name: "required",
+                    billing_last_name: "required",
+                    billing_phone: "required",
                     billing_street: "required",
                     billing_city: "required",
                     billing_state: "required",
                     billing_pincode: "required",
                     billing_country: "required",
+                    shipping_first_name: "required",
+                    shipping_last_name: "required",
+                    shipping_phone: "required",
                     shipping_street: "required",
                     shipping_city: "required",
                     shipping_state: "required",
@@ -1066,30 +1153,40 @@
                     country: "The country field is required",
                     gender: "The gender field is required",
                     hire_date: "The hire date field is required",
+                    billing_first_name: "The billing first name field is required",
+                    billing_last_name: "The billing last name field is required",
+                    billing_phone: "The billing phone field is required",
                     billing_street: "The billing street field is required",
                     billing_city: "The billing city field is required",
                     billing_state: "The billing state field is required",
                     billing_pincode: "The billing pincode field is required",
                     billing_country: "The billing country field is required",
+                    shipping_first_name: "The shipping first name field is required",
+                    shipping_last_name: "The shipping last name field is required",
+                    shipping_phone: "The shipping phone field is required",
                     shipping_street: "The shipping street field is required",
                     shipping_city: "The shipping city field is required",
                     shipping_state: "The shipping state field is required",
                     shipping_pincode: "The shipping pincode field is required",
-                    shipping_country: "The shipping country field is required",
-
+                    shipping_country: "The shipping country field is required"
                 }
             });
         });
 
         $('#same_as_billing').change(function(){
-            var bstate = $('#billing_state').val();
            if($(this).prop('checked')){
+               $('#shipping_first_name').val($('#billing_first_name').val());
+               $('#shipping_last_name').val($('#billing_last_name').val());
+               $('#shipping_phone').val($('#billing_phone').val());
                $('#shipping_street').val($('#billing_street').val());
                $('#shipping_city').val($('#billing_city').val());
                $('#shipping_state').val($('#billing_state').val()).change();
                $('#shipping_pincode').val($('#billing_pincode').val());
                $('#shipping_country').val($('#billing_country').val());
            }else{
+               $('#shipping_first_name').val('');
+               $('#shipping_last_name').val('');
+               $('#shipping_phone').val('');
                $('#shipping_street').val('');
                $('#shipping_city').val('');
                $('#shipping_state').val('').change();

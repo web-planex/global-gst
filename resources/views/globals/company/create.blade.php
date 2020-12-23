@@ -114,7 +114,7 @@
 
                         <div class="form-group mb-3 col-md-6">
                             <label for="state">State <span class="text-danger">*</span></label>
-                            {!! Form::text('state', null, ['class' => 'form-control','id'=>'state']) !!}
+                            {!! Form::select('state', $states, null, ['class' => 'form-control amounts-are-select2','id'=>'state']) !!}
                             @if ($errors->has('state'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('state') }}</strong>

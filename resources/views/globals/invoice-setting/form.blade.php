@@ -9,38 +9,38 @@
         @include('inc.message2')
         <div class="row">
             <div class="col-lg-12">
-                {!! Form::model($invoice_setting,['url' => url('invoice-setting/addedit'),'method'=>'patch' ,'class' => 'form-horizontal','files'=>true,'id'=>'signupSuppliersForm']) !!}
+                {!! Form::model($invoice_setting,['url' => url('company-setting/addedit'),'method'=>'patch' ,'class' => 'form-horizontal','files'=>true,'id'=>'signupSuppliersForm']) !!}
                     @csrf
                     <div class="row mb-0">
                         <!--LOGO IMAGE-->
                         <div class="col-lg-6">
                             <div class="card signature-image-bg">
                                 <div class="card-header bg-primary">
-                                    <h4 class="m-b-0 text-white">Logo Image</h4>
+                                    <h4 class="m-b-0 text-white">Company Logo</h4>
                                 </div>
                                 <div class="card-body">
                                     <div class="form-group mb-0">
-                                        <label class="col-form-label">Logo Image</label>
+                                        <label class="col-form-label">Company Logo</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="icon-picture"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" name="logo_image" id="logo_image" onchange="AjaxUploadImage(this,1)">
-                                                <label class="custom-file-label" for="logo_image">Upload Logo Image</label>
+                                                <input type="file" class="custom-file-input" name="company_logo" id="company_logo" onchange="AjaxUploadImage(this,1)">
+                                                <label class="custom-file-label" for="company_logo">Upload Logo Image</label>
                                             </div>
                                         </div>
-                                        @if ($errors->has('logo_image'))
+                                        @if ($errors->has('company_logo'))
                                             <span class="text-danger">
-                                                <strong>{{ $errors->first('logo_image') }}</strong>
+                                                <strong>{{ $errors->first('company_logo') }}</strong>
                                             </span>
                                         @endif
                                         <p class="mt-2">Note: Image dimension should be less than 100X100 pixels.</p>
                                     </div>
 
                                     <div class="form-group mb-0">
-                                        @if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['logo_image']) && file_exists($invoice_setting['logo_image']))
-                                            <img src="{{url($invoice_setting['logo_image'])}}" id="DisplayImage1" height="60px" width="60px">
+                                        @if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['company_logo']) && file_exists($invoice_setting['company_logo']))
+                                            <img src="{{url($invoice_setting['company_logo'])}}" id="DisplayImage1" height="60px" width="60px">
                                         @else
                                             <img src="" id="DisplayImage1" height="60px" width="60px" style="display: none;">
                                         @endif
@@ -86,102 +86,6 @@
                             </div>
                         </div>
 
-                        <!--STORE INFORMATION-->
-                        <div class="col-lg-12">
-                            <div class="card signature-image-bg">
-                                <div class="card-header bg-primary">
-                                    <h4 class="m-b-0 text-white">Store Information</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3 row">
-                                                <label for="store_name" class="col-md-12 col-form-label">Store Name </label>
-                                                <div class="col-md-12">
-                                                    {!! Form::text('store_name', null, ['class' => 'form-control']) !!}
-                                                    @if ($errors->has('store_name'))
-                                                        <span class="text-danger">
-                                                            <strong>{{ $errors->first('store_name') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3 row">
-                                                <label for="brand_name" class="col-md-12 col-form-label">Brand Name </label>
-                                                <div class="col-md-12">
-                                                    {!! Form::text('brand_name', null, ['class' => 'form-control']) !!}
-                                                    @if ($errors->has('brand_name'))
-                                                        <span class="text-danger">
-                                                            <strong>{{ $errors->first('brand_name') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3 row">
-                                                <label for="store_address" class="col-md-12 col-form-label">Store Address </label>
-                                                <div class="col-md-12">
-                                                    {!! Form::text('store_address', null, ['class' => 'form-control']) !!}
-                                                    @if ($errors->has('store_address'))
-                                                        <span class="text-danger">
-                                                            <strong>{{ $errors->first('store_address') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3 row">
-                                                <label for="contact_person" class="col-md-12 col-form-label">Contact Person </label>
-                                                <div class="col-md-12">
-                                                    {!! Form::text('contact_person', null, ['class' => 'form-control']) !!}
-                                                    @if ($errors->has('contact_person'))
-                                                        <span class="text-danger">
-                                                            <strong>{{ $errors->first('contact_person') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3 row">
-                                                <label for="store_phone" class="col-md-12 col-form-label">Store Phone </label>
-                                                <div class="col-md-12">
-                                                    {!! Form::text('store_phone', null, ['class' => 'form-control']) !!}
-                                                    @if ($errors->has('store_phone'))
-                                                        <span class="text-danger">
-                                                            <strong>{{ $errors->first('store_phone') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3 row">
-                                                <label for="store_email" class="col-md-12 col-form-label">Store Email </label>
-                                                <div class="col-md-12">
-                                                    {!! Form::text('store_email', null, ['class' => 'form-control']) !!}
-                                                    @if ($errors->has('store_email'))
-                                                        <span class="text-danger">
-                                                            <strong>{{ $errors->first('store_email') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <!--GST STORE SETTING-->
                         <div class="col-lg-12">
                             <div class="card signature-image-bg">
@@ -190,20 +94,6 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3 row">
-                                                <label for="gst_number" class="col-md-12 col-form-label">GST Number </label>
-                                                <div class="col-md-12">
-                                                    {!! Form::text('gst_number', null, ['class' => 'form-control']) !!}
-                                                    @if ($errors->has('gst_number'))
-                                                        <span class="text-danger">
-                                                            <strong>{{ $errors->first('gst_number') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         <div class="col-md-6">
                                             <div class="form-group mb-3 row">
                                                 <label for="iec_code" class="col-md-12 col-form-label">Import Export Code(IEC Code) </label>
@@ -226,20 +116,6 @@
                                                     @if ($errors->has('cin_number'))
                                                         <span class="text-danger">
                                                             <strong>{{ $errors->first('cin_number') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3 row">
-                                                <label for="pan_number" class="col-md-12 col-form-label">Pan Number </label>
-                                                <div class="col-md-12">
-                                                    {!! Form::text('pan_number', null, ['class' => 'form-control']) !!}
-                                                    @if ($errors->has('pan_number'))
-                                                        <span class="text-danger">
-                                                            <strong>{{ $errors->first('pan_number') }}</strong>
                                                         </span>
                                                     @endif
                                                 </div>

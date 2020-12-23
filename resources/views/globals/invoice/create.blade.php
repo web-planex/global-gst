@@ -8,8 +8,6 @@
         padding:5px 0 !important;
         border:none;
     }
-    .select2{width: 100%!important;}
-
     .btn-circle.btn-sm, .btn-group-sm>.btn-circle.btn {
         width: 30px;
         height: 30px;
@@ -89,12 +87,32 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group mb-3 col-md-6">
+                        <div class="form-group mb-3 col-md-4">
                             <label for="place_of_supply">Place Of Supply <span class="text-danger">*</span></label>
                             {!! Form::text('place_of_supply', null, ['class' => 'form-control','id'=>'place_of_supply']) !!}
                             @if ($errors->has('place_of_supply'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('place_of_supply') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+
+                        <div class="form-group mb-3 col-md-4">
+                            <label for="payment_method">Payment Method <span class="text-danger">*</span></label>
+                            {!! Form::select('payment_method', \App\Models\Globals\Invoice::$payment_method, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method']) !!}
+                            @if ($errors->has('payment_method'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('payment_method') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+
+                        <div class="form-group mb-3 col-md-4">
+                            <label for="status">Status <span class="text-danger">*</span></label>
+                            {!! Form::select('status', \App\Models\Globals\Invoice::$invoice_status, null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
+                            @if ($errors->has('status'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('status') }}</strong>
                                 </span>
                             @endif
                         </div>
@@ -130,7 +148,7 @@
                                                         <tr class="{{$i > 1 ? 'itemNewCheckTr' : 'itemTr'}}">
                                                             <td>{{$i}}</td>
                                                             <td id="pro_list">
-                                                                <select name="product[]" id="product_select_{{$i}}" class="form-control ex-product product_select_edit amounts-are-select2" data-id="{{$i}}" required="">
+                                                                <select name="product[]" id="product_select_{{$i}}" class="form-control ex-product product_select_edit amounts-are-select2" data-id="{{$i}}" style="width: 100%;" required="">
                                                                     @foreach($products as $pro)
                                                                         <option value="{{$pro['id']}}" @if($pro['id'] == $item['product_id']) selected @endif>{{$pro['title']}}</option>
                                                                     @endforeach
@@ -175,7 +193,7 @@
                                                         <td>1</td>
                                                         <td id="pro_list">
                                                             <!--<input type="text" class="form-control" name="item_name[0]" required>-->
-                                                            <select name="product[0]" id="product_select" class="form-control ex-product amounts-are-select2" required="">
+                                                            <select name="product[0]" id="product_select" class="form-control ex-product amounts-are-select2" style="width: 100%;" required="">
                                                                 @foreach($products as $pro)
                                                                     <option value="{{$pro['id']}}">{{$pro['title']}}</option>
                                                                 @endforeach
@@ -547,7 +565,7 @@
             var i = numItems + 1;
 
             var row = $("<tr>").addClass("itemTr");
-            var product_select = "<select name=\"product["+numItems+"]\" id=\"product_select"+i+"\" class='product_select ex-product form-control amounts-are-select3' required>";
+            var product_select = "<select name=\"product["+numItems+"]\" id=\"product_select"+i+"\" class='product_select ex-product form-control amounts-are-select3' style=\"width: 100%;\" required>";
             /*Product Get*/
             $.ajax({
                 url: '{{url('ajax/get_product')}}',
@@ -910,7 +928,7 @@
             taxCalculation();
         });
 
-    function deleteAttachment(aid){
+        function deleteAttachment(aid){
         Swal.fire({
             title: 'Are you want to delete this receipt?',
             text: "",
@@ -952,6 +970,7 @@
             });
         };
     }(jQuery));
+
     $(".floatTextBox").inputFilter(function(value) {
         return /^-?\d*[.,]?\d*$/.test(value);
     });
@@ -966,7 +985,5 @@
             }
         });
     }
-
-
 </script>
 @endsection

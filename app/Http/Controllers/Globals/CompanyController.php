@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Globals;
 
 use App\Models\Globals\CompanySettings;
 use App\Http\Controllers\Controller;
+use App\Models\Globals\States;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,6 +35,7 @@ class CompanyController extends Controller
 
     public function create(){
         $data['menu'] = 'Company';
+        $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         return view('globals.company.create',$data);
     }
 
@@ -76,6 +78,7 @@ class CompanyController extends Controller
     public function edit($id){
         $data['menu'] = 'Company';
         $data['companies'] = CompanySettings::findOrFail($id);
+        $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         return view('globals.company.create',$data);
     }
 

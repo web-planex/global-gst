@@ -18,6 +18,7 @@ class CreateCompanySettingsTable extends Migration
             $table->integer('user_id');
             $table->string('company_name',50)->nullable();
             $table->text('company_logo')->nullable();
+            $table->text('signature_image')->nullable();
             $table->string('pan_no',45)->nullable();
             $table->string('gstin',45)->nullable();
             $table->string('company_email',45)->nullable();
@@ -25,9 +26,23 @@ class CreateCompanySettingsTable extends Migration
             $table->string('website',45)->nullable();
             $table->string('street',45)->nullable();
             $table->string('city',45)->nullable();
-            $table->string('state',45)->nullable();
+            $table->integer('state')->nullable();
             $table->string('pincode',45)->nullable();
             $table->string('country',45)->nullable();
+            $table->string('iec_code',25)->nullable();
+            $table->string('cin_number',25)->nullable();
+            $table->string('fssai_lic_number',25)->nullable();
+            $table->string('invoice_prefix',25)->nullable();
+            $table->string('invoice_number',25)->nullable();
+            $table->string('credit_note_prefix',15)->nullable();
+            $table->string('credit_note_number',10)->nullable();
+            $table->boolean('product_price_gst')->nullable();
+            $table->boolean('shipping_price_gst')->nullable();
+            $table->boolean('shipping_gst')->nullable();
+            $table->boolean('igst_on_export_order')->nullable();
+            $table->longText('terms_and_condition')->nullable();
+            $table->boolean('email_notification')->nullable();
+            $table->text('email_notification_for_site_admin')->nullable();
             $table->timestamps();
         });
     }

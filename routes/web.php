@@ -64,8 +64,8 @@ Route::any('/payment-account/delete/{id}', 'Globals\PaymentAccountController@del
 Route::post('/ajax/get-account-type', 'Globals\PaymentAccountController@ajaxGetAccountType')->name('ajax-get-account-type');
 
 //Invoice Setting
-Route::get('/invoice-setting', 'Globals\InvoiceSettingController@index')->name('invoice-setting');
-Route::any('/invoice-setting/addedit', 'Globals\InvoiceSettingController@store')->name('invoice-setting-add');
+Route::get('/company-setting', 'Globals\InvoiceSettingController@index')->name('company-setting');
+Route::any('/company-setting/addedit', 'Globals\InvoiceSettingController@store')->name('company-setting-add');
 
 //Company Management
 Route::resource('/companies', 'Globals\CompanyController');
@@ -81,7 +81,7 @@ Route::post('ajax/getEmail', 'Globals\InvoiceController@getEmail');
 Route::get('/sales/download_pdf/{id}', 'Globals\InvoiceController@download_pdf')->name('sales-download_pdf');
 Route::resource('/sales', 'Globals\InvoiceController');
 Route::get('/sales/delete/{id}', 'Globals\InvoiceController@destroy')->name('sales-delete');
-
+Route::get('/sales/download_pdf/{id}', 'Globals\InvoiceController@download_pdf')->name('invoice-download_pdf');
 
 Route::get('/clear-cache-all', function() {
     Artisan::call('cache:clear');

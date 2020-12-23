@@ -1,416 +1,532 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Expense</title>
-<style>
-    table { border-collapse: collapse; border-color:#000; }
-    .hide {display: none;}
-    
-</style>
-<script src="{{ asset('assets/jquery/jquery-3.2.1.min.js') }}"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Tax Invoice</title>
+    <style>
+        table { border-collapse: collapse!important; border-color:#444444;}
+        table.td-gray td {border:solid 1px #444444;	}
+        td {
+            color:#1d1d1d;
+        }
+        @page {
+            footer: myFooter1;
+        }
+        .hide{display: none;}
+    </style>
+    <script src="{{ asset('assets/jquery/jquery-3.2.1.min.js') }}"></script>
 </head>
-
-<body style="font-family:Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0; font-weight:normal; line-height:16px;">
-@if($expense['tax_type'] == 1)
-<input type="hidden" id="amounts_are" value="exclusive" />
-@elseif($expense['tax_type'] == 2)
-<input type="hidden" id="amounts_are" value="inclusive" />
-@elseif($expense['tax_type'] == 3)
-<input type="hidden" id="amounts_are" value="out_of_scope" />
+<body style="font-family:Arial, Helvetica, sans-serif;font-size:16px; margin:0; padding:0; font-weight:normal;">
+@if($invoice['tax_type'] == 1)
+    <input type="hidden" id="amounts_are" value="exclusive" />
+@elseif($invoice['tax_type'] == 2)
+    <input type="hidden" id="amounts_are" value="inclusive" />
+@elseif($invoice['tax_type'] == 3)
+    <input type="hidden" id="amounts_are" value="out_of_scope" />
 @endif
-<table width="800" border="0" cellspacing="0" cellpadding="0" align="center" style="border:solid 2px #000;">
-  <tr>
-    <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
-      <tr>
-        <td valign="top" style="padding:5px;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-<!--          <tr>
-            <td align="center">|| Shree Ganeshay namah ||</td>
-          </tr>-->
-          <tr>
-            <td align="left"><strong>GSTIN : {{$company['gstin']}}</strong></td>
-          </tr>
-          <tr>
-            <td align="center"><img src="{{url($company['company_logo'])}}" alt="" width="auto" height="auto" style="max-height:50px;"/></td>
-          </tr>
-          <tr>
-            <td align="center"><strong>{{$company['name']}}</strong><br/>
-              {{$company['street']}}, {{$company['city']}}, - {{$company['pincode']}} ({{$company['state']}}) Phone No. {{$company['company_phone']}}  
-             </td>
-          </tr>
-        </table></td>
-      </tr>
-      <tr>
-        <td><table width="100%" border="1" cellspacing="0" cellpadding="0" id="table-top">
-          <tr>
-            <td width="67%" height="30" style="padding:0 5px;" >Ref no. :  <strong>003</strong></td>
-            <!--<td width="33%" style="padding:0 5px;">Transport Model : Bule Dart Express</td>-->
-          </tr>
-          <tr>
-            <td height="30" style="padding:0 5px;">Expense Date : {{$expense['created_at']->format('d-m-Y')}}</td>
-            <!--<td style="padding:0 5px;">Vehicle Number : </td>-->
-          </tr>
-          <tr>
-            <td height="30" style="padding:0 5px;">Reverse Charge (Y/N) : </td>
-            <!--<td style="padding:0 5px;">Date of  Supply : 24-07-2017</td>-->
-          </tr>
-          <tr>
-            <td height="30" v><table width="100%" border="0" cellspacing="0" cellpadding="0">
-                <tr>
-                  <td width="68%" height="30" style="padding:0 5px;">State : {{$user['state']}} </td>
-                  <td width="16%" style="border-left: solid 1px #000;" align="center">Code</td>
-                  <td width="16%" style="border-left: solid 1px #000;" align="center">{{$user['state_code']}}</td>
-                </tr>
-              </table></td>
-            <!--<td style="padding:0 5px;">Place of Supply : VARANASI (UP)</td>-->
-          </tr>
-        </table></td>
-      </tr>
-      <tr>
-        <td><table width="100%" border="1" cellspacing="0" cellpadding="0" id="table-top2">
-          <tr>
-            <td bgcolor="#eeeeee" height="30" align="center" style="padding:0 5px;" >Payment To</td>
-            <!--<td  bgcolor="#eeeeee" align="center" style="padding:0 5px;">SHIP TO PARTY / DELIVERY ADDRESS</td>-->
-          </tr>
-          <tr>
-            <td width="50%" height="30" style="padding:0 5px;" >Payee Name : {{$user['first_name']}} {{$user['last_name']}}</td>
-            <!--<td width="50%" style="padding:0 5px;">Name : {{$user['first_name']}} {{$user['last_name']}}</td>-->
-          </tr>
-          <tr>
-            <td height="50" style="padding:0 5px;">Address :  {{$user['street']}}, {{$user['city']}}-{{$user['pincode']}}</td>
-            <!--<td valign="top"  style="padding:0 5px;">Address :  {{$user['street']}}, {{$user['city']}}-{{$user['pincode']}}</td>-->
-          </tr>
-          <tr>
-            <td height="30" style="padding:0 5px;">GSTIN : @if(!empty($user['gstin']) ) {{$user['gstin']}} @endif</td>
-            <!--<td style="padding:0 5px;">GSTIN : @if(!empty($user['gstin']) ) {{$user['gstin']}} @endif</td>-->
-          </tr>
-          <tr>
-            <td height="30" v="v"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-              <tr>
-                <td width="68%" height="30" style="padding:0 5px;">State : {{$user['state']}} </td>
-                <td width="16%" style="border-left: solid 1px #000;" align="center">Code</td>
-                <td width="16%" style="border-left: solid 1px #000;" align="center">{{$user['state_code']}}</td>
-              </tr>
-            </table></td>
-<!--            <td ><table width="100%" border="0" cellspacing="0" cellpadding="0">
-              <tr>
-                <td width="68%" height="30" style="padding:0 5px;">State : {{$user['state']}} </td>
-                <td width="16%" style="border-left: solid 1px #000;" align="center">Code</td>
-                <td width="16%" style="border-left: solid 1px #000;" align="center">{{$user['state_code']}}</td>
-              </tr>
-            </table></td>-->
-          </tr>
-        </table></td>
-      </tr>
-      <tr>
-        <td><table width="100%" border="1" cellspacing="0" cellpadding="0" >
-          <tr>
-            <td width="5%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Sr.<br/> No.</td>
-            <td width="23%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Item Name</td>
-            <td width="23%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Description</td>
-            <td width="15%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Tax</td>
-            <td width="9%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Quantity</td>
-            <td width="17%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Rate</td>
-            <td width="17%" align="center" bgcolor="#eeeeee" style="padding:0 5px;">Amount</td>            
-          </tr>
-           @if(!empty($expense))
-                    @php $i=1; @endphp
-                    @foreach($expense['ExpenseItems'] as $list)
-                            <tr>
-                            <td height="30" align="center">{{$i}}</td>
-                            <td height="30" align="center">{{$list['item_name']}}</td>
-                            <td height="30" align="center">{{$list['description']}}</td>
-                            <td height="30" align="center" style="padding:0 5px;">{{$list['tax_name']}}</td>
-                            <td height="30" align="center"><span class="quantity-input">{{$list['quantity']}}</span></td>
-                            <td height="30" align="center"><span class="rate-input">{{$list['rate']}}</span></td>
-                            <td height="30" align="right" style="padding:0 5px;"><span class="amount-input">{{$list['amount']}}</span>/-</td>
-                            <td style="display:none;">
-                            <select id="taxes" class="form-control tax-input">
-                                @foreach($taxes as $tax)
-                                    <option value="{{$tax['id']}}" @if(!empty($list['tax_id']) && $list['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name']}}</option>
-                                @endforeach
-                            </select>
-                            </td>
-                          </tr>
-                    @php $i++; @endphp
-                    @endforeach
-           @endif
-          <tr>
-            <td colspan="3" rowspan="{{$tax_count}}" align="left" valign="top">
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                              <td height="123" style="padding:0 10px; border-bottom:solid 1px #000;">
-                                  <strong>Payment Account</strong> : {{$expense['PaymentAccount']['name']}}<br/>
-                                  <strong>Payment Method</strong> : {{App\Models\Globals\Expense::$payment_method[$expense['payment_method']]}}
-                              </td>
-                            </tr>
-                            <tr>
-                                  <td height="123" style="padding:0 10px; border-bottom:solid 1px #000;" valign="bottom">
-                                          <div style="display:block; height:45px;"><strong>Total Expense Amount in Words :</strong></div>
-                                          <table width="99%" border="0" cellspacing="0" cellpadding="0" align="center">
-                                            <tr>
-                                              <td height="35" style="padding:0 5px; border-top:solid 1px #000;">{{ucwords($expense['total_in_word'])}} Only</td>
-                                            </tr>
-                                            <tr>
-                                              <td height="35" style="padding:0 5px; border-top:solid 1px #000;">&nbsp;</td>
-                                            </tr>
-                                          </table>
-                                  </td>
-                            </tr>
-                            <tr>
-                              <td height="60" style="padding:0 10px;">
-                                  <strong>Subject to Rajkot Jurisdiction<br/>E. & O. E.</strong>
-                              </td>
-                            </tr>              
+    <table width="1182" border="0" cellspacing="0" cellpadding="0" >
+        <tr>
+            <td align="left" valign="top" width="31%" style="border-top:solid 1px #444444;border-left:solid 1px #444444;font-size:22px; padding: 8px 0px 0px 5px;">
+                <h2>&nbsp;Tax Invoice</h2>
+                &nbsp;&nbsp;<strong style="font-size:16px;">GSTIN : {{$company['gstin']}}</strong>
+            </td>
+            <td align="center" valign="top" width="38%" style="border-top:solid 1px #444444; padding: 10px 0px 0px;">
+                <img src="{{url($company['company_logo'])}}" alt="" width="100" height="100" style="max-height:100px;"/>
+            </td>
+            <td align="right" width="31%" valign="top" style="font-size:18px;border-top:solid 1px #444444;border-right:solid 1px #444444;line-height:22px; padding: 8px 5px 0px 0px;">
+                <strong>Original&nbsp;&nbsp;</strong>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="border-left:solid 1px #444444;border-right:solid 1px #444444;line-height:25px; padding-bottom: 10px;" align="center">
+                <strong>{{$company['company_name']}}</strong>
+                <br/>
+                {{$company['street']}}, {{$company['city']}}-{{$company['pincode']}}, {{$company['state']}}, India
+            </td>
+        </tr>
+        <tr>
+            <td style="border-left:solid 1px #444444;line-height:25px; padding: 0px 0px 8px 8px;" align="left" >
+                &nbsp;<img src="{{url('assets/images/pdf_img/mail-icon.png')}}" alt="" width="12px" height="12px" />&nbsp;<strong >{{$company['company_email']}}</strong>
+            </td>
+            <td style="line-height:25px; padding-bottom: 8px;" align="center" >
+                &nbsp;<img src="{{url('assets/images/pdf_img/web-icon.png')}}" alt="" width="10px" height="10px" />&nbsp;<strong>{{$company['website']}}</strong>
+            </td>
+            <td style="border-right:solid 1px #444444;line-height:25px; padding: 0px 8px 8px 0px;" align="right" >
+                &nbsp;<img src="{{url('assets/images/pdf_img/phone-icon.png')}}" alt="" width="12px" height="12px" />&nbsp;<strong>{{$company['company_phone']}}</strong>&nbsp;
+            </td>
+        </tr>
+    </table>
+
+    <table width="1182" border="0" cellspacing="0" cellpadding="0" id="table-top">
+        <tr>
+            <td align="left" width="591" style="padding:0 5px;border-top:solid 1px #444444;border-left:solid 1px #444444;line-height:30px;">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" >
+                    <tr>
+                        <td align="left" width="295" style="line-height:30px;">&nbsp;&nbsp;Invoice No:&nbsp;&nbsp;</strong>{{$company['invoice_prefix']}}/{{$invoice['invoice_number']}} </td>
+                    </tr>
                 </table>
             </td>
-            <td height="30">&nbsp;</td>
-            <td height="30">&nbsp;</td>
-            <td height="30">&nbsp;</td>
-            <td height="30">&nbsp;</td>
-          </tr>
-          <tr>
-            <td height="30" colspan="2" style="padding:0 5px;">Total Amount before Tax</td>
-            <td height="30" colspan="2" align="right" style="padding:0 5px;">{{$expense['amount_before_tax']}}</td>
-          </tr>
-           @foreach($taxes as $tax)
-                @if($tax['tax_name'] == 'GST')
-                <tr class="{{$tax['rate'].'_'.$tax['tax_name']}} hide">
-                    <td height="30" colspan="2" style="padding:0 5px;">{{$tax['rate'] / 2}}% CGST on <span id="label_1_{{$tax['rate'].'_'.$tax['tax_name']}}">0.00</span></td>
-                    <td height="30" align="right" colspan="2" style="padding:0 5px;"><span id="input_1_{{$tax['rate'].'_'.$tax['tax_name']}}" class="tax-input-row"></td>
+            <td align="left" width="591" style="padding:0 5px; border:solid 1px #444444;line-height:30px;">&nbsp;&nbsp;Transport Mode: <strong>-</strong></td>
+        </tr>
+        <tr>
+            <td align="left" width="591" style="padding:0 5px;border:solid 1px #444444;line-height:30px;">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td align="left" width="295" style="line-height:30px;">&nbsp;&nbsp;Invoice Date: <strong>{{date('d-m-Y', strtotime($invoice['invoice_date']))}}</strong></td>
+                    </tr>
+                </table>
+            </td>
+            <td align="left" width="591" style="padding:0 5px; border:solid 1px #444444;line-height:30px;">&nbsp;&nbsp;Date of Supply: <strong>{{date('d-m-Y', strtotime($invoice['due_date']))}}</strong></td>
+        </tr>
+        <tr>
+            <td align="left" style="border-left: solid 1px #444444;"><table width="100%" border="0" cellspacing="0" cellpadding="0" >
+                    <tr>
+                        <td align="left" width="68%" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;State: <strong>{{$company['state']}}</strong></td>
+                        <td width="16%" style="border-left: solid 1px #444444;line-height:30px;" align="center">&nbsp;&nbsp;Code</td>
+                        <td width="16%" style="border-left: solid 1px #444444;line-height:30px;" align="center"><strong>{{$company['state_code']}}</strong></td>
+                    </tr>
+                </table>
+            </td>
+
+            <td align="left" style="padding:0 5px;border-left: solid 1px #444444;border-right: solid 1px #444444;line-height:30px;">&nbsp;&nbsp;Place of Supply:
+                <strong>{{$invoice['place_of_supply']}}</strong>
+            </td>
+        </tr>
+    </table>
+
+    <table class="td-gray" width="1182" border="1" cellspacing="0" cellpadding="0" id="table-top2">
+        <tr>
+            <td colspan="2" style="padding: 20px 10px;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td align="center" bgcolor="#eeeeee" align="center" style="padding:0 5px;line-height:30px;" ><strong>BILL TO PARTY</strong></td>
+            <td align="center" bgcolor="#eeeeee" align="center" style="padding:0 5px;line-height:30px;"><strong>SHIP TO PARTY / DELIVERY ADDRESS</strong></td>
+        </tr>
+        <tr>
+            <td align="left" width="50%" style="padding:0 5px;line-height:30px;" >&nbsp;&nbsp;<strong>{{$user['billing_first_name']}} {{$user['billing_last_name']}}</strong></td>
+            <td align="left" width="50%" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>{{$user['shipping_first_name']}} {{$user['shipping_last_name']}}</strong></td>
+        </tr>
+        <tr>
+            <td align="left" valign="top" style="padding:0 14px;line-height:30px;">{{$user['billing_street']}}, {{$user['billing_city']}}-{{$user['billing_pincode']}}, {{$user['state']}}, {{$user['billing_country']}}.</td>
+            <td align="left" valign="top" style="padding:0 14px;line-height:30px;">{{$user['shipping_street']}}, {{$user['shipping_city']}}-{{$user['shipping_pincode']}}, {{$user['shipping_state']}}, {{$user['shipping_country']}}.</td>
+        </tr>
+        <tr>
+            <td align="left" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>Phone No:</strong> {{$user['billing_phone']}}</td>
+            <td align="left" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>Phone No:</strong> {{$user['shipping_phone']}}</td>
+        </tr>
+        <tr>
+            <td align="left">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td align="left" width="40%" style="padding:0 5px;line-height:30px; border: 0px;">&nbsp;&nbsp;<strong>State:</strong> {{$user['state']}}</td>
+                        <td width="16%" style="border-left: solid 1px #444444; border-right: solid 1px #444444; border-top:0px; border-bottom:0px; line-height:30px;" align="center"><strong>Code</strong></td>
+                        <td width="16%" style="border-left: solid 1px #444444; border-top:0px; border-bottom:0px;line-height:30px;" align="center">{{$user['state_code']}}</td>
+                        <td align="left" width="28%" style="padding:0 5px;line-height:30px; border: 0px;">&nbsp;&nbsp;<strong>Country:</strong> {{$user['billing_country']}}</td>
+                    </tr>
+                </table>
+            </td>
+            <td align="left" >
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td align="left" width="40%" style="padding:0 5px;line-height:30px; border: 0px;">&nbsp;&nbsp;<strong>State:</strong> {{$user['shipping_state']}}</td>
+                        <td width="16%" style="border-left: solid 1px #444444; border-right: solid 1px #444444; border-top:0px; border-bottom:0px;line-height:30px;" align="center"><strong>Code</strong></td>
+                        <td width="16%" style="border-left: solid 1px #444444; border-top:0px; border-bottom:0px; line-height:30px;" align="center">{{$user['shipping_state_code']}}</td>
+                        <td align="left" width="28%" style="padding:0 5px;line-height:30px; border: 0px;">&nbsp;&nbsp;<strong>Country:</strong> {{$user['shipping_country']}}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 20px 10px;border-left: solid 1px #444444; border-right:0px; border-bottom: 0px;">&nbsp;</td>
+            <td style="padding: 20px 10px;border-top: solid 1px #444444; border-left:0px; border-right: solid 1px #444444;border-bottom: 0px;">&nbsp;</td>
+        </tr>
+    </table>
+
+    <table width="1182" border="1" cellspacing="0" cellpadding="0" class="td-gray" style="margin-top: -1px;">
+        <tr>
+            <td width="38px" valign="top" align="center" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px;"><strong>#</strong></td>
+            <td width="280px" valign="top" align="center" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>Product</strong></td>
+            <td width="40px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>HSN</strong></td>
+            <td width="40px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>Tax <br> %</strong></td>
+            <td width="50px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>Qty</strong></td>
+            <td width="140px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>RATE PER ITEM</strong></td>
+            <td width="150px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;">&nbsp;&nbsp;<strong>Total <br>Rs.</strong></td>
+        </tr>
+        @if(!empty($invoice['InvoiceItems']))
+            @php $i=1; @endphp
+            @foreach($invoice['InvoiceItems'] as $item)
+                <tr>
+                    <td style="line-height:30px;" align="center" valign="top">{{$i}}</td>
+                    <td style="padding:0 5px;line-height:30px;" align="left" valign="top">{{$item['Product']['title']}}</td>
+                    <td style="line-height:30px;" align="center" valign="top">{{$item['Product']['hsn_code']}}</td>
+                    <td style="line-height:30px;" align="center" valign="top">{{$item['tax_name']}}</td>
+                    <td style="line-height:30px;" align="center" valign="top"><span class="quantity-input">{{$item['quantity']}}</span></td>
+                    <td style="line-height:30px;" align="center" valign="top"><span class="rate-input">{{$item['rate']}}</span></td>
+                    <td style="line-height:30px;" align="center" valign="top"><span class="amount-input">{{$item['amount']}} &nbsp;</span></td>
+                    <td style="display:none;">
+                        <select id="taxes" class="tax-input">
+                            @foreach($taxes as $tax)
+                                @if($tax['is_cess'] == 0)
+                                    <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name']}}</option>
+                                @else
+                                    <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </td>
                 </tr>
-                <tr class="{{$tax['rate'].'_'.$tax['tax_name']}} hide">
-                    <td height="30" colspan="2" style="padding:0 5px;">{{$tax['rate'] / 2}}% SGST on <span id="label_2_{{$tax['rate'].'_'.$tax['tax_name']}}">0.00</span></td>
-                    <td height="30" align="right" colspan="2" style="padding:0 5px;"><span id="input_2_{{$tax['rate'].'_'.$tax['tax_name']}}" class="tax-input-row"></td>
-                </tr>
-                @else
-                <tr class="{{$tax['rate'].'_'.$tax['tax_name']}} hide">
-                    <td height="30" colspan="2" style="padding:0 5px;">{{$tax['rate'].'% '.$tax['tax_name']}} on <span id="label_{{$tax['rate'].'_'.$tax['tax_name']}}">0.00</span></td>
-                    <td height="30" align="right" colspan="2" style="padding:0 5px;"><span id="input_{{$tax['rate'].'_'.$tax['tax_name']}}" class="tax-input-row"></td>
-                </tr>
-                @endif
+                @php $i++; @endphp
             @endforeach
-<!--          <tr>
-            <td height="30" colspan="2" style="padding:0 5px;">Add. CGST &nbsp; 0 %</td>
-            <td height="30" colspan="2" align="right" style="padding:0 5px;">-</td>
-          </tr>
-          <tr>
-            <td height="30" colspan="2" style="padding:0 5px;">Add. SGST &nbsp; 0 %</td>
-            <td height="30" colspan="2" align="right" style="padding:0 5px;">-</td>
-          </tr>
-          <tr>
-            <td height="30" colspan="2" style="padding:0 5px;">Add. IGST &nbsp; 3 %</td>
-            <td height="30" colspan="2" align="right" style="padding:0 5px;">39663/-</td>
-          </tr>
-          <tr>
-            <td height="30" colspan="2" style="padding:0 5px;">Total Tax Amount</td>
-            <td height="30" colspan="2" align="right" style="padding:0 5px;">{{$expense['tax_amount']}}</td>
-          </tr>
-          <tr>
-            <td height="30" colspan="2" style="padding:0 5px;">GST on Reverse Charge</td>
-            <td height="30" colspan="2" align="right" style="padding:0 5px;">&nbsp;</td>
-          </tr>-->
-          <tr>
-            <td height="30" colspan="2" style="padding:0 5px;">Total Amount After Tax</td>
-            <td height="30" colspan="2" align="right" style="padding:0 5px;">{{$expense['total']}}</td>
-          </tr>
-          <tr>
-            <td height="30" colspan="2" style="padding:0 5px;">Discount / Labour Etx.</td>
-            <td height="30" colspan="2" align="right" style="padding:0 5px;">&nbsp;</td>
-          </tr>
-          <tr>
-            <td height="30" colspan="2" style="padding:0 5px;"><strong>Total</strong></td>
-            <td height="30" colspan="2" align="right" style="padding:0 5px;"><strong>{{$expense['total']}}</strong></td>
-          </tr>
-        </table></td>
-      </tr>
-      <tr>
-        <td height="72" valign="middle" align="right" style="padding:0 10px; border-top: solid 1px #000;"><div style="display:block; height:50px;"><strong>For, J S K Silver Omaments</strong></div>
+        @endif
+    </table>
 
-Authorised Signature</td>
-      </tr>
-    </table></td>
-  </tr>
-</table>
+    <table width="1182" border="0" cellspacing="0" cellpadding="0" style="margin-top: -1px;">
+        <tr>
+            <td align="left" valign="top" style="border-top: solid 1px #444444; border-left:solid 1px #444444; border-right:solid 1px #444444;">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td style="padding:8px 0px;border-bottom:solid 1px #444444;" valign="bottom">
+                            <table  width="100%" border="0" cellspacing="0" cellpadding="0" align="left">
+                                <tr>
+                                    <td style="padding-left:15px"><strong>Payment Mode : </strong>{{$invoice['payment_method']}}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top" style="padding:15px 15px 5px 15px;border-bottom:solid 1px #444444;">
+                            <table cellspacing="0" cellpadding="0" border="0">
+                                <tr>
+                                    <td><strong>Terms and Conditions</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px 0px;">{{$company['terms_and_condition']}}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:5px 15px;" valign="bottom">
+                            <table  width="100%" border="0" cellspacing="0" cellpadding="0" align="left">
+                                <tr>
+                                    <td><strong>Total Invoice Amount in Words</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px 0px;">{{$invoice['total_in_word']}}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td width="50%" align="left" valign="top" style="border-right: solid 1px #444444;border-top: solid 1px #444444; line-height: 35px;">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Total Amount before Tax</td>
+                        <td align="right" height="35" style="border-right:0px;border-bottom:solid 1px #444444;">{{$invoice['amount_before_tax']}}/-&nbsp;&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Total Tax Amount</td>
+                        <td align="right" height="35" style="border-right:0px;border-bottom:solid 1px #444444;">{{$invoice['tax_amount']}}/-&nbsp;&nbsp;</td>
+                    </tr>
 
-<script type="text/javascript">
-function subTotal() {
-    amount = 0;
-    $('.amount-input').each(function(){
-        var val = $(this).html();
-        if(val == null || val == '') {
-            val = 0;
-        }
-        amount += parseFloat(val);
-    });
+                    @foreach($all_tax_labels as $tax)
+                        @php
+                            $arr = explode("_", $tax, 2);
+                            $rate = $arr[0];
+                            $tax_name = $arr[1];
+                        @endphp
+                        @if($tax_name == 'GST')
+                            <tr class="{{$rate.'_'.$tax_name}} hide">
+                                <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;"> &nbsp; {{$rate / 2}}% CGST on Rs. <span id="label_1_{{$rate.'_'.$tax_name}}">0.00</span></td>
+                                <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;"><span id="input_1_{{$rate.'_'.$tax_name}}" class="tax-input-row"></span>&nbsp;&nbsp;</td>
+                            </tr>
+                            <tr class="{{$rate.'_'.$tax_name}} hide">
+                                <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;"> &nbsp; {{$rate / 2}}% SGST on Rs. <span id="label_2_{{$rate.'_'.$tax_name}}">0.00</span></td>
+                                <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;"><span id="input_2_{{$rate.'_'.$tax_name}}" class="tax-input-row"></span>&nbsp;&nbsp;</td>
+                            </tr>
+                        @else
+                            <tr class="{{$rate.'_'.$tax_name}} hide">
+                                <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;"> &nbsp; {{$rate.'% '.$tax_name}} on Rs. <span id="label_{{$rate.'_'.$tax_name}}">0.00</span></td>
+                                <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;"><span id="input_{{$rate.'_'.$tax_name}}" class="tax-input-row"></span>&nbsp;&nbsp;</td>
+                            </tr>
+                        @endif
+                    @endforeach
 
-    var tax_type = $('#amounts_are').val();
-    var final_amount = 0;
-    if(tax_type == 'exclusive') {
-        final_amount = amount;
-    } else if(tax_type == 'inclusive') {
-        var total_tax_amount = getTotalTax();
-        final_amount = parseFloat(amount) - parseFloat(total_tax_amount);
-    } else {
-        final_amount = amount;
-    }
-    //$('#subtotal').val('Rs. ' + final_amount.toFixed(2));
+                    <tr>
+                        <td style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">
+                            <table width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse: collapse; ">
+                                <tr>
+                                    <td height="35" align="left" width="60%" style="">&nbsp;&nbsp;Discount %</td>
+                                    <td align="right" style="border-left:solid 1px #444444; text-align: center;">@if($invoice['discount_type']==1) {{$invoice['discount']}} % @else - @endif</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="border-bottom:solid 1px #444444;">
+                            <table width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse: collapse; ">
+                                <tr>
+                                    <td height="35" align="left" width="50%" style="">
+                                        &nbsp;&nbsp;Discount
+                                    </td>
+                                    <td align="right" style="width:100px;border-left:solid 1px #444444;">{{$invoice['discount_price']}}&nbsp;&nbsp;</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Total Amount After Tax</td>
+                        <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">{{$invoice['total']}}/-&nbsp;&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Round Off</td>
+                        <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">-&nbsp;&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="left" height="35" style="border-right:solid 1px #444444; border-bottom:solid 1px #444444; text-transform: uppercase;"><strong>&nbsp;&nbsp;Total</strong></td>
+                        <td align="right" style="border-right:0px; border-bottom:solid 1px #444444;"><strong>{{$invoice['total']}}/-&nbsp;&nbsp;</strong></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr><td colspan="2" align="left" style="padding: 3px 5px; border-left:solid 1px #444444;border-right: solid 1px #444444;border-top: solid 1px #444444;">E. & O.E</td></tr>
+        <tr>
+            <td align="left" style="border-left:solid 1px #444444;border-bottom: solid 1px #444444;line-height:30px;">
+                @if(in_array($invoice['status'],[1,2,4]))
+                    <img src="{{url('assets/images/pdf_img/'.$invoice['status_image'])}}" alt="" width="150" height="70" />
+                @endif
+            </td>
+            <td align="right" style="padding:0 10px 20px; border-bottom: solid 1px #444444;border-right:solid 1px #444444;line-height:30px;">
+                <strong>For, {{$company['company_name']}}</strong>&nbsp;&nbsp;<br/>
+                <img src="{{url($company['signature_image'])}}" alt="" width="auto" height="40" style="max-height:40px;"/>&nbsp;&nbsp;&nbsp;<br>
+                Authorised Signature&nbsp;&nbsp;
+                <br>
+                This is computer generated invoice and does not require a signature
+            </td>
+        </tr>
+    </table>
 
-    return final_amount.toFixed(2);
-}
 
-function getTotalTax() {
-    total_tax_amount = 0;
-    $('.tax-input-row').each(function() {
-        var val = $(this).html();
-        if(!$(this).parent('td').parent('tr').hasClass('hide')){
-            val = val.replace('Rs. ','');
-            if(val == null || val == '') {
-                val = 0;
-            }
-            total_tax_amount += parseFloat(val);
-        }
-    });
-    return total_tax_amount;
-}
+    <script type="text/javascript">
+        function subTotal() {
+            amount = 0;
+            $('.amount-input').each(function(){
+                var val = $(this).html();
+                if(val == null || val == '') {
+                    val = 0;
+                }
+                amount += parseFloat(val);
+            });
 
-function taxCalculation() {
-
-    var subtotal = subTotal();
-    var tax_type = $('#amounts_are').val();
-    var tax = 0;
-    var total = 0;
-    var amount_before_tax = 0;
-
-    var tax_arr = [];
-    var tax_total_arr = [];
-    var i = 0;
-
-    $('.tax-input').find('option').each(function() {
-        var str = $(this).filter(":selected").text();
-        var opt = $(this).text();
-        var opt_str = opt.replace("% ", "_");
-        var tax_str = str.replace("% ", "_");
-        var amount = 0;
-        amount = $(this).parent('select').parent('td').prev('td').find('.amount-input').html();
-
-        var tax_name = tax_str.split('_').pop();
-        var tax_rate = tax_str.substr(0, tax_str.indexOf('_'));
-        var tax_raw_html = '';
-        var tax_id = $(this).val();
-        if(tax_str != '') {
-            var tax_hidden = 0;
-            tax_hidden += parseFloat(amount);
-            $("#id_"+ tax_str).val(tax_hidden);
-        }
-
-        var cls_opt_str = "." + opt_str;
-        $(cls_opt_str).addClass("hide");
-        if(tax_str != '' && tax_str !=  null) {
-            tax_arr[i] = tax_str;
-            if(tax_total_arr.hasOwnProperty(tax_str)) {
-                tax_total_arr[tax_str] += parseFloat(amount);
+            var tax_type = $('#amounts_are').val();
+            var final_amount = 0;
+            if(tax_type == 'exclusive') {
+                final_amount = amount;
+            } else if(tax_type == 'inclusive') {
+                var total_tax_amount = getTotalTax();
+                final_amount = parseFloat(amount) - parseFloat(total_tax_amount);
             } else {
-                tax_total_arr[tax_str] = parseFloat(amount);
+                final_amount = amount;
             }
-            i++;
+            //$('#subtotal').val('Rs. ' + final_amount.toFixed(2));
+
+            return final_amount.toFixed(2);
         }
-    });
 
-    $('.amount-input').each(function() {
-        var tax_text = $(this).parent('td').next('td').find('.tax-input').find(":selected").text();
-        var amount = parseFloat($(this).val());
-    });
-
-    if(tax_type != 'out_of_scope') {
-        for(var a=0; a < tax_arr.length; a++) {
-            $("."+tax_arr[a]).removeClass("hide");
+        function getTotalTax() {
+            total_tax_amount = 0;
+            $('.tax-input-row').each(function() {
+                var val = $(this).html();
+                if(!$(this).parent('td').parent('tr').hasClass('hide')){
+                    val = val.replace('Rs. ','');
+                    if(val == null || val == '') {
+                        val = 0;
+                    }
+                    total_tax_amount += parseFloat(val);
+                }
+            });
+            return total_tax_amount;
         }
-    }
 
-    for (var key in tax_total_arr) {
+        function taxCalculation() {
+            var subtotal = subTotal();
+            var tax_type = $('#amounts_are').val();
+            var tax = 0;
+            var total = 0;
+            var amount_before_tax = 0;
 
-        var value = parseFloat(tax_total_arr[key]);
-        var tax = key.split('_')[1];
-        var tax_rate = key.substr(0, key.indexOf('_'));
-        var tax_amount = 0;
+            var tax_arr = [];
+            var tax_total_arr = [];
+            var i = 0;
 
-        if(tax == 'GST') {
+            $('.tax-input').find('option').each(function() {
+                var str = $(this).filter(":selected").text();
+                var opt = $(this).text();
+                var opt_str = opt.replace("% ", "_").replace(" + ","+").replace(" ", "_").replace("%", "");
+                var tax_str = str.replace("% ", "_").replace(" + ","+").replace(" ", "_").replace("%", "");
+                var is_cess = false;
+                var cess_arr = [];
+                if (tax_str.indexOf('CESS') > -1) {
+                    is_cess = true;
+                    cess_arr = tax_str.split("+");
+                }
+                var amount = 0;
+                amount = $(this).parent('select').parent('td').prev('td').find('.amount-input').html();
+
+                if(cess_arr.length > 0 && is_cess) {
+                    for(var r=0;r < cess_arr.length;r++){
+                        tax_str = cess_arr[r];
+                        var opt1_str = opt_str.substr(0, opt_str.indexOf('+'));
+                        var opt2_str = opt_str.split('+').pop();
+                        var tax_name = tax_str.split('_').pop();
+                        var tax_rate = tax_str.substr(0, tax_str.indexOf('_'));
+                        var tax_raw_html = '';
+                        var tax_id = $(this).val();
+                        if(tax_str != '') {
+                            var tax_hidden = 0;
+                            tax_hidden += parseFloat(amount);
+                            $("#id_"+ tax_str).val(tax_hidden);
+                        }
+
+                        var cls_opt_str1 = "." + opt1_str;
+                        var cls_opt_str2 = "." + opt2_str;
+
+                        $(cls_opt_str1).addClass("hide");
+                        $(cls_opt_str2).addClass("hide");
+
+                        if(tax_str != '' && tax_str !=  null) {
+                            tax_arr[i] = tax_str;
+                            if(tax_total_arr.hasOwnProperty(tax_str)) {
+                                tax_total_arr[tax_str] += parseFloat(amount);
+                            } else {
+                                tax_total_arr[tax_str] = parseFloat(amount);
+                            }
+                            i++;
+                        }
+                    }
+                } else {
+                    var tax_name = tax_str.split('_').pop();
+                    var tax_rate = tax_str.substr(0, tax_str.indexOf('_'));
+                    var tax_raw_html = '';
+                    var tax_id = $(this).val();
+
+                    if(tax_str != '') {
+                        var tax_hidden = 0;
+                        tax_hidden += parseFloat(amount);
+                        $("#id_"+ tax_str).val(tax_hidden);
+                    }
+                    if (opt_str.indexOf('CESS') > -1) {
+                        var opt_str2 = opt_str.substr(0, opt_str.indexOf('+'));
+                        opt_str = opt_str.split('+').pop();
+                        $('.'+opt_str2).addClass("hide");
+                    }
+                    var cls_opt_str = "." + opt_str;
+                    $(cls_opt_str).addClass("hide");
+                    if(tax_str != '' && tax_str !=  null) {
+                        tax_arr[i] = tax_str;
+                        if(tax_total_arr.hasOwnProperty(tax_str)) {
+                            tax_total_arr[tax_str] += parseFloat(amount);
+                        } else {
+                            tax_total_arr[tax_str] = parseFloat(amount);
+                        }
+                        i++;
+                    }
+                }
+            });
+
+            $('.amount-input').each(function() {
+                var tax_text = $(this).parent('td').next('td').find('.tax-input').find(":selected").text();
+                var amount = parseFloat($(this).val());
+            });
+
+            if(tax_type != 'out_of_scope') {
+                for(var a=0; a < tax_arr.length; a++) {
+                    $("."+tax_arr[a]).removeClass("hide");
+                }
+            }
+
+            for (var key in tax_total_arr) {
+                var value = parseFloat(tax_total_arr[key]);
+                var tax = key.split('_')[1];
+                var tax_rate = key.substr(0, key.indexOf('_'));
+                var tax_amount = 0;
+
+                if(tax == 'GST') {
+                    if(tax_type == 'exclusive') {
+                        var tax_rate_gst = tax_rate / 2;
+                        if(isNaN(value)) {
+                            value=0;
+                        }
+                        $("#label_1_"+key).html(value.toFixed(2));
+                        $("#label_2_"+key).html(value.toFixed(2));
+                        tax_amount = value * tax_rate_gst / 100;
+                        amount_before_tax = parseFloat(subtotal).toFixed(2);
+                        if(isNaN(tax_amount)) {
+                            tax_amount=0;
+                        }
+                        $("#input_1_"+key).html(tax_amount.toFixed(2));
+                        $("#input_2_"+key).html(tax_amount.toFixed(2));
+                    } else if(tax_type == 'inclusive') {
+                        var tax_rate_gst = tax_rate / 2;
+                        tax_amount = value * tax_rate / (parseInt(100) + parseInt(tax_rate));
+                        var new_value = parseFloat(value) - parseFloat(tax_amount);
+                        if(isNaN(new_value)) {
+                            new_value=0;
+                        }
+                        amount_before_tax = parseFloat(new_value).toFixed(2);
+                        $("#label_1_"+key).html(new_value.toFixed(2));
+                        $("#label_2_"+key).html(new_value.toFixed(2));
+                        var new_tax_value = tax_amount / 2;
+                        if(isNaN(new_tax_value)) {
+                            new_tax_value=0;
+                        }
+                        $("#input_1_"+key).html(new_tax_value.toFixed(2));
+                        $("#input_2_"+key).html(new_tax_value.toFixed(2));
+                    }
+                } else {
+                    if(tax_type == 'exclusive') {
+                        tax_amount = value * tax_rate / 100;
+                        amount_before_tax = parseFloat(subtotal).toFixed(2);
+                        if(isNaN(value)) {
+                            value=0;
+                        }
+                        $("#label_"+key).html(value.toFixed(2));
+                    } else if(tax_type == 'inclusive') {
+                        tax_amount = value * tax_rate / (parseInt(100) + parseInt(tax_rate));
+                        var new_value = parseFloat(value) - parseFloat(tax_amount);
+                        if(isNaN(new_value)) {
+                            new_value=0;
+                        }
+                        amount_before_tax = parseFloat(new_value).toFixed(2);
+                        $("#label_"+key).html(new_value.toFixed(2));
+                    }
+                    if(isNaN(tax_amount)) {
+                        tax_amount=0;
+                    }
+                    $("#input_"+key).html(tax_amount.toFixed(2));
+                }
+            }
+            var total_tax = getTotalTax();
             if(tax_type == 'exclusive') {
-                var tax_rate_gst = tax_rate / 2;
-                if(isNaN(value)) {
-                    value=0;
-                }
-                $("#label_1_"+key).html(value.toFixed(2));
-                $("#label_2_"+key).html(value.toFixed(2));
-                tax_amount = value * tax_rate_gst / 100;
-                amount_before_tax = parseFloat(subtotal).toFixed(2);
-                if(isNaN(tax_amount)) {
-                    tax_amount=0;
-                }
-                $("#input_1_"+key).html(tax_amount.toFixed(2));
-                $("#input_2_"+key).html(tax_amount.toFixed(2));
+                total = parseFloat(subtotal) + parseFloat(total_tax);
             } else if(tax_type == 'inclusive') {
-                var tax_rate_gst = tax_rate / 2;
-                tax_amount = value * tax_rate / (parseInt(100) + parseInt(tax_rate));
-                var new_value = parseFloat(value) - parseFloat(tax_amount);
-                if(isNaN(new_value)) {
-                    new_value=0;
-                }
-                amount_before_tax = parseFloat(new_value).toFixed(2);
-                $("#label_1_"+key).html(new_value.toFixed(2));
-                $("#label_2_"+key).html(new_value.toFixed(2));
-                var new_tax_value = tax_amount / 2;
-                if(isNaN(new_tax_value)) {
-                    new_tax_value=0;
-                }
-                $("#input_1_"+key).html(new_tax_value.toFixed(2));
-                $("#input_2_"+key).html(new_tax_value.toFixed(2));
-            }
-        } else {
-            if(tax_type == 'exclusive') {
-                tax_amount = value * tax_rate / 100;
+                subtotal = subTotal();
+                amount_before_tax = parseFloat(subtotal);
+                total = parseFloat(subtotal) + parseFloat(total_tax);
+            } else {
+                total_tax = 0;
                 amount_before_tax = parseFloat(subtotal).toFixed(2);
-                if(isNaN(value)) {
-                    value=0;
-                }
-                $("#label_"+key).html(value.toFixed(2));
-            } else if(tax_type == 'inclusive') {
-                tax_amount = value * tax_rate / (parseInt(100) + parseInt(tax_rate));
-                var new_value = parseFloat(value) - parseFloat(tax_amount);
-                if(isNaN(new_value)) {
-                    new_value=0;
-                }
-                amount_before_tax = parseFloat(new_value).toFixed(2);
-                $("#label_"+key).html(new_value.toFixed(2));
+                total = parseFloat(subtotal);
             }
-            if(isNaN(tax_amount)) {
-                tax_amount=0;
-            }
-            $("#input_"+key).html(tax_amount.toFixed(2));
-        }
-    }
-    var total_tax = getTotalTax();
-    if(tax_type == 'exclusive') {
-        total = parseFloat(subtotal) + parseFloat(total_tax);
-    } else if(tax_type == 'inclusive') {
-        subtotal = subTotal();
-        amount_before_tax = parseFloat(subtotal);
-        total = parseFloat(subtotal) + parseFloat(total_tax);
-    } else {
-        total_tax = 0;
-        amount_before_tax = parseFloat(subtotal).toFixed(2);
-        total = parseFloat(subtotal);
-    }
 
-    //$('#total').val('Rs. '+ parseFloat(total).toFixed(2));
-    //$('#amount_before_tax').val(amount_before_tax);
-    //$('#tax_amount').val(total_tax.toFixed(2));
-    //$('#total_amount').val(parseFloat(total).toFixed(2));
-}
-$(document).ready(function(){
-    taxCalculation();
-});
-</script>
+            //$('#total').val('Rs. '+ parseFloat(total).toFixed(2));
+            //$('#amount_before_tax').val(amount_before_tax);
+            //$('#tax_amount').val(total_tax.toFixed(2));
+            //$('#total_amount').val(parseFloat(total).toFixed(2));
+        }
+
+        $(document).ready(function(){
+            taxCalculation();
+        });
+    </script>
+
 </body>
 </html>

@@ -109,8 +109,8 @@
                         <a class="waves-effect waves-dark" href="{{route('payment-account')}}"><i class="fa fa-credit-card"></i><span class="hide-menu">Payment Account</span></a>
                     </li>
 
-                    <li class="@if($menu == 'Invoice Setting' ) active @endif">
-                        <a class="waves-effect waves-dark" href="{{route('invoice-setting')}}"><i class="fa fa-file-invoice"></i><span class="hide-menu">Invoice Setting</span></a>
+                    <li class="@if($menu == 'Company Setting' ) active @endif">
+                        <a class="waves-effect waves-dark" href="{{route('company-setting')}}"><i class="fa fa-file-invoice"></i><span class="hide-menu">Company Setting</span></a>
                     </li>
                 </ul>
             </nav>

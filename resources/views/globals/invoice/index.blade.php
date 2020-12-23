@@ -28,25 +28,31 @@
             @include('inc.message')
             {!! Form::open(['url' => url('sales'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group">
-                                {!! Form::text('search', isset($search)&&!empty($search)?$search:null, ['class' => 'form-control','id'=>'search', 'placeholder'=>'Search']) !!}
+                            {!! Form::text('search', isset($search)&&!empty($search)?$search:null, ['class' => 'form-control','id'=>'search', 'placeholder'=>'Search']) !!}
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group">
-                                {!! Form::text('start_date', $start_date, ['class' => 'form-control','id'=>'start_date', 'placeholder'=>'Start date']) !!}
+                            {!! Form::text('start_date', $start_date, ['class' => 'form-control','id'=>'start_date', 'placeholder'=>'Start date']) !!}
                         </div>
                     </div>
 
-                   <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="form-group">
-                                {!! Form::text('end_date', $end_date, ['class' => 'form-control','id'=>'end_date', 'placeholder'=>'End date']) !!}
+                            {!! Form::text('end_date', $end_date, ['class' => 'form-control','id'=>'end_date', 'placeholder'=>'End date']) !!}
                         </div>
                     </div>
 
-                   <div class="col-md-2">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            {!! Form::select('status', [''=>'All Status']+\App\Models\Globals\Invoice::$invoice_status, isset($status)&&!empty($status)?$status:null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
                        <button type="submit" class="btn btn-primary mr-2"><i class="ti-search"></i></button>
                        <a href="{{url('sales')}}"><button type="button" class="btn btn-danger">Clear</button></a>
                     </div>
@@ -63,6 +69,7 @@
                                     <th>Customer Email</th>
                                     <th>Invoice Date</th>
                                     <th>Due Date</th>
+                                    <th>Status</th>
                                     <th>Place Of Supply</th>
                                     <th>Action</th>
                                 </tr>
@@ -77,6 +84,17 @@
                                         <td>{{$list['customer_email']}}</td>
                                         <td>{{date('d F Y', strtotime($list['invoice_date']))}}</td>
                                         <td>{{date('d F Y', strtotime($list['due_date']))}}</td>
+                                        <td>
+                                            @if($list['status']==1)
+                                                <label class="label label-warning">Pending</label>
+                                            @elseif($list['status']==2)
+                                                <label class="label label-danger">Paid</label>
+                                            @elseif($list['status']==3)
+                                                <label class="label label-primary">Refunded</label>
+                                            @else
+                                                <label class="label label-warning">Voided</label>
+                                            @endif
+                                        </td>
                                         <td>{{$list['place_of_supply']}}</td>
                                         <td>
                                             <div class="btn-group">
@@ -87,8 +105,8 @@
                                                 <div class="dropdown-menu">
                                                     <a class="dropdown-item" href="{{url('sales/'.$list['id'].'/edit')}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="delete_invoice_records({{$list['id']}})">Delete</a>
-                                                    <a class="dropdown-item" target="_blank" href="{{route('sales-download_pdf',['id'=>$list['id'],'output'=>'print'])}}">Print</a>
-                                                    <a class="dropdown-item" href="{{route('sales-download_pdf',['id'=>$list['id'],'output'=>'download'])}}">Download</a>
+                                                    <a class="dropdown-item" target="_blank" href="{{route('invoice-download_pdf',['id'=>$list['id'],'output'=>'print'])}}">Print</a>
+                                                    <a class="dropdown-item" href="{{route('invoice-download_pdf',['id'=>$list['id'],'output'=>'download'])}}">Download</a>
                                                     @if(!empty($list['files']) && file_exists($list['files']))
                                                         <a class="dropdown-item" href="{{url($list['files'])}}" download>Download Receipt</a>
                                                     @endif
