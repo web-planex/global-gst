@@ -28,7 +28,7 @@
             @include('inc.message')
              {!! Form::open(['url' => url('expense'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 {!! Form::text('search', isset($search)&&!empty($search)?$search:null, ['class' => 'form-control','id'=>'search', 'placeholder'=>'Search']) !!}
                             </div>
@@ -52,9 +52,15 @@
                             </div>
                         </div>
 
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                {!! Form::select('status', [null => 'Select Status'] + \App\Models\Globals\Expense::$expense_status, isset($status)&&!empty($status)?$status:null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
+                            </div>
+                        </div>
+
                        <div class="col-md-2">
-                           <button type="submit" class="btn btn-primary mr-2"><i class="ti-search"></i></button>
-                           <a href="{{url('expense')}}"><button type="button" class="btn btn-danger">Clear</button></a>
+                           <button type="submit" class="btn btn-primary waves-effect waves-light pt-2"><i class="ti-search"></i></button>
+                           <a href="{{url('expense')}}"><button type="button" class="btn sync-orders-btn waves-effect waves-light btn-success">Clear</button></a>
                         </div>
                     </div>                
               {!! Form::close() !!}
@@ -70,6 +76,8 @@
                                     <th>Payment Date</th>
                                     <th>Payment Method</th>
                                     <th>Ref No</th>
+                                    <th>Status</th>
+                                    <th>Total</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -84,6 +92,16 @@
                                         <td>{{date('d F Y', strtotime($list['payment_date']))}}</td>
                                         <td>{{App\Models\Globals\Expense::$payment_method[$list['payment_method']]}}</td>
                                         <td>{{$list['ref_no']}}</td>
+                                        <td>
+                                            @if($list['status'] == 1)
+                                            <span class="badge badge-warning text-white">Pending</span>
+                                            @elseif($list['status'] == 2)
+                                            <span class="badge badge-primary text-white">Paid</span>
+                                            @elseif($list['status'] == 3)
+                                            <span class="badge badge-warning text-white">Voided</span>
+                                            @endif
+                                        </td>
+                                        <td>Rs. {{number_format($list['total'],2)}}</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button type="button" onclick="javascript:window.location.href='{{route('expense-edit',$list['id'])}}'" class="btn btn-secondary">Edit</button>

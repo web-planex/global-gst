@@ -11,6 +11,11 @@ use Illuminate\Validation\ValidationException;
 
 class InvoiceSettingController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
     public function index(){
         $data['menu'] = 'Invoice Setting';
         $data['invoice_setting'] = InvoiceSetting::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->first();
