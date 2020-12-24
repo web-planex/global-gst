@@ -28,8 +28,7 @@ class InvoiceController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request)
-    {
+    public function index(Request $request){
         $data['menu'] = 'Sales';
         $input_search = $request['search'];
         $start_date = !empty($request['start_date'])?date('Y-m-d', strtotime($request['start_date'])) :"";
@@ -80,6 +79,7 @@ class InvoiceController extends Controller
         $data['start_date'] = $request['start_date'];
         $data['end_date'] = $request['end_date'];
         $data['invoice'] = $query->orderBy('id','DESC')->paginate($this->pagination);
+        $data['company'] = CompanySettings::where('id',$this->Company())->first();
         return view('globals.invoice.index',$data);
     }
 
@@ -318,6 +318,7 @@ class InvoiceController extends Controller
 
     public function download_pdf(Request $request, $id){
         $user = Auth::user();
+        $data['invoice_type'] = isset($request['download'])&&$request['download']==1?'Original':(isset($request['download'])&&$request['download']==2?'Duplicate':(isset($request['download'])&&$request['download']==3?'Triplicate':'Original'));
         $data['menu']  = 'Invoice Voucher PDF';
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
         $state = States::where('id',$data['company']['state'])->first();
@@ -394,7 +395,7 @@ class InvoiceController extends Controller
 
         $pdf->addPage(view('globals.invoice.pdf_invoice',$data));
         if($request->output == 'download') {
-            if (!$pdf->send('sales_invoice.pdf')) {
+            if (!$pdf->send('sales_invoice_'.$data['invoice_type'].'.pdf')) {
                 $error = $pdf->getError();
                 return $error;
             }
@@ -404,5 +405,99 @@ class InvoiceController extends Controller
                 return $error;
             }
         }
+    }
+
+    public function multiple_pdf(Request $request){
+        $data['menu']  = 'Invoice Voucher PDF';
+        $user = Auth::user();
+        $data['invoice_type'] = $request['invoice_type'];
+        $data['company'] = CompanySettings::where('id',$this->Company())->first();
+        $state = States::where('id',$data['company']['state'])->first();
+        $data['company']['state'] = $state['state_name'];
+        $data['company']['state_code'] = $state['state_number'];
+
+        foreach($request['all_sales_check'] as $in_id){
+            $data['invoice'] = Invoice::with('InvoiceItems')->where('id',$in_id)->first();
+            $data['invoice']['status_image'] = $data['invoice']['status']==1?"pending_img.png":($data['invoice']['status']==2?"paid_imag.png":"voided_imag.png");
+            $data['invoice']['payment_method'] = $data['invoice']['payment_method']==1?"Cash":($data['invoice']['payment_method']==2?"Cheque":"Credit Card");
+
+            /*Count Discount Price*/
+            if($data['invoice']['discount_type']==1){
+                $main_total = $data['invoice']['amount_before_tax'] + $data['invoice']['tax_amount'];
+                $discount = ($main_total / 100) * $data['invoice']['discount'];
+                $data['invoice']['discount_price'] = number_format($discount,2);
+            }else{
+                $data['invoice']['discount_price'] = $data['invoice']['discount'];
+            }
+            $data['taxes'] = Taxes::where('status', 1)->get();
+            $tax_count = 5;
+            foreach($data['taxes'] as $tax) {
+                $tax['tax_name'] == 'GST' ? $tax_count += 2 : $tax_count += 1;
+            }
+            $data['tax_count'] = $tax_count;
+
+            if(!empty($data['invoice']['InvoiceItems'])){
+                foreach($data['invoice']['InvoiceItems'] as $item){
+                    $tax = Taxes::where('id',$item['tax_id'])->first();
+                    if($tax['is_cess'] == 0) {
+                        $item['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'];
+                    } else {
+                        $item['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS';
+                    }
+                }
+            }
+            $data['invoice']['total_in_word'] = $this->convert_digit_to_words($data['invoice']['total']);
+
+            $payee = Payees::where('id',$data['invoice']['customer_id'])->first();
+            if(!empty($payee)){
+                $data['user'] = Customers::where('id',$payee['type_id'])->first();
+                $state = States::where('id',$data['user']['billing_state'])->first();
+                $shipping_state = States::where('id',$data['user']['shipping_state'])->first();
+                $data['user']['state'] = $state['state_name'];
+                $data['user']['state_code'] = $state['state_number'];
+
+                $data['user']['shipping_state'] = $shipping_state['state_name'];
+                $data['user']['shipping_state_code'] = $shipping_state['state_number'];
+            }
+
+            $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
+            $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
+            $taxes_without_cess_arr = [];
+            $taxes_with_cess_arr = [];
+
+            $a=0;
+            foreach($taxes_without_cess as $tax) {
+                $taxes_without_cess_arr[$a] = $tax['rate'].'_'.$tax['tax_name'];
+                $a++;
+            }
+            $i=0;
+            foreach($taxes_with_cess as $tax) {
+                $taxes_with_cess_arr[$i] = $tax['rate'].'_'.$tax['tax_name'];
+                $taxes_with_cess_arr[$i+1] = $tax['cess'].'_CESS';
+                $i = $i+2;
+            }
+            $data['all_tax_labels'] = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
+            $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
+            $company = CompanySettings::select('company_name')->where('id',$this->Company())->first();
+            $data['company_name'] = $company['company_name'];
+            $data['name']  = 'Sales Voucher';
+            $data['content'] = 'This is test pdf.';
+
+
+
+            $pdf = new WKPDF($this->globalPdfOption());
+
+            $pdf->addPage(view('globals.invoice.pdf_invoice',$data));
+
+            $path = $user->id.'/sales_invoices/';
+            $root = base_path() . '/public/upload/' . $path;
+            if (!file_exists($root)) {
+                mkdir($root, 0777, true);
+            }
+
+            $pdf->saveAs('upload/sales_invoice_'.$i.'_'.$data['invoice_type'].'.pdf');
+        }
+        return 'Done';
+
     }
 }
