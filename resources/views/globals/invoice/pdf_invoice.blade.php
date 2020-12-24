@@ -33,7 +33,7 @@
                 <img src="{{url($company['company_logo'])}}" alt="" width="100" height="100" style="max-height:100px;"/>
             </td>
             <td align="right" width="31%" valign="top" style="font-size:18px;border-top:solid 1px #444444;border-right:solid 1px #444444;line-height:22px; padding: 8px 5px 0px 0px;">
-                <strong>Original&nbsp;&nbsp;</strong>
+                <strong>{{$invoice_type}}&nbsp;&nbsp;</strong>
             </td>
         </tr>
         <tr>
@@ -146,7 +146,9 @@
             <td width="38px" valign="top" align="center" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px;"><strong>#</strong></td>
             <td width="280px" valign="top" align="center" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>Product</strong></td>
             <td width="40px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>HSN</strong></td>
-            <td width="40px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>Tax <br> %</strong></td>
+            @if($invoice['tax_type'] != 3)
+                <td width="40px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>Tax <br> %</strong></td>
+            @endif
             <td width="50px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>Qty</strong></td>
             <td width="140px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>RATE PER ITEM</strong></td>
             <td width="150px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;">&nbsp;&nbsp;<strong>Total <br>Rs.</strong></td>
@@ -158,7 +160,9 @@
                     <td style="line-height:30px;" align="center" valign="top">{{$i}}</td>
                     <td style="padding:0 5px;line-height:30px;" align="left" valign="top">{{$item['Product']['title']}}</td>
                     <td style="line-height:30px;" align="center" valign="top">{{$item['Product']['hsn_code']}}</td>
-                    <td style="line-height:30px;" align="center" valign="top">{{$item['tax_name']}}</td>
+                    @if($invoice['tax_type'] != 3)
+                        <td style="line-height:30px;" align="center" valign="top">{{$item['tax_name']}}</td>
+                    @endif
                     <td style="line-height:30px;" align="center" valign="top"><span class="quantity-input">{{$item['quantity']}}</span></td>
                     <td style="line-height:30px;" align="center" valign="top"><span class="rate-input">{{$item['rate']}}</span></td>
                     <td style="line-height:30px;" align="center" valign="top"><span class="amount-input">{{$item['amount']}} &nbsp;</span></td>
@@ -176,6 +180,20 @@
                 </tr>
                 @php $i++; @endphp
             @endforeach
+
+            @for($i=1; $i<=($invoice['InvoiceItems']->count()>0?10-$invoice['InvoiceItems']->count():10); $i++)
+                <tr>
+                    <td style="line-height:30px;" align="center" valign="top"> &nbsp; </td>
+                    <td style="padding:0 5px;line-height:30px;" align="left" valign="top"> &nbsp; </td>
+                    <td style="line-height:30px;" align="center" valign="top"> &nbsp; </td>
+                    @if($invoice['tax_type'] != 3)
+                        <td style="line-height:30px;" align="center" valign="top"> &nbsp; </td>
+                    @endif
+                    <td style="line-height:30px;" align="center" valign="top"><span class="quantity-input"> &nbsp; </span></td>
+                    <td style="line-height:30px;" align="center" valign="top"><span class="rate-input"> &nbsp; </span></td>
+                    <td style="line-height:30px;" align="center" valign="top"><span class="amount-input"> &nbsp; </span></td>
+                </tr>
+            @endfor
         @endif
     </table>
 
@@ -211,7 +229,7 @@
                                     <td><strong>Total Invoice Amount in Words</strong></td>
                                 </tr>
                                 <tr>
-                                    <td style="padding: 5px 0px;">{{$invoice['total_in_word']}}</td>
+                                    <td style="padding: 5px 0px;">{{ucwords($invoice['total_in_word'])}}</td>
                                 </tr>
                             </table>
                         </td>

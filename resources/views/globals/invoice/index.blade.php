@@ -58,19 +58,72 @@
                     </div>
                 </div>
             {!! Form::close() !!}
+
+            {!! Form::open(['url' => url('sales/multiple_pdf'),'class' => 'form-horizontal','files'=>true,'id'=>'MultiplePdfForm']) !!}
             <div class="card">
+                <div class="row results-top" style="margin: 0 5px;">
+                    <div class="col-md-6 col-lg-5 action">
+                        <div class="action-invoice">
+                            <div class="action-on">
+                                <div>Action on </div>
+                                <div><span id="selected_unfulfilled_count">0</span> Selected</div>
+                            </div>
+                            <div class="invoice-type">
+                                <div class="form-group has-success mb-0">
+                                    <select class="form-control custom-select" id="invoice_type" name="invoice_type" data-toggle="tooltip" data-placement="top" title="" data-original-title="Select &amp; Generate Invoices Zip">
+                                        <option value="">Select Invoice Type</option>
+                                        <option value="original">Download Original</option>
+                                        <option value="duplicate">Download Duplicate</option>
+                                        <option value="triplicate">Download Triplicate</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-lg-6 btn-group">
+                        <div class="col-left">
+                            <div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title font-bold-500 font-16 text-primary" id="tooltipmodel">Bulk Invoice Download</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                <label><input type="radio" name="download_type" value="1" checked="checked"> Download selected invoices as single PDF</label>
+                                                <label><input type="radio" name="download_type" value="2"> Download selected invoices as individual PDF</label>
+                                            </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary"><i class="fa fa-download" aria-hidden="true" style="font-size:20px;" title="Generate Invoices Zip"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="https://gstdemo.webplanex.net/orders-invoice-zip-list?shop=wepdemo3.myshopify.com" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Invoices Zip"><i class="fas fa-cloud-download-alt"></i></a>
+                        </div>
+                    </div>
+                </div>
                 <div class="gstinvoice-table-data">
                     <div class="table-responsive data-table-gst-box pb-3">
                         <table id="myTable0" class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="all_checked">
+                                            <label class="custom-control-label" for="all_checked"></label>
+                                        </div>
+                                    </th>
                                     <th>#</th>
+                                    <th>Invoice No.</th>
                                     <th>Customer</th>
-                                    <th>Customer Email</th>
                                     <th>Invoice Date</th>
                                     <th>Due Date</th>
                                     <th>Status</th>
-                                    <th>Place Of Supply</th>
+                                    <th>Invoice</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -79,9 +132,15 @@
                                 @php $i=1; @endphp
                                 @foreach($invoice as $list)
                                     <tr>
+                                        <td>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" name="all_sales_check[]" value="{{$list['id']}}" class="custom-control-input all_sales_check" id="check_{{$list['id']}}">
+                                                <label class="custom-control-label" for="check_{{$list['id']}}"></label>
+                                            </div>
+                                        </td>
                                         <td>{{$i}}</td>
+                                        <td>{{$company['invoice_prefix']}}/{{$list['invoice_number']}}</td>
                                         <td>{{$list['Payee']['name']}}</td>
-                                        <td>{{$list['customer_email']}}</td>
                                         <td>{{date('d F Y', strtotime($list['invoice_date']))}}</td>
                                         <td>{{date('d F Y', strtotime($list['due_date']))}}</td>
                                         <td>
@@ -95,7 +154,20 @@
                                                 <label class="label label-warning">Voided</label>
                                             @endif
                                         </td>
-                                        <td>{{$list['place_of_supply']}}</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button" onclick="javascript:;" class="btn btn-secondary">Download</button>
+                                                <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <span class="sr-only">Toggle Dropdown</span>
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" href="{{route('invoice-download_pdf',['id'=>$list['id'],'output'=>'download','download'=>'1'])}}">Original</a>
+                                                    <a class="dropdown-item" href="{{route('invoice-download_pdf',['id'=>$list['id'],'output'=>'download','download'=>'2'])}}">Duplicate</a>
+                                                    <a class="dropdown-item" href="{{route('invoice-download_pdf',['id'=>$list['id'],'output'=>'download','download'=>'3'])}}">Triplicate</a>
+                                                </div>
+                                            </div>
+                                        </td>
+
                                         <td>
                                             <div class="btn-group">
                                                 <button type="button" onclick="javascript:window.location.href='{{url('sales/'.$list['id'].'/edit')}}'" class="btn btn-secondary">Edit</button>
@@ -106,7 +178,6 @@
                                                     <a class="dropdown-item" href="{{url('sales/'.$list['id'].'/edit')}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="delete_invoice_records({{$list['id']}})">Delete</a>
                                                     <a class="dropdown-item" target="_blank" href="{{route('invoice-download_pdf',['id'=>$list['id'],'output'=>'print'])}}">Print</a>
-                                                    <a class="dropdown-item" href="{{route('invoice-download_pdf',['id'=>$list['id'],'output'=>'download'])}}">Download</a>
                                                     @if(!empty($list['files']) && file_exists($list['files']))
                                                         <a class="dropdown-item" href="{{url($list['files'])}}" download>Download Receipt</a>
                                                     @endif
@@ -128,9 +199,34 @@
                     </div>
                 </div>
             </div>
+            {!! Form::close() !!}
         </div>
     </div>
 <script type='text/javascript'>
+
+    $("#all_checked").click(function () {
+        $('input:checkbox').not(this).prop('checked', this.checked);
+        $('#selected_unfulfilled_count').html($('[name="all_sales_check[]"]:checked').length);
+    });
+
+    $('.all_sales_check').click(function(){
+        if($('[name="all_sales_check[]"]:checked').length == {{$invoice->count()}}){
+            $('#all_checked').prop('checked',true);
+        }else{
+            $('#all_checked').prop('checked',false);
+        }
+        $('#selected_unfulfilled_count').html($('[name="all_sales_check[]"]:checked').length);
+    });
+
+    $('#invoice_type').change(function(){
+       if($('[name="all_sales_check[]"]:checked').length == 0){
+           Swal.fire("Select at least one sales");
+           return false;
+       }
+        $('#myModal').modal('show');
+        return false;
+    });
+
     function delete_invoice_records(invoice_id){
         Swal.fire({
             title: 'Are you want to delete this?',
