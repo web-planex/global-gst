@@ -360,13 +360,21 @@ class ExpenseController extends Controller
         $user = Auth::user();
         $data['menu']  = 'Expense Voucher PDF';
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
+        $state = States::where('id',$data['company']['state'])->first();
+        $data['company']['state'] = $state['state_name'];
+        $data['company']['state_code'] = $state['state_number'];
+        $company_address_arr = [
+            $data['company']['street'],
+            $data['company']['city'],
+            $data['company']['state'],
+            $data['company']['pincode'],
+            $data['company']['country'],
+        ];
+
+        $data['company']['address'] = implode(', ', $company_address_arr);
+
         $data['expense'] = Expense::with('ExpenseItems')->where('id',$id)->first();
         $data['taxes'] = Taxes::where('status', 1)->get();
-        $tax_count = 5;
-        foreach($data['taxes'] as $tax) {
-            $tax['tax_name'] == 'GST' ? $tax_count += 2 : $tax_count += 1;
-        }
-        $data['tax_count'] = $tax_count;
         
         if(!empty($data['expense']['ExpenseItems'])){
             foreach($data['expense']['ExpenseItems'] as $exp){
@@ -480,7 +488,7 @@ class ExpenseController extends Controller
         //return $data;
         $pdf->addPage(view('globals.expense.pdf_expense',$data));
         //$pdf->addPage(view('globals.expense.pdf_invoice',$data));
-//        return View('globals.expense.pdf_invoice',$data);
+//        return View('globals.expense.pdf_expense',$data);
         if($request->output == 'download') {
             if (!$pdf->send('expense_invoice.pdf')) {
                 $error = $pdf->getError();

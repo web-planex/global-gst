@@ -4,12 +4,12 @@
         <title>Expense Voucher</title>
         <style>
             table {border-collapse: collapse!important; border-color:#444444;}
-            table.td-gray td {border:solid 1px #444444;	}
+            table.td-gray td {border:solid 1px #444444;}
             td {color:#1d1d1d;}
             @page {footer: myFooter1;}
             .hide {display: none;}
         </style>
-        <script src="{{ asset('assets/jquery/jquery-3.2.1.min.js') }}"></script>
+        <script src="{{asset('assets/jquery/jquery-3.2.1.min.js')}}"></script>
     </head>
     <body style="font-family:Arial, Helvetica, sans-serif;font-size:16px; margin:0; padding:0; font-weight:normal;">
         @if($expense['tax_type'] == 1)
@@ -19,35 +19,35 @@
         @elseif($expense['tax_type'] == 3)
         <input type="hidden" id="amounts_are" value="out_of_scope" />
         @endif
-        <table width="1182" border="0" cellspacing="0" cellpadding="0" >
+        <table width="1182" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td align="left" valign="top" width="31%" style="border-top:solid 1px #444444;border-left:solid 1px #444444;font-size:22px; padding: 8px 0px 0px 5px;">
                     <h2>&nbsp;Expense Voucher</h2>
                     &nbsp;&nbsp;<strong style="font-size:16px;">GSTIN : {{$company['gstin']}}</strong>
                 </td>
                 <td align="center" valign="top" width="38%" style="border-top:solid 1px #444444; padding: 10px 0px 0px;">
-                    <img src="{{ url($company['company_logo']) }}" alt="" width="100" height="100" style="max-height:100px;"/>
+                    <img src="{{url($company['company_logo'])}}" alt="" width="100" height="100" style="max-height:100px;"/>
                 </td>
                 <td align="right" width="31%" valign="top" style="font-size:18px;border-top:solid 1px #444444;border-right:solid 1px #444444;line-height:22px; padding: 8px 5px 0px 0px;">
-                    <strong>Original&nbsp;&nbsp;</strong>
+                    <!--<strong>Original&nbsp;&nbsp;</strong>-->
                 </td>
             </tr>
             <tr>
                 <td colspan="3" style="border-left:solid 1px #444444;border-right:solid 1px #444444;line-height:25px; padding-bottom: 10px;" align="center">
                     <strong>{{$company['company_name']}}</strong>
                     <br/>
-                    {{$company['street'].', '.$company['city'].', '.$company['state'].', '.$company['pincode'].', '.$company['country']}}
+                    {{$company['address']}}
                 </td>
             </tr>
             <tr>
                 <td style="border-left:solid 1px #444444;line-height:25px; padding: 0px 0px 8px 8px;" align="left">
-                    &nbsp;<img src="{{ asset('images/mail-icon.png') }}" alt="" width="12px" height="12px" />&nbsp;<strong>{{$company['company_email']}}</strong>
+                    &nbsp;<img src="{{asset('images/mail-icon.png')}}" alt="" width="12px" height="12px" />&nbsp;<strong>{{$company['company_email']}}</strong>
                 </td>
                 <td style="line-height:25px; padding-bottom: 8px;" align="center">
-                    &nbsp;<img src="{{ asset('images/web-icon.png') }}" alt="" width="10px" height="10px" />&nbsp;<strong>{{$company['website']}}</strong>
+                    &nbsp;<img src="{{asset('images/web-icon.png')}}" alt="" width="10px" height="10px" />&nbsp;<strong>{{$company['website']}}</strong>
                 </td>
                 <td style="border-right:solid 1px #444444;line-height:25px; padding: 0px 8px 8px 0px;" align="right">
-                    &nbsp;<img src="{{ asset('images/phone-icon.png') }}" alt="" width="12px" height="12px" />&nbsp;<strong>{{$company['company_phone']}}</strong>&nbsp;
+                    &nbsp;<img src="{{asset('images/phone-icon.png')}}" alt="" width="12px" height="12px" />&nbsp;<strong>{{$company['company_phone']}}</strong>&nbsp;
                 </td>
             </tr>
         </table>
@@ -113,9 +113,9 @@
                 @endif
             </tr>
             <tr>
-                <td @if(!$user['is_shipping']) colspan="2" @endif align="left" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>Phone No:</strong> {{$user['mobile']}}</td>
+                <td @if(!$user['is_shipping']) colspan="2" @endif align="left" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>Phone No:</strong> {{$user['billing_phone']}}</td>
                 @if($user['is_shipping'])
-                <td align="left" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>Phone No:</strong> {{$user['mobile']}}</td>
+                <td align="left" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>Phone No:</strong> {{$user['shipping_phone']}}</td>
                 @endif
             </tr>
             <tr>
@@ -152,12 +152,14 @@
                 <td width="30px" valign="top" align="center" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px;"><strong>#</strong></td>
                 <td width="280px" valign="top" align="center" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>Item</strong></td>
                 <td width="80px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>HSN</strong></td>
+                @if($expense['tax_type'] != 3)
                 <td width="120px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>Tax <br/>%</strong></td>
+                @endif
                 <td width="44px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;">
                     <strong>Qty</strong>
                 </td>
                 <td width="120px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;">
-                    <strong>RATE PER ITEM</strong>
+                    <strong>Rate Per Item</strong>
                 </td>
                 <td width="120px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;">&nbsp;&nbsp;<strong>Total <br/> Rs.</strong></td>
             </tr>
@@ -171,7 +173,9 @@
                     @endforeach
                 </td>
                 <td width="80px" style="line-height:30px;" align="center" valign="top">{{$item['hsn_code']}}</td>
+                @if($expense['tax_type'] != 3)
                 <td width="120px" style="line-height:30px;" align="center" valign="top">{{$item['tax_name']}}</td>
+                @endif
                 <td width="44px" style="line-height:30px;" align="center" valign="top"><span class="quantity-input">{{$item['quantity']}}</span></td>
                 <td width="120px" style="line-height:30px;" align="center" valign="top"><span class="rate-input">{{$item['rate']}}</span></td>
                 <td width="120px" style="line-height:30px;" align="center" valign="top"><span class="amount-input">{{$item['amount']}}</span></td>
@@ -193,7 +197,9 @@
                 <td width="30px" style="line-height:30px;">&nbsp;</td>
                 <td width="280px" style="padding:0 5px;line-height:30px;">&nbsp;</td>
                 <td width="44px" style="line-height:30px;">&nbsp;</td>
+                @if($expense['tax_type'] != 3)
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
+                @endif
                 <td width="80px" style="line-height:30px;">&nbsp;</td>
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
@@ -202,7 +208,9 @@
                 <td width="30px" style="line-height:30px;">&nbsp;</td>
                 <td width="280px" style="padding:0 5px;line-height:30px;">&nbsp;</td>
                 <td width="44px" style="line-height:30px;">&nbsp;</td>
+                @if($expense['tax_type'] != 3)
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
+                @endif
                 <td width="80px" style="line-height:30px;">&nbsp;</td>
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
@@ -211,7 +219,9 @@
                 <td width="30px" style="line-height:30px;">&nbsp;</td>
                 <td width="280px" style="padding:0 5px;line-height:30px;">&nbsp;</td>
                 <td width="44px" style="line-height:30px;">&nbsp;</td>
+                @if($expense['tax_type'] != 3)
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
+                @endif
                 <td width="80px" style="line-height:30px;">&nbsp;</td>
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
@@ -220,16 +230,9 @@
                 <td width="30px" style="line-height:30px;">&nbsp;</td>
                 <td width="280px" style="padding:0 5px;line-height:30px;">&nbsp;</td>
                 <td width="44px" style="line-height:30px;">&nbsp;</td>
+                @if($expense['tax_type'] != 3)
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
-                <td width="80px" style="line-height:30px;">&nbsp;</td>
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
-            </tr>
-            <tr>
-                <td width="30px" style="line-height:30px;">&nbsp;</td>
-                <td width="280px" style="padding:0 5px;line-height:30px;">&nbsp;</td>
-                <td width="44px" style="line-height:30px;">&nbsp;</td>
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
+                @endif
                 <td width="80px" style="line-height:30px;">&nbsp;</td>
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
@@ -336,7 +339,7 @@
                                             @endphp
                                             {{number_format(($total_before_discount * $expense['discount']) / 100,2)}}
                                         @elseif(isset($expense['discount_type']) && $expense['discount_type'] == '2')
-                                            {{number_format($expense['discount'],2)}}
+                                            {{$expense['discount']}}
                                         @endif
                                         </td>
                                     </tr>
@@ -367,7 +370,7 @@
                 </td>
                 <td align="right" style="padding:0 10px 20px; border-bottom: solid 1px #444444;border-right:solid 1px #444444;line-height:30px;">
                     <strong>For, WebPlanex</strong>&nbsp;&nbsp;<br/>
-                    <img src="{{ asset('images/signature_1514553481.png') }}" alt="" width="auto" height="40" style="max-height:40px;"/>&nbsp;&nbsp;&nbsp;<br/>
+                    <img src="{{ url($company['signature_image']) }}" alt="" width="auto" height="40" style="max-height:40px;"/>&nbsp;&nbsp;&nbsp;<br/>
                     Authorised Signature&nbsp;&nbsp;
                     <br/>
                     This is computer generated expense and does not require a signature

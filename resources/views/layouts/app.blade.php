@@ -112,6 +112,24 @@
                     <li class="@if($menu == 'Company Setting' ) active @endif">
                         <a class="waves-effect waves-dark" href="{{route('company-setting')}}"><i class="fa fa-file-invoice"></i><span class="hide-menu">Company Setting</span></a>
                     </li>
+                    <li class=""> 
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-files"></i>
+                        <span class="hide-menu">Report Builder</span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li class=""> <a href="" > Export Report</a></li>
+                            <li class=""> <a href="" >Report Templates</a></li>
+                        </ul>
+                    </li>
+                    <li> <a class="has-arrow waves-effect waves-dark active" href="javascript:void(0)" aria-expanded="false"><i class="ti-layout-grid2"></i><span class="hide-menu">Apps</span></a>
+                            <ul aria-expanded="false" class="collapse in">
+                                <li><a href="app-calendar.html">Calendar</a></li>
+                                <li><a href="app-chat.html">Chat app</a></li>
+                                <li><a href="app-ticket.html">Support Ticket</a></li>
+                                <li><a href="app-contact.html">Contact / Employee</a></li>
+                                <li><a href="app-contact2.html">Contact Grid</a></li>
+                                <li><a href="app-contact-detail.html">Contact Detail</a></li>
+                            </ul>
+                        </li>
                 </ul>
             </nav>
         </div>

@@ -137,19 +137,19 @@
         </div>
     </div>
 <script type='text/javascript'>
-    function delete_expense_records(expense_id){
-        Swal.fire({
-            title: 'Are you want to delete this?',
-            text: "",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#01c0c8",
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.value) {
-                $('#frm_delete_'+expense_id).submit();
-            }
-        })
-    }
+function delete_expense_records(expense_id){
+    Swal.fire({
+        title: 'Are you want to delete this?',
+        text: "",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#01c0c8",
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.value) {
+            $('#frm_delete_'+expense_id).submit();
+        }
+    })
+}
 </script>
 @endsection
