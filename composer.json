@@ -20,7 +20,8 @@
         "laravelcollective/html": "^6.2",
         "mikehaertl/phpwkhtmltopdf": "^2.4",
         "osiset/basic-shopify-api": "^10.0",
-        "phpclassic/php-shopify": "^1.1"
+        "phpclassic/php-shopify": "^1.1",
+        "rap2hpoutre/laravel-log-viewer": "^1.7"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

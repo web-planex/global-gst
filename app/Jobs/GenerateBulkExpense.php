@@ -7,19 +7,38 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Globals\Customers;
+use App\Models\Globals\Employees;
+use App\Models\Globals\Expense;
+use App\Models\Globals\Payees;
+use App\Models\Globals\States;
+use App\Models\Globals\Suppliers;
+use App\Models\Globals\CompanySettings;
+use App\Models\Globals\Taxes;
+use App\Models\Globals\Product;
+use WKPDF;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
+
 
 class GenerateBulkExpense implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    
+    protected $checkboxes;
+    protected $company_id;
+    protected $user;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($user, $company_id, $checkboxes)
     {
-        
+        $this->user = $user;
+        $this->company_id = $company_id;
+        $this->checkboxes = $checkboxes;
     }
 
     /**
@@ -27,8 +46,206 @@ class GenerateBulkExpense implements ShouldQueue
      *
      * @return void
      */
+    
     public function handle()
     {
-        
+        Log::info("Job ID: ".$this->job->getJobId());
+        $data = [];
+        $company = CompanySettings::where('id',$this->company_id)->first();
+        $company->job_id = $this->job->getJobId();
+        $company->save();
+        $data['company'] = $company;
+        $state = States::where('id',$data['company']['state'])->first();
+        $data['company']['state'] = $state['state_name'];
+        $data['company']['state_code'] = $state['state_number'];
+        $company_address_arr = [
+            $data['company']['street'],
+            $data['company']['city'],
+            $data['company']['state'],
+            $data['company']['pincode'],
+            $data['company']['country'],
+        ];
+
+        $data['company']['address'] = implode(', ', $company_address_arr);
+        foreach($this->checkboxes as $id){
+            
+            $data['expense'] = Expense::with('ExpenseItems')->where('id',$id)->first();
+            $data['taxes'] = Taxes::where('status', 1)->get();
+
+            if(!empty($data['expense']['ExpenseItems'])){
+                foreach($data['expense']['ExpenseItems'] as $exp){
+                    $tax = Taxes::where('id',$exp['tax_id'])->first();
+                    if($tax['is_cess'] == 0) {
+                        $exp['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'];
+                    } else {
+                        $exp['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS';
+                    }
+                }
+            }
+            $data['expense']['total_in_word'] = $this->convert_digit_to_words($data['expense']['total']);
+
+            $payee = Payees::where('id',$data['expense']['payee_id'])->first();
+            if(!empty($payee)){
+                if($payee['type']==1){
+                    $data['user'] = Suppliers::where('id',$payee['type_id'])->first();
+                    $state = States::where('id',$data['user']['state'])->first();
+                    $data['user']['state'] = $state['state_name'];
+                    $data['user']['state_code'] = $state['state_number'];
+                    $data['user']['billing_state'] = $state['state_name'];
+                    $data['user']['billing_state_code'] = $state['state_number'];
+                    $data['user']['is_shipping'] = false;
+                    $address_arr = [
+                        $data['user']['street'],
+                        $data['user']['city'],
+                        $data['user']['state'],
+                        $data['user']['pincode'],
+                        $data['user']['country']
+                    ];
+                    $data['user']['address'] = implode(', ', $address_arr);
+                }elseif($payee['type']==2){
+                    $data['user'] = Employees::where('id',$payee['type_id'])->first();
+                    $state = States::where('id',$data['user']['state'])->first();
+                    $data['user']['state'] = $state['state_name'];
+                    $data['user']['billing_state'] = $state['state_name'];
+                    $data['user']['billing_state_code'] = $state['state_number'];
+                    $data['user']['state_code'] = $state['state_number'];
+                    $data['user']['is_shipping'] = false;
+                    $address_arr = [
+                        $data['user']['street'],
+                        $data['user']['city'],
+                        $data['user']['state'],
+                        $data['user']['pincode'],
+                        $data['user']['country']
+                    ];
+                    $data['user']['address'] = implode(', ', $address_arr);
+                }else{
+                    $data['user'] = Customers::where('id',$payee['type_id'])->first();
+                    $state = States::where('id',$data['user']['billing_state'])->first();
+                    $shipping_state = States::where('id',$data['user']['shipping_state'])->first();
+                    $data['user']['state'] = $state['state_name'];
+                    $data['user']['billing_state'] = $state['state_name'];
+                    $data['user']['shipping_state'] = $shipping_state['state_name'];
+                    $data['user']['billing_state_code'] = $state['state_number'];
+                    $data['user']['shipping_state_code'] = $shipping_state['state_number'];
+                    $data['user']['is_shipping'] = true;
+                    $billing_address_arr = [
+                        $data['user']['billing_street'],
+                        $data['user']['billing_city'],
+                        $data['user']['billing_state'],
+                        $data['user']['billing_pincode'],
+                        $data['user']['billing_country']
+                    ];
+                    $data['user']['billing_address'] = implode(', ', $billing_address_arr);
+                    $shipping_address_arr = [
+                        $data['user']['shipping_street'],
+                        $data['user']['shipping_city'],
+                        $data['user']['shipping_state'],
+                        $data['user']['shipping_pincode'],
+                        $data['user']['shipping_country']
+                    ];
+                    $data['user']['shipping_address'] = implode(', ', $shipping_address_arr);
+                }
+            }
+
+            $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
+            $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
+            $taxes_without_cess_arr = [];
+            $taxes_with_cess_arr = [];
+
+            $a=0;
+            foreach($taxes_without_cess as $tax) {
+                $taxes_without_cess_arr[$a] = $tax['rate'].'_'.$tax['tax_name'];
+                $a++;
+            }
+            $i=0;
+            foreach($taxes_with_cess as $tax) {
+                $taxes_with_cess_arr[$i] = $tax['rate'].'_'.$tax['tax_name'];
+                $taxes_with_cess_arr[$i+1] = $tax['cess'].'_CESS';
+                $i = $i+2;
+            }
+            $data['all_tax_labels'] = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
+            $data['products'] = Product::where('user_id',$this->user->id)->where('company_id',$this->company_id)->where('status',1)->get();
+            $company = CompanySettings::select('company_name')->where('id',$this->company_id)->first();
+            $data['company_name'] = $company['company_name'];
+
+            $data['expense']['status_image'] = '';
+
+            if($data['expense']['status'] == 1) {
+                $data['expense']['status_image'] = url('assets/images/pdf_img/pending_img.png');
+            }elseif($data['expense']['status'] == 2) {
+                $data['expense']['status_image'] = url('assets/images/pdf_img/paid_imag.png');
+            }elseif($data['expense']['status'] == 3) {
+                $data['expense']['status_image'] = url('assets/images/pdf_img/voided_imag.png');
+            }
+
+            $data['name'] = 'Expense Voucher';
+            $data['content'] = 'This is test pdf.';
+            $pdf = new WKPDF($this->globalPdfOption());
+            //return $data;
+            $pdf->addPage(view('globals.expense.pdf_expense',$data));
+            $path = $this->user->id.'/expense_voucher/';
+            $root = base_path() . '/public/upload/' . $path;
+            if (!file_exists($root)) {
+                mkdir($root, 0777, true);
+            }
+            if(!$pdf->saveAs(public_path().'/upload/'.$path.'expense_voucher_'.$id.'.pdf')){
+                $error = $pdf->getError();
+                Log::error($error);
+            }
+        }
+    }
+    public function convert_digit_to_words($no){
+        //creating array of word for each digit
+        $words = array('0'=> 'Zero' ,'1'=> 'one' ,'2'=> 'two' ,'3' => 'three','4' => 'four','5' => 'five','6' => 'six','7' => 'seven','8' => 'eight','9' => 'nine','10' => 'ten','11' => 'eleven','12' => 'twelve','13' => 'thirteen','14' => 'fourteen','15' => 'fifteen','16' => 'sixteen','17' => 'seventeen','18' => 'eighteen','19' => 'nineteen','20' => 'twenty','30' => 'thirty','40' => 'forty','50' => 'fifty','60' => 'sixty','70' => 'seventy','80' => 'eighty','90' => 'ninety','100' => 'hundred','1000' => 'thousand','100000' => 'lac','10000000' => 'crore');
+
+        //for decimal number taking decimal part
+        $cash=(int)$no; //take number wihout decimal
+        $decpart = $no - $cash; //get decimal part of number
+        $decpart=sprintf("%01.2f",$decpart); //take only two digit after decimal
+        $decpart1=substr($decpart,2,1); //take first digit after decimal
+        $decpart2=substr($decpart,3,1); //take second digit after decimal
+        $decimalstr='';
+        //if given no. is decimal than preparing string for decimal digit's word
+        if($decpart>0){
+            $decimalstr.="point ".$words[$decpart1]." ".$words[$decpart2];
+        }
+
+        if($no == 0)
+            return ' ';
+        else {
+            $novalue='';
+            $highno=$no;
+            $remainno=0;
+            $value=100;
+            $value1=1000;
+            while($no>=100) {
+                if(($value <= $no) &&($no < $value1)) {
+                    $novalue=$words["$value"];
+                    $highno = (int)($no/$value);
+                    $remainno = $no % $value;
+                    break;
+                }
+                $value= $value1;
+                $value1 = $value * 100;
+            }
+            if(array_key_exists("$highno",$words)) //check if $high value is in $words array
+            return $words["$highno"]." ".$novalue." ".$this->convert_digit_to_words($remainno).$decimalstr; //recursion
+            else {
+                $unit=$highno%10;
+                $ten =(int)($highno/10)*10;
+                return $words["$ten"]." ".$words["$unit"]." ".$novalue." ".$this->convert_digit_to_words($remainno).$decimalstr; //recursion
+            }
+        }
+    }
+    public function globalPdfOption() {
+         $global_options = [
+            'binary' => 'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf',
+            'ignoreWarnings' => true,
+//            'binary' => '/usr/bin/wkhtmltopdf',
+//            'header-html' => $header_html,
+//            'footer-html' => $footer_html,
+            'minimum-font-size' => 12
+        ]; 
+        return $global_options ;
     }
 }

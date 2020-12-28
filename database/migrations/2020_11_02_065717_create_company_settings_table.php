@@ -43,6 +43,7 @@ class CreateCompanySettingsTable extends Migration
             $table->longText('terms_and_condition')->nullable();
             $table->boolean('email_notification')->nullable();
             $table->text('email_notification_for_site_admin')->nullable();
+            $table->bigInteger('job_id')->nullable();
             $table->timestamps();
         });
     }

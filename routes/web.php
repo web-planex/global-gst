@@ -90,3 +90,7 @@ Route::get('/clear-cache-all', function() {
     Artisan::call('config:clear');
     dd("All Clear");
 });
+
+Route::post('generate-multiple-expenses', 'Globals\ExpenseController@multiple_pdf')->name('generate-multiple-expenses');
+
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');

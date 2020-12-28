@@ -20,6 +20,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use App\Jobs\GenerateBulkExpense;
+use Illuminate\Support\Facades\Log;
 
 class ExpenseController extends Controller
 {
@@ -482,7 +484,7 @@ class ExpenseController extends Controller
             $data['expense']['status_image'] = asset('images/voided_imag.png');
         }
 
-        $data['name']  = 'Expense Voucher';
+        $data['name'] = 'Expense Voucher';
         $data['content'] = 'This is test pdf.';
         $pdf = new WKPDF($this->globalPdfOption());
         //return $data;
@@ -497,7 +499,7 @@ class ExpenseController extends Controller
         } else {
             if (!$pdf->send()) {
                 $error = $pdf->getError();
-                return $error;
+                Log::error($error);
             }
         }
     }
@@ -538,5 +540,14 @@ class ExpenseController extends Controller
         $input['files'] = null;
         $expense->update($input);
         return ;
+    }
+
+    public function multiple_pdf(Request $request){
+        $user = Auth::user();
+        $company_id = $this->Company();
+        $checkboxes = $request['all_expenses_check'];
+        $job = (new GenerateBulkExpense($user,$company_id,$checkboxes))->onQueue('multiple_expense_pdf');
+        dispatch($job);
+        return redirect()->back();
     }
 }
