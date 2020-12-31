@@ -26,7 +26,7 @@
                     &nbsp;&nbsp;<strong style="font-size:16px;">GSTIN : {{$company['gstin']}}</strong>
                 </td>
                 <td align="center" valign="top" width="38%" style="border-top:solid 1px #444444; padding: 10px 0px 0px;">
-                    <img src="{{asset($company['company_logo'])}}" alt="" width="100" height="100" style="max-height:100px;"/>
+                    <img src="{{url($company['company_logo'])}}" alt="" width="100" height="100" style="max-height:100px;"/>
                 </td>
                 <td align="right" width="31%" valign="top" style="font-size:18px;border-top:solid 1px #444444;border-right:solid 1px #444444;line-height:22px; padding: 8px 5px 0px 0px;">
                     <!--<strong>Original&nbsp;&nbsp;</strong>-->
@@ -41,13 +41,13 @@
             </tr>
             <tr>
                 <td style="border-left:solid 1px #444444;line-height:25px; padding: 0px 0px 8px 8px;" align="left">
-                    &nbsp;<img src="{{asset('images/mail-icon.png')}}" alt="" width="12px" height="12px" />&nbsp;<strong>{{$company['company_email']}}</strong>
+                    &nbsp;<img src="{{url('images/mail-icon.png')}}" alt="" width="12px" height="12px" />&nbsp;<strong>{{$company['company_email']}}</strong>
                 </td>
                 <td style="line-height:25px; padding-bottom: 8px;" align="center">
-                    &nbsp;<img src="{{asset('images/web-icon.png')}}" alt="" width="10px" height="10px" />&nbsp;<strong>{{$company['website']}}</strong>
+                    &nbsp;<img src="{{url('images/web-icon.png')}}" alt="" width="10px" height="10px" />&nbsp;<strong>{{$company['website']}}</strong>
                 </td>
                 <td style="border-right:solid 1px #444444;line-height:25px; padding: 0px 8px 8px 0px;" align="right">
-                    &nbsp;<img src="{{asset('images/phone-icon.png')}}" alt="" width="12px" height="12px" />&nbsp;<strong>{{$company['company_phone']}}</strong>&nbsp;
+                    &nbsp;<img src="{{url('images/phone-icon.png')}}" alt="" width="12px" height="12px" />&nbsp;<strong>{{$company['company_phone']}}</strong>&nbsp;
                 </td>
             </tr>
         </table>

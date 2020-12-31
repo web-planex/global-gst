@@ -92,5 +92,6 @@ Route::get('/clear-cache-all', function() {
 });
 
 Route::post('generate-multiple-expenses', 'Globals\ExpenseController@multiple_pdf')->name('generate-multiple-expenses');
-
+Route::get('download-pdf-zip', 'Globals\ExpenseController@downloadPdfZip')->name('download-pdf-zip');
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+

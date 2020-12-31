@@ -97,7 +97,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="javascript:;" id="download_multi_expense" data-toggle="modal" data-target="#myModal" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Expenses Zip"><i class="fas fa-cloud-download-alt"></i></a>
+                            <a href="javascript:;" id="download_multi_expense" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Expenses Zip"><i class="fas fa-cloud-download-alt"></i></a>
                         </div>
                     </div>
                 </div>
@@ -164,7 +164,7 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                            <form name="frm_delete_{{$list['id']}}" id="frm_delete_{{$list['id']}}" action="{{route('expense-delete',$list['id'])}}" method="get"></form>
+                                            <!--<form name="frm_delete_{{$list['id']}}" id="frm_delete_{{$list['id']}}" action="{{route('expense-delete',$list['id'])}}" method="get"></form>-->
                                         </td>
                                     </tr>
                                     @php $i++; @endphp
@@ -215,7 +215,7 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.value) {
-                $('#frm_delete_'+expense_id).submit();
+                window.location.href = '{{url("expense/delete")}}/'+expense_id;
             }
         })
     }

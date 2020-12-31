@@ -15,6 +15,7 @@ use App\Models\Globals\CompanySettings;
 use App\Models\Globals\Taxes;
 use App\Models\Globals\ExpenseItems;
 use App\Models\Globals\Product;
+use App\Models\Globals\PdfZips;
 use WKPDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Jobs\GenerateBulkExpense;
 use Illuminate\Support\Facades\Log;
+use App\Models\Globals\Job;
 
 class ExpenseController extends Controller
 {
@@ -546,8 +548,39 @@ class ExpenseController extends Controller
         $user = Auth::user();
         $company_id = $this->Company();
         $checkboxes = $request['all_expenses_check'];
-        $job = (new GenerateBulkExpense($user,$company_id,$checkboxes))->onQueue('multiple_expense_pdf');
+        $download_type = $request['download_type'];
+        $job = (new GenerateBulkExpense($user,$company_id,$checkboxes,$download_type))->onQueue('multiple_expense_pdf');
         dispatch($job);
-        return redirect()->back();
+        return redirect('download-pdf-zip');
+    }
+    
+    public function downloadPdfZip() {
+        date_default_timezone_set('Asia/Kolkata');
+        $user = Auth::user();
+        $company_id = $this->Company();
+        $company = CompanySettings::where('id',$company_id)->first();
+        $job_id = $company['job_id'];
+        $pdfZip = PdfZips::where('user_id',$user->id)->where('company_id',$company_id)->where('zip_type',1)->orderBy('id','DESC')->get();
+        $job_details = Job::where('id',$job_id)->first();
+        $job_status = '';
+        if($job_details){
+            if($job_details->attempts == 0){
+                $job_status = "Pending";
+            }
+            if($job_details->attempts > 0 ){
+                $job_status = "Processing";
+            }
+        } else {
+            if($job_id != ""){
+                $job_status = "Finished";
+            }   
+        }
+        $data = [
+            'menu' => 'Expense',
+            'user_id' => $user->id,
+            'zip_files' => $pdfZip,
+            'job_status' => $job_status
+        ];
+        return view('globals.expense.get_pdf_zip',$data);
     }
 }

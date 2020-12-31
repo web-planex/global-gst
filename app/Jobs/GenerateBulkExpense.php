@@ -16,8 +16,8 @@ use App\Models\Globals\Suppliers;
 use App\Models\Globals\CompanySettings;
 use App\Models\Globals\Taxes;
 use App\Models\Globals\Product;
+use App\Models\Globals\PdfZips;
 use WKPDF;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 
 
@@ -28,17 +28,19 @@ class GenerateBulkExpense implements ShouldQueue
     protected $checkboxes;
     protected $company_id;
     protected $user;
+    protected $download_type;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($user, $company_id, $checkboxes)
+    public function __construct($user, $company_id, $checkboxes, $download_type)
     {
         $this->user = $user;
         $this->company_id = $company_id;
         $this->checkboxes = $checkboxes;
+        $this->download_type = $download_type;
     }
 
     /**
@@ -47,9 +49,23 @@ class GenerateBulkExpense implements ShouldQueue
      * @return void
      */
     
-    public function handle()
-    {
-        Log::info("Job ID: ".$this->job->getJobId());
+    public function handle() {
+        $files = [];
+        if($this->download_type == 1) {
+            $files = $this->createSignleExpensePDF();
+        } else if($this->download_type == 2) {
+            $files = $this->createMultiExpensePDF();
+        }
+        if(!empty($files)) {
+            foreach ($files as $file) {
+                if(file_exists($file)){
+                    unlink($file);
+                }
+            }
+        }
+    }
+
+    public function createMultiExpensePDF() {
         $data = [];
         $company = CompanySettings::where('id',$this->company_id)->first();
         $company->job_id = $this->job->getJobId();
@@ -68,7 +84,7 @@ class GenerateBulkExpense implements ShouldQueue
 
         $data['company']['address'] = implode(', ', $company_address_arr);
         foreach($this->checkboxes as $id){
-            
+
             $data['expense'] = Expense::with('ExpenseItems')->where('id',$id)->first();
             $data['taxes'] = Taxes::where('status', 1)->get();
 
@@ -191,9 +207,212 @@ class GenerateBulkExpense implements ShouldQueue
             if(!$pdf->saveAs(public_path().'/upload/'.$path.'expense_voucher_'.$id.'.pdf')){
                 $error = $pdf->getError();
                 Log::error($error);
+            } else {
+                $files[] = public_path().'/upload/'.$path.'expense_voucher_'.$id.'.pdf';
             }
         }
+        $zip_name = 'expense_voucher_multiple_pdf_'.time().'.zip';
+        $zip_path = public_path() .'/upload/'.$this->user->id.'/expense_voucher/'.$zip_name;
+        $zip = new \ZipArchive;
+        $zip->open($zip_path, \ZipArchive::CREATE);
+        foreach ($files as $file) {
+            $file_name = explode('/', $file);
+            $zip->addFile($file, end($file_name));
+        }
+        $zip->close();
+        if(file_exists($zip_path)) {
+            $pdfZip = new PdfZips();
+            $pdfZip->user_id = $this->user->id;
+            $pdfZip->company_id = $this->company_id;
+            $pdfZip->zip_name = $zip_name;
+            $pdfZip->zip_type = 1;
+            $pdfZip->status = 0;
+            $pdfZip->save();
+        }
+        return $files;
     }
+
+    public function createSignleExpensePDF() {
+
+        $path = $this->user->id.'/expense_voucher/';
+        $root = base_path() . '/public/upload/' . $path;
+        if (!file_exists($root)) {
+            mkdir($root, 0777, true);
+        }
+        $company = CompanySettings::where('id',$this->company_id)->first();
+        $company->job_id = $this->job->getJobId();
+        $company->save();
+        $state = States::where('id',$company['state'])->first();
+        $company['state'] = $state['state_name'];
+        $company['state_code'] = $state['state_number'];
+        $company_address_arr = [
+            $company['street'],
+            $company['city'],
+            $company['state'],
+            $company['pincode'],
+            $company['country'],
+        ];
+
+        $company['address'] = implode(', ', $company_address_arr);
+        $pdf = new WKPDF($this->globalPdfOption());
+
+        foreach($this->checkboxes as $id){
+
+            $expense = Expense::with('ExpenseItems')->where('id',$id)->first();
+            $taxes = Taxes::where('status', 1)->get();
+
+            if(!empty($expense['ExpenseItems'])){
+                $ct = 0;
+                foreach($expense['ExpenseItems'] as $exp){
+                    $tax = Taxes::where('id',$exp['tax_id'])->first();
+                    if($tax['is_cess'] == 0) {
+                        $expense['ExpenseItems'][$ct]['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'];
+                    } else {
+                        $expense['ExpenseItems'][$ct]['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS';
+                    }
+                    $ct++;
+                }
+            }
+            $expense['total_in_word'] = $this->convert_digit_to_words($expense['total']);
+
+            $payee = Payees::where('id',$expense['payee_id'])->first();
+            if(!empty($payee)){
+                if($payee['type'] == 1){
+                    $user = Suppliers::where('id',$payee['type_id'])->first();
+                    $state = States::where('id',$user['state'])->first();
+                    $user['state'] = $state['state_name'];
+                    $user['state_code'] = $state['state_number'];
+                    $user['billing_state'] = $state['state_name'];
+                    $user['billing_state_code'] = $state['state_number'];
+                    $user['is_shipping'] = false;
+                    $address_arr = [
+                        $user['street'],
+                        $user['city'],
+                        $user['state'],
+                        $user['pincode'],
+                        $user['country']
+                    ];
+                    $user['address'] = implode(', ', $address_arr);
+                }elseif($payee['type']==2){
+                    $user = Employees::where('id',$payee['type_id'])->first();
+                    $state = States::where('id',$user['state'])->first();
+                    $user['state'] = $state['state_name'];
+                    $user['billing_state'] = $state['state_name'];
+                    $user['billing_state_code'] = $state['state_number'];
+                    $user['state_code'] = $state['state_number'];
+                    $user['is_shipping'] = false;
+                    $address_arr = [
+                        $user['street'],
+                        $user['city'],
+                        $user['state'],
+                        $user['pincode'],
+                        $user['country']
+                    ];
+                    $user['address'] = implode(', ', $address_arr);
+                }else{
+                    $user = Customers::where('id',$payee['type_id'])->first();
+                    $state = States::where('id',$user['billing_state'])->first();
+                    $shipping_state = States::where('id',$user['shipping_state'])->first();
+                    $user['state'] = $state['state_name'];
+                    $user['billing_state'] = $state['state_name'];
+                    $user['shipping_state'] = $shipping_state['state_name'];
+                    $user['billing_state_code'] = $state['state_number'];
+                    $user['shipping_state_code'] = $shipping_state['state_number'];
+                    $user['is_shipping'] = true;
+                    $billing_address_arr = [
+                        $user['billing_street'],
+                        $user['billing_city'],
+                        $user['billing_state'],
+                        $user['billing_pincode'],
+                        $user['billing_country']
+                    ];
+                    $user['billing_address'] = implode(', ', $billing_address_arr);
+                    $shipping_address_arr = [
+                        $user['shipping_street'],
+                        $user['shipping_city'],
+                        $user['shipping_state'],
+                        $user['shipping_pincode'],
+                        $user['shipping_country']
+                    ];
+                    $user['shipping_address'] = implode(', ', $shipping_address_arr);
+                }
+            }
+
+            $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
+            $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
+            $taxes_without_cess_arr = [];
+            $taxes_with_cess_arr = [];
+
+            $a=0;
+            foreach($taxes_without_cess as $tax) {
+                $taxes_without_cess_arr[$a] = $tax['rate'].'_'.$tax['tax_name'];
+                $a++;
+            }
+            $i=0;
+            foreach($taxes_with_cess as $tax) {
+                $taxes_with_cess_arr[$i] = $tax['rate'].'_'.$tax['tax_name'];
+                $taxes_with_cess_arr[$i+1] = $tax['cess'].'_CESS';
+                $i = $i+2;
+            }
+            $all_tax_labels = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
+            $products = Product::where('user_id',$this->user->id)->where('company_id',$this->company_id)->where('status',1)->get();
+            $company_obj = CompanySettings::select('company_name')->where('id',$this->company_id)->first();
+            $company_name = $company_obj['company_name'];
+
+            $expense['status_image'] = '';
+
+            if($expense['status'] == 1) {
+                $expense['status_image'] = url('assets/images/pdf_img/pending_img.png');
+            } else if($expense['status'] == 2) {
+                $expense['status_image'] = url('assets/images/pdf_img/paid_imag.png');
+            } else if($expense['status'] == 3) {
+                $expense['status_image'] = url('assets/images/pdf_img/voided_imag.png');
+            }
+
+            $name = 'Expense Voucher';
+            $content = 'This is test pdf.';
+
+            $pdf->addPage(view('globals.expense.pdf_expense',[
+                'expense' => $expense,
+                'taxes' => $taxes,
+                'user' => $user,
+                'all_tax_labels' => $all_tax_labels,
+                'products' => $products,
+                'company_name' => $company_name,
+                'name' => $name,
+                'content' => $content,
+                'company' => $company
+            ]));
+        }
+        $file_name = 'expense_voucher.pdf';
+        if(!$pdf->saveAs(public_path().'/upload/'.$path.$file_name)){
+            $error = $pdf->getError();
+            Log::error($error);
+        } else {
+            $files[] = public_path().'/upload/'.$path.$file_name;
+        }
+
+        $zip_name = 'expense_voucher_single_pdf_'.time().'.zip';
+        $zip_path = public_path() .'/upload/'.$this->user->id.'/expense_voucher/'.$zip_name;
+        $zip = new \ZipArchive;
+        $zip->open($zip_path, \ZipArchive::CREATE);
+        foreach ($files as $file) {
+            $file_name = explode('/', $file);
+            $zip->addFile($file, end($file_name));
+        }
+        $zip->close();
+        if(file_exists($zip_path)) {
+            $pdfZip = new PdfZips();
+            $pdfZip->user_id = $this->user->id;
+            $pdfZip->company_id = $this->company_id;
+            $pdfZip->zip_name = $zip_name;
+            $pdfZip->zip_type = 1;
+            $pdfZip->status = 0;
+            $pdfZip->save();
+        }
+        return $files;
+    }
+
     public function convert_digit_to_words($no){
         //creating array of word for each digit
         $words = array('0'=> 'Zero' ,'1'=> 'one' ,'2'=> 'two' ,'3' => 'three','4' => 'four','5' => 'five','6' => 'six','7' => 'seven','8' => 'eight','9' => 'nine','10' => 'ten','11' => 'eleven','12' => 'twelve','13' => 'thirteen','14' => 'fourteen','15' => 'fifteen','16' => 'sixteen','17' => 'seventeen','18' => 'eighteen','19' => 'nineteen','20' => 'twenty','30' => 'thirty','40' => 'forty','50' => 'fifty','60' => 'sixty','70' => 'seventy','80' => 'eighty','90' => 'ninety','100' => 'hundred','1000' => 'thousand','100000' => 'lac','10000000' => 'crore');
@@ -238,9 +457,9 @@ class GenerateBulkExpense implements ShouldQueue
         }
     }
     public function globalPdfOption() {
-         $global_options = [
+        $global_options = [
             'binary' => 'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf',
-            'ignoreWarnings' => true,
+            //'ignoreWarnings' => true,
 //            'binary' => '/usr/bin/wkhtmltopdf',
 //            'header-html' => $header_html,
 //            'footer-html' => $footer_html,
