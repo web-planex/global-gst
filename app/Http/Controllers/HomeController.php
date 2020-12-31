@@ -37,6 +37,8 @@ class HomeController extends Controller
             if(!empty($company)){
                  session(['company'=>$company['id']]);
                  $data['session_company'] = Session::get('company');
+            }else{
+                $data['session_company'] = 0;
             }
         }else{
             $data['session_company'] = $this->Company();

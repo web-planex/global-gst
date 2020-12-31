@@ -22,6 +22,10 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Auth::routes();
 
+//Google Login
+Route::get('auth/google', 'Auth\GoogleController@redirectToGoogle');
+Route::get('auth/google/callback', 'Auth\GoogleController@handleGoogleCallback');
+
 //SET COMPANY
 Route::post('ajax/set_company', 'Globals\UserController@set_company');
 
@@ -83,6 +87,7 @@ Route::get('/sales/download_pdf/{id}', 'Globals\InvoiceController@download_pdf')
 Route::resource('/sales', 'Globals\InvoiceController');
 Route::get('/sales/delete/{id}', 'Globals\InvoiceController@destroy')->name('sales-delete');
 Route::get('/sales/download_pdf/{id}', 'Globals\InvoiceController@download_pdf')->name('invoice-download_pdf');
+Route::get('/credit-note', 'Globals\InvoiceController@credit_notes')->name('credit-note');
 
 Route::get('/clear-cache-all', function() {
     Artisan::call('cache:clear');

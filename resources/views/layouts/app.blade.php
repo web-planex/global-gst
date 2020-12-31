@@ -101,6 +101,10 @@
                         <a class="waves-effect waves-dark" href="{{ url('sales')}}"><i class="fa fa-line-chart"></i><span class="hide-menu">Sales</span></a>
                     </li>
 
+                    <li class="@if($menu == 'Credit Note' ) active @endif">
+                        <a class="waves-effect waves-dark" href="{{ url('credit-note')}}"><i class="fas fa-clipboard"></i><span class="hide-menu">Credit note</span></a>
+                    </li>
+
                     <li class="@if($menu == 'Payees' ) active @endif">
                         <a class="waves-effect waves-dark" href="{{ url('payees')}}"><i class="fa fa-user-plus"></i><span class="hide-menu">Payees</span></a>
                     </li>

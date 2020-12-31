@@ -237,7 +237,7 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.value) {
-                $('#frm_delete_'+invoice_id).submit();
+                window.location.href = '{{url('sales/delete')}}/'+invoice_id;
             }
         })
     }

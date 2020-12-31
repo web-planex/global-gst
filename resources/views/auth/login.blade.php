@@ -40,6 +40,17 @@
                 <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Log In</button>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 m-t-10 text-center">
+                <div class="social">
+                    <a href="{{ url('auth/google') }}">
+                        <button type="button" class="btn btn-googleplus"> <i aria-hidden="true" class="fab fa-google-plus-g pr-4"></i> <span>Login with Google</span> </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
         <div class="form-group m-b-0">
             <div class="col-sm-12 text-center">
                 Don't have an account? <a href="{{url('register')}}" class="text-primary m-l-5"><b>Register Here</b></a>

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
-    protected $fillable = ['user_id','company_id','invoice_number','tax_type','customer_id','customer_email','invoice_date',
+    protected $fillable = ['user_id','company_id','invoice_number','credit_note_number','tax_type','customer_id','customer_email','invoice_date',
         'due_date','place_of_supply','amount_before_tax','tax_amount','discount','discount_type',
         'total','files','payment_method','status'];
 
@@ -43,8 +43,8 @@ class Invoice extends Model
     protected static function boot() {
         parent::boot();
 
-        static::deleting(function($comment) {
-            $comment->InvoiceItems()->delete();
+        static::deleting(function($data) {
+            $data->InvoiceItems()->delete();
         });
     }
 }

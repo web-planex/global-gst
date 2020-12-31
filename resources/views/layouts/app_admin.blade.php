@@ -30,7 +30,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="{{ asset('assets/popper/popper.min.js') }}"></script>
-<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <script type="text/javascript">
         $(function() {
             $(".preloader").fadeOut();

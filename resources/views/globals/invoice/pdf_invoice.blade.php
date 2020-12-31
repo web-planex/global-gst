@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Tax Invoice</title>
+    <title>{{$menu}}</title>
     <style>
         table { border-collapse: collapse!important; border-color:#444444;}
         table.td-gray td {border:solid 1px #444444;	}
@@ -26,14 +26,14 @@
     <table width="1182" border="0" cellspacing="0" cellpadding="0" >
         <tr>
             <td align="left" valign="top" width="31%" style="border-top:solid 1px #444444;border-left:solid 1px #444444;font-size:22px; padding: 8px 0px 0px 5px;">
-                <h2>&nbsp;Tax Invoice</h2>
+                <h2>&nbsp;{{$menu}}</h2>
                 &nbsp;&nbsp;<strong style="font-size:16px;">GSTIN : {{$company['gstin']}}</strong>
             </td>
             <td align="center" valign="top" width="38%" style="border-top:solid 1px #444444; padding: 10px 0px 0px;">
                 <img src="{{url($company['company_logo'])}}" alt="" width="100" height="100" style="max-height:100px;"/>
             </td>
             <td align="right" width="31%" valign="top" style="font-size:18px;border-top:solid 1px #444444;border-right:solid 1px #444444;line-height:22px; padding: 8px 5px 0px 0px;">
-                <strong>{{$invoice_type}}&nbsp;&nbsp;</strong>
+                <strong>@if($menu != 'Credit Note') {{$invoice_type}}&nbsp;@endif</strong>
             </td>
         </tr>
         <tr>
@@ -61,11 +61,11 @@
             <td align="left" width="591" style="padding:0 5px;border-top:solid 1px #444444;border-left:solid 1px #444444;line-height:30px;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" >
                     <tr>
-                        <td align="left" width="295" style="line-height:30px;">&nbsp;&nbsp;Invoice No:&nbsp;&nbsp;</strong>{{$company['invoice_prefix']}}/{{$invoice['invoice_number']}} </td>
+                        <td align="left" width="295" style="line-height:30px;">&nbsp;&nbsp;@if($print_type==2)Original @endif Invoice No:&nbsp;&nbsp;</strong>{{$company['invoice_prefix']}}/{{$invoice['invoice_number']}} </td>
                     </tr>
                 </table>
             </td>
-            <td align="left" width="591" style="padding:0 5px; border:solid 1px #444444;line-height:30px;">&nbsp;&nbsp;Transport Mode: <strong>-</strong></td>
+            <td align="left" width="591" style="padding:0 5px; border:solid 1px #444444;line-height:30px;">&nbsp;@if($print_type==1) Transport Mode: - @else Credit Note No.: {{$company['invoice_prefix']}}/{{$invoice['credit_note_number']}}@endif</td>
         </tr>
         <tr>
             <td align="left" width="591" style="padding:0 5px;border:solid 1px #444444;line-height:30px;">
@@ -75,7 +75,7 @@
                     </tr>
                 </table>
             </td>
-            <td align="left" width="591" style="padding:0 5px; border:solid 1px #444444;line-height:30px;">&nbsp;&nbsp;Date of Supply: <strong>{{date('d-m-Y', strtotime($invoice['due_date']))}}</strong></td>
+            <td align="left" width="591" style="padding:0 5px; border:solid 1px #444444;line-height:30px;">&nbsp;@if($print_type==1)Date of Supply: <strong>{{date('d-m-Y', strtotime($invoice['due_date']))}}</strong> @else Credit Note Date: <strong>{{date('d-m-Y', strtotime($invoice['updated_at']))}}</strong> @endif  </td>
         </tr>
         <tr>
             <td align="left" style="border-left: solid 1px #444444;"><table width="100%" border="0" cellspacing="0" cellpadding="0" >
@@ -98,23 +98,31 @@
             <td colspan="2" style="padding: 20px 10px;">&nbsp;</td>
         </tr>
         <tr>
-            <td align="center" bgcolor="#eeeeee" align="center" style="padding:0 5px;line-height:30px;" ><strong>BILL TO PARTY</strong></td>
-            <td align="center" bgcolor="#eeeeee" align="center" style="padding:0 5px;line-height:30px;"><strong>SHIP TO PARTY / DELIVERY ADDRESS</strong></td>
+            <td @if($print_type==2) colspan="2" @endif bgcolor="#eeeeee" align="center" style="padding:0 5px;line-height:30px;"><strong>BILL TO PARTY</strong></td>
+            @if($print_type==1)
+                <td align="center" bgcolor="#eeeeee" align="center" style="padding:0 5px;line-height:30px;"><strong>SHIP TO PARTY / DELIVERY ADDRESS</strong></td>
+            @endif
         </tr>
         <tr>
-            <td align="left" width="50%" style="padding:0 5px;line-height:30px;" >&nbsp;&nbsp;<strong>{{$user['billing_first_name']}} {{$user['billing_last_name']}}</strong></td>
-            <td align="left" width="50%" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>{{$user['shipping_first_name']}} {{$user['shipping_last_name']}}</strong></td>
+            <td @if($print_type==2) colspan="2" @endif align="left" width="50%" style="padding:0 5px;line-height:30px;" >&nbsp;&nbsp;<strong>{{$user['billing_first_name']}} {{$user['billing_last_name']}}</strong></td>
+            @if($print_type==1)
+                <td align="left" width="50%" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>{{$user['shipping_first_name']}} {{$user['shipping_last_name']}}</strong></td>
+            @endif
         </tr>
         <tr>
-            <td align="left" valign="top" style="padding:0 14px;line-height:30px;">{{$user['billing_street']}}, {{$user['billing_city']}}-{{$user['billing_pincode']}}, {{$user['state']}}, {{$user['billing_country']}}.</td>
-            <td align="left" valign="top" style="padding:0 14px;line-height:30px;">{{$user['shipping_street']}}, {{$user['shipping_city']}}-{{$user['shipping_pincode']}}, {{$user['shipping_state']}}, {{$user['shipping_country']}}.</td>
+            <td @if($print_type==2) colspan="2" @endif align="left" valign="top" style="padding:0 14px;line-height:30px;">{{$user['billing_street']}}, {{$user['billing_city']}}-{{$user['billing_pincode']}}, {{$user['state']}}, {{$user['billing_country']}}.</td>
+            @if($print_type==1)
+                <td align="left" valign="top" style="padding:0 14px;line-height:30px;">{{$user['shipping_street']}}, {{$user['shipping_city']}}-{{$user['shipping_pincode']}}, {{$user['shipping_state']}}, {{$user['shipping_country']}}.</td>
+            @endif
         </tr>
         <tr>
-            <td align="left" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>Phone No:</strong> {{$user['billing_phone']}}</td>
-            <td align="left" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>Phone No:</strong> {{$user['shipping_phone']}}</td>
+            <td @if($print_type==2) colspan="2" @endif align="left" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>Phone No:</strong> {{$user['billing_phone']}}</td>
+            @if($print_type==1)
+                <td align="left" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>Phone No:</strong> {{$user['shipping_phone']}}</td>
+            @endif
         </tr>
         <tr>
-            <td align="left">
+            <td @if($print_type==2) colspan="2" @endif align="left">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                         <td align="left" width="40%" style="padding:0 5px;line-height:30px; border: 0px;">&nbsp;&nbsp;<strong>State:</strong> {{$user['state']}}</td>
@@ -124,16 +132,18 @@
                     </tr>
                 </table>
             </td>
-            <td align="left" >
-                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td align="left" width="40%" style="padding:0 5px;line-height:30px; border: 0px;">&nbsp;&nbsp;<strong>State:</strong> {{$user['shipping_state']}}</td>
-                        <td width="16%" style="border-left: solid 1px #444444; border-right: solid 1px #444444; border-top:0px; border-bottom:0px;line-height:30px;" align="center"><strong>Code</strong></td>
-                        <td width="16%" style="border-left: solid 1px #444444; border-top:0px; border-bottom:0px; line-height:30px;" align="center">{{$user['shipping_state_code']}}</td>
-                        <td align="left" width="28%" style="padding:0 5px;line-height:30px; border: 0px;">&nbsp;&nbsp;<strong>Country:</strong> {{$user['shipping_country']}}</td>
-                    </tr>
-                </table>
-            </td>
+            @if($print_type==1)
+                <td align="left" >
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td align="left" width="40%" style="padding:0 5px;line-height:30px; border: 0px;">&nbsp;&nbsp;<strong>State:</strong> {{$user['shipping_state']}}</td>
+                            <td width="16%" style="border-left: solid 1px #444444; border-right: solid 1px #444444; border-top:0px; border-bottom:0px;line-height:30px;" align="center"><strong>Code</strong></td>
+                            <td width="16%" style="border-left: solid 1px #444444; border-top:0px; border-bottom:0px; line-height:30px;" align="center">{{$user['shipping_state_code']}}</td>
+                            <td align="left" width="28%" style="padding:0 5px;line-height:30px; border: 0px;">&nbsp;&nbsp;<strong>Country:</strong> {{$user['shipping_country']}}</td>
+                        </tr>
+                    </table>
+                </td>
+            @endif
         </tr>
         <tr>
             <td style="padding: 20px 10px;border-left: solid 1px #444444; border-right:0px; border-bottom: 0px;">&nbsp;</td>
