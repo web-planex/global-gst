@@ -8,6 +8,7 @@ use App\Models\Globals\Customers;
 use App\Models\Globals\Employees;
 use App\Models\Globals\Expense;
 use App\Models\Globals\ExpenseItems;
+use App\Models\Globals\GeneratedInvoiceList;
 use App\Models\Globals\Invoice;
 use App\Models\Globals\InvoiceItems;
 use App\Models\Globals\Payees;
@@ -145,12 +146,25 @@ class InvoiceController extends Controller
         $invoice->amount_before_tax = $request['amount_before_tax'];
         $invoice->tax_amount = $request['tax_amount'];
         $invoice->payment_method = $request['payment_method'];
+        $invoice->status = $request['status'];
 
-        $in_number = Invoice::orderBy('id','DESC')->first();
+        $old_invoice = Invoice::orderBy('id','DESC')->first();
         $company = CompanySettings::where('id',$this->Company())->first();
 
-        $invoice->invoice_number = !empty($in_number)?$in_number['invoice_number']+1:$company['invoice_number'];
-        $invoice->status = $request['status'];
+        if(empty($old_invoice)){
+            $input['invoice_number'] = !empty($company['invoice_number'])?$company['invoice_number']:1;
+        }else{
+            $input['invoice_number'] = !empty($company['invoice_number'])?$company['invoice_number']+1:1;
+            if(in_array($request['status'],[3,4])){
+                $input['credit_note_number'] = empty($old_invoice['credit_note_number'])&&!empty($company['credit_note_number'])?$company['credit_note_number']:(!empty($old_invoice['credit_note_number'])&&!empty($company['credit_note_number'])?$company['credit_note_number']+1:1);
+            }
+        }
+
+        $company->update($input);
+
+        $invoice->invoice_number = $company['invoice_number'];
+        $invoice->credit_note_number = $company['credit_note_number'];
+
         if($request['discount_type'] != '') {
             $invoice->discount = $request['discount_type']==2?str_replace( ',', '', $request['discount']):str_replace( ' %', '', $request['discount']);
         } else {
@@ -258,6 +272,15 @@ class InvoiceController extends Controller
         $invoice->tax_amount = $request['tax_amount'];
         $invoice->payment_method = $request['payment_method'];
         $invoice->status = $request['status'];
+
+        $company = CompanySettings::where('id',$this->Company())->first();
+
+        if(in_array($request['status'],[3,4]) && empty($invoice['credit_note_number'])){
+            $input['credit_note_number'] = !empty($company['credit_note_number'])?$company['credit_note_number']+1:1;
+            $company->update($input);
+            $invoice->credit_note_number = $company['credit_note_number'];
+        }
+
         if($request['discount_type'] != '') {
             $invoice->discount = $request['discount_type']==2?str_replace( ',', '', $request['discount']):str_replace( ' %', '', $request['discount']);
         } else {
@@ -295,9 +318,12 @@ class InvoiceController extends Controller
     public function destroy($id)
     {
         $invoice = Invoice::where('id',$id)->first();
+        if(!empty($invoice['files']) && file_exists($invoice['files'])){
+            unlink($invoice['files']);
+        }
         $invoice->delete();
         \Session::flash('error-message', 'Sales has been deleted successfully!');
-        return redirect('sales');
+        return redirect()->back();
     }
 
     public function getEmail(Request $request){
@@ -319,7 +345,8 @@ class InvoiceController extends Controller
     public function download_pdf(Request $request, $id){
         $user = Auth::user();
         $data['invoice_type'] = isset($request['download'])&&$request['download']==1?'Original':(isset($request['download'])&&$request['download']==2?'Duplicate':(isset($request['download'])&&$request['download']==3?'Triplicate':'Original'));
-        $data['menu']  = 'Invoice Voucher PDF';
+        $data['menu']  = isset($request['type'])&&$request['type']=='credit_note'?'Credit Note':'Tax Invoice';
+        $data['print_type']  = isset($request['type'])&&$request['type']=='credit_note'?2:1;
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
         $state = States::where('id',$data['company']['state'])->first();
         $data['company']['state'] = $state['state_name'];
@@ -446,6 +473,7 @@ class InvoiceController extends Controller
                     }
                 }
             }
+
             $data['invoice']['total_in_word'] = $this->convert_digit_to_words($data['invoice']['total']);
 
             $payee = Payees::where('id',$data['invoice']['customer_id'])->first();
@@ -455,7 +483,6 @@ class InvoiceController extends Controller
                 $shipping_state = States::where('id',$data['user']['shipping_state'])->first();
                 $data['user']['state'] = $state['state_name'];
                 $data['user']['state_code'] = $state['state_number'];
-
                 $data['user']['shipping_state'] = $shipping_state['state_name'];
                 $data['user']['shipping_state_code'] = $shipping_state['state_number'];
             }
@@ -482,22 +509,88 @@ class InvoiceController extends Controller
             $data['company_name'] = $company['company_name'];
             $data['name']  = 'Sales Voucher';
             $data['content'] = 'This is test pdf.';
-
-
-
             $pdf = new WKPDF($this->globalPdfOption());
-
             $pdf->addPage(view('globals.invoice.pdf_invoice',$data));
-
             $path = $user->id.'/sales_invoices/';
             $root = base_path() . '/public/upload/' . $path;
             if (!file_exists($root)) {
                 mkdir($root, 0777, true);
             }
 
-            $pdf->saveAs('upload/sales_invoice_'.$i.'_'.$data['invoice_type'].'.pdf');
+            if (!$pdf->saveAs('upload/'.$user->id.'/sales_invoices/sales_invoice_'.$in_id.'_'.$data['invoice_type'].'.pdf')) {
+                $error = $pdf->getError();
+                return $error;
+            }
+
+            $input['user_id'] = $user->id;
+            $input['company_id'] = $data['company']['id'];
+            $input['invoice_id'] = $in_id;
+            $input['invoice'] = 'upload/'.$user->id.'/sales_invoices/sales_invoice_'.$in_id.'_'.$data['invoice_type'].'.pdf';
+            GeneratedInvoiceList::create($input);
+        }
+
+        $zip = new \ZipArchive();
+        $zip_name = 'upload/'.$user->id.'/all_invoice.zip';
+        if ($zip->open($zip_name, \ZipArchive::CREATE) === TRUE) {
+            // Add File in ZipArchive
+            $all_invoice = GeneratedInvoiceList::where('user_id',$user->id)->where('company_id',$data['company']['id'])->pluck('invoice')->toArray();
+            foreach($all_invoice as $file){
+                if (! $zip->addFile($file, basename($file))) {
+                    echo 'Could not add file to ZIP: ' . $file;
+                }
+            }
+            // Close ZipArchive
+            $zip->close();
+        } else {
+            echo 'Could not open ZIP file.';
         }
         return 'Done';
+    }
 
+    public function credit_notes(Request $request){
+        $data['menu'] = 'Credit Note';
+        $input_search = $request['search'];
+        $start_date = !empty($request['start_date'])?date('Y-m-d', strtotime($request['start_date'])) :"";
+        $end_date = !empty($request['end_date'])?date('Y-m-d', strtotime($request['end_date'])):"";
+        $search = '';
+        $status = '';
+        $query = Invoice::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->whereIn('status',[3,4])->select();
+
+        if(isset($input_search) && !empty($input_search)){
+            $payee_id = '';
+
+            $payees = Payees::where('name','like','%'.$input_search.'%')->select('id')->get();
+            foreach($payees as $pid){
+                $payee_id .= $pid['id'].',';
+            }
+
+            $query->where(function($q) use($input_search,$payee_id){
+                $q->orwhereIn('customer_id', explode(',', $payee_id));
+                $q->orwhere('customer_email','like','%'.$input_search.'%');
+                $q->orwhere('place_of_supply','like','%'.$input_search.'%');
+            });
+            $search = $input_search;
+        }
+
+        if(isset($start_date) && !empty($start_date)){
+            $query->where(function($q) use($start_date){
+                $q->orwhere('invoice_date','>=',$start_date);
+                $q->orwhere('due_date','>=',$start_date);
+            });
+        }
+
+        if(isset($end_date) && !empty($end_date)){
+            $query->where(function($q) use($end_date){
+                $q->orwhere('invoice_date','<=',$end_date);
+                $q->orwhere('due_date','<=',$end_date);
+            });
+        }
+        $data['search'] = $search;
+        $data['status'] = $status;
+        $data['start_date'] = $request['start_date'];
+        $data['end_date'] = $request['end_date'];
+        $data['credit_notes'] = $query->orderBy('id','DESC')->paginate($this->pagination);
+        $data['company'] = CompanySettings::where('id',$this->Company())->first();
+        return view('globals.invoice.credit_note',$data);
     }
 }
