@@ -136,7 +136,7 @@
 
                         <div class="form-group mb-3 col-md-6">
                             <label for="state">State</label>
-                            {!! Form::text('state', isset($company)&&!empty($company)?$company['state']:null, ['class' => 'form-control','id'=>'state']) !!}
+                            {!! Form::select('state', $states, isset($company)&&!empty($company)?$company['state']:null, ['class' => 'form-control amounts-are-select2', 'id'=>'state', 'style'=>'width:100%!important']) !!}
                             @if ($errors->has('state'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('state') }}</strong>

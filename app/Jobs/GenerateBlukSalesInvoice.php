@@ -28,8 +28,7 @@ class GenerateBlukSalesInvoice implements ShouldQueue
     protected $download_type;
     protected $invoice_type;
 
-    public function __construct($user, $company_id, $checkboxes, $download_type, $invoice_type)
-    {
+    public function __construct($user, $company_id, $checkboxes, $download_type, $invoice_type){
         $this->user = $user;
         $this->company_id = $company_id;
         $this->checkboxes = $checkboxes;
@@ -37,8 +36,7 @@ class GenerateBlukSalesInvoice implements ShouldQueue
         $this->invoice_type = $invoice_type;
     }
 
-    public function handle()
-    {
+    public function handle(){
         $files = [];
         if($this->download_type == 1) {
             $files = $this->createSignleInvoicePDF();

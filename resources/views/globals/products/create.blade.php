@@ -48,7 +48,7 @@
 
                         <div class="form-group mb-3 col-md-6">
                             <label for="unit">Unit <span class="text-danger"></span></label>
-                            {!! Form::select('unit', \App\Models\Globals\Product::$unit, null, ['class' => 'form-control amounts-are-select2', 'id' => 'unit']) !!}
+                            {!! Form::select('unit', [''=>'Select Unit']+\App\Models\Globals\Product::$unit, null, ['class' => 'form-control amounts-are-select2', 'id' => 'unit']) !!}
                             @if ($errors->has('unit'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('unit') }}</strong>

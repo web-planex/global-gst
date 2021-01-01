@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Globals;
 
 use App\Models\Globals\CompanySettings;
 use App\Http\Controllers\Controller;
+use App\Models\Globals\States;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +22,7 @@ class UserController extends Controller
         $data['menu'] = 'Profile';
         $data['user'] = User::where('id',$id)->first();
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
-
+        $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         return view('user.edit_profile',$data);
     }
 
