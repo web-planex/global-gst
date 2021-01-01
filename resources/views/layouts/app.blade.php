@@ -90,7 +90,7 @@
                     </li>
 
                     <li class="@if($menu == 'Products' ) active @endif">
-                        <a class="waves-effect waves-dark" href="{{ url('products')}}"><i class="fab fa-product-hunt"></i><span class="hide-menu">Products</span></a>
+                        <a class="waves-effect waves-dark" href="{{ url('products')}}"><i class="fab fa-product-hunt"></i><span class="hide-menu">Products / Services</span></a>
                     </li>
                     
                     <li class="@if($menu == 'Expense' ) active @endif">

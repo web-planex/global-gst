@@ -61,11 +61,11 @@
             <td align="left" width="591" style="padding:0 5px;border-top:solid 1px #444444;border-left:solid 1px #444444;line-height:30px;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0" >
                     <tr>
-                        <td align="left" width="295" style="line-height:30px;">&nbsp;&nbsp;@if($print_type==2)Original @endif Invoice No:&nbsp;&nbsp;</strong>{{$company['invoice_prefix']}}/{{$invoice['invoice_number']}} </td>
+                        <td align="left" width="295" style="line-height:30px;">&nbsp;&nbsp;@if($print_type==2)Original @endif Invoice No:&nbsp;&nbsp;</strong>{{$invoice['invoice_number']}} </td>
                     </tr>
                 </table>
             </td>
-            <td align="left" width="591" style="padding:0 5px; border:solid 1px #444444;line-height:30px;">&nbsp;@if($print_type==1) Transport Mode: - @else Credit Note No.: {{$company['invoice_prefix']}}/{{$invoice['credit_note_number']}}@endif</td>
+            <td align="left" width="591" style="padding:0 5px; border:solid 1px #444444;line-height:30px;">&nbsp;@if($print_type==1) Transport Mode: - @else Credit Note No.: {{$invoice['credit_note_number']}}@endif</td>
         </tr>
         <tr>
             <td align="left" width="591" style="padding:0 5px;border:solid 1px #444444;line-height:30px;">

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Globals;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\GenerateBlukCreditNote;
+use App\Jobs\GenerateBlukSalesInvoice;
 use App\Models\Globals\CompanySettings;
 use App\Models\Globals\Customers;
 use App\Models\Globals\Employees;
@@ -11,8 +13,10 @@ use App\Models\Globals\ExpenseItems;
 use App\Models\Globals\GeneratedInvoiceList;
 use App\Models\Globals\Invoice;
 use App\Models\Globals\InvoiceItems;
+use App\Models\Globals\Job;
 use App\Models\Globals\Payees;
 use App\Models\Globals\PaymentAccount;
+use App\Models\Globals\PdfZips;
 use App\Models\Globals\Product;
 use App\Models\Globals\States;
 use App\Models\Globals\Suppliers;
@@ -148,22 +152,12 @@ class InvoiceController extends Controller
         $invoice->payment_method = $request['payment_method'];
         $invoice->status = $request['status'];
 
-        $old_invoice = Invoice::orderBy('id','DESC')->first();
         $company = CompanySettings::where('id',$this->Company())->first();
 
-        if(empty($old_invoice)){
-            $input['invoice_number'] = !empty($company['invoice_number'])?$company['invoice_number']:1;
-        }else{
-            $input['invoice_number'] = !empty($company['invoice_number'])?$company['invoice_number']+1:1;
-            if(in_array($request['status'],[3,4])){
-                $input['credit_note_number'] = empty($old_invoice['credit_note_number'])&&!empty($company['credit_note_number'])?$company['credit_note_number']:(!empty($old_invoice['credit_note_number'])&&!empty($company['credit_note_number'])?$company['credit_note_number']+1:1);
-            }
+        $invoice->invoice_number = $company['invoice_prefix'].'/'.$company['invoice_number'];
+        if(in_array($request['status'],[3,4])){
+            $invoice->credit_note_number = $company['credit_note_prefix'].'/'.$company['credit_note_number'];
         }
-
-        $company->update($input);
-
-        $invoice->invoice_number = $company['invoice_number'];
-        $invoice->credit_note_number = $company['credit_note_number'];
 
         if($request['discount_type'] != '') {
             $invoice->discount = $request['discount_type']==2?str_replace( ',', '', $request['discount']):str_replace( ' %', '', $request['discount']);
@@ -179,6 +173,11 @@ class InvoiceController extends Controller
 
         if($request->has('submit')) {
             $invoice->save();
+
+            $input['invoice_number'] = $company['invoice_number']+1;
+            $input['credit_note_number'] = in_array($request['status'],[3,4])?$company['credit_note_number']+1:$company['credit_note_number'];
+            $company->update($input);
+
             $invoice_id = $invoice->id;
             $data = [];
             for($i=0;$i<count($request['product']);$i++) {
@@ -275,10 +274,8 @@ class InvoiceController extends Controller
 
         $company = CompanySettings::where('id',$this->Company())->first();
 
-        if(in_array($request['status'],[3,4]) && empty($invoice['credit_note_number'])){
-            $input['credit_note_number'] = !empty($company['credit_note_number'])?$company['credit_note_number']+1:1;
-            $company->update($input);
-            $invoice->credit_note_number = $company['credit_note_number'];
+        if(in_array($request['status'],[3,4])){
+            $invoice->credit_note_number = $company['credit_note_prefix'].'/'.$company['credit_note_number'];
         }
 
         if($request['discount_type'] != '') {
@@ -295,6 +292,10 @@ class InvoiceController extends Controller
 
         if($request->has('submit')) {
             $invoice->save();
+
+            $input['credit_note_number'] = in_array($request['status'],[3,4])?$company['credit_note_number']+1:$company['credit_note_number'];
+            $company->update($input);
+
             InvoiceItems::where('invoice_id',$invoice['id'])->delete();
 
             $invoice_id = $invoice->id;
@@ -435,116 +436,44 @@ class InvoiceController extends Controller
     }
 
     public function multiple_pdf(Request $request){
-        $data['menu']  = 'Invoice Voucher PDF';
         $user = Auth::user();
-        $data['invoice_type'] = $request['invoice_type'];
-        $data['company'] = CompanySettings::where('id',$this->Company())->first();
-        $state = States::where('id',$data['company']['state'])->first();
-        $data['company']['state'] = $state['state_name'];
-        $data['company']['state_code'] = $state['state_number'];
+        $company_id = $this->Company();
+        $checkboxes = $request['all_sales_check'];
+        $download_type = $request['download_type'];
+        $invoice_type = $request['invoice_type'];
+        $job = (new GenerateBlukSalesInvoice($user,$company_id,$checkboxes,$download_type,$invoice_type))->onQueue('multiple_sales_invoice_pdf');
+        dispatch($job);
+        return redirect('download-invoice-pdf-zip');
+    }
 
-        foreach($request['all_sales_check'] as $in_id){
-            $data['invoice'] = Invoice::with('InvoiceItems')->where('id',$in_id)->first();
-            $data['invoice']['status_image'] = $data['invoice']['status']==1?"pending_img.png":($data['invoice']['status']==2?"paid_imag.png":"voided_imag.png");
-            $data['invoice']['payment_method'] = $data['invoice']['payment_method']==1?"Cash":($data['invoice']['payment_method']==2?"Cheque":"Credit Card");
-
-            /*Count Discount Price*/
-            if($data['invoice']['discount_type']==1){
-                $main_total = $data['invoice']['amount_before_tax'] + $data['invoice']['tax_amount'];
-                $discount = ($main_total / 100) * $data['invoice']['discount'];
-                $data['invoice']['discount_price'] = number_format($discount,2);
-            }else{
-                $data['invoice']['discount_price'] = $data['invoice']['discount'];
+    public function downloadPdfZip() {
+        date_default_timezone_set('Asia/Kolkata');
+        $user = Auth::user();
+        $company_id = $this->Company();
+        $company = CompanySettings::where('id',$company_id)->first();
+        $job_id = $company['job_id'];
+        $pdfZip = PdfZips::where('user_id',$user->id)->where('company_id',$company_id)->where('zip_type',2)->orderBy('id','DESC')->get();
+        $job_details = Job::where('id',$job_id)->first();
+        $job_status = '';
+        if($job_details){
+            if($job_details->attempts == 0){
+                $job_status = "Pending";
             }
-            $data['taxes'] = Taxes::where('status', 1)->get();
-            $tax_count = 5;
-            foreach($data['taxes'] as $tax) {
-                $tax['tax_name'] == 'GST' ? $tax_count += 2 : $tax_count += 1;
+            if($job_details->attempts > 0 ){
+                $job_status = "Processing";
             }
-            $data['tax_count'] = $tax_count;
-
-            if(!empty($data['invoice']['InvoiceItems'])){
-                foreach($data['invoice']['InvoiceItems'] as $item){
-                    $tax = Taxes::where('id',$item['tax_id'])->first();
-                    if($tax['is_cess'] == 0) {
-                        $item['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'];
-                    } else {
-                        $item['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS';
-                    }
-                }
-            }
-
-            $data['invoice']['total_in_word'] = $this->convert_digit_to_words($data['invoice']['total']);
-
-            $payee = Payees::where('id',$data['invoice']['customer_id'])->first();
-            if(!empty($payee)){
-                $data['user'] = Customers::where('id',$payee['type_id'])->first();
-                $state = States::where('id',$data['user']['billing_state'])->first();
-                $shipping_state = States::where('id',$data['user']['shipping_state'])->first();
-                $data['user']['state'] = $state['state_name'];
-                $data['user']['state_code'] = $state['state_number'];
-                $data['user']['shipping_state'] = $shipping_state['state_name'];
-                $data['user']['shipping_state_code'] = $shipping_state['state_number'];
-            }
-
-            $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
-            $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
-            $taxes_without_cess_arr = [];
-            $taxes_with_cess_arr = [];
-
-            $a=0;
-            foreach($taxes_without_cess as $tax) {
-                $taxes_without_cess_arr[$a] = $tax['rate'].'_'.$tax['tax_name'];
-                $a++;
-            }
-            $i=0;
-            foreach($taxes_with_cess as $tax) {
-                $taxes_with_cess_arr[$i] = $tax['rate'].'_'.$tax['tax_name'];
-                $taxes_with_cess_arr[$i+1] = $tax['cess'].'_CESS';
-                $i = $i+2;
-            }
-            $data['all_tax_labels'] = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
-            $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
-            $company = CompanySettings::select('company_name')->where('id',$this->Company())->first();
-            $data['company_name'] = $company['company_name'];
-            $data['name']  = 'Sales Voucher';
-            $data['content'] = 'This is test pdf.';
-            $pdf = new WKPDF($this->globalPdfOption());
-            $pdf->addPage(view('globals.invoice.pdf_invoice',$data));
-            $path = $user->id.'/sales_invoices/';
-            $root = base_path() . '/public/upload/' . $path;
-            if (!file_exists($root)) {
-                mkdir($root, 0777, true);
-            }
-
-            if (!$pdf->saveAs('upload/'.$user->id.'/sales_invoices/sales_invoice_'.$in_id.'_'.$data['invoice_type'].'.pdf')) {
-                $error = $pdf->getError();
-                return $error;
-            }
-
-            $input['user_id'] = $user->id;
-            $input['company_id'] = $data['company']['id'];
-            $input['invoice_id'] = $in_id;
-            $input['invoice'] = 'upload/'.$user->id.'/sales_invoices/sales_invoice_'.$in_id.'_'.$data['invoice_type'].'.pdf';
-            GeneratedInvoiceList::create($input);
-        }
-
-        $zip = new \ZipArchive();
-        $zip_name = 'upload/'.$user->id.'/all_invoice.zip';
-        if ($zip->open($zip_name, \ZipArchive::CREATE) === TRUE) {
-            // Add File in ZipArchive
-            $all_invoice = GeneratedInvoiceList::where('user_id',$user->id)->where('company_id',$data['company']['id'])->pluck('invoice')->toArray();
-            foreach($all_invoice as $file){
-                if (! $zip->addFile($file, basename($file))) {
-                    echo 'Could not add file to ZIP: ' . $file;
-                }
-            }
-            // Close ZipArchive
-            $zip->close();
         } else {
-            echo 'Could not open ZIP file.';
+            if($job_id != ""){
+                $job_status = "Finished";
+            }
         }
-        return 'Done';
+        $data = [
+            'menu' => 'Sales',
+            'user_id' => $user->id,
+            'zip_files' => $pdfZip,
+            'job_status' => $job_status
+        ];
+        return view('globals.invoice.get_pdf_zip',$data);
     }
 
     public function credit_notes(Request $request){
@@ -592,5 +521,46 @@ class InvoiceController extends Controller
         $data['credit_notes'] = $query->orderBy('id','DESC')->paginate($this->pagination);
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
         return view('globals.invoice.credit_note',$data);
+    }
+
+    public function multiple_credit_note_pdf(Request $request){
+        $user = Auth::user();
+        $company_id = $this->Company();
+        $checkboxes = $request['all_sales_check'];
+        $download_type = $request['download_type'];
+        $invoice_type = $request['invoice_type'];
+        $job = (new GenerateBlukCreditNote($user,$company_id,$checkboxes,$download_type,$invoice_type))->onQueue('multiple_credit_note_pdf');
+        dispatch($job);
+        return redirect('download-credit-note-pdf-zip');
+    }
+
+    public function downloadCreditNotePdfZip() {
+        date_default_timezone_set('Asia/Kolkata');
+        $user = Auth::user();
+        $company_id = $this->Company();
+        $company = CompanySettings::where('id',$company_id)->first();
+        $job_id = $company['job_id'];
+        $pdfZip = PdfZips::where('user_id',$user->id)->where('company_id',$company_id)->where('zip_type',3)->orderBy('id','DESC')->get();
+        $job_details = Job::where('id',$job_id)->first();
+        $job_status = '';
+        if($job_details){
+            if($job_details->attempts == 0){
+                $job_status = "Pending";
+            }
+            if($job_details->attempts > 0 ){
+                $job_status = "Processing";
+            }
+        } else {
+            if($job_id != ""){
+                $job_status = "Finished";
+            }
+        }
+        $data = [
+            'menu' => 'Credit Note',
+            'user_id' => $user->id,
+            'zip_files' => $pdfZip,
+            'job_status' => $job_status
+        ];
+        return view('globals.invoice.get_credit_note_pdf_zip',$data);
     }
 }

@@ -102,7 +102,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="https://gstdemo.webplanex.net/orders-invoice-zip-list?shop=wepdemo3.myshopify.com" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Invoices Zip"><i class="fas fa-cloud-download-alt"></i></a>
+                            <a href="{{url('download-invoice-pdf-zip')}}" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Invoices Zip"><i class="fas fa-cloud-download-alt"></i></a>
                         </div>
                     </div>
                 </div>
@@ -139,7 +139,7 @@
                                             </div>
                                         </td>
                                         <td>{{$i}}</td>
-                                        <td>{{$company['invoice_prefix']}}/{{$list['invoice_number']}}</td>
+                                        <td>{{$list['invoice_number']}}</td>
                                         <td>{{$list['Payee']['name']}}</td>
                                         <td>{{date('d F Y', strtotime($list['invoice_date']))}}</td>
                                         <td>{{date('d F Y', strtotime($list['due_date']))}}</td>

@@ -456,6 +456,7 @@ class GenerateBulkExpense implements ShouldQueue
             }
         }
     }
+
     public function globalPdfOption() {
         $global_options = [
             'binary' => 'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf',

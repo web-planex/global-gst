@@ -81,13 +81,17 @@ Route::get('/products/delete/{id}', 'Globals\ProductController@destroy');
 
 //Invoice Management
 Route::post('/sales/multiple_pdf', 'Globals\InvoiceController@multiple_pdf')->name('invoice-multiple_pdf');
+Route::get('download-invoice-pdf-zip', 'Globals\InvoiceController@downloadPdfZip')->name('download-invoice-pdf-zip');
 Route::post('ajax/delete_attachment', 'Globals\InvoiceController@delete_attachment');
 Route::post('ajax/getEmail', 'Globals\InvoiceController@getEmail');
 Route::get('/sales/download_pdf/{id}', 'Globals\InvoiceController@download_pdf')->name('sales-download_pdf');
 Route::resource('/sales', 'Globals\InvoiceController');
 Route::get('/sales/delete/{id}', 'Globals\InvoiceController@destroy')->name('sales-delete');
 Route::get('/sales/download_pdf/{id}', 'Globals\InvoiceController@download_pdf')->name('invoice-download_pdf');
+
 Route::get('/credit-note', 'Globals\InvoiceController@credit_notes')->name('credit-note');
+Route::post('/credit-note/multiple_pdf', 'Globals\InvoiceController@multiple_credit_note_pdf')->name('credit-note-multiple_pdf');
+Route::get('download-credit-note-pdf-zip', 'Globals\InvoiceController@downloadCreditNotePdfZip')->name('download-credit-note-pdf-zip');
 
 Route::get('/clear-cache-all', function() {
     Artisan::call('cache:clear');
