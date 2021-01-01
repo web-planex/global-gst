@@ -85,35 +85,35 @@
         <div class="scroll-sidebar">
             <nav class="sidebar-nav">
                 <ul id="sidebarnav">
-                    <li class="@if($menu == 'Dashboard' ) active @endif">
+                    <li class="@if(isset($menu) && $menu == 'Dashboard' ) active @endif">
                         <a class="waves-effect waves-dark" href="{{ url('dashboard')}}"><i class="fa fa-home"></i><span class="hide-menu">Dashboard</span></a>
                     </li>
 
-                    <li class="@if($menu == 'Products' ) active @endif">
+                    <li class="@if(isset($menu) && $menu == 'Products' ) active @endif">
                         <a class="waves-effect waves-dark" href="{{ url('products')}}"><i class="fab fa-product-hunt"></i><span class="hide-menu">Products</span></a>
                     </li>
                     
-                    <li class="@if($menu == 'Expense' ) active @endif">
+                    <li class="@if(isset($menu) && $menu == 'Expense' ) active @endif">
                         <a class="waves-effect waves-dark" href="{{ url('expense')}}"><i class="fa fa-money"></i><span class="hide-menu">Expense</span></a>
                     </li>
 
-                    <li class="@if($menu == 'Sales' ) active @endif">
+                    <li class="@if(isset($menu) && $menu == 'Sales' ) active @endif">
                         <a class="waves-effect waves-dark" href="{{ url('sales')}}"><i class="fa fa-line-chart"></i><span class="hide-menu">Sales</span></a>
                     </li>
 
-                    <li class="@if($menu == 'Credit Note' ) active @endif">
+                    <li class="@if(isset($menu) && $menu == 'Credit Note' ) active @endif">
                         <a class="waves-effect waves-dark" href="{{ url('credit-note')}}"><i class="fas fa-clipboard"></i><span class="hide-menu">Credit note</span></a>
                     </li>
 
-                    <li class="@if($menu == 'Payees' ) active @endif">
+                    <li class="@if(isset($menu) && $menu == 'Payees' ) active @endif">
                         <a class="waves-effect waves-dark" href="{{ url('payees')}}"><i class="fa fa-user-plus"></i><span class="hide-menu">Payees</span></a>
                     </li>
 
-                    <li class="@if($menu == 'payment-account' ) active @endif">
+                    <li class="@if(isset($menu) && $menu == 'payment-account' ) active @endif">
                         <a class="waves-effect waves-dark" href="{{route('payment-account')}}"><i class="fa fa-credit-card"></i><span class="hide-menu">Payment Account</span></a>
                     </li>
 
-                    <li class="@if($menu == 'Company Setting' ) active @endif">
+                    <li class="@if(isset($menu) && $menu == 'Company Setting' ) active @endif">
                         <a class="waves-effect waves-dark" href="{{route('company-setting')}}"><i class="fa fa-file-invoice"></i><span class="hide-menu">Company Setting</span></a>
                     </li>
                     <li class=""> 

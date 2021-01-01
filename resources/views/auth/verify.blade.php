@@ -1,12 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+<div class="row page-titles">
+    <div class="col-sm-6 align-self-center">
+        <h4 class="text-themecolor">{{ __('Verify Your Email Address') }}</h4>
+    </div>
+</div>
+<div class="content">
+    <div class="row">
+        <div class="col-lg-12">
             <div class="card">
-                <div class="card-header">{{ __('Verify Your Email Address') }}</div>
-
                 <div class="card-body">
                     @if (session('resent'))
                         <div class="alert alert-success" role="alert">
@@ -14,7 +17,9 @@
                         </div>
                     @endif
 
-                    {{ __('Before proceeding, please check your email for a verification link.') }}
+                    <div class="alert alert-warning" role="alert">
+                        {{ __('Before proceeding, please check your email for a verification link.') }}
+                    </div>
                     {{ __('If you did not receive the email') }},
                     <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
                         @csrf

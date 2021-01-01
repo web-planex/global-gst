@@ -28,7 +28,7 @@ use App\Models\Globals\Job;
 class ExpenseController extends Controller
 {
     public function __construct(){
-        $this->middleware('auth');
+        $this->middleware(['auth','verified']);
     }
 
     public function index(Request $request){
@@ -38,12 +38,12 @@ class ExpenseController extends Controller
         $end_date =  !empty($request['end_date'])?date('Y-m-d', strtotime($request['end_date'])):"";
         $search = '';
         $query = Expense::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->select();
-        
+
         if(isset($input_search) && !empty($input_search)){
              $method = '';
              $payee_id = '';
              $pay_account = '';
-             
+
              foreach (Expense::$payment_method as $key => $type){
                  if(preg_grep('~'. strtolower($input_search).'~', array(strtolower($type)))){
                      $method .= $key.',';
@@ -54,12 +54,12 @@ class ExpenseController extends Controller
              foreach($payees as $pid){
                  $payee_id .= $pid['id'].',';
              }
-             
+
              $payment = PaymentAccount::where('name','like','%'.$input_search.'%')->select('id')->get();
              foreach($payment as $paid){
                  $pay_account .= $paid['id'].',';
              }
-             
+
              $query->where(function($q) use($input_search, $method,$payee_id, $pay_account){
                         $q->orwhere('ref_no','like','%'.$input_search.'%');
                         $q->orwhereIn('payee_id', explode(',', $payee_id));
@@ -68,11 +68,11 @@ class ExpenseController extends Controller
               });
              $search = $input_search;
         }
-        
+
         if(isset($start_date) && !empty($start_date)){
             $query->where('payment_date','>=',$start_date);
         }
-        
+
         if(isset($end_date) && !empty($end_date)){
             $query->where('payment_date','<=',$end_date);
         }
@@ -83,7 +83,7 @@ class ExpenseController extends Controller
         if(isset($request['status']) && !empty($request['status'])){
             $query->where('status',$request['status']);
         }
-        
+
         $data['search'] = $search;
         $data['start_date'] =$request['start_date'];
         $data['end_date'] = $request['end_date'];
@@ -104,7 +104,7 @@ class ExpenseController extends Controller
         $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
         $taxes_without_cess_arr = [];
         $taxes_with_cess_arr = [];
-        
+
         $a=0;
         foreach($taxes_without_cess as $tax) {
             $taxes_without_cess_arr[$a] = $tax['rate'].'_'.$tax['tax_name'];
@@ -214,7 +214,7 @@ class ExpenseController extends Controller
         $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
         $taxes_without_cess_arr = [];
         $taxes_with_cess_arr = [];
-        
+
         $a=0;
         foreach($taxes_without_cess as $tax) {
             $taxes_without_cess_arr[$a] = $tax['rate'].'_'.$tax['tax_name'];
@@ -278,7 +278,7 @@ class ExpenseController extends Controller
         if($request->has('submit')) {
             $expense->save();
             ExpenseItems::where('expense_id',$expense['id'])->delete();
-            
+
             $expense_id = $expense->id;
             $data = [];
             for($i=0;$i<count($request['product']);$i++) {
@@ -359,7 +359,7 @@ class ExpenseController extends Controller
 
         return $data;
     }
-    
+
     public function download_pdf(Request $request, $id){
         $user = Auth::user();
         $data['menu']  = 'Expense Voucher PDF';
@@ -379,7 +379,7 @@ class ExpenseController extends Controller
 
         $data['expense'] = Expense::with('ExpenseItems')->where('id',$id)->first();
         $data['taxes'] = Taxes::where('status', 1)->get();
-        
+
         if(!empty($data['expense']['ExpenseItems'])){
             foreach($data['expense']['ExpenseItems'] as $exp){
                 $tax = Taxes::where('id',$exp['tax_id'])->first();
@@ -553,9 +553,9 @@ class ExpenseController extends Controller
         dispatch($job);
         return redirect('download-pdf-zip');
     }
-    
+
     public function downloadPdfZip() {
-        date_default_timezone_set('Asia/Kolkata');
+
         $user = Auth::user();
         $company_id = $this->Company();
         $company = CompanySettings::where('id',$company_id)->first();
@@ -573,7 +573,7 @@ class ExpenseController extends Controller
         } else {
             if($job_id != ""){
                 $job_status = "Finished";
-            }   
+            }
         }
         $data = [
             'menu' => 'Expense',

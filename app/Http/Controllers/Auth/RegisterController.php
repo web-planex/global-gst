@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\CompanySettings;
+use App\Models\Globals\CompanySettings;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;

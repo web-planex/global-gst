@@ -22,6 +22,8 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Auth::routes();
 
+Auth::routes(['verify' => true]);
+
 //Google Login
 Route::get('auth/google', 'Auth\GoogleController@redirectToGoogle');
 Route::get('auth/google/callback', 'Auth\GoogleController@handleGoogleCallback');
