@@ -21,8 +21,10 @@ class CreateProductsTable extends Migration
             $table->longText('description')->nullable();
             $table->string('hsn_code',15)->nullable();
             $table->string('sku',15)->nullable();
+            $table->string('unit',15)->nullable();
             $table->string('price',15);
-            $table->string('status')->default(1);            
+            $table->string('sale_price',15);
+            $table->string('status')->default(1);
             $table->timestamps();
         });
     }

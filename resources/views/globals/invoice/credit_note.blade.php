@@ -48,7 +48,7 @@
             </div>
             {!! Form::close() !!}
 
-            {!! Form::open(['url' => url('sales/multiple_pdf'),'class' => 'form-horizontal','files'=>true,'id'=>'MultiplePdfForm']) !!}
+            {!! Form::open(['url' => url('credit-note/multiple_pdf'),'class' => 'form-horizontal','files'=>true,'id'=>'MultiplePdfForm']) !!}
             <div class="card">
                 <div class="row results-top" style="margin: 0 5px;">
                     <div class="col-md-6 col-lg-5 action">
@@ -59,12 +59,8 @@
                             </div>
                             <div class="invoice-type">
                                 <div class="form-group has-success mb-0">
-                                    <select class="form-control custom-select" id="invoice_type" name="invoice_type" data-toggle="tooltip" data-placement="top" title="" data-original-title="Select &amp; Generate Invoices Zip">
-                                        <option value="">Select Invoice Type</option>
-                                        <option value="original">Download Original</option>
-                                        <option value="duplicate">Download Duplicate</option>
-                                        <option value="triplicate">Download Triplicate</option>
-                                    </select>
+                                    <button type="button" id="credit_note_btn" class="btn btn-primary waves-effect waves-light mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Credit Note"><i class="fa fa-download"></i></button>
+                                    <a href="{{url('download-credit-note-pdf-zip')}}" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Credit Note Zip"><i class="fas fa-cloud-download-alt"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -91,7 +87,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="https://gstdemo.webplanex.net/orders-invoice-zip-list?shop=wepdemo3.myshopify.com" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Invoices Zip"><i class="fas fa-cloud-download-alt"></i></a>
                         </div>
                     </div>
                 </div>
@@ -130,8 +125,8 @@
                                             </div>
                                         </td>
                                         <td>{{$i}}</td>
-                                        <td>{{$company['invoice_prefix']}}/{{$list['invoice_number']}}</td>
-                                        <td>@if(!empty($list['credit_note_number'])) {{$company['credit_note_prefix']}}/{{$list['credit_note_number']}} @else - @endif</td>
+                                        <td>{{$list['invoice_number']}}</td>
+                                        <td>{{$list['credit_note_number']}}</td>
                                         <td>{{$list['Payee']['name']}}</td>
                                         <td>{{date('d F Y', strtotime($list['invoice_date']))}}</td>
                                         <td>{{date('d F Y', strtotime($list['due_date']))}}</td>
@@ -180,7 +175,7 @@
             $('#selected_unfulfilled_count').html($('[name="all_sales_check[]"]:checked').length);
         });
 
-        $('#invoice_type').change(function(){
+        $('#credit_note_btn').click(function(){
             if($('[name="all_sales_check[]"]:checked').length == 0){
                 Swal.fire("Select at least one sales");
                 return false;

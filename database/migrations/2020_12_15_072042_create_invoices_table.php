@@ -17,8 +17,8 @@ class CreateInvoicesTable extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('company_id');
-            $table->integer('invoice_number');
-            $table->integer('credit_note_number')->nullable();
+            $table->string('invoice_number',15);
+            $table->string('credit_note_number',15)->nullable();
             $table->integer('tax_type')->comment('(1 => Exclusive, 2 => Inclusive, 3 => Out of scope)');
             $table->integer('customer_id');
             $table->string('customer_email',50);

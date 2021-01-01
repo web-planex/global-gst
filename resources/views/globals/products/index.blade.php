@@ -2,7 +2,7 @@
 @section('content')
     <div class="row page-titles">
         <div class="col-sm-6 align-self-center">
-            <h4 class="text-themecolor">Products</h4>
+            <h4 class="text-themecolor">Products / Services</h4>
         </div>
         <div class="col-sm-6 text-right">
                 <a href="{{url('products/create')}}" class="float-right">
@@ -35,9 +35,10 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Title</th>
-                                    <th>HSN Code</th>
+                                    <th>HSN / SAC Code</th>
                                     <th>SKU</th>
-                                    <th>Price</th>
+                                    <th>Purchase Price</th>
+                                    <th>Sale Price</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -51,6 +52,7 @@
                                         <td>{{$list['hsn_code']}}</td>
                                         <td>{{$list['sku']}}</td>
                                         <td>{{$list['price']}}</td>
+                                        <td>{{$list['sale_price']}}</td>
                                         <td>
                                             <div class="btn-group table-icons-box" role="group" aria-label="Basic example">
                                                 <a href="{{url('products/'.$list['id'].'/edit')}}" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Update"><i class="fas fa-edit"></i></a>

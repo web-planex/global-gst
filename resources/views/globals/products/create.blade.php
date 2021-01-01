@@ -2,7 +2,7 @@
 @section('content')
     <div class="row page-titles">
         <div class="col-sm-6 align-self-center">
-            <h4 class="text-themecolor">@if(isset($products)) Edit @else Add @endif Product</h4>
+            <h4 class="text-themecolor">@if(isset($products)) Edit @else Add @endif Product / Service</h4>
         </div>
     </div>
 
@@ -27,7 +27,7 @@
                         </div>
 
                         <div class="form-group mb-3 col-md-6">
-                            <label for="hsn_code">HSN Code<span class="text-danger"></span></label>
+                            <label for="hsn_code">HSN / SAC Code<span class="text-danger"></span></label>
                             {!! Form::text('hsn_code', null, ['class' => 'form-control','id'=>'hsn_code']) !!}
                             @if ($errors->has('hsn_code'))
                                 <span class="text-danger">
@@ -47,11 +47,31 @@
                         </div>
 
                         <div class="form-group mb-3 col-md-6">
-                            <label for="price">Price<span class="text-danger">*</span></label>
-                            {!! Form::number('price', null, ['class' => 'form-control','id'=>'price']) !!}
+                            <label for="unit">Unit <span class="text-danger"></span></label>
+                            {!! Form::select('unit', \App\Models\Globals\Product::$unit, null, ['class' => 'form-control amounts-are-select2', 'id' => 'unit']) !!}
+                            @if ($errors->has('unit'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('unit') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+
+                        <div class="form-group mb-3 col-md-6">
+                            <label for="price">Purchase Price<span class="text-danger">*</span></label>
+                            {!! Form::number('price', null, ['class' => 'form-control','id'=>'price','step'=>'0.01']) !!}
                             @if ($errors->has('price'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('price') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+
+                        <div class="form-group mb-3 col-md-6">
+                            <label for="sale_price">Sale Price<span class="text-danger">*</span></label>
+                            {!! Form::number('sale_price', null, ['class' => 'form-control','id'=>'sale_price','step'=>'0.01']) !!}
+                            @if ($errors->has('sale_price'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('sale_price') }}</strong>
                                 </span>
                             @endif
                         </div>
@@ -65,10 +85,10 @@
                                 </span>
                             @endif
                         </div>
-                        
+
                         <div class="form-group mb-3 col-md-6">
                             <div class="row">
-                                 <label for="status" class="col-md-12">Status <span class="text-danger">*</span></label>
+                                <label for="status" class="col-md-12">Status <span class="text-danger">*</span></label>
                                 @foreach(\App\Models\Globals\Product::$status as $key2 =>$value2)
                                     <?php $checked = $key2 == 1 ?'checked':'';?>
                                     <div class="col-md-2">
@@ -83,7 +103,7 @@
                                        <strong>{{ $errors->first('status') }}</strong>
                                    </span>
                                 @endif
-                            </div>                           
+                            </div>
                         </div>
 
                         <div class="form-group col-md-12 mb-0">
