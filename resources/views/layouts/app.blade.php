@@ -158,7 +158,7 @@
         </div>
     </div>
     <footer class="footer text-center">
-        © 2020 WebPlanex. All Rights Reserved.
+        © {{date('Y')}} WebPlanex. All Rights Reserved.
     </footer>
 </div>
 <script src="{{ asset('assets/popper/popper.min.js') }}"></script>
