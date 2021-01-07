@@ -196,8 +196,7 @@ class InvoiceController extends Controller
         }
     }
 
-    public function show($id)
-    {
+    public function show($id){
         //
     }
 
@@ -316,8 +315,7 @@ class InvoiceController extends Controller
         }
     }
 
-    public function destroy($id)
-    {
+    public function destroy($id){
         $invoice = Invoice::where('id',$id)->first();
         if(!empty($invoice['files']) && file_exists($invoice['files'])){
             unlink($invoice['files']);

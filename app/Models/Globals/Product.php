@@ -31,4 +31,12 @@ class Product extends Model
         self::UNIT_PIECE => 'PIECE',
         self::UNIT_QT => 'QT',
     ];
+
+    public function User(){
+        return $this->belongsTo('App\User','user_id')->select('id','name');
+    }
+
+    public function Company(){
+        return $this->belongsTo('App\Models\Globals\CompanySettings','company_id')->select('id','company_name');
+    }
 }

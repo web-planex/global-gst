@@ -78,6 +78,7 @@ Route::resource('/companies', 'Globals\CompanyController');
 Route::get('/companies/delete/{id}', 'Globals\CompanyController@destroy');
 
 //Product Management
+Route::get('/products/export_product', 'Globals\ProductController@export_product');
 Route::resource('/products', 'Globals\ProductController');
 Route::get('/products/delete/{id}', 'Globals\ProductController@destroy');
 

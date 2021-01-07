@@ -6,6 +6,7 @@ use App\Models\Globals\Product;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class ProductController extends Controller
 {
@@ -88,5 +89,45 @@ class ProductController extends Controller
         $product->delete();
         \Session::flash('error-message', 'Product has been deleted successfully!');
         return redirect('products');
+    }
+
+    public function export_product(){
+        $fields_key_array = array('user', 'company', 'title', 'description', 'hsn_code', 'sku', 'unit', 'price', 'sale_price', 'status');
+        $fields_value_array = array('User_Name', 'Company', 'Title', 'Description', 'HSN/SAC_Code', 'SKU', 'Unit', 'Price', 'Sale_Price', 'Status');
+        $columns = $fields_value_array;
+        $main_array = Product::with('User','Company')->get();
+        $headers = array(
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=file.csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        );
+
+        $callback = function() use ($main_array, $columns, $fields_key_array)
+        {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+            foreach($main_array as $subarray) {
+                $data   =  array_merge(array_flip($fields_key_array), array_filter(array(
+                    'user' => $subarray['User']['name'],
+                    'company' => $subarray['Company']['company_name'],
+                    'title' => $subarray['title'],
+                    'description' => $subarray['description'],
+                    'hsn_code' => $subarray['hsn_code'],
+                    'sku' => $subarray['sku'],
+                    'unit' => $subarray['unit'],
+                    'price' => $subarray['price'],
+                    'sale_price' => $subarray['sale_price'],
+                    'status' => $subarray['status']==1?'Active':'Inactive',
+                ),
+                function ($key) use ($fields_key_array) {
+                    return in_array($key, $fields_key_array);
+                }, ARRAY_FILTER_USE_KEY));
+                fputcsv($file, $data);
+            }
+            fclose($file);
+        };
+        return Response::stream($callback, 200, $headers);
     }
 }
