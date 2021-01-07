@@ -2,7 +2,7 @@
 @section('content')
     <div class="row page-titles">
         <div class="col-sm-6 align-self-center">
-            <h4 class="text-themecolor">@if(isset($payee)) Edit @else Add @endif Payees</h4>
+            <h4 class="text-themecolor">@if(isset($payee)) Edit @else Add @endif Payees / Vendors</h4>
         </div>
     </div>
 

@@ -3,16 +3,21 @@ ul.footer-links{
 margin: 0;
 float: left;
 }
-
 ul.footer-links li{
   list-style: none;
   display: inline-block;
   padding: 0 8px;
 }
-
 .dropdown-menu-header {
     left: inherit;
     right: 0;
     margin: .125rem 0 0;
 }
 .dropdown-menu.show {border-color: #01c0c8;}
+.custom-column-display .dropdown-item.active, .custom-column-display .dropdown-item:active {
+    color: inherit;
+    background-color: inherit;
+}
+.dropdown-divider{
+    border-top: 1px solid #e9ecef;
+}

@@ -92,9 +92,15 @@
                     <li class="@if(isset($menu) && $menu == 'Products' ) active @endif">
                         <a class="waves-effect waves-dark" href="{{ url('products')}}"><i class="fab fa-product-hunt"></i><span class="hide-menu">Products</span></a>
                     </li>
-                    
+
                     <li class="@if(isset($menu) && $menu == 'Expense' ) active @endif">
-                        <a class="waves-effect waves-dark" href="{{ url('expense')}}"><i class="fa fa-money"></i><span class="hide-menu">Expense</span></a>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-files"></i>
+                            <span class="hide-menu">Purchases</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li class=""><a href="{{route('expense')}}">Expenses</a></li>
+                            <li class=""><a href="javascript:;">Bills</a></li>
+                        </ul>
                     </li>
 
                     <li class="@if(isset($menu) && $menu == 'Sales' ) active @endif">
@@ -106,7 +112,7 @@
                     </li>
 
                     <li class="@if(isset($menu) && $menu == 'Payees' ) active @endif">
-                        <a class="waves-effect waves-dark" href="{{ url('payees')}}"><i class="fa fa-user-plus"></i><span class="hide-menu">Payees</span></a>
+                        <a class="waves-effect waves-dark" href="{{ url('payees')}}"><i class="fa fa-user-plus"></i><span class="hide-menu">Payees / Vendors</span></a>
                     </li>
 
                     <li class="@if(isset($menu) && $menu == 'payment-account' ) active @endif">
@@ -199,7 +205,7 @@
 </script>
 <script>
     $('#start_date_orderlist, #end_date_orderlist').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false });
-    $('#start_date, #end_date, #hire_date, #released, #date_of_birth, #as_of, #payment_date, #invoice_date, #due_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false});
+    $('#start_date, #end_date, #hire_date, #released, #date_of_birth, #as_of, #expense_date, #invoice_date, #due_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false});
     $('#timepicker').bootstrapMaterialDatePicker({ format: 'HH:mm', time: true, date: false });
     $('#date-format').bootstrapMaterialDatePicker({ format: 'DD MMMM YYYY' });
     $('#min-date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', minDate: new Date() });
