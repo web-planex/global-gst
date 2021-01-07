@@ -26,44 +26,44 @@
     <div class="row">
         <div class="col-12 page-min-height">
             @include('inc.message')
-             {!! Form::open(['url' => url('expense'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
-                    <div class="row">
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                {!! Form::text('search', isset($search)&&!empty($search)?$search:null, ['class' => 'form-control','id'=>'search', 'placeholder'=>'Search']) !!}
-                            </div>
+            {!! Form::open(['url' => url('expense'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            {!! Form::text('search', isset($search)&&!empty($search)?$search:null, ['class' => 'form-control','id'=>'search', 'placeholder'=>'Search']) !!}
                         </div>
+                    </div>
 
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                {!! Form::text('start_date', $start_date, ['class' => 'form-control','id'=>'start_date', 'placeholder'=>'Start date']) !!}
-                            </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            {!! Form::text('start_date', $start_date, ['class' => 'form-control','id'=>'start_date', 'placeholder'=>'Start date']) !!}
                         </div>
+                    </div>
 
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                {!! Form::text('end_date', $end_date, ['class' => 'form-control','id'=>'end_date', 'placeholder'=>'End date']) !!}
-                            </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            {!! Form::text('end_date', $end_date, ['class' => 'form-control','id'=>'end_date', 'placeholder'=>'End date']) !!}
                         </div>
+                    </div>
 
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                {!! Form::select('payee', $payees, isset($selected_payee)&&!empty($selected_payee)?$selected_payee:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payee']) !!}
-                            </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            {!! Form::select('payee', $payees, isset($selected_payee)&&!empty($selected_payee)?$selected_payee:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payee']) !!}
                         </div>
+                    </div>
 
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                {!! Form::select('status', [null => 'Select Status'] + \App\Models\Globals\Expense::$expense_status, isset($status)&&!empty($status)?$status:null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
-                            </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            {!! Form::select('status', [null => 'Select Status'] + \App\Models\Globals\Expense::$expense_status, isset($status)&&!empty($status)?$status:null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
                         </div>
+                    </div>
 
-                       <div class="col-md-2">
-                           <button type="submit" class="btn btn-primary waves-effect waves-light pt-2"><i class="ti-search"></i></button>
-                           <a href="{{url('expense')}}"><button type="button" class="btn sync-orders-btn waves-effect waves-light btn-success">Clear</button></a>
-                        </div>
-                    </div>                
-              {!! Form::close() !!}
+                   <div class="col-md-2">
+                       <button type="submit" class="btn btn-primary waves-effect waves-light pt-2"><i class="ti-search"></i></button>
+                       <a href="{{url('expense')}}"><button type="button" class="btn sync-orders-btn waves-effect waves-light btn-success">Clear</button></a>
+                    </div>
+                </div>
+            {!! Form::close() !!}
             {!! Form::open(['url' => route('generate-multiple-expenses'),'class' => 'form-horizontal','files'=>true,'id'=>'MultiplePdfForm']) !!}
             <div class="card">
                 <div class="row results-top" style="margin: 0 5px;">
@@ -100,6 +100,27 @@
                             <a href="javascript:;" id="download_multi_expense" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Expenses Zip"><i class="fas fa-cloud-download-alt"></i></a>
                         </div>
                     </div>
+                    <div class="col-md-7">
+                        <div class="pull-right dropleft custom-column-display">
+                            <a href="javascript:;" class="btn" data-toggle="dropdown" title="Settings" aria-expanded="false">
+                                <i class="fas fa-cog" style="font-size:20px;margin-top: 8px;"></i>
+                            </a>
+                            <div class="dropdown-menu chk-column-container">
+                                @if(!empty($custom_column))
+                                <div class="dropdown-item">Columns <small>(Check to hide)</small></div>
+                                <div class="dropdown-divider"></div>
+                                @foreach($custom_column as $column)
+                                <div class="dropdown-item">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" value="col_{{strtolower(str_replace(' ','_',$column))}}" class="custom-control-input custom-column-checkbox" id="{{$column}}">
+                                        <label class="custom-control-label" for="{{$column}}">{{$column}}</label>
+                                    </div>
+                                </div>
+                                @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="gstinvoice-table-data">
                     <div class="table-responsive data-table-gst-box pb-3">
@@ -112,12 +133,13 @@
                                             <label class="custom-control-label" for="all_checked"></label>
                                         </div>
                                     </th>
-                                    <th>#</th>
-                                    <th>Payee</th>
-                                    <th>Payment Date</th>
-                                    <th>Payment Method</th>
-                                    <th>Ref No</th>
-                                    <th>Status</th>
+                                    <th class="col_payee">Payee / Vendors</th>
+                                    <th class="col_expense_date">Expense Date</th>
+                                    <th class="col_payment_account">Payment account</th>
+                                    <th class="col_payment_method">Payment Method</th>
+                                    <th class="col_ref_no">Ref No</th>
+                                    <th class="col_memo">Memo</th>
+                                    <th class="col_status">Status</th>
                                     <th>Total</th>
                                     <th>Action</th>
                                 </tr>
@@ -133,12 +155,13 @@
                                                 <label class="custom-control-label" for="check_{{$list['id']}}"></label>
                                             </div>
                                         </td>
-                                        <td>{{$i}}</td>
-                                        <td>{{$list['Payee']['name']}}</td>
-                                        <td>{{date('d F Y', strtotime($list['payment_date']))}}</td>
-                                        <td>{{App\Models\Globals\Expense::$payment_method[$list['payment_method']]}}</td>
-                                        <td>{{$list['ref_no']}}</td>
-                                        <td>
+                                        <td class="col_payee">{{$list['Payee']['name']}}</td>
+                                        <td class="col_expense_date">{{date('d F Y', strtotime($list['expense_date']))}}</td>
+                                        <td class="col_payment_account">{{$list['PaymentAccount']['name']}}</td>
+                                        <td class="col_payment_method">{{App\Models\Globals\Expense::$payment_method[$list['payment_method']]}}</td>
+                                        <td class="col_ref_no">{{$list['ref_no']}}</td>
+                                        <td class="col_memo">{{$list['memo']}}</td>
+                                        <td class="col_status">
                                             @if($list['status'] == 1)
                                             <span class="badge badge-warning text-white">Pending</span>
                                             @elseif($list['status'] == 2)
@@ -184,6 +207,59 @@
         </div>
     </div>
 <script type='text/javascript'>
+    $(document).ready(function(){
+        $(document).on('click', '.custom-column-display .dropdown-menu', function (e) {
+            e.stopPropagation();
+        });
+
+        var checkbox_cookie_arr = [];
+        var exp_cokkie_json_str = getCookie('expenseColumns');
+        console.log(exp_cokkie_json_str);
+        if(exp_cokkie_json_str != '') {
+            checkbox_cookie_arr = JSON.parse(exp_cokkie_json_str);
+        }
+        $('.chk-column-container').find('input:checkbox').each(function(){
+            if(exp_cokkie_json_str.includes($(this).val())) {
+                $(this).prop("checked", true);
+                $('.'+$(this).val()).addClass('hide');
+            }
+        });
+        $('.custom-column-checkbox').on('click',function(){
+            var class_name = $(this).val();
+            if($(this).is(':checked')) {
+                checkbox_cookie_arr.push(class_name);
+            } else {
+                var index = checkbox_cookie_arr.indexOf(class_name);
+                if (index > -1) {
+                    checkbox_cookie_arr.splice(index, 1);
+                }
+            }
+            var json_str = JSON.stringify(checkbox_cookie_arr);
+            $('.'+class_name).toggleClass('hide');
+            setCookie("expenseColumns", json_str, 365);
+            console.log(getCookie('expenseColumns'));
+        });
+    });
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires="+d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
     $('#download_multi_expense').click(function(){
        if($('[name="all_expenses_check[]"]:checked').length == 0){
            Swal.fire("Select at least one expense");

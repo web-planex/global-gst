@@ -65,7 +65,7 @@
                 <td align="left" width="1182" style="padding:0 5px;border:solid 1px #444444;line-height:30px;">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td align="left" width="295" style="line-height:30px;">&nbsp;&nbsp;Payment Date: <strong>{{date('d-m-Y',strtotime($expense['payment_date']))}}</strong></td>
+                            <td align="left" width="295" style="line-height:30px;">&nbsp;&nbsp;Payment Date: <strong>{{date('d-m-Y',strtotime($expense['expense_date']))}}</strong></td>
                         </tr>
                     </table>
                 </td>

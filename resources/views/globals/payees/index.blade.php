@@ -2,7 +2,7 @@
 @section('content')
     <div class="row page-titles">
         <div class="col-sm-6 align-self-center">
-            <h4 class="text-themecolor">Payees</h4>
+            <h4 class="text-themecolor">Payees / Vendors</h4>
         </div>
         <div class="col-sm-6 text-right">
             <a href="{{url('payees/create')}}" class="float-right">

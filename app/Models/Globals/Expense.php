@@ -12,7 +12,7 @@ class Expense extends Model
         'tax_type',
         'payee_id',
         'payment_account_id',
-        'payment_date',
+        'expense_date',
         'payment_method',
         'ref_no',
         'expense_category_id',

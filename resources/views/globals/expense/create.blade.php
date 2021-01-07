@@ -32,36 +32,26 @@
                 @endif
                     @csrf
                     <div class="form-row">
-                        <div class="form-group mb-3 col-md-3 pull-right">
-                            <label>Amounts are</label>
-                            <select class="form-control amounts-are-select2" name="tax_type" id="amounts_are">
-                                <option value="exclusive" @if(isset($expense) && $expense['tax_type']==1)) selected @endif>Exclusive of Tax</option>
-                                <option value="inclusive" @if(isset($expense) && $expense['tax_type']==2)) selected @endif>Inclusive of Tax</option>
-                                <option value="out_of_scope" @if(isset($expense) && $expense['tax_type']==3)) selected @endif>Out of scope of Tax</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
                         <div class="from-group mb-3 col-md-4">
                             <label for='status'>Status <span class="text-danger">*</span></label>
                             {!! Form::select('status', [null => 'Select Status'] + \App\Models\Globals\Expense::$expense_status, null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
-                            @if ($errors->has('status'))
+                            @error('status')
                                 <span class="text-danger">
-                                    <strong>{{ $errors->first('status') }}</strong>
+                                    <strong>{{ $message }}</strong>
                                 </span>
-                            @endif
+                            @enderror
                         </div>
                         <div class="form-group mb-3 col-md-4">
-                            <label for="payee">Payee <span class="text-danger">*</span></label>
+                            <label for="payee">Payee / Vendors <span class="text-danger">*</span></label>
                             {!! Form::select('payee', $payees, isset($expense)&&!empty($expense)?$expense['payee_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payee']) !!}
                             <div class="wrapper" id="wrp" style="display: none;">
                                 <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
                             </div>
-                            @if ($errors->has('payee'))
+                            @error('payee')
                                 <span class="text-danger">
-                                    <strong>{{ $errors->first('payee') }}</strong>
+                                    <strong>{{ $message }}</strong>
                                 </span>
-                            @endif
+                            @enderror
                         </div>
                         <div class="form-group mb-3 col-md-4">
                             <label for="payment_account">Payment account <span class="text-danger">*</span></label>
@@ -69,40 +59,50 @@
                             <div class="wrapper" id="wrp2" style="display: none;">
                                 <a href="javascript:;" id="type2" class="font-weight-300" onclick="OpenPaymentAccountModal()"><i class="fa fa-plus-circle"></i> Add New</a>
                             </div>
-                            @if ($errors->has('payment_account'))
+                            @error('payment_account')
                                 <span class="text-danger">
-                                    <strong>{{ $errors->first('payment_account') }}</strong>
+                                    <strong>{{ $message }}</strong>
                                 </span>
-                            @endif
+                            @enderror
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-4">
-                            <label for="payment_date">Payment date <span class="text-danger">*</span></label>
-                            {!! Form::text('payment_date', isset($expense)&&!empty($expense)?date('d-m-Y',strtotime($expense['payment_date'])):null, ['class' => 'form-control','id'=>'payment_date']) !!}
-                            @if ($errors->has('payment_date'))
+                            <label for="expense_date">Expense date <span class="text-danger">*</span></label>
+                            {!! Form::text('expense_date', isset($expense)&&!empty($expense)?date('d-m-Y',strtotime($expense['expense_date'])):date('d-m-Y'), ['class' => 'form-control','id'=>'expense_date']) !!}
+                            @error('expense_date')
                                 <span class="text-danger">
-                                    <strong>{{ $errors->first('payment_date') }}</strong>
+                                    <strong>{{ $message }}</strong>
                                 </span>
-                            @endif
+                            @enderror
                         </div>
                         <div class="form-group mb-3 col-md-4">
                             <label for="payment_method">Payment method</label>
                             {!! Form::select('payment_method', \App\Models\Globals\Expense::$payment_method, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method']) !!}
-                            @if ($errors->has('payment_method'))
+                            @error('payment_method')
                                 <span class="text-danger">
-                                    <strong>{{ $errors->first('payment_method') }}</strong>
+                                    <strong>{{ $message }}</strong>
                                 </span>
-                            @endif
+                            @enderror
                         </div>
                         <div class="form-group mb-3 col-md-4">
                             <label for="ref_no">Ref no.</label>
                             {!! Form::text('ref_no', null, ['class' => 'form-control','id'=>'ref_no']) !!}
-                            @if ($errors->has('ref_no'))
+                            @error('ref_no')
                                 <span class="text-danger">
-                                    <strong>{{ $errors->first('ref_no') }}</strong>
+                                    <strong>{{ $message }}</strong>
                                 </span>
-                            @endif
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="form-row" style="flex-direction:row-reverse">
+                        <div class="form-group mb-3 col-md-3 pull-right">
+                            <label>Amounts are</label>
+                            <select class="form-control amounts-are-select2" name="tax_type" id="amounts_are">
+                                <option value="exclusive" @if(isset($expense) && $expense['tax_type']==1)) selected @endif>Exclusive of Tax</option>
+                                <option value="inclusive" @if(isset($expense) && $expense['tax_type']==2)) selected @endif>Inclusive of Tax</option>
+                                <option value="out_of_scope" @if(isset($expense) && $expense['tax_type']==3)) selected @endif>Out of scope of Tax</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row">
@@ -117,12 +117,13 @@
                                             <table class="table table-hover">
                                                 <thead>
                                                     <th width="3%">#</th>
-                                                    <th width="22%">Product <span class="text-danger">*</span></th>
-                                                    <th width="13%">HSN Code <span class="text-danger">*</span></th>
+                                                    <th width="35%">Expense Type <span class="text-danger">*</span></th>
+                                                    <th width="20%">Note</th>
+                                                    <!--<th width="13%">HSN Code <span class="text-danger">*</span></th>
                                                     <th width="10%">QTY <span class="text-danger">*</span></th>
-                                                    <th width="14%">Rate <span class="text-danger">*</span></th>
+                                                    <th width="14%">Rate <span class="text-danger">*</span></th>-->
                                                     <th width="14%">Amount <span class="text-danger">*</span></th>
-                                                    <th width="20%" class="tax-column" @if(isset($expense['tax_type']) && $expense['tax_type']==3) style="display: none;" @endif>Tax <span class="text-danger">*</span></th>
+                                                    <th width="25%" class="tax-column" @if(isset($expense['tax_type']) && $expense['tax_type']==3) style="display: none;" @endif>Tax <span class="text-danger">*</span></th>
                                                     <th width="4%">&nbsp;</th>
                                                 </thead>
                                                 <tbody id="items_list_body">
@@ -145,6 +146,9 @@
                                                                 </div>
                                                             </td>
                                                             <td>
+                                                                <textarea class="form-control" cols="5" name="note[]">{{$item['note']}}</textarea>
+                                                            </td>
+                                                            {{--<td>
                                                                 <input type="text" class="form-control hsn_code_input" name="hsn_code[]" value="{{$item['hsn_code']}}">
                                                             </td>
                                                             <td>
@@ -152,7 +156,7 @@
                                                             </td>
                                                             <td>
                                                                 <input type="text" min="0" class="form-control rate-input floatTextBox" name="rate[]" value="{{$item['rate']}}">
-                                                            </td>
+                                                            </td>--}}
                                                             <td>
                                                                 <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[]" value="{{$item['amount']}}">
                                                             </td>
@@ -182,7 +186,7 @@
                                                             <!--<input type="text" class="form-control" name="item_name[0]" required>-->
                                                             <select name="product[0]" id="product_select" class="form-control ex-product amounts-are-select2" required="">
                                                                 @foreach($products as $pro)
-                                                                     <option value="{{$pro['id']}}">{{$pro['title']}}</option>
+                                                                    <option value="{{$pro['id']}}">{{$pro['title']}}</option>
                                                                 @endforeach
                                                             </select>
                                                             <div class="wrapper" id="prowrp" style="display: none;">
@@ -190,6 +194,9 @@
                                                             </div>
                                                         </td>
                                                         <td>
+                                                            <textarea class="form-control" cols="5" name="note[]"></textarea>
+                                                        </td>
+                                                        {{-- <td>
                                                             <input type="text" class="form-control hsn_code_input" name="hsn_code[0]" id="hsn_code_0" value="{{$first_product['hsn_code']}}" required>
                                                         </td>
                                                         <td>
@@ -197,7 +204,7 @@
                                                         </td>
                                                         <td>
                                                             <input type="text" min="0" class="form-control rate-input floatTextBox" id="rate_0"  name="rate[0]" value="{{$first_product['price']}}" required>
-                                                        </td>
+                                                        </td> --}}
                                                         <td>
                                                             <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[0]" required>
                                                         </td>
@@ -246,7 +253,7 @@
                                                     </tr>
                                                     @endif
                                                 @endforeach
-                                                <tr>
+<!--                                                <tr>
                                                     <th>Discount Type</th>
                                                     <td>
                                                         <select name="discount_type" id="discount_type" class="form-control">
@@ -259,7 +266,7 @@
                                                 <tr>
                                                     <th>Discount Amount</th>
                                                     <td>{!! Form::text('discount', null, ['class' => 'form-control','id'=>'discount']) !!}</td>
-                                                </tr>
+                                                </tr>-->
                                                 <tr>
                                                     <th width="50%">Total</th>
                                                     <td width="50%"><input type="text" class="form-control text-right" id="total" readonly="" /></td>
@@ -274,11 +281,11 @@
                                                     <div class="form-group mb-0">
                                                     <label for="memo">Memo</label>
                                                     {!! Form::textarea('memo', null, ['class' => 'form-control','id'=>'memo','rows' => '3']) !!}
-                                                    @if ($errors->has('memo'))
+                                                    @error('memo')
                                                         <span class="text-danger">
-                                                            <strong>{{ $errors->first('memo') }}</strong>
+                                                            <strong>{{ $message }}</strong>
                                                         </span>
-                                                    @endif
+                                                    @enderror
                                                     </div>
                                                 </div>
                                             </div>
@@ -329,12 +336,12 @@
                                                             @endif
                                                             <div id="att_del_msg" class="text-danger text-bold"></div>
                                                         @endif
-                                                        @if ($errors->has('files'))
+                                                        @error('files')
                                                             <br>
                                                             <span class="text-danger">
-                                                                <strong>{{ $errors->first('files') }}</strong>
+                                                                <strong>{{$message}}</strong>
                                                             </span>
-                                                        @endif
+                                                        @enderror
                                                     </div>
                                                 </div>
                                             </div>
@@ -345,7 +352,6 @@
                         </div>
                     </div>
                     <button type="submit" name="submit" id="submit" class="btn btn-default btn-lg btn-primary">Submit</button>
-{{--                </form>--}}
                 {!! Form::close() !!}
             </div>
         </div>
@@ -480,11 +486,11 @@
         
         $("#formExpense").validate({
             rules: {
-                payment_date: "required",
+                expense_date: "required",
                 status: "required",
             },
             messages: {
-                payment_date: "The payment date field is required",
+                expense_date: "The expense date field is required",
                 status: "The status field is required",
             }
         });
@@ -742,7 +748,6 @@
             },
             messages: {
                 title: "The title field is required",
-                // hsn_code: "The hsn code field is required",
                 // sku: "The sku field is required",
                 price: "The price field is required",
                 // description: "The description field is required",
@@ -805,7 +810,7 @@
         $("#addItem").click(function() {
             var numItems = $('.itemTr').length;
             var i = numItems + 1;
-
+            var tax_type = $('#amounts_are').find(":selected").val();
             var row = $("<tr>").addClass("itemTr");
             var product_select = "<select name=\"product["+numItems+"]\" id=\"product_select"+i+"\" class='product_select ex-product form-control amounts-are-select3' required>";
             /*Product Get*/
@@ -825,18 +830,23 @@
                     var products = $('#pro_list').html();
                     var html = "<tr class=\"itemNewCheckTr\">";
                     html += "<td>" + i + "</td>";
-//            html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
+                    //html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
                     html += "<td>" + product_select +
                         "<div class=\"wrapper\" id=\"prowrp"+i+"\" style=\"display: none;\">"+
                         "<a href=\"javascript:;\" class=\"font-weight-300 add-new-prod-link\" data-id=\"product_select"+i+"\" onclick=\"OpenProductModel('product_select"+i+"')\"><i class=\"fa fa-plus-circle\"></i> Add New</a>"+
                         "</div>"+
                         "</td>";
                     //html += "<td><input type=\"text\" class=\"form-control description_input\" name=\"description["+numItems+"]\" id=\"description_"+numItems+"\" value='{{$first_product['description']}}' required><span class=\"multi-error\"></span></td>";
-                    html += "<td><input type=\"text\" class=\"form-control hsn_code_input\" name=\"hsn_code["+numItems+"]\" id=\"hsn_code_"+numItems+"\" value='{{$first_product['hsn_code']}}' required><span class=\"multi-error\"></span></td>";
-                    html += "<td><input type=\"number\" min=\"1\" value=\"1\" class=\"form-control quantity-input floatTextBox\" name=\"quantity["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
-                    html += "<td><input type=\"text\" min=\"0\" class=\"form-control rate-input floatTextBox\" id=\"rate_"+numItems+"\" name=\"rate["+numItems+"]\" value='{{$first_product['price']}}' required><span class=\"multi-error\"></span></td>";
+                    //html += "<td><input type=\"text\" class=\"form-control hsn_code_input\" name=\"hsn_code["+numItems+"]\" id=\"hsn_code_"+numItems+"\" value='{{$first_product['hsn_code']}}' required><span class=\"multi-error\"></span></td>";
+                    //html += "<td><input type=\"number\" min=\"1\" value=\"1\" class=\"form-control quantity-input floatTextBox\" name=\"quantity["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
+                    //html += "<td><input type=\"text\" min=\"0\" class=\"form-control rate-input floatTextBox\" id=\"rate_"+numItems+"\" name=\"rate["+numItems+"]\" value='{{$first_product['price']}}' required><span class=\"multi-error\"></span></td>";
+                    html += "<td><textarea class='form-control' name='note[]' cols='5'></textarea></td>";
                     html += "<td><input type=\"text\" min=\"0\" class=\"form-control amount-input floatTextBox\" name=\"amount["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
-                    html += "<td class=\"tax-column\"><select class='form-control tax-input' name=\"taxes["+numItems+"]\">@foreach($taxes as $tax) @if($tax['is_cess'] == 0)<option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name']}}</option> @else <option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option> @endif @endforeach</select></td>";
+                    if(tax_type == 'out_of_scope') {
+                        html += "<td class='tax-column hide'><select class='form-control tax-input' name=\"taxes["+numItems+"]\">@foreach($taxes as $tax) @if($tax['is_cess'] == 0)<option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name']}}</option> @else <option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option> @endif @endforeach</select></td>";
+                    } else {
+                        html += "<td class='tax-column'><select class='form-control tax-input' name=\"taxes["+numItems+"]\">@foreach($taxes as $tax) @if($tax['is_cess'] == 0)<option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name']}}</option> @else <option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option> @endif @endforeach</select></td>";
+                    }
                     html += "<td><button type=\"button\" class=\"btn btn-danger btn-circle remove-line-item \"><i class=\"fa fa-times\"></i> </button></td>";
                     html += "</tr>";
                     $("#items_list_body").append(html);
