@@ -41,6 +41,8 @@ Route::patch('/update_password/{id}', 'Globals\UserController@update_password')-
 Route::post('ajax/expense_delete_attachment', 'Globals\ExpenseController@delete_attachment');
 Route::post('ajax/get_product', 'Globals\ExpenseController@get_product')->name('get_product');
 Route::post('ajax/product-store', 'Globals\ExpenseController@product_store')->name('product-store');
+Route::post('ajax/expense-type-store', 'Globals\ExpenseController@expense_type_store')->name('expense-type-store');
+Route::post('ajax/get-expense-type', 'Globals\ExpenseController@get_expense_type')->name('get-expense-type');
 Route::post('ajax/payees-store', 'Globals\ExpenseController@payee_store')->name('payee-store');
 Route::post('ajax/payment-account-store', 'Globals\ExpenseController@payment_account_store')->name('payment-account-store');
 Route::get('/expense', 'Globals\ExpenseController@index')->name('expense');

@@ -32,7 +32,7 @@
                 @endif
                     @csrf
                     <div class="form-row">
-                        <div class="from-group mb-3 col-md-4">
+                        <div class="from-group mb-3 col-md-6">
                             <label for='status'>Status <span class="text-danger">*</span></label>
                             {!! Form::select('status', [null => 'Select Status'] + \App\Models\Globals\Expense::$expense_status, null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
                             @error('status')
@@ -41,25 +41,13 @@
                                 </span>
                             @enderror
                         </div>
-                        <div class="form-group mb-3 col-md-4">
+                        <div class="form-group mb-3 col-md-6">
                             <label for="payee">Payee / Vendors <span class="text-danger">*</span></label>
                             {!! Form::select('payee', $payees, isset($expense)&&!empty($expense)?$expense['payee_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payee']) !!}
                             <div class="wrapper" id="wrp" style="display: none;">
                                 <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
                             </div>
                             @error('payee')
-                                <span class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="form-group mb-3 col-md-4">
-                            <label for="payment_account">Payment account <span class="text-danger">*</span></label>
-                            {!! Form::select('payment_account', $payment_accounts, isset($expense)&&!empty($expense)?$expense['payment_account_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_account']) !!}
-                            <div class="wrapper" id="wrp2" style="display: none;">
-                                <a href="javascript:;" id="type2" class="font-weight-300" onclick="OpenPaymentAccountModal()"><i class="fa fa-plus-circle"></i> Add New</a>
-                            </div>
-                            @error('payment_account')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -136,13 +124,13 @@
                                                         <tr class="{{$i > 1 ? 'itemNewCheckTr' : 'itemTr'}}">
                                                             <td>{{$i}}</td>
                                                             <td id="pro_list">
-                                                                <select name="product[]" id="product_select_{{$i}}" class="form-control ex-product product_select_edit amounts-are-select2" data-id="{{$i}}" required="">
-                                                                    @foreach($products as $pro)
-                                                                         <option value="{{$pro['id']}}" @if($pro['id'] == $item['product_id']) selected @endif>{{$pro['title']}}</option>
+                                                                <select name="expense_type[]" id="expense_type_{{$i}}" class="form-control ex-type expense_type_edit amounts-are-select2" data-id="{{$i}}" required="">
+                                                                    @foreach($expense_types as $expense_type)
+                                                                         <option value="{{$expense_type['id']}}" @if($expense_type['id'] == $item['expense_type_id']) selected @endif>{{$expense_type['name']}}</option>
                                                                     @endforeach
                                                                 </select>
                                                                 <div class="wrapper" id="prowrp{{$i}}" style="display: none;">
-                                                                    <a href="javascript:;" class="font-weight-300 add-new-prod-link" data-id="product_select_{{$i}}" onclick="OpenProductModel('product_select_{{$i}}')"><i class="fa fa-plus-circle"></i> Add New</a>
+                                                                    <a href="javascript:;" class="font-weight-300 add-new-prod-link" data-id="expense_type_{{$i}}" onclick="OpenExpenseTypeModal('expense_type_{{$i}}')"><i class="fa fa-plus-circle"></i> Add New</a>
                                                                 </div>
                                                             </td>
                                                             <td>
@@ -184,13 +172,13 @@
                                                         <td>1</td>
                                                         <td id="pro_list">
                                                             <!--<input type="text" class="form-control" name="item_name[0]" required>-->
-                                                            <select name="product[0]" id="product_select" class="form-control ex-product amounts-are-select2" required="">
-                                                                @foreach($products as $pro)
-                                                                    <option value="{{$pro['id']}}">{{$pro['title']}}</option>
+                                                            <select name="expense_type[0]" id="expense_type" class="form-control ex-type amounts-are-select2" required="">
+                                                                @foreach($expense_types as $expense_type)
+                                                                    <option value="{{$expense_type['id']}}">{{$expense_type['name']}}</option>
                                                                 @endforeach
                                                             </select>
                                                             <div class="wrapper" id="prowrp" style="display: none;">
-                                                                <a href="javascript:;" id="type2" data-id="product_select" class="font-weight-300 add-new-prod-link" onclick="OpenProductModel('product_select')"><i class="fa fa-plus-circle"></i> Add New</a>
+                                                                <a href="javascript:;" id="type2" data-id="expense_type" class="font-weight-300 add-new-prod-link" onclick="OpenExpenseTypeModal('expense_type')"><i class="fa fa-plus-circle"></i> Add New</a>
                                                             </div>
                                                         </td>
                                                         <td>
@@ -253,7 +241,7 @@
                                                     </tr>
                                                     @endif
                                                 @endforeach
-<!--                                                <tr>
+                                                {{--<tr>
                                                     <th>Discount Type</th>
                                                     <td>
                                                         <select name="discount_type" id="discount_type" class="form-control">
@@ -266,7 +254,7 @@
                                                 <tr>
                                                     <th>Discount Amount</th>
                                                     <td>{!! Form::text('discount', null, ['class' => 'form-control','id'=>'discount']) !!}</td>
-                                                </tr>-->
+                                                </tr>--}}
                                                 <tr>
                                                     <th width="50%">Total</th>
                                                     <td width="50%"><input type="text" class="form-control text-right" id="total" readonly="" /></td>
@@ -397,13 +385,16 @@
 <!--PRODUCT MODAL-->
 @include('globals.expense.product_model')
 
+<!--PRODUCT MODAL-->
+@include('globals.expense.expense_type_modal')
+
 <script type="text/javascript">
     @if(isset($expense) && !empty($expense))
         $(document).ready(function(){
-            $('.product_select_edit').on('select2:open',function(){
+            $('.expense_type_edit').on('select2:open',function(){
                 var id = $(this).data('id');
-                $("#select2-product_select_"+id+"-results").siblings('div').remove();
-                $("#select2-product_select_"+id+"-results").parent('span').prepend("<div class='select2-results__option'>" + jQuery('#prowrp'+id).html() + "</div>");
+                $("#select2-expense_type_"+id+"-results").siblings('div').remove();
+                $("#select2-expense_type_"+id+"-results").parent('span').prepend("<div class='select2-results__option'>" + jQuery('#prowrp'+id).html() + "</div>");
             });
             if($('#discount_type').find(":selected").val() == '1') {
                 $('#discount').inputmask("percentage");
@@ -416,7 +407,7 @@
     @else
         $(document).ready(function(){
             setTimeout(function(){
-                $('.ex-product').trigger('change');
+                $('.ex-type').trigger('change');
             },500);
         }); 
     @endif
@@ -437,8 +428,8 @@
         $('#payment_account').select2('close');
     }
 
-    function OpenProductModel(selectID){
-        $('#ProductModal').modal('show');
+    function OpenExpenseTypeModal(selectID){
+        $('#ExpenseTypeModal').modal('show');
         $('#'+selectID).select2('close');
     }
 
@@ -737,40 +728,31 @@
             }
         });
 
-        $("#ProductForm").validate({
+        $("#ExpenseTypeForm").validate({
             rules: {
-                title: "required",
-                // hsn_code: "required",
-                // sku: "required",
-                price: "required",
-                // description: "required",
-                status: "required",
+                name: "required"
             },
             messages: {
-                title: "The title field is required",
-                // sku: "The sku field is required",
-                price: "The price field is required",
-                // description: "The description field is required",
-                status: "The status field is required",
+                name: "The name field is required"
             },
             normalizer: function(value) {
                 return $.trim(value);
             },
             submitHandler:function(){
-                var data2 = $('#ProductForm').serialize();
+                var data2 = $('#ExpenseTypeForm').serialize();
                 $.ajax({
-                    url: '{{url('ajax/product-store')}}',
+                    url: '{{route('expense-type-store')}}',
                     type: 'POST',
                     data: {'data':data2},
                     success: function (result) {
                         optionValue = result['id'];
                         optionText = result['name'];
-                        $('.ex-product').append(`<option value="${optionValue}">${optionText}</option>`);
-                        $('#ProductModal').modal('hide');
+                        $('.ex-type').append(`<option value="${optionValue}">${optionText}</option>`);
+                        $('#ExpenseTypeModal').modal('hide');
                         $('html, body').css('overflowY', 'auto');
-                        $("#ProductForm")[0].reset();
+                        $("#ExpenseTypeForm")[0].reset();
                         $('#'+dropdown_id+' option:last').attr("selected", "selected");
-                        $('.ex-product').trigger('change');
+                        $('.ex-type').trigger('change');
                     }
                 });
             }
@@ -799,7 +781,7 @@
             }
         });
         
-        $('#product_select').on("select2:open", function() {
+        $('#expense_type').on("select2:open", function() {
             flg3++;
             if (flg3 == 1) {
                 $this_html = jQuery('#prowrp').html();
@@ -812,34 +794,29 @@
             var i = numItems + 1;
             var tax_type = $('#amounts_are').find(":selected").val();
             var row = $("<tr>").addClass("itemTr");
-            var product_select = "<select name=\"product["+numItems+"]\" id=\"product_select"+i+"\" class='product_select ex-product form-control amounts-are-select3' required>";
-            /*Product Get*/
+            var expense_type = "<select name=\"expense_type["+numItems+"]\" id=\"expense_type"+i+"\" class='expense_type ex-type form-control amounts-are-select3' required>";
+            /*Expense Type Get*/
             $.ajax({
-                url: '{{url('ajax/get_product')}}',
+                url: '{{route('get-expense-type')}}',
                 type: 'POST',
                 data: {'data': 0},
                 success: function (result) {
                     var j;
-                    for(j=0; j<result['products'].length; j++ ){
-                        product_select += "<option value='"+result['products'][j]['id']+"'>"+result['products'][j]['title']+"</option>";
+                    for(j=0; j<result['expense_type'].length; j++ ){
+                        expense_type += "<option value='"+result['expense_type'][j]['id']+"'>"+result['expense_type'][j]['name']+"</option>";
                     }
-                    product_select += "</select>";
+                    expense_type += "</select>";
 
                     $("#items_list_body").append(row);
                     var tax_input = $('#taxes').html();
-                    var products = $('#pro_list').html();
+
                     var html = "<tr class=\"itemNewCheckTr\">";
                     html += "<td>" + i + "</td>";
-                    //html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
-                    html += "<td>" + product_select +
+                    html += "<td>" + expense_type +
                         "<div class=\"wrapper\" id=\"prowrp"+i+"\" style=\"display: none;\">"+
-                        "<a href=\"javascript:;\" class=\"font-weight-300 add-new-prod-link\" data-id=\"product_select"+i+"\" onclick=\"OpenProductModel('product_select"+i+"')\"><i class=\"fa fa-plus-circle\"></i> Add New</a>"+
+                        "<a href=\"javascript:;\" class=\"font-weight-300 add-new-prod-link\" data-id=\"expense_type"+i+"\" onclick=\"OpenExpenseTypeModal('expense_type"+i+"')\"><i class=\"fa fa-plus-circle\"></i> Add New</a>"+
                         "</div>"+
                         "</td>";
-                    //html += "<td><input type=\"text\" class=\"form-control description_input\" name=\"description["+numItems+"]\" id=\"description_"+numItems+"\" value='{{$first_product['description']}}' required><span class=\"multi-error\"></span></td>";
-                    //html += "<td><input type=\"text\" class=\"form-control hsn_code_input\" name=\"hsn_code["+numItems+"]\" id=\"hsn_code_"+numItems+"\" value='{{$first_product['hsn_code']}}' required><span class=\"multi-error\"></span></td>";
-                    //html += "<td><input type=\"number\" min=\"1\" value=\"1\" class=\"form-control quantity-input floatTextBox\" name=\"quantity["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
-                    //html += "<td><input type=\"text\" min=\"0\" class=\"form-control rate-input floatTextBox\" id=\"rate_"+numItems+"\" name=\"rate["+numItems+"]\" value='{{$first_product['price']}}' required><span class=\"multi-error\"></span></td>";
                     html += "<td><textarea class='form-control' name='note[]' cols='5'></textarea></td>";
                     html += "<td><input type=\"text\" min=\"0\" class=\"form-control amount-input floatTextBox\" name=\"amount["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
                     if(tax_type == 'out_of_scope') {
@@ -854,31 +831,15 @@
                         return /^-?\d*[.,]?\d*$/.test(value);
                     });
 
-                    $('#product_select'+i).on('select2:open',function(){
-                        $("#select2-product_select"+i+"-results").siblings('div').remove();
-                        $("#select2-product_select"+i+"-results").parent('span').prepend("<div class='select2-results__option'>" + jQuery('#prowrp'+i).html() + "</div>");
+                    $('#expense_type'+i).on('select2:open',function(){
+                        $("#select2-expense_type"+i+"-results").siblings('div').remove();
+                        $("#select2-expense_type"+i+"-results").parent('span').prepend("<div class='select2-results__option'>" + jQuery('#prowrp'+i).html() + "</div>");
                     });
 
                     $('.amounts-are-select3').select2();
-                    $('.ex-product').trigger('change')
+                    //$('.ex-type').trigger('change')
                 }
             });
-        });
-
-        $(document).on('change','.ex-product',function(){
-              var pid = $(this) .val();
-              var that = $(this);
-              $.ajax({
-               url: '{{url('ajax/get_product')}}',
-               type: 'POST',
-               data:  {'data':pid},
-               success: function (result) {
-                    //$(that).parent('td').next('td').find('.description_input').val(result['description']);
-                    $(that).parent('td').next('td').find('.hsn_code_input').val(result['hsn_code']);
-                    $(that).parent('td').next('td').next('td').next('td').find('.rate-input').val(result['price']);
-                    $(that).parent('td').next('td').next('td').next('td').find('.rate-input').trigger('change');
-               }
-           });
         });
 
         $(document).on('keyup change','.rate-input',function(){

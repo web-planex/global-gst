@@ -34,15 +34,6 @@
                                 </span>
                             @endif
                         </div>
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="payment_account">Payment account <span class="text-danger">*</span></label>
-                            {!! Form::select('payment_account', $payment_accounts, $expense['payment_account_id'], ['class' => 'form-control', 'id' => 'payment_account']) !!}
-                            @if ($errors->has('payment_account'))
-                                <span class="text-danger">
-                                    <strong>{{ $errors->first('payment_account') }}</strong>
-                                </span>
-                            @endif
-                        </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-4">

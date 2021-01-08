@@ -86,22 +86,6 @@
                 </div>
             </a>
         </div>
-
-        <div class="col-lg-3 col-md-6">
-            <a href="{{url('payment-account')}}" class="text-dark">
-                <div class="card mr-1">
-                    <div class="card-body">
-                        <div class="d-flex no-block">
-                            <div class="round align-self-center round-info"><i class="fa fa-credit-card"></i></div>
-                            <div class="m-l-10 align-self-center">
-                                <h3 class="m-b-0">{{$total_payment_account}}</h3>
-                                <h5 class="text-muted m-b-0">Payment Accounts</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-        </div>
         
         <div class="col-lg-3 col-md-6">
             <a href="{{url('companies')}}" class="text-dark">

@@ -135,7 +135,6 @@
                                     </th>
                                     <th class="col_payee">Payee / Vendors</th>
                                     <th class="col_expense_date">Expense Date</th>
-                                    <th class="col_payment_account">Payment account</th>
                                     <th class="col_payment_method">Payment Method</th>
                                     <th class="col_ref_no">Ref No</th>
                                     <th class="col_memo">Memo</th>
@@ -157,7 +156,6 @@
                                         </td>
                                         <td class="col_payee">{{$list['Payee']['name']}}</td>
                                         <td class="col_expense_date">{{date('d F Y', strtotime($list['expense_date']))}}</td>
-                                        <td class="col_payment_account">{{$list['PaymentAccount']['name']}}</td>
                                         <td class="col_payment_method">{{App\Models\Globals\Expense::$payment_method[$list['payment_method']]}}</td>
                                         <td class="col_ref_no">{{$list['ref_no']}}</td>
                                         <td class="col_memo">{{$list['memo']}}</td>

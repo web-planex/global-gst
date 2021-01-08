@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Jobs\GenerateBulkExpense;
 use Illuminate\Support\Facades\Log;
 use App\Models\Globals\Job;
+use App\Models\Globals\ExpenseType;
 
 class ExpenseController extends Controller
 {
@@ -42,7 +43,6 @@ class ExpenseController extends Controller
         if(isset($input_search) && !empty($input_search)){
             $method = '';
             $payee_id = '';
-            $pay_account = '';
 
             foreach (Expense::$payment_method as $key => $type){
                 if(preg_grep('~'. strtolower($input_search).'~', array(strtolower($type)))){
@@ -55,15 +55,9 @@ class ExpenseController extends Controller
                 $payee_id .= $pid['id'].',';
             }
 
-            $payment = PaymentAccount::where('name','like','%'.$input_search.'%')->select('id')->get();
-            foreach($payment as $paid){
-                $pay_account .= $paid['id'].',';
-            }
-
-            $query->where(function($q) use($input_search, $method,$payee_id, $pay_account){
+            $query->where(function($q) use($input_search, $method,$payee_id){
                        $q->orwhere('ref_no','like','%'.$input_search.'%');
                        $q->orwhereIn('payee_id', explode(',', $payee_id));
-                       $q->orwhereIn('payment_account_id', explode(',', $pay_account));
                        $q->orwhereIn('payment_method', explode(',', $method));
              });
             $search = $input_search;
@@ -94,7 +88,6 @@ class ExpenseController extends Controller
         $data['custom_column'] = [
             'Payee',
             'Expense Date',
-            'Payment account',
             'Payment Method',
             'Ref No',
             'Memo',
@@ -107,7 +100,6 @@ class ExpenseController extends Controller
         $user = Auth::user();
         $data['menu'] = 'Expense';
         $payees = payees::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
-        $payment_accounts = PaymentAccount::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
         $data['taxes'] = Taxes::where('status', 1)->get();
         $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
         $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
@@ -137,10 +129,10 @@ class ExpenseController extends Controller
 
         $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
         $data['payees'] = $payees;
-        $data['payment_accounts'] = $payment_accounts;
         $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $data['first_product'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
+        $data['expense_types'] = ExpenseType::where('user_id',$user->id)->where('company_id',$this->Company())->get();
         return view('globals.expense.create',$data);
     }
 
@@ -148,7 +140,6 @@ class ExpenseController extends Controller
         $user = Auth::user();
         $this->validate($request, [
             'payee' => 'required',
-            'payment_account' => 'required',
             'expense_date' => 'required',
             'status' => 'required',
             'files' => 'mimes:jpg,png,jpeg,pdf,bmp,xlsx,xls,csv,docx,doc,txt'
@@ -166,7 +157,6 @@ class ExpenseController extends Controller
             $expense->tax_type = 3;
         }
         $expense->payee_id = $request['payee'];
-        $expense->payment_account_id = $request['payment_account'];
         $expense->expense_date = date('Y-m-d', strtotime($request['expense_date']));
         $expense->payment_method = $request['payment_method'];
         $expense->ref_no = $request['ref_no'];
@@ -189,15 +179,12 @@ class ExpenseController extends Controller
             $expense->save();
             $expense_id = $expense->id;
             $data = [];
-            for($i=0;$i<count($request['product']);$i++) {
+            for($i=0;$i<count($request['expense_type']);$i++) {
                 $data = [
                     'expense_id' => $expense_id,
                     'tax_id' => $request['taxes'][$i],
-                    'product_id' => $request['product'][$i],
+                    'expense_type_id' => $request['expense_type'][$i],
                     'note' => $request['note'][$i],
-                    /*'hsn_code' => $request['hsn_code'][$i],
-                    'quantity' => $request['quantity'][$i],
-                    'rate' => $request['rate'][$i],*/
                     'amount' => $request['amount'][$i],
                 ];
                 ExpenseItems::create($data);
@@ -219,7 +206,6 @@ class ExpenseController extends Controller
         }
         $data['expense_items'] = ExpenseItems::where('expense_id',$id)->get()->toArray();
         $data['payees'] = payees::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
-        $data['payment_accounts'] = PaymentAccount::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
         $data['taxes'] = Taxes::where('status', 1)->get();
         $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
         $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
@@ -242,6 +228,7 @@ class ExpenseController extends Controller
         $data['products'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $data['first_product'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
+        $data['expense_types'] = ExpenseType::where('user_id',$user->id)->where('company_id',$this->Company())->get();
         return view('globals.expense.create',$data);
     }
 
@@ -249,7 +236,6 @@ class ExpenseController extends Controller
         $user = Auth::user();
         $this->validate($request, [
             'payee' => 'required',
-            'payment_account' => 'required',
             'expense_date' => 'required',
             'status' => 'required',
             'files' => 'mimes:jpg,png,jpeg,pdf,bmp,xlsx,xls,csv,docx,doc,txt'
@@ -266,7 +252,6 @@ class ExpenseController extends Controller
             $expense->tax_type = 3;
         }
         $expense->payee_id = $request['payee'];
-        $expense->payment_account_id = $request['payment_account'];
         $expense->expense_date = date('Y-m-d', strtotime($request['expense_date']));
         $expense->payment_method = $request['payment_method'];
         $expense->ref_no = $request['ref_no'];
@@ -293,15 +278,12 @@ class ExpenseController extends Controller
 
             $expense_id = $expense->id;
             $data = [];
-            for($i=0;$i<count($request['product']);$i++) {
+            for($i=0;$i<count($request['expense_type']);$i++) {
                 $data = [
                     'expense_id' => $expense_id,
                     'tax_id' => $request['taxes'][$i],
-                    'product_id' => $request['product'][$i],
+                    'expense_type_id' => $request['expense_type'][$i],
                     'note' => $request['note'][$i],
-                    /*'hsn_code' => $request['hsn_code'][$i],
-                    'quantity' => $request['quantity'][$i],
-                    'rate' => $request['rate'][$i],*/
                     'amount' => $request['amount'][$i],
                 ];
                 ExpenseItems::create($data);
@@ -531,6 +513,17 @@ class ExpenseController extends Controller
         }
         return $data;
     }
+    
+    public function get_expense_type(Request $request) {
+        if($request['data'] != 0){
+            $expense_type = Product::where('id',$request['data'])->first();
+            $data['description'] = $expense_type['description'];
+        }else{
+            $user = Auth::user();
+            $data['expense_type'] = ExpenseType::where('user_id',$user->id)->where('company_id',$this->Company())->select('name','id')->get()->toArray();
+        }
+        return $data;
+    }
 
     public function product_store(Request $request){
         $productValue = $request->all();
@@ -544,6 +537,21 @@ class ExpenseController extends Controller
 
         $data['id'] = $product['id'];
         $data['name'] = $product['title'];
+        return $data;
+    }
+    
+    public function expense_type_store(Request $request) {
+        $expenseTypeValue = $request->all();
+        $input=  array();
+        $user = Auth::user();
+        parse_str($expenseTypeValue['data'], $input);
+        $input['user_id'] = $user->id;
+        $input['company_id'] = $this->Company();
+
+        $expense_type = ExpenseType::create($input);
+
+        $data['id'] = $expense_type['id'];
+        $data['name'] = $expense_type['name'];
         return $data;
     }
 

@@ -19,8 +19,7 @@ class CreateExpensesTable extends Migration
             $table->integer('company_id');
             $table->integer('tax_type')->comment('(1 => Exclusive, 2 => Inclusive, 3 => Out of scope)');
             $table->integer('payee_id');
-            $table->integer('payment_account_id');
-            $table->date('payment_date');
+            $table->date('expense_date');
             $table->string('payment_method',50);
             $table->string('ref_no',50)->nullable();
             $table->integer('expense_category')->nullable();

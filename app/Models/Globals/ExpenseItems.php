@@ -9,7 +9,7 @@ class ExpenseItems extends Model
     protected $fillable = [
         'expense_id',
         'tax_id',
-        'product_id',
+        'expense_type_id',
         'note',
         //'hsn_code',
         //'quantity',

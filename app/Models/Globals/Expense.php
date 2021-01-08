@@ -11,7 +11,6 @@ class Expense extends Model
         'company_id',
         'tax_type',
         'payee_id',
-        'payment_account_id',
         'expense_date',
         'payment_method',
         'ref_no',
@@ -62,10 +61,6 @@ class Expense extends Model
 
     public function Payee(){
         return $this->belongsTo('App\Models\Globals\Payees','payee_id');
-    }
-
-    public function PaymentAccount(){
-        return $this->belongsTo('App\Models\Globals\PaymentAccount','payment_account_id');
     }
 
     protected static function boot() {

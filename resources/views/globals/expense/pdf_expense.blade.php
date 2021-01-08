@@ -130,7 +130,7 @@
                     </table>
                 </td>
                 @if($user['is_shipping'])
-                <td align="left" >
+                <td align="left">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
                             <td align="left" width="40%" style="padding:0 5px;line-height:30px; border: 0px;">&nbsp;&nbsp;<strong>State:</strong> {{$user['shipping_state']}}</td>
@@ -151,16 +151,17 @@
             <tr>
                 <td width="30px" valign="top" align="center" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px;"><strong>#</strong></td>
                 <td width="280px" valign="top" align="center" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>Item</strong></td>
-                <td width="80px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>HSN</strong></td>
+                <!--<td width="80px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>HSN</strong></td>-->
+                <td width="120px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height: 30px;text-transform:uppercase;"><strong>Note</strong></td>
                 @if($expense['tax_type'] != 3)
                 <td width="120px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>Tax <br/>%</strong></td>
                 @endif
-                <td width="44px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;">
+<!--                <td width="44px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;">
                     <strong>Qty</strong>
-                </td>
-                <td width="120px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;">
+                </td>-->
+<!--                <td width="120px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;">
                     <strong>Rate Per Item</strong>
-                </td>
+                </td>-->
                 <td width="120px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;">&nbsp;&nbsp;<strong>Total <br/> Rs.</strong></td>
             </tr>
             @php $i=1; @endphp
@@ -172,12 +173,13 @@
                         @if($pro['id'] == $item['product_id']){{$pro['title']}}@endif
                     @endforeach
                 </td>
-                <td width="80px" style="line-height:30px;" align="center" valign="top">{{$item['hsn_code']}}</td>
+                <!--<td width="80px" style="line-height:30px;" align="center" valign="top">{{$item['hsn_code']}}</td>-->
+                <td width="120px" style="line-height:30px;" align="center" valign="top">{{$item['note']}}</td>
                 @if($expense['tax_type'] != 3)
                 <td width="120px" style="line-height:30px;" align="center" valign="top">{{$item['tax_name']}}</td>
                 @endif
-                <td width="44px" style="line-height:30px;" align="center" valign="top"><span class="quantity-input">{{$item['quantity']}}</span></td>
-                <td width="120px" style="line-height:30px;" align="center" valign="top"><span class="rate-input">{{$item['rate']}}</span></td>
+                <!--<td width="44px" style="line-height:30px;" align="center" valign="top"><span class="quantity-input">{{$item['quantity']}}</span></td>
+                <td width="120px" style="line-height:30px;" align="center" valign="top"><span class="rate-input">{{$item['rate']}}</span></td>-->
                 <td width="120px" style="line-height:30px;" align="center" valign="top"><span class="amount-input">{{$item['amount']}}</span></td>
                 <td style="display:none;">
                 <select id="taxes" class="tax-input">
@@ -196,45 +198,37 @@
             <tr>
                 <td width="30px" style="line-height:30px;">&nbsp;</td>
                 <td width="280px" style="padding:0 5px;line-height:30px;">&nbsp;</td>
-                <td width="44px" style="line-height:30px;">&nbsp;</td>
+                <td width="120px" style="line-height:30px;">&nbsp;</td>
                 @if($expense['tax_type'] != 3)
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
                 @endif
-                <td width="80px" style="line-height:30px;">&nbsp;</td>
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
             </tr>
             <tr>
                 <td width="30px" style="line-height:30px;">&nbsp;</td>
                 <td width="280px" style="padding:0 5px;line-height:30px;">&nbsp;</td>
-                <td width="44px" style="line-height:30px;">&nbsp;</td>
+                <td width="120px" style="line-height:30px;">&nbsp;</td>
                 @if($expense['tax_type'] != 3)
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
                 @endif
-                <td width="80px" style="line-height:30px;">&nbsp;</td>
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
             </tr>
             <tr>
                 <td width="30px" style="line-height:30px;">&nbsp;</td>
                 <td width="280px" style="padding:0 5px;line-height:30px;">&nbsp;</td>
-                <td width="44px" style="line-height:30px;">&nbsp;</td>
+                <td width="120px" style="line-height:30px;">&nbsp;</td>
                 @if($expense['tax_type'] != 3)
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
                 @endif
-                <td width="80px" style="line-height:30px;">&nbsp;</td>
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
             </tr>
             <tr>
                 <td width="30px" style="line-height:30px;">&nbsp;</td>
                 <td width="280px" style="padding:0 5px;line-height:30px;">&nbsp;</td>
-                <td width="44px" style="line-height:30px;">&nbsp;</td>
+                <td width="120px" style="line-height:30px;">&nbsp;</td>
                 @if($expense['tax_type'] != 3)
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
                 @endif
-                <td width="80px" style="line-height:30px;">&nbsp;</td>
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
                 <td width="120px" style="line-height:30px;">&nbsp;</td>
             </tr>
         </table>
@@ -313,7 +307,7 @@
                             </tr>
                             @endif
                         @endforeach
-                        <tr>
+                        {{--<tr>
                             <td style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">
                                 <table width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse: collapse;">
                                     <tr>
@@ -345,7 +339,7 @@
                                     </tr>
                                 </table>
                             </td>
-                        </tr>
+                        </tr>--}}
                         <tr>
                             <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Total Amount After Tax</td>
                             <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">{{number_format($expense['total'],2)}}/-&nbsp;&nbsp;</td>
