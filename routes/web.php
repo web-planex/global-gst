@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
-
+use Globals\BillController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -118,3 +118,6 @@ Route::post('generate-multiple-expenses', 'Globals\ExpenseController@multiple_pd
 Route::get('download-pdf-zip', 'Globals\ExpenseController@downloadPdfZip')->name('download-pdf-zip');
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
+Route::resources([
+    'bills' => BillController::class
+]);
