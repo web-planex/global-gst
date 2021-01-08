@@ -127,10 +127,6 @@
                         <a class="waves-effect waves-dark" href="{{ url('payees')}}"><i class="fa fa-user-plus"></i><span class="hide-menu">Payees / Vendors</span></a>
                     </li>
 
-                    <li class="@if(isset($menu) && $menu == 'payment-account' ) active @endif">
-                        <a class="waves-effect waves-dark" href="{{route('payment-account')}}"><i class="fa fa-credit-card"></i><span class="hide-menu">Payment Account</span></a>
-                    </li>
-                    
                     <li class="">
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-files"></i>
                         <span class="hide-menu">Report Builder</span></a>
