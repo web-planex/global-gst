@@ -70,7 +70,7 @@ Route::any('/payment-account/delete/{id}', 'Globals\PaymentAccountController@del
 Route::post('/ajax/get-account-type', 'Globals\PaymentAccountController@ajaxGetAccountType')->name('ajax-get-account-type');
 
 //Invoice Setting
-Route::get('/company-setting', 'Globals\InvoiceSettingController@index')->name('company-setting');
+Route::get('/company-setting', 'Globals\InvoiceSettingController@index');
 Route::any('/company-setting/addedit', 'Globals\InvoiceSettingController@store')->name('company-setting-add');
 
 //Company Management
@@ -78,6 +78,7 @@ Route::resource('/companies', 'Globals\CompanyController');
 Route::get('/companies/delete/{id}', 'Globals\CompanyController@destroy');
 
 //Product Management
+Route::post('/products/import', 'Globals\ProductController@import_product');
 Route::get('/products/export_product', 'Globals\ProductController@export_product');
 Route::resource('/products', 'Globals\ProductController');
 Route::get('/products/delete/{id}', 'Globals\ProductController@destroy');
@@ -91,6 +92,14 @@ Route::get('/sales/download_pdf/{id}', 'Globals\InvoiceController@download_pdf')
 Route::resource('/sales', 'Globals\InvoiceController');
 Route::get('/sales/delete/{id}', 'Globals\InvoiceController@destroy')->name('sales-delete');
 Route::get('/sales/download_pdf/{id}', 'Globals\InvoiceController@download_pdf')->name('invoice-download_pdf');
+
+// PAYMENT TERMS
+Route::resource('/payment-terms', 'Globals\PaymentTermsController');
+Route::get('/payment-terms/delete/{id}', 'Globals\PaymentTermsController@destroy');
+
+// PAYMENT METHODS
+Route::resource('/payment-methods', 'Globals\PaymentMethodController');
+Route::get('/payment-methods/delete/{id}', 'Globals\PaymentMethodController@destroy');
 
 Route::get('/credit-note', 'Globals\InvoiceController@credit_notes')->name('credit-note');
 Route::post('/credit-note/multiple_pdf', 'Globals\InvoiceController@multiple_credit_note_pdf')->name('credit-note-multiple_pdf');

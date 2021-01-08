@@ -82,7 +82,7 @@
                     </div>
                     <div class="col-md-2 col-lg-6 btn-group">
                         <div class="col-left">
-                            <div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
+                            <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <!-- Modal content-->
                                     <div class="modal-content">

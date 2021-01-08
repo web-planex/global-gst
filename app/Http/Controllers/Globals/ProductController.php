@@ -92,8 +92,8 @@ class ProductController extends Controller
     }
 
     public function export_product(){
-        $fields_key_array = array('user', 'company', 'title', 'description', 'hsn_code', 'sku', 'unit', 'price', 'sale_price', 'status');
-        $fields_value_array = array('User_Name', 'Company', 'Title', 'Description', 'HSN/SAC_Code', 'SKU', 'Unit', 'Price', 'Sale_Price', 'Status');
+        $fields_key_array = array('title', 'description', 'hsn_code', 'sku', 'unit', 'price', 'sale_price');
+        $fields_value_array = array('Title', 'Description', 'HSN/SAC_Code', 'SKU', 'Unit', 'Price', 'Sale_Price');
         $columns = $fields_value_array;
         $main_array = Product::with('User','Company')->get();
         $headers = array(
@@ -110,8 +110,6 @@ class ProductController extends Controller
             fputcsv($file, $columns);
             foreach($main_array as $subarray) {
                 $data   =  array_merge(array_flip($fields_key_array), array_filter(array(
-                    'user' => $subarray['User']['name'],
-                    'company' => $subarray['Company']['company_name'],
                     'title' => $subarray['title'],
                     'description' => $subarray['description'],
                     'hsn_code' => $subarray['hsn_code'],
@@ -119,7 +117,6 @@ class ProductController extends Controller
                     'unit' => $subarray['unit'],
                     'price' => $subarray['price'],
                     'sale_price' => $subarray['sale_price'],
-                    'status' => $subarray['status']==1?'Active':'Inactive',
                 ),
                 function ($key) use ($fields_key_array) {
                     return in_array($key, $fields_key_array);
@@ -129,5 +126,39 @@ class ProductController extends Controller
             fclose($file);
         };
         return Response::stream($callback, 200, $headers);
+    }
+
+    public function import_product(Request $request){
+        $arrResult  = array();
+        $file = $request->file('import_csv');
+        if (($handle = fopen($file, "r")) !== FALSE) {
+            $count = 0;
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                $count++;
+                if($count!=1){
+                    $arrResult[] = $data;
+                }
+            }
+            fclose($handle);
+        }
+
+        for ($i=0; $i<count($arrResult); $i++){
+            $old_product = Product::where('title',$arrResult[$i][0])->first();
+            if(empty($old_product)){
+                if(!empty($arrResult[$i][0])){
+                    $input['user_id'] = Auth::user()->id;
+                    $input['company_id'] = $this->Company();
+                    $input['title'] = $arrResult[$i][0];
+                    $input['description'] = $arrResult[$i][1];
+                    $input['hsn_code'] = $arrResult[$i][2];
+                    $input['sku'] = $arrResult[$i][3];
+                    $input['unit'] = $arrResult[$i][4];
+                    $input['price'] = $arrResult[$i][5];
+                    $input['sale_price'] = $arrResult[$i][6];
+                    Product::create($input);
+                }
+            }
+        }
+        return ;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\Globals\CompanySettings;
 use App\Http\Controllers\Controller;
+use App\Models\Globals\PaymentTerms;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -79,10 +80,21 @@ class RegisterController extends Controller
         ]);
 
         //Company Entry
-        CompanySettings::create([
+        $new_company = CompanySettings::create([
             'user_id' => $user['id'],
             'company_name' => $data['company_name'],
         ]);
+
+        //Payment Terms Entry
+        $days_arr = [15,30,45,60];
+        foreach ($days_arr as $days){
+            PaymentTerms::create([
+                'user_id' => $user['id'],
+                'company_id' => $new_company['id'],
+                'terms_name' => 'Net '.$days,
+                'terms_days' => $days,
+            ]);
+        }
 
         $root = base_path() . '/public/upload/'.$user['id'];
         if (!file_exists($root)) {
