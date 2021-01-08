@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Models\Globals\CompanySettings;
 use App\Http\Controllers\Controller;
 use App\Models\Globals\PaymentTerms;
+use App\Models\Globals\ExpenseType;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -93,6 +94,43 @@ class RegisterController extends Controller
                 'company_id' => $new_company['id'],
                 'terms_name' => 'Net '.$days,
                 'terms_days' => $days,
+            ]);
+        }
+
+        //Expense Types Entry
+        $expense_types = [
+            'Advertising And Marketing',
+            'Automobile Expense',
+            'Bad Debt',
+            'Bank Fees and Charges',
+            'Consultant Expense',
+            'Contract Assets',
+            'Credit Card Charges',
+            'Depreciation And Amortisation',
+            'Depreciation Expense',
+            'IT and Internet Expenses',
+            'Janitorial Expense',
+            'Lodging',
+            'Meals and Entertainment',
+            'Merchandise',
+            'Office Supplies',
+            'Other Expenses',
+            'Postage',
+            'Printing and Stationery',
+            'Raw Materials And Consumables',
+            'Rent Expense',
+            'Repairs and Maintenance',
+            'Salaries and Employee Wages',
+            'Telephone Expense',
+            'Transportation Expense',
+            'Travel Expense'
+        ];
+
+        foreach($expense_types as $type) {
+            ExpenseType::create([
+                'user_id' => $user['id'],
+                'company_id' => $new_company['id'],
+                'name' => $type
             ]);
         }
 

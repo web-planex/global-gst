@@ -169,8 +169,8 @@
             <tr>
                 <td width="30px" style="line-height:30px;" align="center" valign="top">{{$i}}</td>
                 <td width="280px" style="padding:0 5px;line-height:30px;" align="left" valign="top">
-                    @foreach($products as $pro)
-                        @if($pro['id'] == $item['product_id']){{$pro['title']}}@endif
+                    @foreach($expense_types as $pro)
+                        @if($pro['id'] == $item['expense_type_id']){{$pro['name']}}@endif
                     @endforeach
                 </td>
                 <!--<td width="80px" style="line-height:30px;" align="center" valign="top">{{$item['hsn_code']}}</td>-->

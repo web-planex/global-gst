@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Globals\Customers;
 use App\Models\Globals\Employees;
 use App\Models\Globals\Expense;
-use App\Models\Globals\Invoice;
 use App\Models\Globals\Payees;
 use App\Models\Globals\PaymentAccount;
 use App\Models\Globals\States;
@@ -172,7 +171,7 @@ class ExpenseController extends Controller
         $expense->memo = $request['memo'];
 
         if($photo = $request->file('files')){
-            $expense->files = $this->allFiles($photo,$user->id.'/invoice/invoice_attachment');
+            $expense->files = $this->allFiles($photo,$user->id.'/expense/expense_attachment');
         }
         $expense->status = $request['status'];
         if($request->has('submit')) {
@@ -470,7 +469,7 @@ class ExpenseController extends Controller
         $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $company = CompanySettings::select('company_name')->where('id',$this->Company())->first();
         $data['company_name'] = $company['company_name'];
-
+        $data['expense_types'] = ExpenseType::where('user_id',$user->id)->where('company_id',$this->Company())->get();
         $data['expense']['status_image'] = '';
 
         if($data['expense']['status'] == 1) {
@@ -486,10 +485,10 @@ class ExpenseController extends Controller
         $pdf = new WKPDF($this->globalPdfOption());
         //return $data;
         $pdf->addPage(view('globals.expense.pdf_expense',$data));
-        //$pdf->addPage(view('globals.expense.pdf_invoice',$data));
+        //$pdf->addPage(view('globals.expense.pdf_expense',$data));
 //        return View('globals.expense.pdf_expense',$data);
         if($request->output == 'download') {
-            if (!$pdf->send('expense_invoice.pdf')) {
+            if (!$pdf->send('expense_voucher.pdf')) {
                 $error = $pdf->getError();
                 return $error;
             }

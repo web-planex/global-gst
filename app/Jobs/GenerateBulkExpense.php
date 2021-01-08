@@ -19,7 +19,7 @@ use App\Models\Globals\Product;
 use App\Models\Globals\PdfZips;
 use WKPDF;
 use Illuminate\Support\Facades\Log;
-
+use App\Models\Globals\ExpenseType;
 
 class GenerateBulkExpense implements ShouldQueue
 {
@@ -183,7 +183,7 @@ class GenerateBulkExpense implements ShouldQueue
             $data['products'] = Product::where('user_id',$this->user->id)->where('company_id',$this->company_id)->where('status',1)->get();
             $company = CompanySettings::select('company_name')->where('id',$this->company_id)->first();
             $data['company_name'] = $company['company_name'];
-
+            $data['expense_types'] = ExpenseType::where('user_id',$this->user->id)->where('company_id',$this->company_id)->get();
             $data['expense']['status_image'] = '';
 
             if($data['expense']['status'] == 1) {
