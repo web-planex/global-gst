@@ -27,6 +27,8 @@ class CreateInvoicesTable extends Migration
             $table->string('place_of_supply',15);
             $table->string('amount_before_tax',20);
             $table->string('tax_amount',20);
+            $table->string('discount',20);
+            $table->integer('discount_type',20);
             $table->string('total',20);
             $table->text('files')->nullable();
             $table->string('payment_method',50);

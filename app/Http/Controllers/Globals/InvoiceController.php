@@ -124,10 +124,8 @@ class InvoiceController extends Controller
         $user = Auth::user();
         $this->validate($request, [
             'customer' => 'required',
-            'customer_email' => 'required',
             'invoice_date' => 'required',
             'due_date' => 'required',
-            'place_of_supply' => 'required',
             'files' => 'mimes:jpg,png,jpeg,pdf,bmp,xlsx,xls,csv,docx,doc,txt'
         ]);
 
@@ -143,10 +141,8 @@ class InvoiceController extends Controller
             $invoice->tax_type = 3;
         }
         $invoice->customer_id = $request['customer'];
-        $invoice->customer_email = $request['customer_email'];
         $invoice->invoice_date = date('Y-m-d', strtotime($request['invoice_date']));
         $invoice->due_date = date('Y-m-d', strtotime($request['due_date']));
-        $invoice->place_of_supply = $request['place_of_supply'];
         $invoice->amount_before_tax = $request['amount_before_tax'];
         $invoice->tax_amount = $request['tax_amount'];
         $invoice->payment_method = $request['payment_method'];
@@ -154,9 +150,10 @@ class InvoiceController extends Controller
 
         $company = CompanySettings::where('id',$this->Company())->first();
 
-        $invoice->invoice_number = $company['invoice_prefix'].'/'.$company['invoice_number'];
+        $invoice->invoice_number = !empty($company['invoice_prefix'])?$company['invoice_prefix'].'/'.$company['invoice_number']:1;
+
         if(in_array($request['status'],[3,4])){
-            $invoice->credit_note_number = $company['credit_note_prefix'].'/'.$company['credit_note_number'];
+            $invoice->credit_note_number = !empty($company['credit_note_prefix'])?$company['credit_note_prefix'].'/'.$company['credit_note_number']:1;
         }
 
         if($request['discount_type'] != '') {
@@ -243,10 +240,8 @@ class InvoiceController extends Controller
         $user = Auth::user();
         $this->validate($request, [
             'customer' => 'required',
-            'customer_email' => 'required',
             'invoice_date' => 'required',
             'due_date' => 'required',
-            'place_of_supply' => 'required',
             'files' => 'mimes:jpg,png,jpeg,pdf,bmp,xlsx,xls,csv,docx,doc,txt'
         ]);
 
@@ -262,10 +257,8 @@ class InvoiceController extends Controller
             $invoice->tax_type = 3;
         }
         $invoice->customer_id = $request['customer'];
-        $invoice->customer_email = $request['customer_email'];
         $invoice->invoice_date = date('Y-m-d', strtotime($request['invoice_date']));
         $invoice->due_date = date('Y-m-d', strtotime($request['due_date']));
-        $invoice->place_of_supply = $request['place_of_supply'];
         $invoice->amount_before_tax = $request['amount_before_tax'];
         $invoice->tax_amount = $request['tax_amount'];
         $invoice->payment_method = $request['payment_method'];

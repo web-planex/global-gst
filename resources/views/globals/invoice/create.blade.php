@@ -31,17 +31,15 @@
                 @endif
                     @csrf
                     <div class="form-row">
-                        <div class="form-group mb-3 col-md-3 pull-right">
-                            <label>Amounts are</label>
-                            <select class="form-control amounts-are-select2" name="tax_type" id="amounts_are">
-                                <option value="exclusive" @if(isset($invoice) && $invoice['tax_type']==1)) selected @endif>Exclusive of Tax</option>
-                                <option value="inclusive" @if(isset($invoice) && $invoice['tax_type']==2)) selected @endif>Inclusive of Tax</option>
-                                <option value="out_of_scope" @if(isset($invoice) && $invoice['tax_type']==3)) selected @endif>Out of scope of Tax</option>
-                            </select>
+                        <div class="form-group mb-3 col-md-6">
+                            <label for="status">Status <span class="text-danger">*</span></label>
+                            {!! Form::select('status', \App\Models\Globals\Invoice::$invoice_status, null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
+                            @if ($errors->has('status'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('status') }}</strong>
+                                </span>
+                            @endif
                         </div>
-                    </div>
-
-                    <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
                             <label for="customer">Customer <span class="text-danger">*</span></label>
                             {!! Form::select('customer', $payees, isset($invoice)&&!empty($invoice)?$invoice['customer_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'customer', 'onchange'=>'getEmail(this.value)']) !!}
@@ -54,19 +52,10 @@
                                 </span>
                             @endif
                         </div>
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="customer_email">Customer Email<span class="text-danger">*</span></label>
-                            {!! Form::text('customer_email', null, ['class' => 'form-control','id'=>'customer_email']) !!}
-                            @if ($errors->has('customer_email'))
-                                <span class="text-danger">
-                                    <strong>{{ $errors->first('customer_email') }}</strong>
-                                </span>
-                            @endif
-                        </div>
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group mb-3 col-md-6">
+                        <div class="form-group mb-3 col-md-4">
                             <label for="invoice_date">Invoice Date <span class="text-danger">*</span></label>
                             {!! Form::text('invoice_date', isset($invoice)&&!empty($invoice)?date('d-m-Y',strtotime($invoice['invoice_date'])):null, ['class' => 'form-control','id'=>'invoice_date']) !!}
                             @if ($errors->has('invoice_date'))
@@ -75,7 +64,7 @@
                                 </span>
                             @endif
                         </div>
-                        <div class="form-group mb-3 col-md-6">
+                        <div class="form-group mb-3 col-md-4">
                             <label for="due_date">Due Date <span class="text-danger">*</span></label>
                             {!! Form::text('due_date', isset($invoice)&&!empty($invoice)?date('d-m-Y',strtotime($invoice['due_date'])):null, ['class' => 'form-control','id'=>'due_date']) !!}
                             @if ($errors->has('due_date'))
@@ -84,19 +73,6 @@
                                 </span>
                             @endif
                         </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group mb-3 col-md-4">
-                            <label for="place_of_supply">Place Of Supply <span class="text-danger">*</span></label>
-                            {!! Form::text('place_of_supply', null, ['class' => 'form-control','id'=>'place_of_supply']) !!}
-                            @if ($errors->has('place_of_supply'))
-                                <span class="text-danger">
-                                    <strong>{{ $errors->first('place_of_supply') }}</strong>
-                                </span>
-                            @endif
-                        </div>
-
                         <div class="form-group mb-3 col-md-4">
                             <label for="payment_method">Payment Method <span class="text-danger">*</span></label>
                             {!! Form::select('payment_method', \App\Models\Globals\Invoice::$payment_method, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method']) !!}
@@ -106,15 +82,16 @@
                                 </span>
                             @endif
                         </div>
+                    </div>
 
-                        <div class="form-group mb-3 col-md-4">
-                            <label for="status">Status <span class="text-danger">*</span></label>
-                            {!! Form::select('status', \App\Models\Globals\Invoice::$invoice_status, null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
-                            @if ($errors->has('status'))
-                                <span class="text-danger">
-                                    <strong>{{ $errors->first('status') }}</strong>
-                                </span>
-                            @endif
+                    <div class="form-row" style="flex-direction:row-reverse">
+                        <div class="form-group mb-3 col-md-3 pull-right">
+                            <label>Amounts are</label>
+                            <select class="form-control amounts-are-select2" name="tax_type" id="amounts_are">
+                                <option value="exclusive" @if(isset($invoice) && $invoice['tax_type']==1)) selected @endif>Exclusive of Tax</option>
+                                <option value="inclusive" @if(isset($invoice) && $invoice['tax_type']==2)) selected @endif>Inclusive of Tax</option>
+                                <option value="out_of_scope" @if(isset($invoice) && $invoice['tax_type']==3)) selected @endif>Out of scope of Tax</option>
+                            </select>
                         </div>
                     </div>
 
@@ -436,19 +413,23 @@
                 city: "required",
                 state: "required",
                 pincode: "required",
-                country: "required",
+                // country: "required",
                 gender: "required",
                 hire_date: "required",
+                billing_name: "required",
+                billing_phone: "required",
                 billing_street: "required",
                 billing_city: "required",
                 billing_state: "required",
                 billing_pincode: "required",
-                billing_country: "required",
+                // billing_country: "required",
+                shipping_name: "required",
+                shipping_phone: "required",
                 shipping_street: "required",
                 shipping_city: "required",
                 shipping_state: "required",
                 shipping_pincode: "required",
-                shipping_country: "required",
+                // shipping_country: "required",
             },
             messages: {
                 first_name: "The firstname field is required",
@@ -462,19 +443,23 @@
                 city: "The city field is required",
                 state: "The state field is required",
                 pincode: "The pincode field is required",
-                country: "The country field is required",
+                // country: "The country field is required",
                 gender: "The gender field is required",
                 hire_date: "The hire date field is required",
+                billing_name: "The billing name field is required",
+                billing_phone: "The billing phone field is required",
                 billing_street: "The billing street field is required",
                 billing_city: "The billing city field is required",
                 billing_state: "The billing state field is required",
                 billing_pincode: "The billing pincode field is required",
-                billing_country: "The billing country field is required",
+                // billing_country: "The billing country field is required",
+                shipping_name: "The shipping name field is required",
+                shipping_phone: "The shipping phone field is required",
                 shipping_street: "The shipping street field is required",
                 shipping_city: "The shipping city field is required",
                 shipping_state: "The shipping state field is required",
                 shipping_pincode: "The shipping pincode field is required",
-                shipping_country: "The shipping country field is required",
+                // shipping_country: "The shipping country field is required",
             },
             normalizer: function(value) {
                 return $.trim(value);

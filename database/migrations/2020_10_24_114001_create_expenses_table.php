@@ -14,7 +14,7 @@ class CreateExpensesTable extends Migration
     public function up()
     {
         Schema::create('expenses', function (Blueprint $table) {
-            $table->integer('id');
+            $table->id();
             $table->integer('user_id');
             $table->integer('company_id');
             $table->integer('tax_type')->comment('(1 => Exclusive, 2 => Inclusive, 3 => Out of scope)');
@@ -26,10 +26,9 @@ class CreateExpensesTable extends Migration
             $table->string('amount_before_tax',20);
             $table->string('tax_amount',20);
             $table->string('total',20);
-            $table->string('discount',20);
-            $table->integer('discount_type',1);
             $table->text('memo')->nullable();
             $table->text('files')->nullable();
+            $table->integer('status')->nullable();
             $table->timestamps();
         });
     }

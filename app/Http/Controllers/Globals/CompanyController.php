@@ -51,7 +51,7 @@ class CompanyController extends Controller
             'city' => 'required',
             'state' => 'required',
             'pincode' => 'required',
-            'country' => 'required',
+//            'country' => 'required',
         ]);
         $input = $request->all();
         $user = Auth::user();
@@ -94,7 +94,7 @@ class CompanyController extends Controller
             'city' => 'required',
             'state' => 'required',
             'pincode' => 'required',
-            'country' => 'required',
+//            'country' => 'required',
         ]);
         $companies = CompanySettings::where('id',$id)->first();
         $input = $request->all();

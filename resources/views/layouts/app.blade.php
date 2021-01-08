@@ -98,9 +98,19 @@
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-files"></i>
                             <span class="hide-menu">Purchases</span>
                         </a>
-                        <ul aria-expanded="false" class="collapse">
-                            <li class=""><a href="{{route('expense')}}">Expenses</a></li>
+                        <ul aria-expanded="false" class="collapse @if(isset($menu) && $menu == 'Expense') in @endif">
+                            <li class=""><a href="{{route('expense')}}" class="@if(isset($menu) && $menu == 'Expense' ) active @endif">Expenses</a></li>
                             <li class=""><a href="javascript:;">Bills</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="@if(isset($menu) && $menu == 'Sales' || isset($menu) && $menu == 'Credit Note') active @endif">
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-shopping-cart"></i>
+                            <span class="hide-menu">Sales</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse @if(isset($menu) && $menu == 'Sales' || isset($menu) && $menu == 'Credit Note') in @endif">
+                            <li><a href="{{ url('sales')}}" class="@if(isset($menu) && $menu == 'Sales' ) active @endif">Sales</a></li>
+                            <li><a href="{{url('credit-note')}}" class="@if(isset($menu) && $menu == 'Credit Note' ) active @endif">Credit Note</a></li>
                         </ul>
                     </li>
 
@@ -113,14 +123,6 @@
                             <li><a href="{{url('payment-terms')}}" class="@if(isset($menu) && $menu == 'Payment Terms' ) active @endif">Payment Terms</a></li>
                             <li><a href="{{url('payment-methods')}}" class="@if(isset($menu) && $menu == 'Payment Methods' ) active @endif">Payment Methods</a></li>
                         </ul>
-                    </li>
-
-                    <li class="@if(isset($menu) && $menu == 'Sales' ) active @endif">
-                        <a class="waves-effect waves-dark" href="{{ url('sales')}}"><i class="fa fa-line-chart"></i><span class="hide-menu">Sales</span></a>
-                    </li>
-
-                    <li class="@if(isset($menu) && $menu == 'Credit Note') active @endif">
-                        <a class="waves-effect waves-dark" href="{{ url('credit-note')}}"><i class="fas fa-clipboard"></i><span class="hide-menu">Credit note</span></a>
                     </li>
 
                     <li class="@if(isset($menu) && $menu == 'Payees') active @endif">

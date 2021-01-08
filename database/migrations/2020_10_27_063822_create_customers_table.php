@@ -27,16 +27,14 @@ class CreateCustomersTable extends Migration
             $table->string('website',45)->nullable();
             $table->string('gstin',25)->nullable();
             $table->integer('gst_registration_type_id');
-            $table->string('billing_first_name',45);
-            $table->string('billing_last_name',45);
+            $table->string('billing_name',45);
             $table->string('billing_phone',15);
             $table->string('billing_street',255);
             $table->string('billing_city',45);
             $table->string('billing_state',45);
             $table->string('billing_pincode',45);
             $table->string('billing_country',45);
-            $table->string('shipping_first_name',45);
-            $table->string('shipping_last_name',45);
+            $table->string('shipping_name',45);
             $table->string('shipping_phone',15);
             $table->string('shipping_street',255);
             $table->string('shipping_city',45);

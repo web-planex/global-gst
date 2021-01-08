@@ -17,8 +17,6 @@ class Expense extends Model
         'expense_category_id',
         'amount_before_tax',
         'tax_amount',
-        'discount',
-        'discount_type',
         'total',
         'memo',
         'files',

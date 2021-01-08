@@ -125,7 +125,7 @@
                             <div class="form-group mb-3 row">
                                 <label for="state" class="col-md-12 col-form-label">State <span class="text-danger">*</span></label>
                                 <div class="col-md-12">
-                                    {!! Form::select('state', $states, null, ['class' => 'form-control amounts-are-select2', 'id'=>'emp_state']) !!}
+                                    {!! Form::select('state', $states, null, ['class' => 'form-control amounts-are-select2', 'id'=>'emp_state','style'=>'width:100%']) !!}
                                     @if ($errors->has('state'))
                                         <span class="text-danger">
                                             <strong>{{ $errors->first('state') }}</strong>
@@ -149,19 +149,19 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <div class="form-group mb-3 row">
-                                <label for="country" class="col-md-12 col-form-label">Country <span class="text-danger">*</span></label>
-                                <div class="col-md-12">
-                                    {!! Form::text('country', null, ['class' => 'form-control']) !!}
-                                    @if ($errors->has('country'))
-                                        <span class="text-danger">
-                                                <strong>{{ $errors->first('country') }}</strong>
-                                            </span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
+{{--                        <div class="col-md-6">--}}
+{{--                            <div class="form-group mb-3 row">--}}
+{{--                                <label for="country" class="col-md-12 col-form-label">Country <span class="text-danger">*</span></label>--}}
+{{--                                <div class="col-md-12">--}}
+{{--                                    {!! Form::text('country', null, ['class' => 'form-control']) !!}--}}
+{{--                                    @if ($errors->has('country'))--}}
+{{--                                        <span class="text-danger">--}}
+{{--                                                <strong>{{ $errors->first('country') }}</strong>--}}
+{{--                                            </span>--}}
+{{--                                    @endif--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
                         <div class="col-md-6">
                             <div class="form-group mb-3 row">

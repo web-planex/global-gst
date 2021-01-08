@@ -13,7 +13,7 @@
                             <div class="form-group mb-3 row">
                                 <label for="first_name" class="col-md-12 col-form-label">First Name <span class="text-danger">*</span></label>
                                 <div class="col-md-12">
-                                    {!! Form::text('first_name', null, ['class' => 'form-control']) !!}
+                                    {!! Form::text('first_name', null, ['class' => 'form-control','id'=>'fname']) !!}
                                     @if ($errors->has('first_name'))
                                         <span class="text-danger">
                                             <strong>{{ $errors->first('first_name') }}</strong>
@@ -27,7 +27,7 @@
                             <div class="form-group mb-3 row">
                                 <label for="last_name" class="col-md-12 col-form-label">Last Name <span class="text-danger">*</span></label>
                                 <div class="col-md-12">
-                                    {!! Form::text('last_name', null, ['class' => 'form-control']) !!}
+                                    {!! Form::text('last_name', null, ['class' => 'form-control','id'=>'lname']) !!}
                                     @if ($errors->has('last_name'))
                                         <span class="text-danger">
                                                 <strong>{{ $errors->first('last_name') }}</strong>
@@ -83,7 +83,7 @@
                             <div class="form-group mb-3 row">
                                 <label for="mobile" class="col-md-12 col-form-label">Mobile <span class="text-danger">*</span></label>
                                 <div class="col-md-12">
-                                    {!! Form::text('mobile', null, ['class' => 'form-control']) !!}
+                                    {!! Form::text('mobile', null, ['class' => 'form-control','id'=>'mobile']) !!}
                                     @if ($errors->has('mobile'))
                                         <span class="text-danger">
                                                 <strong>{{ $errors->first('mobile') }}</strong>
@@ -166,26 +166,12 @@
 
                                         <div class="col-md-12">
                                             <div class="form-group mb-3 row">
-                                                <label for="billing_first_name" class="col-md-12 col-form-label">Billing First Name <span class="text-danger">*</span></label>
+                                                <label for="billing_name" class="col-md-12 col-form-label">Billing Name <span class="text-danger">*</span></label>
                                                 <div class="col-md-9">
-                                                    {!! Form::text('billing_first_name', null, ['class' => 'form-control','id'=>'billing_first_name']) !!}
-                                                    @if ($errors->has('billing_first_name'))
+                                                    {!! Form::text('billing_name', null, ['class' => 'form-control','id'=>'billing_name']) !!}
+                                                    @if ($errors->has('billing_name'))
                                                         <span class="text-danger">
-                                                            <strong>{{ $errors->first('billing_first_name') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-12">
-                                            <div class="form-group mb-3 row">
-                                                <label for="billing_last_name" class="col-md-12 col-form-label">Billing Last Name <span class="text-danger">*</span></label>
-                                                <div class="col-md-9">
-                                                    {!! Form::text('billing_last_name', null, ['class' => 'form-control','id'=>'billing_last_name']) !!}
-                                                    @if ($errors->has('billing_last_name'))
-                                                        <span class="text-danger">
-                                                            <strong>{{ $errors->first('billing_last_name') }}</strong>
+                                                            <strong>{{ $errors->first('billing_name') }}</strong>
                                                         </span>
                                                     @endif
                                                 </div>
@@ -262,19 +248,19 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
-                                            <div class="form-group mb-3 row">
-                                                <label for="billing_country" class="col-md-12 col-form-label">Billing Country <span class="text-danger">*</span></label>
-                                                <div class="col-md-9">
-                                                    {!! Form::text('billing_country', null, ['class' => 'form-control','id'=>'billing_country']) !!}
-                                                    @if ($errors->has('billing_country'))
-                                                        <span class="text-danger">
-                                                                <strong>{{ $errors->first('billing_country') }}</strong>
-                                                            </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
+{{--                                        <div class="col-md-12">--}}
+{{--                                            <div class="form-group mb-3 row">--}}
+{{--                                                <label for="billing_country" class="col-md-12 col-form-label">Billing Country <span class="text-danger">*</span></label>--}}
+{{--                                                <div class="col-md-9">--}}
+{{--                                                    {!! Form::text('billing_country', null, ['class' => 'form-control','id'=>'billing_country']) !!}--}}
+{{--                                                    @if ($errors->has('billing_country'))--}}
+{{--                                                        <span class="text-danger">--}}
+{{--                                                                <strong>{{ $errors->first('billing_country') }}</strong>--}}
+{{--                                                            </span>--}}
+{{--                                                    @endif--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -292,26 +278,12 @@
 
                                         <div class="col-md-12">
                                             <div class="form-group mb-3 row">
-                                                <label for="shipping_first_name" class="col-md-12 col-form-label">Shipping First Name <span class="text-danger">*</span></label>
+                                                <label for="shipping_name" class="col-md-12 col-form-label">Shipping Name <span class="text-danger">*</span></label>
                                                 <div class="col-md-9">
-                                                    {!! Form::text('shipping_first_name', null, ['class' => 'form-control','id'=>'shipping_first_name']) !!}
-                                                    @if ($errors->has('shipping_first_name'))
+                                                    {!! Form::text('shipping_name', null, ['class' => 'form-control','id'=>'shipping_name']) !!}
+                                                    @if ($errors->has('shipping_name'))
                                                         <span class="text-danger">
-                                                            <strong>{{ $errors->first('shipping_first_name') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-12">
-                                            <div class="form-group mb-3 row">
-                                                <label for="shipping_last_name" class="col-md-12 col-form-label">Shipping Last Name <span class="text-danger">*</span></label>
-                                                <div class="col-md-9">
-                                                    {!! Form::text('shipping_last_name', null, ['class' => 'form-control','id'=>'shipping_last_name']) !!}
-                                                    @if ($errors->has('shipping_last_name'))
-                                                        <span class="text-danger">
-                                                            <strong>{{ $errors->first('shipping_last_name') }}</strong>
+                                                            <strong>{{ $errors->first('shipping_name') }}</strong>
                                                         </span>
                                                     @endif
                                                 </div>
@@ -388,19 +360,19 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
-                                            <div class="form-group mb-3 row">
-                                                <label for="shipping_country" class="col-md-12 col-form-label">Shipping Country <span class="text-danger">*</span></label>
-                                                <div class="col-md-9">
-                                                    {!! Form::text('shipping_country', null, ['class' => 'form-control','id'=>'shipping_country']) !!}
-                                                    @if ($errors->has('shipping_country'))
-                                                        <span class="text-danger">
-                                                                <strong>{{ $errors->first('shipping_country') }}</strong>
-                                                            </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
+{{--                                        <div class="col-md-12">--}}
+{{--                                            <div class="form-group mb-3 row">--}}
+{{--                                                <label for="shipping_country" class="col-md-12 col-form-label">Shipping Country <span class="text-danger">*</span></label>--}}
+{{--                                                <div class="col-md-9">--}}
+{{--                                                    {!! Form::text('shipping_country', null, ['class' => 'form-control','id'=>'shipping_country']) !!}--}}
+{{--                                                    @if ($errors->has('shipping_country'))--}}
+{{--                                                        <span class="text-danger">--}}
+{{--                                                                <strong>{{ $errors->first('shipping_country') }}</strong>--}}
+{{--                                                            </span>--}}
+{{--                                                    @endif--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
                                     </div>
                                 </div>
                             </div>
@@ -417,6 +389,21 @@
 </div>
 
 <script>
+    $('#fname').keyup(function(){
+        $('#billing_name').val($(this).val());
+        $('#shipping_name').val($(this).val());
+    });
+
+    $('#lname').keyup(function(){
+        $('#billing_name').val($('#fname').val()+' '+$(this).val());
+        $('#shipping_name').val($('#fname').val()+' '+$(this).val());
+    });
+
+    $('#mobile').keyup(function(){
+        $('#billing_phone').val($(this).val());
+        $('#shipping_phone').val($(this).val());
+    });
+
     $('#same_as_billing').change(function(){
         if($(this).prop('checked')){
             $('#shipping_first_name').val($('#billing_first_name').val());
@@ -426,7 +413,7 @@
             $('#shipping_city').val($('#billing_city').val());
             $('#shipping_state').val($('#billing_state').val()).change();
             $('#shipping_pincode').val($('#billing_pincode').val());
-            $('#shipping_country').val($('#billing_country').val());
+            // $('#shipping_country').val($('#billing_country').val());
         }else{
             $('#shipping_first_name').val('');
             $('#shipping_last_name').val('');
@@ -435,7 +422,7 @@
             $('#shipping_city').val('');
             $('#shipping_state').val('').change();
             $('#shipping_pincode').val('');
-            $('#shipping_country').val('');
+            // $('#shipping_country').val('');
         }
     });
 </script>

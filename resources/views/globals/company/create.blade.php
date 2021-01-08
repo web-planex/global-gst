@@ -132,15 +132,15 @@
                             @endif
                         </div>
 
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="country">Country <span class="text-danger">*</span></label>
-                            {!! Form::text('country', null, ['class' => 'form-control','id'=>'country']) !!}
-                            @if ($errors->has('country'))
-                                <span class="text-danger">
-                                    <strong>{{ $errors->first('country') }}</strong>
-                                </span>
-                            @endif
-                        </div>
+{{--                        <div class="form-group mb-3 col-md-6">--}}
+{{--                            <label for="country">Country <span class="text-danger">*</span></label>--}}
+{{--                            {!! Form::text('country', null, ['class' => 'form-control','id'=>'country']) !!}--}}
+{{--                            @if ($errors->has('country'))--}}
+{{--                                <span class="text-danger">--}}
+{{--                                    <strong>{{ $errors->first('country') }}</strong>--}}
+{{--                                </span>--}}
+{{--                            @endif--}}
+{{--                        </div>--}}
 
                         <div class="form-group col-md-12 mb-0">
                             <button type="submit" class="btn btn-primary">Save</button>
@@ -193,7 +193,7 @@
                     city: "required",
                     state: "required",
                     pincode: "required",
-                    country: "required",
+                    // country: "required",
                 },
                 messages: {
                     company_name: "The company name field is required",
@@ -205,7 +205,7 @@
                     city: "The city field is required",
                     state: "The state field is required",
                     pincode: "The pincode field is required",
-                    country: "The country field is required",
+                    // country: "The country field is required",
                 }
             });
         });
