@@ -14,12 +14,12 @@ class CreateTaxesTable extends Migration
     public function up()
     {
         Schema::create('taxes', function (Blueprint $table) {
-            $table->integer('id',1);
+            $table->id();
             $table->string('tax_name',15);
             $table->string('rate',10);
             $table->string('cess',3)->nullable();
             $table->integer('status')->default(1);
-            $table->integer('is_cess',1)->nullable(false)->default(0);
+            $table->integer('is_cess')->nullable(false)->default(0);
             $table->timestamps();
         });
         \Illuminate\Support\Facades\DB::table('taxes')->insert([

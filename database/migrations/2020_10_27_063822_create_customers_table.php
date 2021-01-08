@@ -31,7 +31,6 @@ class CreateCustomersTable extends Migration
             $table->string('billing_last_name',45);
             $table->string('billing_phone',15);
             $table->string('billing_street',255);
-            $table->string('billing_street',255);
             $table->string('billing_city',45);
             $table->string('billing_state',45);
             $table->string('billing_pincode',45);

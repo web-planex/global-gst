@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="author" content="">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">
     <title>GST Invoice India</title>
@@ -103,7 +104,18 @@
                         </ul>
                     </li>
 
-                    <li class="@if(isset($menu) && $menu == 'Sales') active @endif">
+                    <li class="@if(isset($menu) && $menu == 'Company Setting' || isset($menu) && $menu == 'Payment Terms' || isset($menu) && $menu == 'Payment Methods') active @endif">
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i>
+                            <span class="hide-menu">Settings</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse @if(isset($menu) && $menu == 'Company Setting' || isset($menu) && $menu == 'Payment Terms' || isset($menu) && $menu == 'Payment Methods') in @endif">
+                            <li><a href="{{url('company-setting')}}" class="@if(isset($menu) && $menu == 'Company Setting' ) active @endif">Company Settings</a></li>
+                            <li><a href="{{url('payment-terms')}}" class="@if(isset($menu) && $menu == 'Payment Terms' ) active @endif">Payment Terms</a></li>
+                            <li><a href="{{url('payment-methods')}}" class="@if(isset($menu) && $menu == 'Payment Methods' ) active @endif">Payment Methods</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="@if(isset($menu) && $menu == 'Sales' ) active @endif">
                         <a class="waves-effect waves-dark" href="{{ url('sales')}}"><i class="fa fa-line-chart"></i><span class="hide-menu">Sales</span></a>
                     </li>
 
@@ -115,9 +127,10 @@
                         <a class="waves-effect waves-dark" href="{{ url('payees')}}"><i class="fa fa-user-plus"></i><span class="hide-menu">Payees / Vendors</span></a>
                     </li>
 
-                    <li class="@if(isset($menu) && $menu == 'Company Setting') active @endif">
-                        <a class="waves-effect waves-dark" href="{{route('company-setting')}}"><i class="fa fa-file-invoice"></i><span class="hide-menu">Company Setting</span></a>
+                    <li class="@if(isset($menu) && $menu == 'payment-account' ) active @endif">
+                        <a class="waves-effect waves-dark" href="{{route('payment-account')}}"><i class="fa fa-credit-card"></i><span class="hide-menu">Payment Account</span></a>
                     </li>
+                    
                     <li class="">
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-files"></i>
                         <span class="hide-menu">Report Builder</span></a>

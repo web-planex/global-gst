@@ -30,7 +30,7 @@ class CreateInvoicesTable extends Migration
             $table->string('total',20);
             $table->text('files')->nullable();
             $table->string('payment_method',50);
-            $table->integer('status',1)->nullable();
+            $table->integer('status')->nullable();
             $table->timestamps();
         });
     }

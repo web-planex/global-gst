@@ -16,8 +16,8 @@
                                     {!! Form::text('first_name', null, ['class' => 'form-control']) !!}
                                     @if ($errors->has('first_name'))
                                         <span class="text-danger">
-                                                <strong>{{ $errors->first('first_name') }}</strong>
-                                            </span>
+                                            <strong>{{ $errors->first('first_name') }}</strong>
+                                        </span>
                                     @endif
                                 </div>
                             </div>
