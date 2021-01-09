@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
-use Globals\BillController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -127,6 +126,7 @@ Route::post('generate-multiple-expenses', 'Globals\ExpenseController@multiple_pd
 Route::get('download-pdf-zip', 'Globals\ExpenseController@downloadPdfZip')->name('download-pdf-zip');
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
-Route::resources([
-    'bills' => BillController::class
-]);
+Route::resource('bills', 'Globals\BillController')->except(['destroy']);
+Route::get('bills/delete/{id}', 'Globals\BillController@destroy');
+Route::post('ajax/payment-terms-store', 'Globals\BillController@payment_terms_store')->name('payment-terms-store');
+Route::post('ajax/bill_delete_attachment', 'Globals\BillController@delete_attachment')->name('bill-delete-attachment');
