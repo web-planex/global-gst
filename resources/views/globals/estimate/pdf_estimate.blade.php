@@ -58,10 +58,17 @@
 
 <table width="1182" border="0" cellspacing="0" cellpadding="0" id="table-top">
     <tr>
-        <td colspan="2" align="left" width="591" style="padding:0 5px;border-top:solid 1px #444444;border-left:solid 1px #444444;border-right: solid 1px #444444; line-height:30px;">
+        <td align="left" width="591" style="padding:0 5px;border-top:solid 1px #444444;border-left:solid 1px #444444;line-height:30px;">
             <table width="100%" border="0" cellspacing="0" cellpadding="0" >
                 <tr>
                     <td align="left" width="295" style="line-height:30px;"> &nbsp;&nbsp;Estimate Number: </strong>{{$estimate['estimate_number']}} </td>
+                </tr>
+            </table>
+        </td>
+        <td align="left" width="591" style="padding:0 5px;border-top:solid 1px #444444;border-left:solid 1px #444444;border-right: solid 1px #444444; line-height:30px;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" >
+                <tr>
+                    <td align="left" width="295" style="line-height:30px;"> &nbsp;&nbsp;Reference: </strong>{{$estimate['reference']}} </td>
                 </tr>
             </table>
         </td>
