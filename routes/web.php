@@ -95,6 +95,15 @@ Route::resource('/sales', 'Globals\InvoiceController');
 Route::get('/sales/delete/{id}', 'Globals\InvoiceController@destroy')->name('sales-delete');
 Route::get('/sales/download_pdf/{id}', 'Globals\InvoiceController@download_pdf')->name('invoice-download_pdf');
 
+//Estimate Management
+Route::post('/estimate/multiple_pdf', 'Globals\EstimateController@multiple_pdf')->name('estimate-multiple_pdf');
+Route::get('download-estimate-pdf-zip', 'Globals\EstimateController@downloadPdfZip')->name('download-estimate-pdf-zip');
+Route::post('ajax/estimate_delete_attachment', 'Globals\EstimateController@delete_attachment');
+Route::get('/estimate/download_pdf/{id}', 'Globals\EstimateController@download_pdf')->name('estimate-download_pdf');
+Route::resource('/estimate', 'Globals\EstimateController');
+Route::get('/estimate/delete/{id}', 'Globals\EstimateController@destroy')->name('estimate-delete');
+Route::get('/estimate/download_pdf/{id}', 'Globals\EstimateController@download_pdf')->name('estimate-download_pdf');
+
 // PAYMENT TERMS
 Route::resource('/payment-terms', 'Globals\PaymentTermsController');
 Route::get('/payment-terms/delete/{id}', 'Globals\PaymentTermsController@destroy');

@@ -17,7 +17,7 @@
             <h4 class="text-themecolor">{{$menu}}</h4>
         </div>
         <div class="col-sm-6 text-right">
-            <a href="{{url('sales/create')}}" class="float-right">
+            <a href="{{url('estimate/create')}}" class="float-right">
                 <button type="button" class="btn btn-info d-none d-lg-block"><i class="fa fa-plus-circle"></i> Create New</button>
             </a>
         </div>
@@ -26,7 +26,7 @@
     <div class="row">
         <div class="col-12 page-min-height">
             @include('inc.message')
-            {!! Form::open(['url' => url('sales'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
+            {!! Form::open(['url' => url('estimate'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
                 <div class="row">
                     <div class="col-md-2">
                         <div class="form-group">
@@ -47,19 +47,13 @@
                     </div>
 
                     <div class="col-md-2">
-                        <div class="form-group">
-                            {!! Form::select('status', [''=>'All Status']+\App\Models\Globals\Invoice::$invoice_status, isset($status)&&!empty($status)?$status:null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
-                        </div>
-                    </div>
-
-                    <div class="col-md-2">
                        <button type="submit" class="btn btn-primary mr-2"><i class="ti-search"></i></button>
-                       <a href="{{url('sales')}}"><button type="button" class="btn btn-danger">Clear</button></a>
+                       <a href="{{url('estimate')}}"><button type="button" class="btn btn-danger">Clear</button></a>
                     </div>
                 </div>
             {!! Form::close() !!}
 
-            {!! Form::open(['url' => url('sales/multiple_pdf'),'class' => 'form-horizontal','files'=>true,'id'=>'MultiplePdfForm']) !!}
+            {!! Form::open(['url' => url('estimate/multiple_pdf'),'class' => 'form-horizontal','files'=>true,'id'=>'MultiplePdfForm']) !!}
             <div class="card">
                 <div class="row results-top" style="margin: 0 5px;">
                     <div class="col-md-6 col-lg-5 action">
@@ -70,12 +64,8 @@
                             </div>
                             <div class="invoice-type">
                                 <div class="form-group has-success mb-0">
-                                    <select class="form-control custom-select" id="invoice_type" name="invoice_type" data-toggle="tooltip" data-placement="top" title="" data-original-title="Select &amp; Generate Invoices Zip">
-                                        <option value="">Select Invoice Type</option>
-                                        <option value="original">Download Original</option>
-                                        <option value="duplicate">Download Duplicate</option>
-                                        <option value="triplicate">Download Triplicate</option>
-                                    </select>
+                                    <button type="button" id="estimate_btn" class="btn btn-primary waves-effect waves-light mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Estimate"><i class="fa fa-download"></i></button>
+                                    <a href="{{url('download-estimate-pdf-zip')}}" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Estimate Zip"><i class="fas fa-cloud-download-alt"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -87,22 +77,21 @@
                                     <!-- Modal content-->
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h4 class="modal-title font-bold-500 font-16 text-primary" id="tooltipmodel">Bulk Invoice Download</h4>
+                                            <h4 class="modal-title font-bold-500 font-16 text-primary" id="tooltipmodel">Bulk Estimate Download</h4>
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                         </div>
                                         <div class="modal-body">
                                             <p>
-                                                <label><input type="radio" name="download_type" value="1" checked="checked"> Download selected invoices as single PDF</label>
-                                                <label><input type="radio" name="download_type" value="2"> Download selected invoices as individual PDF</label>
+                                                <label><input type="radio" name="download_type" value="1" checked="checked"> Download selected estimate as single PDF</label>
+                                                <label><input type="radio" name="download_type" value="2"> Download selected estimate as individual PDF</label>
                                             </p>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-download" aria-hidden="true" style="font-size:20px;" title="Generate Invoices Zip"></i></button>
+                                            <button type="submit" class="btn btn-primary"><i class="fa fa-download" aria-hidden="true" style="font-size:20px;" title="Generate Estimates Zip"></i></button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <a href="{{url('download-invoice-pdf-zip')}}" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Invoices Zip"><i class="fas fa-cloud-download-alt"></i></a>
                         </div>
                     </div>
                 </div>
@@ -118,72 +107,48 @@
                                         </div>
                                     </th>
                                     <th>#</th>
-                                    <th>Invoice No.</th>
+                                    <th>Estimate No.</th>
+                                    <th>Reference</th>
                                     <th>Customer</th>
-                                    <th>Invoice Date</th>
+                                    <th>Estimate Date</th>
                                     <th>Due Date</th>
-                                    <th>Status</th>
-                                    <th>Invoice</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            @if($invoice->count()>0)
+                            @if($estimate->count()>0)
                                 @php $i=1; @endphp
-                                @foreach($invoice as $list)
+                                @foreach($estimate as $list)
                                     <tr>
                                         <td>
                                             <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" name="all_sales_check[]" value="{{$list['id']}}" class="custom-control-input all_sales_check" id="check_{{$list['id']}}">
+                                                <input type="checkbox" name="all_estimate_check[]" value="{{$list['id']}}" class="custom-control-input all_estimate_check" id="check_{{$list['id']}}">
                                                 <label class="custom-control-label" for="check_{{$list['id']}}"></label>
                                             </div>
                                         </td>
                                         <td>{{$i}}</td>
-                                        <td>{{$list['invoice_number']}}</td>
+                                        <td>{{$list['estimate_number']}}</td>
+                                        <td>{{$list['reference']}}</td>
                                         <td>{{$list['Payee']['name']}}</td>
-                                        <td>{{date('d F Y', strtotime($list['invoice_date']))}}</td>
-                                        <td>{{date('d F Y', strtotime($list['due_date']))}}</td>
-                                        <td>
-                                            @if($list['status']==1)
-                                                <label class="label label-warning">Pending</label>
-                                            @elseif($list['status']==2)
-                                                <label class="label label-danger">Paid</label>
-                                            @elseif($list['status']==3)
-                                                <label class="label label-primary">Refunded</label>
-                                            @else
-                                                <label class="label label-warning">Voided</label>
-                                            @endif
-                                        </td>
+                                        <td>{{date('d F Y', strtotime($list['estimate_date']))}}</td>
+                                        <td>{{date('d F Y', strtotime($list['expiry_date']))}}</td>
                                         <td>
                                             <div class="btn-group">
-                                                <button type="button" onclick="javascript:;" class="btn btn-secondary">Download</button>
+                                                <button type="button" onclick="javascript:window.location.href='{{url('estimate/'.$list['id'].'/edit')}}'" class="btn btn-secondary">Edit</button>
                                                 <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="{{route('invoice-download_pdf',['id'=>$list['id'],'output'=>'download','download'=>'1'])}}">Original</a>
-                                                    <a class="dropdown-item" href="{{route('invoice-download_pdf',['id'=>$list['id'],'output'=>'download','download'=>'2'])}}">Duplicate</a>
-                                                    <a class="dropdown-item" href="{{route('invoice-download_pdf',['id'=>$list['id'],'output'=>'download','download'=>'3'])}}">Triplicate</a>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td>
-                                            <div class="btn-group">
-                                                <button type="button" onclick="javascript:window.location.href='{{url('sales/'.$list['id'].'/edit')}}'" class="btn btn-secondary">Edit</button>
-                                                <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <span class="sr-only">Toggle Dropdown</span>
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="{{url('sales/'.$list['id'].'/edit')}}">Edit</a>
+                                                    <a class="dropdown-item" href="{{url('estimate/'.$list['id'].'/edit')}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="delete_invoice_records({{$list['id']}})">Delete</a>
-                                                    <a class="dropdown-item" target="_blank" href="{{route('invoice-download_pdf',['id'=>$list['id'],'output'=>'print'])}}">Print</a>
+                                                    <a class="dropdown-item" target="_blank" href="{{route('estimate-download_pdf',['id'=>$list['id'],'output'=>'print'])}}">Print</a>
+                                                    <a class="dropdown-item" target="_blank" href="{{route('estimate-download_pdf',['id'=>$list['id'],'output'=>'download'])}}">Download</a>
                                                     @if(!empty($list['files']) && file_exists($list['files']))
                                                         <a class="dropdown-item" href="{{url($list['files'])}}" download>Download Receipt</a>
                                                     @endif
                                                 </div>
                                             </div>
-                                            <form name="frm_delete_{{$list['id']}}" id="frm_delete_{{$list['id']}}" action="{{route('sales-delete',$list['id'])}}" method="get">
+                                            <form name="frm_delete_{{$list['id']}}" id="frm_delete_{{$list['id']}}" action="{{route('estimate-delete',$list['id'])}}" method="get">
 
                                             </form>
                                         </td>
@@ -195,7 +160,7 @@
                         </table>
                         <div class="fixed-table-pagination">
                             <div class="float-right pagination mr-3">
-                                @include('inc.pagination', ['paginator' => $invoice])
+                                @include('inc.pagination', ['paginator' => $estimate])
                             </div>
                         </div>
                     </div>
@@ -208,23 +173,23 @@
 
     $("#all_checked").click(function () {
         $('input:checkbox').not(this).prop('checked', this.checked);
-        $('#selected_unfulfilled_count').html($('[name="all_sales_check[]"]:checked').length);
+        $('#selected_unfulfilled_count').html($('[name="all_estimate_check[]"]:checked').length);
     });
 
-    $('.all_sales_check').click(function(){
-        if($('[name="all_sales_check[]"]:checked').length == {{$invoice->count()}}){
+    $('.all_estimate_check').click(function(){
+        if($('[name="all_estimate_check[]"]:checked').length == {{$estimate->count()}}){
             $('#all_checked').prop('checked',true);
         }else{
             $('#all_checked').prop('checked',false);
         }
-        $('#selected_unfulfilled_count').html($('[name="all_sales_check[]"]:checked').length);
+        $('#selected_unfulfilled_count').html($('[name="all_estimate_check[]"]:checked').length);
     });
 
-    $('#invoice_type').change(function(){
-       if($('[name="all_sales_check[]"]:checked').length == 0){
-           Swal.fire("Select at least one sales");
-           return false;
-       }
+    $('#estimate_btn').click(function(){
+        if($('[name="all_estimate_check[]"]:checked').length == 0){
+            Swal.fire("Select at least one estimate");
+            return false;
+        }
         $('#myModal').modal('show');
         return false;
     });
@@ -239,7 +204,7 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.value) {
-                window.location.href = '{{url('sales/delete')}}/'+invoice_id;
+                window.location.href = '{{url('estimate/delete')}}/'+invoice_id;
             }
         })
     }

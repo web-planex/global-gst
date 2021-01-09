@@ -21,6 +21,7 @@ use App\Models\Globals\Product;
 use App\Models\Globals\States;
 use App\Models\Globals\Suppliers;
 use App\Models\Globals\Taxes;
+use Symfony\Component\CssSelector\Parser\Reader;
 use WKPDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +35,7 @@ class InvoiceController extends Controller
     }
 
     public function index(Request $request){
-        $data['menu'] = 'Sales';
+        $data['menu'] = 'Sales Orders';
         $input_search = $request['search'];
         $start_date = !empty($request['start_date'])?date('Y-m-d', strtotime($request['start_date'])) :"";
         $end_date = !empty($request['end_date'])?date('Y-m-d', strtotime($request['end_date'])):"";
@@ -90,7 +91,7 @@ class InvoiceController extends Controller
 
     public function create(){
         $user = Auth::user();
-        $data['menu'] = 'Sales';
+        $data['menu'] = 'Sales Orders';
         $payment_accounts = PaymentAccount::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
         $data['taxes'] = Taxes::where('status', 1)->get();
         $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
@@ -199,7 +200,7 @@ class InvoiceController extends Controller
 
     public function edit($id){
         $user = Auth::user();
-        $data['menu'] = 'Sales';
+        $data['menu'] = 'Sales Orders';
         $data['invoice'] = Invoice::findOrFail($id);
         $data['invoice']['file_name'] = '';
         if(!empty($data['invoice']['files']) && file_exists($data['invoice']['files'])){
@@ -468,7 +469,7 @@ class InvoiceController extends Controller
     }
 
     public function credit_notes(Request $request){
-        $data['menu'] = 'Credit Note';
+        $data['menu'] = 'Credit Notes';
         $input_search = $request['search'];
         $start_date = !empty($request['start_date'])?date('Y-m-d', strtotime($request['start_date'])) :"";
         $end_date = !empty($request['end_date'])?date('Y-m-d', strtotime($request['end_date'])):"";

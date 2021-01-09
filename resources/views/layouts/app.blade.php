@@ -95,7 +95,7 @@
                     </li>
 
                     <li class="@if(isset($menu) && $menu == 'Expense') active @endif">
-                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-files"></i>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-bag"></i>
                             <span class="hide-menu">Purchases</span>
                         </a>
                         <ul aria-expanded="false" class="collapse @if(isset($menu) && $menu == 'Expense') in @endif">
@@ -104,13 +104,14 @@
                         </ul>
                     </li>
 
-                    <li class="@if(isset($menu) && $menu == 'Sales' || isset($menu) && $menu == 'Credit Note') active @endif">
+                    <li class="@if(isset($menu) && $menu == 'Sales Orders' || isset($menu) && $menu == 'Credit Notes' || isset($menu) && $menu == 'Estimate') active @endif">
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-shopping-cart"></i>
                             <span class="hide-menu">Sales</span>
                         </a>
-                        <ul aria-expanded="false" class="collapse @if(isset($menu) && $menu == 'Sales' || isset($menu) && $menu == 'Credit Note') in @endif">
-                            <li><a href="{{ url('sales')}}" class="@if(isset($menu) && $menu == 'Sales' ) active @endif">Sales</a></li>
-                            <li><a href="{{url('credit-note')}}" class="@if(isset($menu) && $menu == 'Credit Note' ) active @endif">Credit Note</a></li>
+                        <ul aria-expanded="false" class="collapse @if(isset($menu) && $menu == 'Sales Orders' || isset($menu) && $menu == 'Credit Notes' || isset($menu) && $menu == 'Estimate') in @endif">
+                            <li><a href="{{ url('sales')}}" class="@if(isset($menu) && $menu == 'Sales Orders' ) active @endif">Sales Orders</a></li>
+                            <li><a href="{{url('credit-note')}}" class="@if(isset($menu) && $menu == 'Credit Notes' ) active @endif">Credit Notes</a></li>
+                            <li><a href="{{url('estimate')}}" class="@if(isset($menu) && $menu == 'Estimate' ) active @endif">Estimate</a></li>
                         </ul>
                     </li>
 
@@ -212,7 +213,7 @@
 </script>
 <script>
     $('#start_date_orderlist, #end_date_orderlist').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false });
-    $('#start_date, #end_date, #hire_date, #released, #date_of_birth, #as_of, #expense_date, #invoice_date, #due_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false});
+    $('#start_date, #end_date, #hire_date, #released, #date_of_birth, #as_of, #expense_date, #invoice_date, #due_date,#estimate_date, #expiry_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false});
     $('#timepicker').bootstrapMaterialDatePicker({ format: 'HH:mm', time: true, date: false });
     $('#date-format').bootstrapMaterialDatePicker({ format: 'DD MMMM YYYY' });
     $('#min-date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', minDate: new Date() });

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInvoicesTable extends Migration
+class CreateEstimatesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,25 +13,22 @@ class CreateInvoicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('invoices', function (Blueprint $table) {
+        Schema::create('estimates', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
             $table->integer('company_id');
-            $table->string('invoice_number',15);
-            $table->string('credit_note_number',15)->nullable();
+            $table->string('estimate_number',15);
+            $table->string('reference',15)->nullable();
             $table->integer('tax_type')->comment('(1 => Exclusive, 2 => Inclusive, 3 => Out of scope)');
             $table->integer('customer_id');
-            $table->date('invoice_date');
-            $table->date('due_date');
-            $table->string('place_of_supply',15);
+            $table->date('estimate_date');
+            $table->date('expiry_date');
             $table->string('amount_before_tax',20);
             $table->string('tax_amount',20);
             $table->string('discount',20);
-            $table->integer('discount_type',20);
+            $table->integer('discount_type');
             $table->string('total',20);
             $table->text('files')->nullable();
-            $table->string('payment_method',50);
-            $table->integer('status')->nullable();
             $table->timestamps();
         });
     }
@@ -43,6 +40,6 @@ class CreateInvoicesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('invoices');
+        Schema::dropIfExists('estimates');
     }
 }

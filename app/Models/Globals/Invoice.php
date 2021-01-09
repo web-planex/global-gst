@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Invoice extends Model
 {
     protected $fillable = ['user_id','company_id','invoice_number','credit_note_number','tax_type','customer_id','invoice_date',
-        'due_date','place_of_supply','amount_before_tax','tax_amount','discount','discount_type',
+        'due_date','amount_before_tax','tax_amount','discount','discount_type',
         'total','files','payment_method','status'];
 
     const STATUS_PENDING = 1;
