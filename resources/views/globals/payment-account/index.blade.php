@@ -54,8 +54,8 @@
                                 <th>As Of</th>
                                 <th>Action</th>
                             </thead>
-                            <tbody>
-                                @if($payment_accounts->count()>0)
+                            @if($payment_accounts->count()>0)
+                                <tbody>
                                     <?php $i=1;?>
                                     @foreach($payment_accounts as $payment_account)
                                         <tr>
@@ -82,8 +82,14 @@
                                         </tr>
                                         <?php $i++;?>
                                     @endforeach
-                                @endif
-                            </tbody>
+                                </tbody>
+                            @else
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="8" align="center">No records found!</td>
+                                    </tr>
+                                </tfoot>
+                            @endif
                         </table>
                         <div class="fixed-table-pagination">
                             <div class="float-right pagination mr-3">

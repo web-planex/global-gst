@@ -36,8 +36,8 @@
                                 <th>Method Name</th>
                                 <th>Action</th>
                             </thead>
-                            <tbody>
-                                @if($payment_method->count()>0)
+                            @if($payment_method->count()>0)
+                                <tbody>
                                     <?php $i=1;?>
                                     @foreach($payment_method as $list)
                                         <tr>
@@ -52,8 +52,14 @@
                                         </tr>
                                         <?php $i++;?>
                                     @endforeach
-                                @endif
-                            </tbody>
+                                </tbody>
+                            @else
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3" align="center">No records found!</td>
+                                    </tr>
+                                </tfoot>
+                            @endif
                         </table>
                         <div class="fixed-table-pagination">
                             <div class="float-right pagination mr-3">

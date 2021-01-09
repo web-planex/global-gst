@@ -48,8 +48,8 @@
                                 <th>Action</th>
                             </tr>
                             </thead>
-                            <tbody>
                             @if($payees->count()>0)
+                                <tbody>
                                 <?php $i=1;?>
                                 @foreach($payees as $list)
                                     <tr>
@@ -75,8 +75,14 @@
                                     </tr>
                                     <?php $i++;?>
                                 @endforeach
-                            @endif
                             </tbody>
+                            @else
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="9" align="center">No records found!</td>
+                                    </tr>
+                                </tfoot>
+                            @endif
                         </table>
                         <div class="fixed-table-pagination">
                             <div class="float-right pagination mr-3">
