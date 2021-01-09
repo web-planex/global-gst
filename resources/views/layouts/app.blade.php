@@ -94,13 +94,13 @@
                         <a class="waves-effect waves-dark" href="{{ url('products')}}"><i class="fab fa-product-hunt"></i><span class="hide-menu">Products / Services</span></a>
                     </li>
 
-                    <li class="@if(isset($menu) && $menu == 'Expense') active @endif">
+                    <li class="@if(isset($menu) && ($menu == 'Expense' || $menu == 'Bill')) active @endif">
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-files"></i>
                             <span class="hide-menu">Purchases</span>
                         </a>
-                        <ul aria-expanded="false" class="collapse @if(isset($menu) && $menu == 'Expense') in @endif">
+                        <ul aria-expanded="false" class="collapse @if(isset($menu) && ($menu == 'Expense' || $menu == 'Bill')) in @endif">
                             <li class=""><a href="{{route('expense')}}" class="@if(isset($menu) && $menu == 'Expense' ) active @endif">Expenses</a></li>
-                            <li class=""><a href="javascript:;">Bills</a></li>
+                            <li class=""><a href="{{route('bills.index')}}" class="@if(isset($menu) && $menu == 'Bill' ) active @endif">Bills</a></li>
                         </ul>
                     </li>
 
@@ -208,11 +208,14 @@
             });
         }
         $('.amounts-are-select2').select2();
+        $('.discount-level-select2').select2({
+            minimumResultsForSearch: -1
+        });
     });
 </script>
 <script>
     $('#start_date_orderlist, #end_date_orderlist').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false });
-    $('#start_date, #end_date, #hire_date, #released, #date_of_birth, #as_of, #expense_date, #invoice_date, #due_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false});
+    $('#start_date, #end_date, #hire_date, #released, #date_of_birth, #as_of, #expense_date, #invoice_date, #due_date, #bill_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false});
     $('#timepicker').bootstrapMaterialDatePicker({ format: 'HH:mm', time: true, date: false });
     $('#date-format').bootstrapMaterialDatePicker({ format: 'DD MMMM YYYY' });
     $('#min-date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', minDate: new Date() });

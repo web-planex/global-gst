@@ -28,8 +28,8 @@ class CreateBillsTable extends Migration
             $table->string('amount_before_tax',20);
             $table->string('tax_amount',20);
             $table->string('total',20);
-            $table->string('discount',20);
-            $table->integer('discount_type');
+            $table->string('discount',20)->nullable();
+            $table->integer('discount_type')->nullable();
             $table->text('memo')->nullable();
             $table->text('files')->nullable();
             $table->integer('status')->comment('1 => Open, 2 => Paid, 3 => Void, 4 => Overdue');
