@@ -126,6 +126,7 @@ Route::post('generate-multiple-expenses', 'Globals\ExpenseController@multiple_pd
 Route::get('download-pdf-zip', 'Globals\ExpenseController@downloadPdfZip')->name('download-pdf-zip');
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
+// Bill Management
 Route::resource('bills', 'Globals\BillController')->except(['destroy']);
 Route::get('bills/delete/{id}', 'Globals\BillController@destroy');
 Route::post('ajax/payment-terms-store', 'Globals\BillController@payment_terms_store')->name('payment-terms-store');
