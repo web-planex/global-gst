@@ -78,7 +78,7 @@
     <script type='text/javascript'>
         function delete_report_records(report_id){
             Swal.fire({
-                title: 'Are you want to delete this?',
+                title: 'Do you want to delete this?',
                 text: "",
                 type: "warning",
                 showCancelButton: true,

@@ -238,12 +238,14 @@
             console.log(getCookie('expenseColumns'));
         });
     });
+
     function setCookie(cname, cvalue, exdays) {
         var d = new Date();
         d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
         var expires = "expires="+d.toUTCString();
         document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
     }
+
     function getCookie(cname) {
         var name = cname + "=";
         var ca = document.cookie.split(';');
@@ -258,6 +260,7 @@
         }
         return "";
     }
+
     $('#download_multi_expense').click(function(){
        if($('[name="all_expenses_check[]"]:checked').length == 0){
            Swal.fire("Select at least one expense");
@@ -266,6 +269,7 @@
         $('#myModal').modal('show');
         return false;
     });
+
     $("#all_checked").click(function () {
         $('input:checkbox').not(this).prop('checked', this.checked);
         $('#selected_unfulfilled_count').html($('[name="all_expenses_check[]"]:checked').length);
@@ -279,9 +283,10 @@
         }
         $('#selected_unfulfilled_count').html($('[name="all_expenses_check[]"]:checked').length);
     });
+
     function delete_expense_records(expense_id){
         Swal.fire({
-            title: 'Are you want to delete this?',
+            title: 'Do you want to delete this?',
             text: "",
             type: "warning",
             showCancelButton: true,

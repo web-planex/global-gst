@@ -186,7 +186,7 @@
 
         function delete_invoice_records(invoice_id){
             Swal.fire({
-                title: 'Are you want to delete this?',
+                title: 'Do you want to delete this?',
                 text: "",
                 type: "warning",
                 showCancelButton: true,

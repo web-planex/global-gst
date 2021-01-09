@@ -30,7 +30,7 @@
         //Warning Message
         $('#sa-warning1, #sa-warning2, #sa-warning3, #sa-warning4').click(function () {
             Swal.fire({
-                title: "Are you want to delete this?",
+                title: "Do you want to delete this?",
                 text: "",
                 type: "warning",
                 showCancelButton: true,
