@@ -113,8 +113,8 @@
                                 <th>Credit Note</th>
                             </tr>
                             </thead>
-                            <tbody>
                             @if($credit_notes->count()>0)
+                                <tbody>
                                 @php $i=1; @endphp
                                 @foreach($credit_notes as $list)
                                     <tr>
@@ -145,8 +145,14 @@
                                     </tr>
                                     @php $i++; @endphp
                                 @endforeach
-                            @endif
                             </tbody>
+                            @else
+                                <tfoot>
+                                <tr>
+                                    <td colspan="11" align="center">No records found!</td>
+                                </tr>
+                                </tfoot>
+                            @endif
                         </table>
                         <div class="fixed-table-pagination">
                             <div class="float-right pagination mr-3">

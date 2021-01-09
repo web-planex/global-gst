@@ -127,8 +127,8 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
                             @if($invoice->count()>0)
+                                <tbody>
                                 @php $i=1; @endphp
                                 @foreach($invoice as $list)
                                     <tr>
@@ -190,8 +190,14 @@
                                     </tr>
                                     @php $i++; @endphp
                                 @endforeach
-                            @endif
                             </tbody>
+                            @else
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="9" align="center">No records found!</td>
+                                    </tr>
+                                </tfoot>
+                            @endif
                         </table>
                         <div class="fixed-table-pagination">
                             <div class="float-right pagination mr-3">

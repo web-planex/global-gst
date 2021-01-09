@@ -37,8 +37,8 @@
                                 <th>Numbers Of Days</th>
                                 <th>Action</th>
                             </thead>
-                            <tbody>
-                                @if($payment_terms->count()>0)
+                            @if($payment_terms->count()>0)
+                                <tbody>
                                     <?php $i=1;?>
                                     @foreach($payment_terms as $list)
                                         <tr>
@@ -54,8 +54,14 @@
                                         </tr>
                                         <?php $i++;?>
                                     @endforeach
-                                @endif
-                            </tbody>
+                                </tbody>
+                            @else
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="4" align="center">No records found!</td>
+                                    </tr>
+                                </tfoot>
+                            @endif
                         </table>
                         <div class="fixed-table-pagination">
                             <div class="float-right pagination mr-3">

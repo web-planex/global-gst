@@ -45,8 +45,8 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
                             @if($products->count()>0)
+                                <tbody>
                                 <?php $i=1;?>
                                 @foreach($products as $list)
                                     <tr>
@@ -65,8 +65,14 @@
                                     </tr>
                                     <?php $i++;?>
                                 @endforeach
-                            @endif
                             </tbody>
+                            @else
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="7" align="center">No records found!</td>
+                                    </tr>
+                                </tfoot>
+                            @endif
                         </table>
                         <div class="fixed-table-pagination">
                             <div class="float-right pagination mr-3">
