@@ -195,7 +195,7 @@ class BillController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        
+
     }
 
     /**
@@ -330,7 +330,7 @@ class BillController extends Controller
         \Session::flash('error-message', 'Bill has been deleted successfully!');
         return redirect('bills');
     }
-    
+
     public function payment_terms_store(Request $request) {
         $all_payment_terms = $request->all();
         $input=  array();
@@ -345,7 +345,7 @@ class BillController extends Controller
         $data['terms_name'] = $payment_terms['terms_name'];
         return $data;
     }
-    
+
     public function delete_attachment(Request $request){
         $bill = Bills::where('id',$request['data'])->first();
         if(!empty($bill['files']) && file_exists($bill['files'])){
