@@ -128,5 +128,7 @@ Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
 Route::resource('bills', 'Globals\BillController')->except(['destroy']);
 Route::get('bills/delete/{id}', 'Globals\BillController@destroy');
+Route::get('bills/void/{id}', 'Globals\BillController@void');
 Route::post('ajax/payment-terms-store', 'Globals\BillController@payment_terms_store')->name('payment-terms-store');
+Route::post('ajax/make_payment/{bid}', 'Globals\BillController@make_payment')->name('make_payment');
 Route::post('ajax/bill_delete_attachment', 'Globals\BillController@delete_attachment')->name('bill-delete-attachment');

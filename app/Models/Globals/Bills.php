@@ -15,6 +15,8 @@ class Bills extends Model
         'payment_method',
         'bill_no',
         'due_date',
+        'payment_date',
+        'void_date',
         'payment_term_id',
         'discount_level',
         'amount_before_tax',

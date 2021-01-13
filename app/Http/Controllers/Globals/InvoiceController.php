@@ -268,7 +268,7 @@ class InvoiceController extends Controller
         $company = CompanySettings::where('id',$this->Company())->first();
 
         if(in_array($request['status'],[3,4])){
-            $invoice->credit_note_number = $company['credit_note_prefix'].'/'.$company['credit_note_number'];
+            $invoice->credit_note_number = !empty($company['credit_note_prefix'])?$company['credit_note_prefix'].'/'.$company['credit_note_number']:1;
         }
 
         if($request['discount_type'] != '') {

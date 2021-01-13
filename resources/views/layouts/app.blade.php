@@ -216,7 +216,8 @@
 </script>
 <script>
     $('#start_date_orderlist, #end_date_orderlist').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false });
-    $('#start_date, #end_date, #hire_date, #released, #date_of_birth, #as_of, #expense_date, #invoice_date, #due_date,#estimate_date, #expiry_date, #bill_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false});
+    $('#start_date, #end_date, #hire_date, #released, #date_of_birth, #as_of, #expense_date, #invoice_date, #due_date,#estimate_date, #expiry_date, #bill_date, #payment_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false});
+    $('.payment_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false});
     $('#timepicker').bootstrapMaterialDatePicker({ format: 'HH:mm', time: true, date: false });
     $('#date-format').bootstrapMaterialDatePicker({ format: 'DD MMMM YYYY' });
     $('#min-date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', minDate: new Date() });

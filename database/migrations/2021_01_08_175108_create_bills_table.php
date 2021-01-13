@@ -20,6 +20,8 @@ class CreateBillsTable extends Migration
             $table->integer('tax_type')->comment('1 => Exclusive, 2 => Inclusive, 3 => Out of scope');
             $table->integer('payee_id');
             $table->date('bill_date');
+            $table->date('payment_date')->nullable();
+            $table->date('void_date')->nullable();
             $table->string('payment_method',50);
             $table->string('bill_no',50)->nullable();
             $table->date('due_date');

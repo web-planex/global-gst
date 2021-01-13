@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Globals;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Globals\Bills;
@@ -20,11 +21,7 @@ class BillController extends Controller
     public function __construct(){
         $this->middleware(['auth','verified']);
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(Request $request) {
         $data['menu'] = 'Bill';
         $input_search = $request['search'];
@@ -76,14 +73,10 @@ class BillController extends Controller
         $data['end_date'] = $request['end_date'];
         $data['bills'] = $query->orderBy('id','DESC')->paginate($this->pagination);
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
+        $data['payment_method'] = PaymentMethod::where('user_id',Auth::user()->id)->pluck('method_name', 'id')->toArray();
         return view('globals.bills.index',$data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create() {
         $user = Auth::user();
         $data['menu'] = 'Bill';
@@ -115,12 +108,6 @@ class BillController extends Controller
         return view('globals.bills.create',$data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request) {
         $user = Auth::user();
         $this->validate($request, [
@@ -166,8 +153,6 @@ class BillController extends Controller
         if($photo = $request->file('files')){
             $bill->files = $this->allFiles($photo,$user->id.'/bill/bill_attachment');
         }
-
-        $bill->status = 1;
         if($request->has('submit')) {
             $bill->save();
             $bill_id = $bill->id;
@@ -188,22 +173,10 @@ class BillController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id) {
         
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id) {
         $user = Auth::user();
         $data['menu'] = 'Bill';
@@ -244,13 +217,6 @@ class BillController extends Controller
         return view('globals.bills.create',$data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id) {
         $user = Auth::user();
         $this->validate($request, [
@@ -284,7 +250,6 @@ class BillController extends Controller
         $bill->amount_before_tax = $request['amount_before_tax'];
         $bill->tax_amount = $request['tax_amount'];
         $bill->total = $request['total'];
-        $bill->status = 1;
 
         if($request['discount_type'] != '') {
             $bill->discount = $request['discount_type']==2?str_replace( ',', '', $request['discount']):str_replace( ' %', '', $request['discount']);
@@ -297,7 +262,6 @@ class BillController extends Controller
             $bill->files = $this->allFiles($photo,$user->id.'/bill/bill_attachment');
         }
 
-        $bill->status = 1;
         if($request->has('submit')) {
             $bill->save();
             $bill_id = $bill->id;
@@ -318,12 +282,6 @@ class BillController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id) {
         $bill = Bills::where('id',$id)->first();
         $bill->delete();
@@ -354,5 +312,27 @@ class BillController extends Controller
         $input['files'] = null;
         $bill->update($input);
         return ;
+    }
+
+    public function make_payment(Request $request, $bid){
+        $bill = Bills::where('id',$bid)->first();
+        if(!empty($bill)){
+            $input['payment_date'] = date('Y-m-d', strtotime($request['pdate']));
+            $input['payment_method'] = $request['pmethod'];
+            $input['bill_no'] = $request['billno'];
+            $input['memo'] = $request['note'];
+            $input['status'] = 2;
+            $bill->update($input);
+        }
+        return ;
+    }
+
+    public function void($id) {
+        $bill = Bills::where('id',$id)->first();
+        $input['void_date'] = Carbon::now()->format('Y-m-d');
+        $input['status'] = 3;
+        $bill->update($input);
+        \Session::flash('error-message', 'Bill has been voided successfully!');
+        return redirect('bills');
     }
 }

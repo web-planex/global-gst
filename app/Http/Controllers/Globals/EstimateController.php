@@ -273,12 +273,6 @@ class EstimateController extends Controller
         return redirect()->back();
     }
 
-    public function getEmail(Request $request){
-        $payee = Payees::where('id',$request['data'])->first();
-        $customer = Customers::where('id',$payee['type_id'])->first();
-        return $customer['email'];
-    }
-
     public function delete_attachment(Request $request){
         $estimate = Estimate::where('id',$request['data'])->first();
         if(!empty($estimate['files']) && file_exists($estimate['files'])){
