@@ -13,6 +13,8 @@ class BillItems extends Model
         'hsn_code',
         'quantity',
         'rate',
-        'amount'
+        'amount',
+        'discount',
+        'discount_type'
     ];
 }

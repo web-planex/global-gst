@@ -13,6 +13,28 @@
         height: 30px;
         padding: 4px 5px!important;
     }
+    .discount-type-items {
+        height: 36px;
+        border: 1px solid #e9ecef;
+    }
+    td.discount-line-section {
+        display: flex;
+        align-self: center;
+    }
+    .discount-line-section input.form-control.discount-items {
+        border-radius: .25rem 0 0 .25rem;
+        border-right: 0;
+    }
+    .discount-line-section input.form-control.discount-items:focus {
+        outline: none;
+        border-color: #e9ecef;
+    }
+    .discount-line-section select.discount-type-items {
+        border-radius: 0 .25rem .25rem 0;
+        border: 1px solid #e9ecef;
+        border-left: none;
+        height: 38px;
+    }
 </style>
 <div class="row page-titles">
     <div class="col-sm-6 align-self-center">
@@ -66,7 +88,8 @@
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-4">
                             <label for="due_date">Due Date <span class="text-danger">*</span></label>
-                            {!! Form::text('due_date', isset($bill)&&!empty($bill)?date('d-m-Y',strtotime($bill['due_date'])):null, ['class' => 'form-control','id'=>'due_date']) !!}
+                            <input type="hidden" id="due_date_hidden" value="{{isset($bill)&&!empty($bill)?date('Y-m-d',strtotime($bill['due_date'])):date('Y-m-d')}}" />
+                            {!! Form::text('due_date', isset($bill)&&!empty($bill)?date('d-m-Y',strtotime($bill['due_date'])):date('d-m-Y'), ['class' => 'form-control','id'=>'due_date']) !!}
                             @error('due_date')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
@@ -83,8 +106,13 @@
                             @enderror
                         </div>
                         <div class="form-group mb-3 col-md-4">
-                            <label for="payment_terms">Payment Terms <span class="text-danger">*</span></label>
-                            {!! Form::select('payment_terms', $payment_terms, isset($bill)&&!empty($bill)?$bill['payment_term_id']:null, ['class' => 'form-control ex-payment-terms amounts-are-select2', 'id' => 'payment_terms']) !!}
+                            <label for="payment_terms">Payment Terms</label>
+                            <select name="payment_terms" class="form-control ex-payment-terms amounts-are-select2" id="payment_terms">
+                                <option data-days="0" value="">Due on Receipt</option>
+                                @foreach ($payment_terms as $payment_term)
+                                <option @if(isset($bill)&&$bill['payment_term_id']==$payment_term['id']) selected @endif data-days="{{$payment_term['terms_days']}}" value="{{$payment_term['id']}}">{{$payment_term['terms_name']}}</option>
+                                @endforeach
+                            </select>
                             <div class="wrapper" id="wrp_terms" style="display: none;">
                                 <a href="javascript:;" class="font-weight-300" onclick="OpenPaymentTermsModal()"><i class="fa fa-plus-circle"></i> Add New</a>
                             </div>
@@ -124,14 +152,14 @@
                                         <div class="table-responsive data-table-gst-box pb-3">
                                             <table class="table table-hover">
                                                 <thead>
-                                                <th width="3%">#</th>
-                                                <th width="22%">Product <span class="text-danger">*</span></th>
-                                                <th width="13%">HSN Code <span class="text-danger">*</span></th>
+                                                <th width="14%">Product <span class="text-danger">*</span></th>
+                                                <th width="12%">HSN Code <span class="text-danger">*</span></th>
                                                 <th width="10%">QTY <span class="text-danger">*</span></th>
-                                                <th width="14%">Rate <span class="text-danger">*</span></th>
-                                                <th width="14%">Amount <span class="text-danger">*</span></th>
-                                                <th width="20%" class="tax_column @if(isset($bill)&&$bill['tax_type']==3) hide @endif">Tax <span class="text-danger">*</span></th>
-                                                <th width="4%">&nbsp;</th>
+                                                <th width="12%">Rate <span class="text-danger">*</span></th>
+                                                <th width="16%" style="display: none;" class="discount-line-section">Discount</th>
+                                                <th width="12%">Amount <span class="text-danger">*</span></th>
+                                                <th width="18%" class="tax_column @if(isset($bill)&&$bill['tax_type']==3) hide @endif">Tax <span class="text-danger">*</span></th>
+                                                <th width="3%">&nbsp;</th>
                                                 </thead>
                                                 <tbody id="items_list_body">
                                                 @php $i=1; @endphp
@@ -141,7 +169,6 @@
                                                             <tr class="itemTr"></tr>
                                                         @endif
                                                         <tr class="{{$i > 1 ? 'itemNewCheckTr' : 'itemTr'}}">
-                                                            <td>{{$i}}</td>
                                                             <td id="pro_list">
                                                                 <select name="product[]" id="product_select_{{$i}}" class="form-control ex-product product_select_edit amounts-are-select2" data-id="{{$i}}" style="width: 100%;" required="">
                                                                     @foreach($products as $pro)
@@ -161,8 +188,15 @@
                                                             <td>
                                                                 <input type="text" min="0" class="form-control rate-input floatTextBox" name="rate[]" value="{{$item['rate']}}">
                                                             </td>
+                                                            <td style="display: none;" class="discount-line-section">
+                                                                <input style="width: 65px" type="text" name="discount_items[]" value="{{$item['discount']}}" class="form-control discount-items">
+                                                                <select name="discount_type_items[]" class="discount-type-items">
+                                                                    <option value="1" @if($item['discount_type'] == 1)  selected @endif>%</option>
+                                                                    <option value="2" @if($item['discount_type'] == 2)  selected @endif>Rs.</option>
+                                                                </select>
+                                                            </td>
                                                             <td>
-                                                                <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[]" value="{{$item['amount']}}">
+                                                                <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[]" value="{{$item['amount']}}" readonly>
                                                             </td>
                                                             <td id="taxes" class="tax_column @if(isset($bill)&&$bill['tax_type']==3) hide @endif">
                                                                 <select id="taxes" class="form-control tax-input" name="taxes[]">
@@ -185,7 +219,6 @@
                                                     @endforeach
                                                 @else
                                                     <tr class="itemTr">
-                                                        <td>1</td>
                                                         <td id="pro_list">
                                                             <!--<input type="text" class="form-control" name="item_name[0]" required>-->
                                                             <select name="product[0]" id="product_select" class="form-control ex-product amounts-are-select2" style="width: 100%;" required="">
@@ -206,8 +239,15 @@
                                                         <td>
                                                             <input type="text" min="0" class="form-control rate-input floatTextBox" id="rate_0"  name="rate[0]" value="{{$first_product['price']}}" required>
                                                         </td>
+                                                        <td style="display: none;" class="discount-line-section">
+                                                            <input style="width: 65px" type="text" name="discount_items[]" class="form-control discount-items">
+                                                            <select name="discount_type_items[]" class="discount-type-items">
+                                                                <option value="1">%</option>
+                                                                <option value="2">Rs.</option>
+                                                            </select>
+                                                        </td>
                                                         <td>
-                                                            <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[0]" required>
+                                                            <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[0]" readonly>
                                                         </td>
                                                         <td id="taxes" class="tax_column @if(isset($bill)&&$bill['tax_type']==3) hide @endif">
                                                             <select class="form-control tax-input" name="taxes[]" required>
@@ -254,7 +294,7 @@
                                                         </tr>
                                                     @endif
                                                 @endforeach
-                                                <tr>
+                                                <tr class="discount-section">
                                                     <th>Discount Type</th>
                                                     <td>
                                                         <select name="discount_type" id="discount_type" class="form-control">
@@ -264,7 +304,7 @@
                                                         </select>
                                                     </td>
                                                 </tr>
-                                                <tr>
+                                                <tr class="discount-section">
                                                     <th>Discount Amount</th>
                                                     <td>{!! Form::text('discount', null, ['class' => 'form-control','id'=>'discount']) !!}</td>
                                                 </tr>
@@ -337,12 +377,12 @@
                                                             @endif
                                                             <div id="att_del_msg" class="text-danger text-bold"></div>
                                                         @endif
-                                                        @if ($errors->has('files'))
+                                                        @error('files')
                                                             <br>
                                                             <span class="text-danger">
-                                                                <strong>{{ $errors->first('files') }}</strong>
+                                                                <strong>{{ $message }}</strong>
                                                             </span>
-                                                        @endif
+                                                        @enderror
                                                     </div>
                                                 </div>
                                             </div>
@@ -353,7 +393,6 @@
                         </div>
                     </div>
                     <button type="submit" name="submit" id="submit" class="btn btn-default btn-lg btn-primary">Submit</button>
-{{--                </form>--}}
                 {!! Form::close() !!}
             </div>
         </div>
@@ -384,13 +423,16 @@
                 $('#discount').inputmask("currency");
                 $('#discount').parent('td').siblings('th').html('Discount Amount');
             }
+            setTimeout(function(){
+                $('#discount_level').trigger('change');
+            },500);
         });
     @else
         $(document).ready(function(){
             setTimeout(function(){
                 $('.ex-product').trigger('change');
             },500);
-        }); 
+        });
     @endif
 
     function OpenUserTypeModal(){
@@ -406,7 +448,7 @@
         $('#ProductModal').modal('show');
         $('#'+selectID).select2('close');
     }
-    
+
     function OpenPaymentTermsModal(){
         $('#PaymentTermsModal').modal('show');
         $('#payment_terms').select2('close');
@@ -416,7 +458,38 @@
         Inputmask.extendDefaults({
             'removeMaskOnSubmit': true
         });
-        
+
+        $("#discount_level").change(function(){
+            var level = $(this).val();
+            if(level == 1) {
+                $(".discount-section").hide();
+                $(".discount-line-section").show();
+                $("#discount_type").val("");
+                $("#discount").val("");
+            } else {
+                $(".discount-section").show();
+                $(".discount-line-section").hide();
+            }
+            discountLevelChange();
+        });
+
+        function discountLevelChange(){
+            $(".discount-type-items").each(function(){
+                if($(this).val() == 1) {
+                    $(this).siblings('.discount-items').inputmask('decimal',{min:0, max:100});
+                } else {
+                    $(this).siblings('.discount-items').inputmask('currency');
+                }
+            });
+        }
+        $(document).on('change','.discount-type-items', function(){
+            if($(this).val() == 1) {
+                $(this).siblings('.discount-items').inputmask('decimal',{min:0, max:100});
+            } else {
+                $(this).siblings('.discount-items').inputmask('currency');
+            }
+        });
+
         $(document).on('click', '.add-new-prod-link', function(){
             dropdown_id = $(this).data('id');
         });
@@ -556,7 +629,7 @@
                 });
             }
         });
-        
+
         $("#PaymentTermsForm").validate({
             rules: {
                 terms_name: "required",
@@ -609,7 +682,7 @@
                 $(".select2-results").prepend("<div class='select2-results__option'>" + $this_html + "</div>");
             }
         });
-        
+
         $('#payment_terms').on("select2:open", function() {
             flg2++;
             if (flg2 == 1) {
@@ -623,6 +696,7 @@
             var numItems = $('.itemTr').length;
             var i = numItems + 1;
             var tax_type = $('#amounts_are').find(":selected").val();
+            var discount_level = $("#discount_level").find(":selected").val();
             var row = $("<tr>").addClass("itemTr");
             var product_select = "<select name=\"product["+numItems+"]\" id=\"product_select"+i+"\" class='product_select ex-product form-control amounts-are-select3' style=\"width: 100%;\" required>";
             /*Product Get*/
@@ -641,18 +715,24 @@
                     var tax_input = $('#taxes').html();
                     var products = $('#pro_list').html();
                     var html = "<tr class=\"itemNewCheckTr\">";
-                    html += "<td>" + i + "</td>";
-//            html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
+                    var discount_field_style = "";
+                    if(discount_level == 0) {
+                        discount_field_style = "style=display:none;";
+                    }
+                    //html += "<td>" + i + "</td>";
                     html += "<td>" + product_select +
                         "<div class=\"wrapper\" id=\"prowrp"+i+"\" style=\"display: none;\">"+
                         "<a href=\"javascript:;\" class=\"font-weight-300 add-new-prod-link\" data-id=\"product_select"+i+"\" onclick=\"OpenProductModel('product_select"+i+"')\"><i class=\"fa fa-plus-circle\"></i> Add New</a>"+
                         "</div>"+
                         "</td>";
-                    //html += "<td><input type=\"text\" class=\"form-control description_input\" name=\"description["+numItems+"]\" id=\"description_"+numItems+"\" value='{{$first_product['description']}}' required><span class=\"multi-error\"></span></td>";
                     html += "<td><input type=\"text\" class=\"form-control hsn_code_input\" name=\"hsn_code["+numItems+"]\" id=\"hsn_code_"+numItems+"\" value='{{$first_product['hsn_code']}}' required><span class=\"multi-error\"></span></td>";
                     html += "<td><input type=\"number\" min=\"1\" value=\"1\" class=\"form-control quantity-input floatTextBox\" name=\"quantity["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
                     html += "<td><input type=\"text\" min=\"0\" class=\"form-control rate-input floatTextBox\" id=\"rate_"+numItems+"\" name=\"rate["+numItems+"]\" value='{{$first_product['price']}}' required><span class=\"multi-error\"></span></td>";
-                    html += "<td><input type=\"text\" min=\"0\" class=\"form-control amount-input floatTextBox\" name=\"amount["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
+                    html += "<td "+discount_field_style+" class='discount-line-section'>";
+                    html += "<input style='width: 65px' type='text' name='discount_items[]' class='form-control discount-items'>";
+                    html += "<select name='discount_type_items[]' class='discount-type-items'>";
+                    html += "<option value='1'>%</option><option value='2'>Rs.</option></select></td>";
+                    html += "<td><input type=\"text\" min=\"0\" class=\"form-control amount-input floatTextBox\" name=\"amount["+numItems+"]\" readonly><span class=\"multi-error\"></span></td>";
                     {{--html += "<td><select class='form-control tax-input' name=\"taxes["+numItems+"]\">@foreach($taxes as $tax) <option value='{{$tax['id']}}'>{{$tax['rate'].'% '.$tax['tax_name']}}</option> @endforeach</select></td>";--}}
                     if(tax_type == 'out_of_scope') {
                         html += "<td class='tax_column hide'><select class='form-control tax-input' name=\"taxes["+numItems+"]\">@foreach($taxes as $tax) @if($tax['is_cess'] == 0)<option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name']}}</option> @else <option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option> @endif @endforeach</select></td>";
@@ -672,7 +752,14 @@
                     });
 
                     $('.amounts-are-select3').select2();
-                    $('.ex-product').trigger('change')
+                    $('#product_select'+i).trigger('change');
+                    $(".discount-type-items").each(function(){
+                        if($(this).val() == 1) {
+                            $(this).siblings('.discount-items').inputmask('decimal',{min:0, max:100});
+                        } else {
+                            $(this).siblings('.discount-items').inputmask('currency');
+                        }
+                    });
                 }
             });
         });
@@ -699,7 +786,8 @@
                 qty = 0;
             }
             var amount = $(this).val() * qty;
-            $(this).parent('td').next('td').find('.amount-input').val(amount);
+            $(this).parent('td').next('td').next('td').find('.amount-input').val(amount);
+            $('.discount-items').trigger('change');
             taxCalculation();
         });
 
@@ -713,15 +801,15 @@
                 val = 0;
             }
             var amount = val * rate;
-            $(this).parent('td').next('td').next('td').find('.amount-input').val(amount);
+            $(this).parent('td').next('td').next('td').next('td').find('.amount-input').val(amount);
             if(val == 0 || val == '') {
                 $(this).parent('td').next('td').find('.rate-input').val(0);
             }
             taxCalculation();
         });
 
-        $(document).on('keyup change','.amount-input',function(){
-            var qty = $(this).parent('td').prev('td').prev('td').find('.quantity-input').val();
+        /*$(document).on('keyup change','.amount-input',function(){
+            var qty = $(this).parent('td').prev('td').prev('td').prev('td').find('.quantity-input').val();
             var val = $(this).val();
             if(qty == null || qty == '') {
                 qty = 0;
@@ -733,18 +821,43 @@
             if(isNaN(rate)) {
                 rate = 0;
             }
-            $(this).parent('td').prev('td').find('.rate-input').val(rate);
+            $(this).parent('td').prev('td').prev('td').find('.rate-input').val(rate);
+            taxCalculation();
+        });*/
+
+        $(document).on('keyup change', '.discount-items', function(){
+            var discount_val = $(this).inputmask('unmaskedvalue');
+            var dis_type = $(this).siblings('.discount-type-items').val(); // 1 => %, 2 => Rs.
+            var quantity = $(this).parent('td').prev('td').prev('td').find('.quantity-input').val();
+            var rate = $(this).parent('td').prev('td').find('.rate-input').val();
+            if(isNaN(quantity)) {
+                quantity = 0;
+            }
+            if(isNaN(rate)){
+                rate = 0;
+            }
+            var amount = quantity * rate;
+            var final_amount = amount;
+
+            if(dis_type == 1 && discount_val != '' && discount_val != 0) {
+                console.log(amount +" * "+ discount_val);
+                var discount_amount = (amount * discount_val)  / 100;
+                final_amount = amount - discount_amount;
+            } else if(dis_type == 2 && discount_val != '' && discount_val != 0) {
+                final_amount = amount - discount_val;
+            }
+            $(this).parent('td').next('td').find('.amount-input').val(final_amount.toFixed(2));
             taxCalculation();
         });
 
         $(document).on('click', '.remove-line-item', function(){
             $(this).parents('.itemNewCheckTr').prev('.itemTr').remove();
             $(this).parents('.itemNewCheckTr').remove();
-            var i = 2;
+            /*var i = 2;
             $('.itemNewCheckTr').each(function(){
                 $(this).children('td:first-child').html(i);
                 i++;
-            });
+            });*/
             taxCalculation();
         });
 
@@ -760,8 +873,55 @@
             }
             taxCalculation();
         });
+
+        $("#payment_terms").change(function(){
+            var due_date = $("#bill_date").val();
+            var days = $(this).find(":selected").data('days');
+            if(days != 0) {
+                var parts = due_date.split('-');
+                var new_date = new Date(parts[2], parts[1] - 1, parts[0]);
+                var final_date = addDays(new_date.toDateString(),days);
+                $("#due_date").val(formatDate(final_date));
+            } else {
+                var bill_date = $("#bill_date").val();
+                $("#due_date").val(bill_date);
+            }
+        });
+        $("#bill_date").change(function(){
+            var due_date = $(this).val();
+            var days = $("#payment_terms").find(":selected").data('days');
+            if(days != 0) {
+                var parts = due_date.split('-');
+                var new_date = new Date(parts[2], parts[1] - 1, parts[0]);
+                // var new_date = new Date(due_date);
+                var final_date = addDays(new_date.toDateString(),days);
+                $("#due_date").val(formatDate(final_date));
+            } else {
+                var bill_date = $(this).val();
+                $("#due_date").val(bill_date);
+            }
+        });
+
         $('form.formInvoice').validate();
     });
+
+    function addDays(date, days) {
+        var result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    }
+
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+        return [day, month, year].join('-');
+    }
 
     function subTotal() {
         amount = 0;
@@ -772,7 +932,6 @@
             }
             amount += parseFloat(val);
         });
-
         var tax_type = $('#amounts_are').find(":selected").val();
         var final_amount = 0;
         if(tax_type == 'exclusive') {
@@ -811,7 +970,7 @@
         var tax = 0;
         var total = 0;
         var amount_before_tax = 0;
-
+        var discount_level = $("#discount_level").find(":selected").val();
         var tax_arr = [];
         var tax_total_arr = [];
         var i = 0;

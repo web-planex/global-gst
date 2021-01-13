@@ -164,7 +164,6 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                            <form name="frm_delete_{{$list['id']}}" id="frm_delete_{{$list['id']}}" action="{{route('sales-delete',$list['id'])}}" method="get"></form>
                                         </td>
                                     </tr>
                                     @php $i++; @endphp

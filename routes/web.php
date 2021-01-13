@@ -124,8 +124,9 @@ Route::get('/clear-cache-all', function() {
 
 Route::post('generate-multiple-expenses', 'Globals\ExpenseController@multiple_pdf')->name('generate-multiple-expenses');
 Route::get('download-pdf-zip', 'Globals\ExpenseController@downloadPdfZip')->name('download-pdf-zip');
-Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->middleware('auth');
 
+// Bill Management
 Route::resource('bills', 'Globals\BillController')->except(['destroy']);
 Route::get('bills/delete/{id}', 'Globals\BillController@destroy');
 Route::get('bills/void/{id}', 'Globals\BillController@void');

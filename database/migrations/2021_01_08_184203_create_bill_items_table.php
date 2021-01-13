@@ -22,6 +22,8 @@ class CreateBillItemsTable extends Migration
             $table->string('quantity',10);
             $table->string('rate',15);
             $table->string('amount',15);
+            $table->string('discount',20)->nullable();
+            $table->tinyInteger('discount_type')->nullable();
             $table->timestamps();
         });
     }
