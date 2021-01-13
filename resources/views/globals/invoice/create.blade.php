@@ -75,7 +75,7 @@
                         </div>
                         <div class="form-group mb-3 col-md-4">
                             <label for="payment_method">Payment Method <span class="text-danger">*</span></label>
-                            {!! Form::select('payment_method', \App\Models\Globals\Invoice::$payment_method, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method']) !!}
+                            {!! Form::select('payment_method', $payment_method, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method']) !!}
                             @if ($errors->has('payment_method'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('payment_method') }}</strong>
