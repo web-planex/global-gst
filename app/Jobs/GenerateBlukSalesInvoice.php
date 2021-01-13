@@ -17,6 +17,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use WKPDF;
+use App\Http\Controllers\Controller;
 
 class GenerateBlukSalesInvoice implements ShouldQueue
 {
@@ -27,6 +28,7 @@ class GenerateBlukSalesInvoice implements ShouldQueue
     protected $user;
     protected $download_type;
     protected $invoice_type;
+    protected $controller;
 
     public function __construct($user, $company_id, $checkboxes, $download_type, $invoice_type){
         $this->user = $user;
@@ -34,6 +36,7 @@ class GenerateBlukSalesInvoice implements ShouldQueue
         $this->checkboxes = $checkboxes;
         $this->download_type = $download_type;
         $this->invoice_type = $invoice_type;
+        $this->controller = new Controller;
     }
 
     public function handle(){
@@ -105,7 +108,7 @@ class GenerateBlukSalesInvoice implements ShouldQueue
                 }
             }
 
-            $data['invoice']['total_in_word'] = $this->convert_digit_to_words($data['invoice']['total']);
+            $data['invoice']['total_in_word'] = $this->controller->convert_digit_to_words($data['invoice']['total']);
 
             $payee = Payees::where('id',$data['invoice']['customer_id'])->first();
             if(!empty($payee)){
@@ -142,7 +145,7 @@ class GenerateBlukSalesInvoice implements ShouldQueue
             $data['company_name'] = $company['company_name'];
             $data['name'] = 'Sales Invoice';
             $data['content'] = 'This is sales invoice pdf.';
-            $pdf = new WKPDF($this->globalPdfOption());
+            $pdf = new WKPDF($this->controller->globalPdfOption());
             //return $data;
             $pdf->addPage(view('globals.invoice.pdf_invoice',$data));
             $path = $this->user->id.'/sales_invoice/';
@@ -201,7 +204,7 @@ class GenerateBlukSalesInvoice implements ShouldQueue
         ];
 
         $company['address'] = implode(', ', $company_address_arr);
-        $pdf = new WKPDF($this->globalPdfOption());
+        $pdf = new WKPDF($this->controller->globalPdfOption());
 
         foreach($this->checkboxes as $id){
             $invoice = Invoice::with('InvoiceItems')->where('id',$id)->first();
@@ -218,7 +221,7 @@ class GenerateBlukSalesInvoice implements ShouldQueue
                     $ct++;
                 }
             }
-            $invoice['total_in_word'] = $this->convert_digit_to_words($invoice['total']);
+            $invoice['total_in_word'] = $this->controller->convert_digit_to_words($invoice['total']);
 
             $payee = Payees::where('id',$invoice['customer_id'])->first();
             if(!empty($payee)){
@@ -299,61 +302,5 @@ class GenerateBlukSalesInvoice implements ShouldQueue
             $pdfZip->save();
         }
         return $files;
-    }
-
-    public function convert_digit_to_words($no){
-        //creating array of word for each digit
-        $words = array('0'=> 'Zero' ,'1'=> 'one' ,'2'=> 'two' ,'3' => 'three','4' => 'four','5' => 'five','6' => 'six','7' => 'seven','8' => 'eight','9' => 'nine','10' => 'ten','11' => 'eleven','12' => 'twelve','13' => 'thirteen','14' => 'fourteen','15' => 'fifteen','16' => 'sixteen','17' => 'seventeen','18' => 'eighteen','19' => 'nineteen','20' => 'twenty','30' => 'thirty','40' => 'forty','50' => 'fifty','60' => 'sixty','70' => 'seventy','80' => 'eighty','90' => 'ninety','100' => 'hundred','1000' => 'thousand','100000' => 'lac','10000000' => 'crore');
-
-        //for decimal number taking decimal part
-        $cash=(int)$no; //take number wihout decimal
-        $decpart = $no - $cash; //get decimal part of number
-        $decpart=sprintf("%01.2f",$decpart); //take only two digit after decimal
-        $decpart1=substr($decpart,2,1); //take first digit after decimal
-        $decpart2=substr($decpart,3,1); //take second digit after decimal
-        $decimalstr='';
-        //if given no. is decimal than preparing string for decimal digit's word
-        if($decpart>0){
-            $decimalstr.="point ".$words[$decpart1]." ".$words[$decpart2];
-        }
-
-        if($no == 0)
-            return ' ';
-        else {
-            $novalue='';
-            $highno=$no;
-            $remainno=0;
-            $value=100;
-            $value1=1000;
-            while($no>=100) {
-                if(($value <= $no) &&($no < $value1)) {
-                    $novalue=$words["$value"];
-                    $highno = (int)($no/$value);
-                    $remainno = $no % $value;
-                    break;
-                }
-                $value= $value1;
-                $value1 = $value * 100;
-            }
-            if(array_key_exists("$highno",$words)) //check if $high value is in $words array
-                return $words["$highno"]." ".$novalue." ".$this->convert_digit_to_words($remainno).$decimalstr; //recursion
-            else {
-                $unit=$highno%10;
-                $ten =(int)($highno/10)*10;
-                return $words["$ten"]." ".$words["$unit"]." ".$novalue." ".$this->convert_digit_to_words($remainno).$decimalstr; //recursion
-            }
-        }
-    }
-
-    public function globalPdfOption() {
-        $global_options = [
-            'binary' => 'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf',
-            //'ignoreWarnings' => true,
-//            'binary' => '/usr/bin/wkhtmltopdf',
-//            'header-html' => $header_html,
-//            'footer-html' => $footer_html,
-            'minimum-font-size' => 12
-        ];
-        return $global_options ;
     }
 }

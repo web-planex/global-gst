@@ -95,7 +95,7 @@ class ProductController extends Controller
         $fields_key_array = array('title', 'description', 'hsn_code', 'sku', 'unit', 'price', 'sale_price');
         $fields_value_array = array('Title', 'Description', 'HSN/SAC_Code', 'SKU', 'Unit', 'Price', 'Sale_Price');
         $columns = $fields_value_array;
-        $main_array = Product::with('User','Company')->get();
+        $main_array = Product::with('User','Company')->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->get();
         $headers = array(
             "Content-type" => "text/csv",
             "Content-Disposition" => "attachment; filename=file.csv",
