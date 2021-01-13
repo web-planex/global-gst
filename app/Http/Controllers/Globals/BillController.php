@@ -111,7 +111,7 @@ class BillController extends Controller
         $data['first_product'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         $data['payment_method'] = PaymentMethod::where('user_id',$user->id)->pluck('method_name', 'id')->toArray();
-        $data['payment_terms'] = PaymentTerms::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('terms_name', 'id')->toArray();
+        $data['payment_terms'] = PaymentTerms::where('user_id',$user->id)->where('company_id',$this->Company())->get();
         return view('globals.bills.create',$data);
     }
 
@@ -129,7 +129,6 @@ class BillController extends Controller
             'bill_date' => 'required',
             'due_date' => 'required',
             'payment_method' => 'required',
-            'payment_terms' => 'required',
             'files' => 'mimes:jpg,png,jpeg,pdf,bmp,xlsx,xls,csv,docx,doc,txt'
         ]);
 
@@ -181,7 +180,13 @@ class BillController extends Controller
                     'quantity' => $request['quantity'][$i],
                     'rate' => $request['rate'][$i],
                     'amount' => $request['amount'][$i],
+                    'discount_type' => $request['discount_type_items'][$i]
                 ];
+                if($request['discount_type_items'][$i] != '') {
+                    $data['discount'] = $request['discount_type_items'][$i]==2?str_replace( ',', '', $request['discount_items'][$i]):str_replace( ' %', '', $request['discount_items'][$i]);
+                } else {
+                    $data['discount'] = '';
+                }
                 BillItems::create($data);
             }
             return redirect('bills')->with('message','Bill has been created successfully!');
@@ -240,7 +245,7 @@ class BillController extends Controller
         $data['first_product'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         $data['payment_method'] = PaymentMethod::where('user_id',$user->id)->pluck('method_name', 'id')->toArray();
-        $data['payment_terms'] = PaymentTerms::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('terms_name', 'id')->toArray();
+        $data['payment_terms'] = PaymentTerms::where('user_id',$user->id)->where('company_id',$this->Company())->get();
         return view('globals.bills.create',$data);
     }
 
@@ -259,7 +264,6 @@ class BillController extends Controller
             'bill_date' => 'required',
             'due_date' => 'required',
             'payment_method' => 'required',
-            'payment_terms' => 'required',
             'files' => 'mimes:jpg,png,jpeg,pdf,bmp,xlsx,xls,csv,docx,doc,txt'
         ]);
 
@@ -311,7 +315,13 @@ class BillController extends Controller
                     'quantity' => $request['quantity'][$i],
                     'rate' => $request['rate'][$i],
                     'amount' => $request['amount'][$i],
+                    'discount_type' => $request['discount_type_items'][$i]
                 ];
+                if($request['discount_type_items'][$i] != '') {
+                    $data['discount'] = $request['discount_type_items'][$i]==2?str_replace( ',', '', $request['discount_items'][$i]):str_replace( ' %', '', $request['discount_items'][$i]);
+                } else {
+                    $data['discount'] = '';
+                }
                 BillItems::create($data);
             }
             return redirect('bills')->with('message','Bill has been updated successfully!');

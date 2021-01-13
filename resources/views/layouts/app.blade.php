@@ -220,6 +220,11 @@
     $('#timepicker').bootstrapMaterialDatePicker({ format: 'HH:mm', time: true, date: false });
     $('#date-format').bootstrapMaterialDatePicker({ format: 'DD MMMM YYYY' });
     $('#min-date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', minDate: new Date() });
+
+    $('#due_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart : 0, time: false });
+    $('#bill_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart : 0, time: false }).on('change', function(e, date) {
+        $('#due_date').bootstrapMaterialDatePicker('setMinDate', date);
+    });
 </script>
 <script>
     $(function () {
