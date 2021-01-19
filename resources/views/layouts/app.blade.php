@@ -127,7 +127,9 @@
                     </li>
 
                     <li class="@if(isset($menu) && $menu == 'Payees') active @endif">
-                        <a class="waves-effect waves-dark" href="{{ url('payees')}}"><i class="fa fa-user-plus"></i><span class="hide-menu">Payees / Vendors</span></a>
+                        <a class="waves-effect waves-dark" href="{{ url('payees')}}"><i class="fa fa-user-plus"></i>
+                            <span class="hide-menu">Payees / Vendors</span>
+                        </a>
                     </li>
 
                     <li class="">

@@ -87,6 +87,13 @@ class InvoiceController extends Controller
         $data['end_date'] = $request['end_date'];
         $data['invoice'] = $query->orderBy('id','DESC')->paginate($this->pagination);
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
+        $data['custom_column'] = [
+            'Invoice No',
+            'Customer',
+            'Invoice Date',
+            'Due Date',
+            'Status'
+        ];
         return view('globals.invoice.index',$data);
     }
 
@@ -281,7 +288,7 @@ class InvoiceController extends Controller
         }
         $invoice->discount_type = $request['discount_type'];
         $invoice->total = $request['total'];
-        
+
         if($photo = $request->file('files')){
             $invoice->files = $this->allFiles($photo,$user->id.'/invoice/invoice_attachment');
         }
@@ -515,6 +522,16 @@ class InvoiceController extends Controller
         $data['end_date'] = $request['end_date'];
         $data['credit_notes'] = $query->orderBy('id','DESC')->paginate($this->pagination);
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
+        $data['custom_column'] = [
+            'Invoice No',
+            'Credit Note No',
+            'Customer',
+            'Invoice Date',
+            'Due Date',
+            'Total Tax',
+            'Status',
+            'Total'
+        ];
         return view('globals.invoice.credit_note',$data);
     }
 

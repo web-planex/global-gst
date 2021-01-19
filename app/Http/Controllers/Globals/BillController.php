@@ -74,6 +74,14 @@ class BillController extends Controller
         $data['bills'] = $query->orderBy('id','DESC')->paginate($this->pagination);
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
         $data['payment_method'] = PaymentMethod::where('user_id',Auth::user()->id)->pluck('method_name', 'id')->toArray();
+        $data['custom_column'] = [
+            'Bill No',
+            'Customer',
+            'Bill Date',
+            'Due Date',
+            'Memo',
+            'Status'
+        ];
         return view('globals.bills.index',$data);
     }
 
@@ -176,10 +184,6 @@ class BillController extends Controller
             }
             return redirect('bills')->with('message','Bill has been created successfully!');
         }
-    }
-
-    public function show($id) {
-
     }
 
     public function edit($id) {

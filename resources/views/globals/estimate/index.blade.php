@@ -56,7 +56,7 @@
             {!! Form::open(['url' => url('estimate/multiple_pdf'),'class' => 'form-horizontal','files'=>true,'id'=>'MultiplePdfForm']) !!}
             <div class="card">
                 <div class="row results-top" style="margin: 0 5px;">
-                    <div class="col-md-6 col-lg-5 action">
+                    <div class="col-md-6 action">
                         <div class="action-invoice">
                             <div class="action-on">
                                 <div>Action on </div>
@@ -70,7 +70,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2 col-lg-6 btn-group">
+                    <div class="col-md-2 btn-group">
                         <div class="col-left">
                             <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
@@ -94,6 +94,27 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-4">
+                        <div class="pull-right dropleft custom-column-display">
+                            <a href="javascript:;" class="btn" data-toggle="dropdown" title="Settings" aria-expanded="false">
+                                <i class="fas fa-cog" style="font-size:20px;margin-top: 8px;"></i>
+                            </a>
+                            <div class="dropdown-menu chk-column-container">
+                                @if(!empty($custom_column))
+                                <div class="dropdown-item">Columns</div>
+                                <div class="dropdown-divider"></div>
+                                @foreach($custom_column as $column)
+                                <div class="dropdown-item">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" value="col_{{strtolower(str_replace(' ','_',$column))}}" class="custom-control-input custom-column-checkbox" id="{{$column}}" checked>
+                                        <label class="custom-control-label" for="{{$column}}">{{$column}}</label>
+                                    </div>
+                                </div>
+                                @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="gstinvoice-table-data">
                     <div class="table-responsive data-table-gst-box pb-3">
@@ -107,11 +128,11 @@
                                         </div>
                                     </th>
                                     <th>#</th>
-                                    <th>Estimate No.</th>
-                                    <th>Reference</th>
-                                    <th>Customer</th>
-                                    <th>Estimate Date</th>
-                                    <th>Due Date</th>
+                                    <th class="col_estimate_no">Estimate No.</th>
+                                    <th class="col_reference">Reference</th>
+                                    <th class="col_customer">Customer</th>
+                                    <th class="col_estimate_date">Estimate Date</th>
+                                    <th class="col_due_date">Due Date</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -127,11 +148,11 @@
                                             </div>
                                         </td>
                                         <td>{{$i}}</td>
-                                        <td>{{$list['estimate_number']}}</td>
-                                        <td>{{$list['reference']}}</td>
-                                        <td>{{$list['Payee']['name']}}</td>
-                                        <td>{{date('d F Y', strtotime($list['estimate_date']))}}</td>
-                                        <td>{{date('d F Y', strtotime($list['expiry_date']))}}</td>
+                                        <td class="col_estimate_no">{{$list['estimate_number']}}</td>
+                                        <td class="col_reference">{{$list['reference']}}</td>
+                                        <td class="col_customer">{{$list['Payee']['name']}}</td>
+                                        <td class="col_estimate_date">{{date('d F Y', strtotime($list['estimate_date']))}}</td>
+                                        <td class="col_due_date">{{date('d F Y', strtotime($list['expiry_date']))}}</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button type="button" onclick="javascript:window.location.href='{{url('estimate/'.$list['id'].'/edit')}}'" class="btn btn-secondary">Edit</button>
@@ -176,29 +197,82 @@
         </div>
     </div>
 <script type='text/javascript'>
+    $(document).ready(function(){
+        $("#all_checked").click(function () {
+            $('input:checkbox').not(this).prop('checked', this.checked);
+            $('#selected_unfulfilled_count').html($('[name="all_estimate_check[]"]:checked').length);
+        });
 
-    $("#all_checked").click(function () {
-        $('input:checkbox').not(this).prop('checked', this.checked);
-        $('#selected_unfulfilled_count').html($('[name="all_estimate_check[]"]:checked').length);
-    });
+        $('.all_estimate_check').click(function(){
+            if($('[name="all_estimate_check[]"]:checked').length == {{$estimate->count()}}){
+                $('#all_checked').prop('checked',true);
+            }else{
+                $('#all_checked').prop('checked',false);
+            }
+            $('#selected_unfulfilled_count').html($('[name="all_estimate_check[]"]:checked').length);
+        });
 
-    $('.all_estimate_check').click(function(){
-        if($('[name="all_estimate_check[]"]:checked').length == {{$estimate->count()}}){
-            $('#all_checked').prop('checked',true);
-        }else{
-            $('#all_checked').prop('checked',false);
-        }
-        $('#selected_unfulfilled_count').html($('[name="all_estimate_check[]"]:checked').length);
-    });
-
-    $('#estimate_btn').click(function(){
-        if($('[name="all_estimate_check[]"]:checked').length == 0){
-            Swal.fire("Select at least one estimate");
+        $('#estimate_btn').click(function(){
+            if($('[name="all_estimate_check[]"]:checked').length == 0){
+                Swal.fire("Select at least one estimate");
+                return false;
+            }
+            $('#myModal').modal('show');
             return false;
+        });
+
+        $(document).on('click', '.custom-column-display .dropdown-menu', function (e) {
+            e.stopPropagation();
+        });
+        var checkbox_cookie_arr = [];
+        var exp_cookie_json_str = getCookie('estimateColumns');
+
+        if(exp_cookie_json_str != '') {
+            checkbox_cookie_arr = JSON.parse(exp_cookie_json_str);
         }
-        $('#myModal').modal('show');
-        return false;
+        $('.chk-column-container').find('input:checkbox').each(function(){
+            if(exp_cookie_json_str.includes($(this).val())) {
+                $(this).prop("checked", false);
+                $('.'+$(this).val()).addClass('hide');
+            }
+        });
+        $('.custom-column-checkbox').on('click',function(){
+            var class_name = $(this).val();
+            if(!$(this).is(':checked')) {
+                checkbox_cookie_arr.push(class_name);
+            } else {
+                var index = checkbox_cookie_arr.indexOf(class_name);
+                if (index > -1) {
+                    checkbox_cookie_arr.splice(index, 1);
+                }
+            }
+            var json_str = JSON.stringify(checkbox_cookie_arr);
+            $('.'+class_name).toggleClass('hide');
+            setCookie("estimateColumns", json_str, 365);
+        });
     });
+
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires="+d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
 
     function delete_invoice_records(invoice_id){
         Swal.fire({
