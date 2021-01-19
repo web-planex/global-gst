@@ -13,7 +13,7 @@ class ProductController extends Controller
     public function __construct(){
           $this->middleware(['auth','verified']);
       }
-    
+
     public function index(Request $request){
         $data['menu'] = 'Products';
         $query = Product::where('user_id', Auth::user()->id)->where('company_id',$this->Company())->select();
@@ -29,6 +29,13 @@ class ProductController extends Controller
         }
         $data['search'] = $search;
         $data['products'] =$query->Paginate($this->pagination);
+        $data['custom_column'] = [
+            'Title',
+            'HSN Code',
+            'SKU',
+            'Purchase Price',
+            'Sale Price'
+        ];
         return view('globals.products.index',$data);
     }
 
@@ -47,7 +54,7 @@ class ProductController extends Controller
             'description' => 'required',
             'status' => 'required',
         ]);
-        
+
         $input = $request->all();
         $input['user_id'] = Auth::user()->id;
         $input['company_id'] = $this->Company();
@@ -76,7 +83,7 @@ class ProductController extends Controller
             'description' => 'required',
             'status' => 'required',
         ]);
-        
+
         $input = $request->all();
         $product = Product::where('id',$id)->first();
         $product->update($input);

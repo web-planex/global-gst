@@ -22,13 +22,34 @@
                             {!! Form::text('search', isset($search)&&!empty($search)?$search:null, ['class' => 'form-control','id'=>'sf_name', 'placeholder'=>'Search']) !!}
                         </div>
                     </div>
-                   <div class="col-md-9">
+                   <div class="col-md-6">
                         <button type="submit" class="btn btn-primary mr-2"><i class="ti-search"></i></button>
                         <a href="{{url('products')}}"><button type="button" class="btn btn-danger mr-2">Clear</button></a>
                         <a href="{{url('products/export_product')}}"><button type="button" class="btn btn-info mr-2">Export Product</button></a>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ImportProduct">Import Product</button>
                     </div>
-                </div>                
+                    <div class="col-md-3">
+                        <div class="pull-right dropleft custom-column-display">
+                            <a href="javascript:;" class="btn" data-toggle="dropdown" title="Settings" aria-expanded="false">
+                                <i class="fas fa-cog" style="font-size:20px;margin-top: 8px;"></i>
+                            </a>
+                            <div class="dropdown-menu chk-column-container">
+                                @if(!empty($custom_column))
+                                <div class="dropdown-item">Columns</div>
+                                <div class="dropdown-divider"></div>
+                                @foreach($custom_column as $column)
+                                <div class="dropdown-item">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" value="col_{{strtolower(str_replace(' ','_',$column))}}" class="custom-control-input custom-column-checkbox" id="{{$column}}" checked>
+                                        <label class="custom-control-label" for="{{$column}}">{{$column}}</label>
+                                    </div>
+                                </div>
+                                @endforeach
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {!! Form::close() !!}
             <div class="card">
                 <div class="gstinvoice-table-data">
@@ -37,11 +58,11 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Title</th>
-                                    <th>HSN / SAC Code</th>
-                                    <th>SKU</th>
-                                    <th>Purchase Price</th>
-                                    <th>Sale Price</th>
+                                    <th class="col_title">Title</th>
+                                    <th class="col_hsn_code">HSN / SAC Code</th>
+                                    <th class="col_sku">SKU</th>
+                                    <th class="col_purchase_price">Purchase Price</th>
+                                    <th class="col_sale_price">Sale Price</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -51,11 +72,11 @@
                                 @foreach($products as $list)
                                     <tr>
                                         <td>{{$i}}</td>
-                                        <td>{{$list['title']}}</td>
-                                        <td>{{$list['hsn_code']}}</td>
-                                        <td>{{$list['sku']}}</td>
-                                        <td>{{$list['price']}}</td>
-                                        <td>{{$list['sale_price']}}</td>
+                                        <td class="col_title">{{$list['title']}}</td>
+                                        <td class="col_hsn_code">{{$list['hsn_code']}}</td>
+                                        <td class="col_sku">{{$list['sku']}}</td>
+                                        <td class="col_purchase_price">{{$list['price']}}</td>
+                                        <td class="col_sale_price">{{$list['sale_price']}}</td>
                                         <td>
                                             <div class="btn-group table-icons-box" role="group" aria-label="Basic example">
                                                 <a href="{{url('products/'.$list['id'].'/edit')}}" class="btn btn-white px-0 mr-2" data-toggle="tooltip" data-placement="top" data-original-title="Update"><i class="fas fa-edit"></i></a>
@@ -123,6 +144,35 @@
         }
 
         $(document).ready(function (e) {
+            $(document).on('click', '.custom-column-display .dropdown-menu', function (e) {
+                e.stopPropagation();
+            });
+            var checkbox_cookie_arr = [];
+            var exp_cookie_json_str = getCookie('productColumns');
+
+            if(exp_cookie_json_str != '') {
+                checkbox_cookie_arr = JSON.parse(exp_cookie_json_str);
+            }
+            $('.chk-column-container').find('input:checkbox').each(function(){
+                if(exp_cookie_json_str.includes($(this).val())) {
+                    $(this).prop("checked", false);
+                    $('.'+$(this).val()).addClass('hide');
+                }
+            });
+            $('.custom-column-checkbox').on('click',function(){
+                var class_name = $(this).val();
+                if(!$(this).is(':checked')) {
+                    checkbox_cookie_arr.push(class_name);
+                } else {
+                    var index = checkbox_cookie_arr.indexOf(class_name);
+                    if (index > -1) {
+                        checkbox_cookie_arr.splice(index, 1);
+                    }
+                }
+                var json_str = JSON.stringify(checkbox_cookie_arr);
+                $('.'+class_name).toggleClass('hide');
+                setCookie("productColumns", json_str, 365);
+            });
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -160,5 +210,26 @@
                 }
             });
         });
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = "expires="+d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for(var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
     </script>
 @endsection

@@ -107,12 +107,12 @@
                             </a>
                             <div class="dropdown-menu chk-column-container">
                                 @if(!empty($custom_column))
-                                <div class="dropdown-item">Columns <small>(Check to hide)</small></div>
+                                <div class="dropdown-item">Columns</div>
                                 <div class="dropdown-divider"></div>
                                 @foreach($custom_column as $column)
                                 <div class="dropdown-item">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" value="col_{{strtolower(str_replace(' ','_',$column))}}" class="custom-control-input custom-column-checkbox" id="{{$column}}">
+                                        <input type="checkbox" value="col_{{strtolower(str_replace(' ','_',$column))}}" class="custom-control-input custom-column-checkbox" id="{{$column}}" checked>
                                         <label class="custom-control-label" for="{{$column}}">{{$column}}</label>
                                     </div>
                                 </div>
@@ -215,22 +215,20 @@
         $(document).on('click', '.custom-column-display .dropdown-menu', function (e) {
             e.stopPropagation();
         });
-
         var checkbox_cookie_arr = [];
-        var exp_cokkie_json_str = getCookie('expenseColumns');
-        console.log(exp_cokkie_json_str);
-        if(exp_cokkie_json_str != '') {
-            checkbox_cookie_arr = JSON.parse(exp_cokkie_json_str);
+        var exp_cookie_json_str = getCookie('expenseColumns');
+        if(exp_cookie_json_str != '') {
+            checkbox_cookie_arr = JSON.parse(exp_cookie_json_str);
         }
         $('.chk-column-container').find('input:checkbox').each(function(){
-            if(exp_cokkie_json_str.includes($(this).val())) {
-                $(this).prop("checked", true);
+            if(exp_cookie_json_str.includes($(this).val())) {
+                $(this).prop("checked", false);
                 $('.'+$(this).val()).addClass('hide');
             }
         });
         $('.custom-column-checkbox').on('click',function(){
             var class_name = $(this).val();
-            if($(this).is(':checked')) {
+            if(!$(this).is(':checked')) {
                 checkbox_cookie_arr.push(class_name);
             } else {
                 var index = checkbox_cookie_arr.indexOf(class_name);
@@ -241,7 +239,6 @@
             var json_str = JSON.stringify(checkbox_cookie_arr);
             $('.'+class_name).toggleClass('hide');
             setCookie("expenseColumns", json_str, 365);
-            console.log(getCookie('expenseColumns'));
         });
     });
 

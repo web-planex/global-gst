@@ -68,6 +68,13 @@ class EstimateController extends Controller
         $data['end_date'] = $request['end_date'];
         $data['estimate'] = $query->orderBy('id','DESC')->paginate($this->pagination);
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
+        $data['custom_column'] = [
+            'Estimate No',
+            'Reference',
+            'Customer',
+            'Estimate Date',
+            'Due Date'
+        ];
         return view('globals.estimate.index',$data);
     }
 
@@ -229,7 +236,7 @@ class EstimateController extends Controller
         $estimate->expiry_date = date('Y-m-d', strtotime($request['expiry_date']));
         $estimate->amount_before_tax = $request['amount_before_tax'];
         $estimate->tax_amount = $request['tax_amount'];
-        
+
         if($request['discount_type'] != '') {
             $estimate->discount = $request['discount_type']==2?str_replace( ',', '', $request['discount']):str_replace( ' %', '', $request['discount']);
         } else {

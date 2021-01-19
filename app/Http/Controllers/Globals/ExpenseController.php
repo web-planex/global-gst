@@ -512,7 +512,7 @@ class ExpenseController extends Controller
         }
         return $data;
     }
-    
+
     public function get_expense_type(Request $request) {
         if($request['data'] != 0){
             $expense_type = Product::where('id',$request['data'])->first();
@@ -538,7 +538,7 @@ class ExpenseController extends Controller
         $data['name'] = $product['title'];
         return $data;
     }
-    
+
     public function expense_type_store(Request $request) {
         $expenseTypeValue = $request->all();
         $input=  array();
