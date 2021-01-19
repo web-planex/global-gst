@@ -135,6 +135,7 @@
                                     <th class="col_due_date">Due Date</th>
                                     <th class="col_memo">Memo</th>
                                     <th class="col_status">Status</th>
+                                    <th class="col_total">Total</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -166,6 +167,7 @@
                                                 <label class="label label-primary">Overdue</label>
                                             @endif
                                         </td>
+                                        <td class="col_total">Rs. {{$list['total']}}</td>
                                         <td>
                                             <div class="btn-group">
                                                 <button type="button" onclick="javascript:window.location.href='{{route('bills.edit',['bill'=>$list['id']])}}'" class="btn btn-secondary">Edit</button>

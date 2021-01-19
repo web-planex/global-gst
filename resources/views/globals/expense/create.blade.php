@@ -388,6 +388,10 @@
 <!--PRODUCT MODAL-->
 @include('globals.expense.expense_type_modal')
 
+@section('page_confirmation_script')
+    <script src="{{asset('js/page_confirmation_script.js')}}"></script>
+@stop
+
 <script type="text/javascript">
     @if(isset($expense) && !empty($expense))
         $(document).ready(function(){
@@ -409,7 +413,7 @@
             setTimeout(function(){
                 $('.ex-type').trigger('change');
             },500);
-        }); 
+        });
     @endif
 
     function OpenUserTypeModal(){
@@ -471,11 +475,11 @@
             }
             taxCalculation();
         });
-        
+
         $('#discount').on('keyup change', function(){
             taxCalculation();
         });
-        
+
         $("#formExpense").validate({
             rules: {
                 expense_date: "required",
@@ -486,7 +490,7 @@
                 status: "The status field is required",
             }
         });
-        
+
         $("#SuppliersForm").validate({
             rules: {
                 first_name: "required",
@@ -789,7 +793,7 @@
                     $this_html2 + "</div>");
             }
         });
-        
+
         $('#expense_type').on("select2:open", function() {
             flg3++;
             if (flg3 == 1) {
@@ -972,7 +976,7 @@
         var tax_arr = [];
         var tax_total_arr = [];
         var i = 0;
-        
+
         var discount_type = $('#discount_type').val();
 
         $('.tax-input').find('option').each(function() {
@@ -1003,7 +1007,7 @@
                         tax_hidden += parseFloat(amount);
                         $("#id_"+ tax_str).val(tax_hidden);
                     }
-                    
+
                     var cls_opt_str1 = "." + opt1_str;
                     var cls_opt_str2 = "." + opt2_str;
 
