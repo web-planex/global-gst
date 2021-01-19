@@ -388,6 +388,10 @@
 <!--PRODUCT MODAL-->
 @include('globals.expense.expense_type_modal')
 
+@section('page_confirmation_script')
+    <script src="{{asset('js/page_confirmation_script.js')}}"></script>
+@stop
+
 <script type="text/javascript">
     @if(isset($expense) && !empty($expense))
         $(document).ready(function(){

@@ -195,6 +195,8 @@
 <script src="{{ asset('assets/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
 <script src="{{ asset('assets/sweetalert2/sweet-alert.init.js') }}"></script>
 <script src="{{ asset('assets/select2/dist/select2.js')}}"></script>
+@yield('page_confirmation_script')
+@yield('tax_calculations_discount')
 <script>
     $(document).ready(function() {
         if ($("#message_body").length > 0) {
@@ -212,7 +214,7 @@
         }
         $('.amounts-are-select2').select2();
         $('.amounts-are-select4').select2();
-'.discount-level-select2').select2({
+        $('.discount-level-select2').select2({
             minimumResultsForSearch: -1
         });
     });
@@ -230,11 +232,10 @@
         $('#due_date').bootstrapMaterialDatePicker('setMinDate', date);
     });
 
-    $('#send_date).bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart : 0, time: false });
-    $('#estart_date).bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart : 0, time: false }).on('change', function(e, date) {
-        $('#send_date).bootstrapMaterialDatePicker('setMinDate', date);
-    });>
-<script>
+    $('#send_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart : 0, time: false });
+    $('#start_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart : 0, time: false }).on('change', function(e, date) {
+        $('#send_date').bootstrapMaterialDatePicker('setMinDate', date);
+    });
     $(function () {
         // Switchery
         var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
