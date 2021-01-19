@@ -31,18 +31,9 @@
                 @endif
                     @csrf
                     <div class="form-row">
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="status">Status <span class="text-danger">*</span></label>
-                            {!! Form::select('status', \App\Models\Globals\Invoice::$invoice_status, null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
-                            @if ($errors->has('status'))
-                                <span class="text-danger">
-                                    <strong>{{ $errors->first('status') }}</strong>
-                                </span>
-                            @endif
-                        </div>
-                        <div class="form-group mb-3 col-md-6">
+                        <div class="form-group mb-3 col-md-12">
                             <label for="customer">Customer <span class="text-danger">*</span></label>
-                            {!! Form::select('customer', $payees, isset($invoice)&&!empty($invoice)?$invoice['customer_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'customer', 'onchange'=>'getEmail(this.value)']) !!}
+                            {!! Form::select('customer', $payees, isset($invoice)&&!empty($invoice)?$invoice['customer_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'customer', 'onchange'=>'getAddress(this.value)']) !!}
                             <div class="wrapper" id="wrp" style="display: none;">
                                 <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
                             </div>
@@ -51,13 +42,59 @@
                                     <strong>{{ $errors->first('customer') }}</strong>
                                 </span>
                             @endif
+
+                            <div class="row mt-3 @if(isset($invoice) && empty($invoice)) hide @elseif(!isset($invoice)) hide @endif" id="cust_address">
+                                <div class="col-md-6">
+                                    <div class="card border-info mb-0" style="background-color: #ECF0F4;">
+                                        <div class="card-header bg-primary">
+                                            <h4 class="m-b-0 text-white">Billing Address</h4>
+                                        </div>
+                                        <div class="card-body pt-2 pb-2">
+                                            @if(isset($invoice) && !empty($invoice))
+                                                <p class="card-text mb-0">{{$invoice['customer']['billing_name']}}</p>
+                                                <p class="card-text mb-0">{{$invoice['customer']['billing_phone']}}</p>
+                                                <p class="card-text mb-0">{{$invoice['customer']['billing_street']}}</p>
+                                                <p class="card-text mb-0">{{$invoice['customer']['billing_city']}} - {{$invoice['customer']['billing_pincode']}}</p>
+                                                <p class="card-text mb-0">{{$invoice['customer']['billing_state_name']}}</p>
+                                                <p class="card-text mb-0">{{$invoice['customer']['billing_country']}}</p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-info mb-0" style="background-color: #ECF0F4;">
+                                        <div class="card-header bg-primary">
+                                            <h4 class="m-b-0 text-white">Shipping Address</h4>
+                                        </div>
+                                        <div class="card-body pt-2 pb-2">
+                                            @if(isset($invoice) && !empty($invoice))
+                                                <p class="card-text mb-0">{{$invoice['customer']['shipping_name']}}</p>
+                                                <p class="card-text mb-0">{{$invoice['customer']['shipping_phone']}}</p>
+                                                <p class="card-text mb-0">{{$invoice['customer']['shipping_street']}}</p>
+                                                <p class="card-text mb-0">{{$invoice['customer']['shipping_city']}} - {{$invoice['customer']['shipping_pincode']}}</p>
+                                                <p class="card-text mb-0">{{$invoice['customer']['shipping_state_name']}}</p>
+                                                <p class="card-text mb-0">{{$invoice['customer']['shipping_country']}}</p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-row">
+                        <div class="form-group mb-3 col-md-4" id="order_div">
+                            <label for="order_number">Order Number <span class="text-danger"></span></label>
+                            {!! Form::text('order_number', null, ['class' => 'form-control','id'=>'order_number']) !!}
+                            @if ($errors->has('order_number'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('order_number') }}</strong>
+                                </span>
+                            @endif
+                        </div>
                         <div class="form-group mb-3 col-md-4">
                             <label for="invoice_date">Invoice Date <span class="text-danger">*</span></label>
-                            {!! Form::text('invoice_date', isset($invoice)&&!empty($invoice)?date('d-m-Y',strtotime($invoice['invoice_date'])):null, ['class' => 'form-control','id'=>'invoice_date']) !!}
+                            {!! Form::text('invoice_date', isset($invoice)&&!empty($invoice)?date('d-m-Y',strtotime($invoice['invoice_date'])):date('d-m-Y'), ['class' => 'form-control','id'=>'invoice_date']) !!}
                             @if ($errors->has('invoice_date'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('invoice_date') }}</strong>
@@ -65,6 +102,18 @@
                             @endif
                         </div>
                         <div class="form-group mb-3 col-md-4">
+                            <label for="status">Status <span class="text-danger">*</span></label>
+                            {!! Form::select('status', \App\Models\Globals\Invoice::$invoice_status, null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
+                            @if ($errors->has('status'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('status') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group mb-3 col-md-4 @if(isset($invoice) && $invoice['status']==1) hide @elseif(!isset($invoice)) hide @endif " id="due_date_div">
                             <label for="due_date">Due Date <span class="text-danger">*</span></label>
                             {!! Form::text('due_date', isset($invoice)&&!empty($invoice)?date('d-m-Y',strtotime($invoice['due_date'])):null, ['class' => 'form-control','id'=>'due_date']) !!}
                             @if ($errors->has('due_date'))
@@ -73,12 +122,30 @@
                                 </span>
                             @endif
                         </div>
-                        <div class="form-group mb-3 col-md-4">
+                        <div class="form-group mb-3 col-md-4 @if(isset($invoice) && $invoice['status']==1) hide @elseif(!isset($invoice)) hide @endif" id="reference_div">
+                            <label for="reference_number">Reference Number <span class="text-danger"></span></label>
+                            {!! Form::text('reference_number', null, ['class' => 'form-control','id'=>'reference_number']) !!}
+                            @if ($errors->has('reference_number'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('reference_number') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                        <div class="form-group mb-3 col-md-4 @if(isset($invoice) && $invoice['status']==1) hide @elseif(!isset($invoice)) hide @endif" id="pay_method_div">
                             <label for="payment_method">Payment Method <span class="text-danger">*</span></label>
-                            {!! Form::select('payment_method', $payment_method, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method']) !!}
+                            {!! Form::select('payment_method', $payment_method, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method','style'=>'width:100%']) !!}
                             @if ($errors->has('payment_method'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('payment_method') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                        <div class="form-group mb-3 col-md-4 @if(isset($invoice) && $invoice['status']==2) hide @endif " id="pay_terms_div">
+                            <label for="payment_terms">Payment Terms <span class="text-danger"></span></label>
+                            {!! Form::select('payment_terms', $payment_terms, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_terms','style'=>'width:100%']) !!}
+                            @if ($errors->has('payment_terms'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('payment_terms') }}</strong>
                                 </span>
                             @endif
                         </div>
@@ -251,6 +318,17 @@
                                                     <td>{!! Form::text('discount', null, ['class' => 'form-control','id'=>'discount']) !!}</td>
                                                 </tr>
                                                 <tr>
+                                                    <th>
+                                                        <label class="font-bold-500">Shipping Charge &nbsp;
+                                                            {!! Form::checkbox('shipping_charge', isset($invoice) && $invoice['shipping_charge']==1?1:null, isset($invoice)&&!empty($invoice['shipping_charge'])?true:false, ['class' => 'js-switch', 'id'=>'shipping_charge', 'data-color'=>'#01c0c8', 'data-size'=>'small', 'data-switchery'=>'true','style'=>'display:none;']) !!}
+                                                        </label>
+                                                    </th>
+                                                    @php
+                                                        $disabled = isset($invoice) && $invoice['shipping_charge']==1?'':'disabled';
+                                                    @endphp
+                                                    <td>{!! Form::text('shipping_charge_amount', null, [$disabled, 'class' => 'form-control','id'=>'shipping_charge_amount','style'=>'text-align:right']) !!}</td>
+                                                </tr>
+                                                <tr>
                                                     <th width="50%">Total</th>
                                                     <td width="50%"><input type="text" class="form-control text-right" id="total" readonly="" /></td>
                                                 </tr>
@@ -397,6 +475,10 @@
             taxCalculation();
         });
 
+        $('#shipping_charge_amount').on('keyup change', function(){
+            taxCalculation();
+        });
+
         $("#CustomersForm").validate({
             rules: {
                 first_name: "required",
@@ -477,6 +559,8 @@
                         $('#customer').val(optionValue).change();
                         $('#CustomersModal').modal('hide');
                         $('html, body').css('overflowY', 'auto');
+                        $('#cust_address').html(result['address']);
+                        $('#cust_address').removeClass('hide');
                         $("#CustomersForm")[0].reset();
                         getEmail($('#customer').val());
                     }
@@ -523,6 +607,51 @@
                 });
             }
         });
+
+        $('#status').change( function(){
+           if($(this).val()==1){
+               $('#pay_terms_div').removeClass('hide');
+               $('#due_date_div').addClass('hide');
+               $('#pay_method_div').addClass('hide');
+               $('#reference_div').addClass('hide');
+           }else{
+               $('#due_date_div').removeClass('hide');
+               $('#pay_method_div').removeClass('hide');
+               $('#reference_div').removeClass('hide');
+               $('#pay_terms_div').addClass('hide');
+           }
+        });
+    });
+
+    function getAddress(cust_id) {
+        $.ajax({
+            url: '{{url('ajax/get_address')}}',
+            type: 'get',
+            data: {'data':cust_id},
+            success: function (result) {
+                if(cust_id != ""){
+                    $('#cust_address').html(result);
+                    $('#cust_address').removeClass('hide');
+                }else{
+                    $('#cust_address').addClass('hide');
+                }
+            }
+        });
+    }
+
+    $('#shipping_charge').click(function () {
+        Inputmask.extendDefaults({
+            'removeMaskOnSubmit': true
+        });
+
+        if($("#shipping_charge").is(':checked')){
+            $('#shipping_charge_amount').removeAttr('disabled');
+            $('#shipping_charge_amount').inputmask("currency");
+        }else{
+            $("#shipping_charge_amount").prop('disabled', true);
+            $('#shipping_charge_amount').val('');
+            taxCalculation();
+        }
     });
 
     $(document).ready(function(){
@@ -913,6 +1042,11 @@
                 var discount = $('#discount').inputmask('unmaskedvalue');
                 total = total - discount;
             }
+        }
+
+        if($('#shipping_charge_amount').val() != '') {
+            var shipping_charge = $('#shipping_charge_amount').val();
+            total = total + parseFloat(shipping_charge) ;
         }
 
         $('#total').val('Rs. '+ parseFloat(total).toFixed(2));

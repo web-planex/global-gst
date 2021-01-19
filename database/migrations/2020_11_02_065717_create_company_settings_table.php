@@ -36,6 +36,8 @@ class CreateCompanySettingsTable extends Migration
             $table->string('invoice_number',25)->nullable();
             $table->string('credit_note_prefix',15)->nullable();
             $table->string('credit_note_number',10)->nullable();
+            $table->string('estimate_prefix',25)->nullable();
+            $table->string('estimate_number',25)->nullable();
             $table->boolean('product_price_gst')->nullable();
             $table->boolean('shipping_price_gst')->nullable();
             $table->boolean('shipping_gst')->nullable();

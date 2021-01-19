@@ -105,7 +105,6 @@ class EstimateController extends Controller
         $user = Auth::user();
         $this->validate($request, [
             'customer' => 'required',
-            'estimate_number' => 'required',
             'estimate_date' => 'required',
             'expiry_date' => 'required',
             'files' => 'mimes:jpg,png,jpeg,pdf,bmp,xlsx,xls,csv,docx,doc,txt'
@@ -124,11 +123,16 @@ class EstimateController extends Controller
         }
         $estimate->customer_id = $request['customer'];
         $estimate->estimate_number = $request['estimate_number'];
-        $estimate->reference = $request['reference'];
         $estimate->estimate_date = date('Y-m-d', strtotime($request['estimate_date']));
         $estimate->expiry_date = date('Y-m-d', strtotime($request['expiry_date']));
         $estimate->amount_before_tax = $request['amount_before_tax'];
         $estimate->tax_amount = $request['tax_amount'];
+        $estimate->shipping_charge_amount = $request['shipping_charge_amount'];
+        $estimate->shipping_charge = isset($request['shipping_charge'])&&!empty($request['shipping_charge'])?1:0;
+        $company = CompanySettings::where('id',$this->Company())->first();
+
+        $estimate->estimate_number = !empty($company['estimate_prefix'])?$company['estimate_prefix'].'/'.$company['estimate_number']:1;
+
         if($request['discount_type'] != '') {
             $estimate->discount = $request['discount_type']==2?str_replace( ',', '', $request['discount']):str_replace( ' %', '', $request['discount']);
         } else {
@@ -143,6 +147,10 @@ class EstimateController extends Controller
 
         if($request->has('submit')) {
             $estimate->save();
+
+            $input['estimate_number'] = $company['estimate_number']+1;
+            $company->update($input);
+
             $estimate_id = $estimate->id;
             $data = [];
             for($i=0;$i<count($request['product']);$i++) {
@@ -169,6 +177,13 @@ class EstimateController extends Controller
         $user = Auth::user();
         $data['menu'] = 'Estimate';
         $data['estimate'] = Estimate::findOrFail($id);
+        $customer = Customers::where('id',$data['estimate']['Payee']['type_id'])->first();
+        $billing_state = States::where('id',$customer['billing_state'])->first();
+        $shipping_state = States::where('id',$customer['shipping_state'])->first();
+
+        $data['estimate']['customer'] = $customer;
+        $data['estimate']['customer']['billing_state_name'] = $billing_state['state_name'];
+        $data['estimate']['customer']['shipping_state_name'] = $shipping_state['state_name'];
         $data['estimate']['file_name'] = '';
         if(!empty($data['estimate']['files']) && file_exists($data['estimate']['files'])){
             $ext = explode('/',$data['estimate']['files']);
@@ -195,6 +210,7 @@ class EstimateController extends Controller
             $taxes_with_cess_arr[$i+1] = $tax['cess'].'_CESS';
             $i = $i+2;
         }
+
         $data['all_tax_labels'] = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
         $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
         $data['products'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
@@ -224,12 +240,12 @@ class EstimateController extends Controller
             $estimate->tax_type = 3;
         }
         $estimate->customer_id = $request['customer'];
-        $estimate->reference = $request['reference'];
         $estimate->estimate_date = date('Y-m-d', strtotime($request['estimate_date']));
         $estimate->expiry_date = date('Y-m-d', strtotime($request['expiry_date']));
         $estimate->amount_before_tax = $request['amount_before_tax'];
         $estimate->tax_amount = $request['tax_amount'];
-        
+        $estimate->shipping_charge_amount = $request['shipping_charge_amount'];
+        $estimate->shipping_charge = isset($request['shipping_charge'])&&!empty($request['shipping_charge'])?1:0;
         if($request['discount_type'] != '') {
             $estimate->discount = $request['discount_type']==2?str_replace( ',', '', $request['discount']):str_replace( ' %', '', $request['discount']);
         } else {
@@ -356,9 +372,6 @@ class EstimateController extends Controller
         $data['name']  = 'Estimate';
         $data['content'] = 'This is test pdf.';
         $pdf = new WKPDF($this->globalPdfOption());
-
-//        return view('globals.estimate.pdf_estimate',$data);
-
         $pdf->addPage(view('globals.estimate.pdf_estimate',$data));
         if($request->output == 'download') {
             if (!$pdf->send('estimate.pdf')) {
@@ -412,5 +425,42 @@ class EstimateController extends Controller
             'job_status' => $job_status
         ];
         return view('globals.estimate.get_pdf_zip',$data);
+    }
+
+    public function get_address(Request $request){
+        $payee = Payees::where('id',$request['data'])->first();
+        $customer = Customers::where('id',$payee['type_id'])->first();
+        $address = '';
+        $billing_state = States::where('id',$customer['billing_state'])->first();
+        $shipping_state = States::where('id',$customer['shipping_state'])->first();
+        $address .= '<div class="col-md-6">
+                        <div class="card border-info mb-0" style="background-color: #f5f5f5;">
+                            <div class="card-header bg-primary">
+                                <h4 class="m-b-0 text-white">Billing Address</h4></div>
+                            <div class="card-body pt-2 pb-2">
+                                <p class="card-text mb-0">'.$customer['billing_name'].'</p>
+                                <p class="card-text mb-0">'.$customer['billing_phone'].'</p>
+                                <p class="card-text mb-0">'.$customer['billing_street'].'</p>
+                                <p class="card-text mb-0">'.$customer['billing_city'].' - '.$customer['billing_pincode'].'</p>
+                                <p class="card-text mb-0">'.$billing_state['state_name'].'</p>
+                                <p class="card-text mb-0">'.$customer['billing_country'].'</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card border-info mb-0" style="background-color: #f5f5f5;">
+                            <div class="card-header bg-primary">
+                                <h4 class="m-b-0 text-white">Shipping Address</h4></div>
+                            <div class="card-body pt-2 pb-2">
+                                <p class="card-text mb-0">'.$customer['shipping_name'].'</p>
+                                <p class="card-text mb-0">'.$customer['shipping_phone'].'</p>
+                                <p class="card-text mb-0">'.$customer['shipping_street'].'</p>
+                                <p class="card-text mb-0">'.$customer['shipping_city'].' - '.$customer['shipping_pincode'].'</p>
+                                <p class="card-text mb-0">'.$shipping_state['state_name'].'</p>
+                                <p class="card-text mb-0">'.$customer['shipping_country'].'</p>
+                            </div>
+                        </div>
+                    </div>';
+        return $address;
     }
 }

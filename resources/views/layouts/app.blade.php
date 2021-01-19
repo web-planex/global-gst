@@ -104,14 +104,14 @@
                         </ul>
                     </li>
 
-                    <li class="@if(isset($menu) && $menu == 'Sales Orders' || isset($menu) && $menu == 'Credit Notes' || isset($menu) && $menu == 'Estimate') active @endif">
+                    <li class="@if(isset($menu) && $menu == 'Invoices' || isset($menu) && $menu == 'Credit Notes' || isset($menu) && $menu == 'Estimate') active @endif">
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-shopping-cart"></i>
                             <span class="hide-menu">Sales</span>
                         </a>
-                        <ul aria-expanded="false" class="collapse @if(isset($menu) && $menu == 'Sales Orders' || isset($menu) && $menu == 'Credit Notes' || isset($menu) && $menu == 'Estimate') in @endif">
-                            <li><a href="{{ url('sales')}}" class="@if(isset($menu) && $menu == 'Sales Orders' ) active @endif">Sales Orders</a></li>
-                            <li><a href="{{url('credit-note')}}" class="@if(isset($menu) && $menu == 'Credit Notes' ) active @endif">Credit Notes</a></li>
+                        <ul aria-expanded="false" class="collapse @if(isset($menu) && $menu == 'Invoices' || isset($menu) && $menu == 'Credit Notes' || isset($menu) && $menu == 'Estimate') in @endif">
                             <li><a href="{{url('estimate')}}" class="@if(isset($menu) && $menu == 'Estimate' ) active @endif">Estimate</a></li>
+                            <li><a href="{{ url('sales')}}" class="@if(isset($menu) && $menu == 'Invoices' ) active @endif">Invoices</a></li>
+                            <li><a href="{{url('credit-note')}}" class="@if(isset($menu) && $menu == 'Credit Notes' ) active @endif">Credit Notes</a></li>
                         </ul>
                     </li>
 
@@ -209,6 +209,7 @@
             });
         }
         $('.amounts-are-select2').select2();
+        $('.amounts-are-select4').select2();
         $('.discount-level-select2').select2({
             minimumResultsForSearch: -1
         });

@@ -17,6 +17,7 @@ use App\Models\Globals\Job;
 use App\Models\Globals\Payees;
 use App\Models\Globals\PaymentAccount;
 use App\Models\Globals\PaymentMethod;
+use App\Models\Globals\PaymentTerms;
 use App\Models\Globals\PdfZips;
 use App\Models\Globals\Product;
 use App\Models\Globals\States;
@@ -36,7 +37,7 @@ class InvoiceController extends Controller
     }
 
     public function index(Request $request){
-        $data['menu'] = 'Sales Orders';
+        $data['menu'] = 'Invoices';
         $input_search = $request['search'];
         $start_date = !empty($request['start_date'])?date('Y-m-d', strtotime($request['start_date'])) :"";
         $end_date = !empty($request['end_date'])?date('Y-m-d', strtotime($request['end_date'])):"";
@@ -92,7 +93,7 @@ class InvoiceController extends Controller
 
     public function create(){
         $user = Auth::user();
-        $data['menu'] = 'Sales Orders';
+        $data['menu'] = 'Invoices';
         $payment_accounts = PaymentAccount::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
         $data['taxes'] = Taxes::where('status', 1)->get();
         $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
@@ -120,6 +121,7 @@ class InvoiceController extends Controller
         $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $data['first_product'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
+        $data['payment_terms'] = PaymentTerms::pluck('terms_name','id');
         return view('globals.invoice.create',$data);
     }
 
@@ -149,6 +151,8 @@ class InvoiceController extends Controller
         $invoice->amount_before_tax = $request['amount_before_tax'];
         $invoice->tax_amount = $request['tax_amount'];
         $invoice->payment_method = $request['payment_method'];
+        $invoice->shipping_charge_amount = $request['shipping_charge_amount'];
+        $invoice->shipping_charge = isset($request['shipping_charge'])&&!empty($request['shipping_charge'])?1:0;
         $invoice->status = $request['status'];
 
         $company = CompanySettings::where('id',$this->Company())->first();
@@ -202,8 +206,15 @@ class InvoiceController extends Controller
 
     public function edit($id){
         $user = Auth::user();
-        $data['menu'] = 'Sales Orders';
+        $data['menu'] = 'Invoices';
         $data['invoice'] = Invoice::findOrFail($id);
+        $customer = Customers::where('id',$data['invoice']['Payee']['type_id'])->first();
+        $billing_state = States::where('id',$customer['billing_state'])->first();
+        $shipping_state = States::where('id',$customer['shipping_state'])->first();
+
+        $data['invoice']['customer'] = $customer;
+        $data['invoice']['customer']['billing_state_name'] = $billing_state['state_name'];
+        $data['invoice']['customer']['shipping_state_name'] = $shipping_state['state_name'];
         $data['invoice']['file_name'] = '';
         if(!empty($data['invoice']['files']) && file_exists($data['invoice']['files'])){
             $ext = explode('/',$data['invoice']['files']);
@@ -237,6 +248,7 @@ class InvoiceController extends Controller
         $data['products'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $data['first_product'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
+        $data['payment_terms'] = PaymentTerms::pluck('terms_name','id');
         return view('globals.invoice.create',$data);
     }
 
@@ -266,6 +278,8 @@ class InvoiceController extends Controller
         $invoice->amount_before_tax = $request['amount_before_tax'];
         $invoice->tax_amount = $request['tax_amount'];
         $invoice->payment_method = $request['payment_method'];
+        $invoice->shipping_charge_amount = $request['shipping_charge_amount'];
+        $invoice->shipping_charge = isset($request['shipping_charge'])&&!empty($request['shipping_charge'])?1:0;
         $invoice->status = $request['status'];
 
         $company = CompanySettings::where('id',$this->Company())->first();

@@ -19,6 +19,8 @@ class CreateInvoicesTable extends Migration
             $table->integer('company_id');
             $table->string('invoice_number',15);
             $table->string('credit_note_number',15)->nullable();
+            $table->string('order_number',15)->nullable();
+            $table->string('reference_number',15)->nullable();
             $table->integer('tax_type')->comment('(1 => Exclusive, 2 => Inclusive, 3 => Out of scope)');
             $table->integer('customer_id');
             $table->date('invoice_date');
@@ -31,7 +33,10 @@ class CreateInvoicesTable extends Migration
             $table->string('total',20);
             $table->text('files')->nullable();
             $table->string('payment_method',50);
+            $table->string('payment_terms',50);
             $table->integer('status')->nullable();
+            $table->integer('shipping_charge')->default(0);
+            $table->string('shipping_charge_amount',20)->nullable();
             $table->timestamps();
         });
     }

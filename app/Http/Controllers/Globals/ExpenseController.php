@@ -334,7 +334,41 @@ class ExpenseController extends Controller
         $data['id'] = $new_payee['id'];
         $data['name'] = $new_payee['name'];
         $data['customer_id'] = $user_type['id'];
+        $address = '';
+        if($payeeValue['user_type']==3 && isset($request['section']) && !empty($request['section']) && $request['section'] == 'estimate'){
+            $billing_state = States::where('id',$user_type['billing_state'])->first();
+            $shipping_state = States::where('id',$user_type['shipping_state'])->first();
+            $address .= '<div class="col-md-6">
+                                <div class="card border-info mb-0" style="background-color: #f5f5f5;">
+                                    <div class="card-header bg-primary">
+                                        <h4 class="m-b-0 text-white">Billing Address</h4></div>
+                                    <div class="card-body pt-2 pb-2">
+                                        <p class="card-text mb-0">'.$user_type['billing_name'].'</p>
+                                        <p class="card-text mb-0">'.$user_type['billing_phone'].'</p>
+                                        <p class="card-text mb-0">'.$user_type['billing_street'].'</p>
+                                        <p class="card-text mb-0">'.$user_type['billing_city'].' - '.$user_type['billing_pincode'].'</p>
+                                        <p class="card-text mb-0">'.$billing_state['state_name'].'</p>
+                                        <p class="card-text mb-0">India</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-info mb-0" style="background-color: #f5f5f5;">
+                                    <div class="card-header bg-primary">
+                                        <h4 class="m-b-0 text-white">Shipping Address</h4></div>
+                                    <div class="card-body pt-2 pb-2">
+                                        <p class="card-text mb-0">'.$user_type['shipping_name'].'</p>
+                                        <p class="card-text mb-0">'.$user_type['shipping_phone'].'</p>
+                                        <p class="card-text mb-0">'.$user_type['shipping_street'].'</p>
+                                        <p class="card-text mb-0">'.$user_type['shipping_city'].' - '.$user_type['shipping_pincode'].'</p>
+                                        <p class="card-text mb-0">'.$shipping_state['state_name'].'</p>
+                                        <p class="card-text mb-0">India</p>
+                                    </div>
+                                </div>
+                            </div>';
+        }
 
+        $data['address'] = $address;
         return $data;
     }
 
