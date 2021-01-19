@@ -80,7 +80,8 @@ class BillController extends Controller
             'Bill Date',
             'Due Date',
             'Memo',
-            'Status'
+            'Status',
+            'Total'
         ];
         return view('globals.bills.index',$data);
     }
