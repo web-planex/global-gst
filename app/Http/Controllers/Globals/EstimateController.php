@@ -134,6 +134,7 @@ class EstimateController extends Controller
         $estimate->expiry_date = date('Y-m-d', strtotime($request['expiry_date']));
         $estimate->amount_before_tax = $request['amount_before_tax'];
         $estimate->tax_amount = $request['tax_amount'];
+        $estimate->discount_level = $request['discount_level'];
         $estimate->shipping_charge_amount = $request['shipping_charge_amount'];
         $estimate->shipping_charge = isset($request['shipping_charge'])&&!empty($request['shipping_charge'])?1:0;
         $company = CompanySettings::where('id',$this->Company())->first();
@@ -169,7 +170,13 @@ class EstimateController extends Controller
                     'quantity' => $request['quantity'][$i],
                     'rate' => $request['rate'][$i],
                     'amount' => $request['amount'][$i],
+                    'discount_type' => $request['discount_type_items'][$i]
                 ];
+                if($request['discount_type_items'][$i] != '') {
+                    $data['discount'] = $request['discount_type_items'][$i]==2?str_replace( ',', '', $request['discount_items'][$i]):str_replace( ' %', '', $request['discount_items'][$i]);
+                } else {
+                    $data['discount'] = '';
+                }
                 EstimateItems::create($data);
             }
             return redirect('estimate')->with('message','Estimate has been created successfully!');
@@ -251,6 +258,7 @@ class EstimateController extends Controller
         $estimate->expiry_date = date('Y-m-d', strtotime($request['expiry_date']));
         $estimate->amount_before_tax = $request['amount_before_tax'];
         $estimate->tax_amount = $request['tax_amount'];
+        $estimate->discount_level = $request['discount_level'];
         $estimate->shipping_charge_amount = $request['shipping_charge_amount'];
         $estimate->shipping_charge = isset($request['shipping_charge'])&&!empty($request['shipping_charge'])?1:0;
         if($request['discount_type'] != '') {
@@ -279,7 +287,13 @@ class EstimateController extends Controller
                     'quantity' => $request['quantity'][$i],
                     'rate' => $request['rate'][$i],
                     'amount' => $request['amount'][$i],
+                    'discount_type' => $request['discount_type_items'][$i]
                 ];
+                if($request['discount_type_items'][$i] != '') {
+                    $data['discount'] = $request['discount_type_items'][$i]==2?str_replace( ',', '', $request['discount_items'][$i]):str_replace( ' %', '', $request['discount_items'][$i]);
+                } else {
+                    $data['discount'] = '';
+                }
                 EstimateItems::create($data);
             }
             return redirect('estimate')->with('message','Estimate has been updated successfully!');

@@ -24,6 +24,7 @@ class CreateEstimatesTable extends Migration
             $table->date('expiry_date');
             $table->string('amount_before_tax',20);
             $table->string('tax_amount',20);
+            $table->integer('discount_level')->comment('0 => Transaction Level, 1 => Item Level');
             $table->string('discount',20);
             $table->integer('discount_type');
             $table->string('total',20);
