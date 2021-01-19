@@ -166,7 +166,7 @@
                                                                 <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[]" value="{{$item['amount']}}">
                                                             </td>
                                                             <td id="taxes" class="tax_column @if(isset($estimate)&&$estimate['tax_type']==3) hide @endif">
-                                                                <select class="form-control tax-input" name="taxes[]">
+                                                                <select id="taxes" class="form-control tax-input" name="taxes[]">
                                                                     @foreach($taxes as $tax)
                                                                         @if($tax['is_cess'] == 0)
                                                                             <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name']}}</option>
@@ -386,32 +386,8 @@
             setTimeout(function(){
                 $('.ex-product').trigger('change');
             },500);
-<<<<<<< HEAD
         });
-    @endif
-
-    function OpenUserTypeModal(){
-        $('#CustomersModal').modal('show');
-        $('#customer').select2('close');
-    }
-
-    function CloseUserModal(){
-        $('#CustomersModal').modal('hide');
-    }
-
-    function OpenProductModel(selectID){
-        $('#ProductModal').modal('show');
-        $('#'+selectID).select2('close');
-    }
-
-    $(document).ready(function() {
-        Inputmask.extendDefaults({
-            'removeMaskOnSubmit': true
-        });
-
-        $(document).on('click', '.add-new-prod-link', function(){
-            dropdown_id = $(this).data('id');
-        });
+        @endif
 
         function OpenUserTypeModal(){
             $('#CustomersModal').modal('show');
