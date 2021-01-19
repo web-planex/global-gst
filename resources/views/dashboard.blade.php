@@ -47,7 +47,7 @@
                             <div class="round align-self-center round-danger"><i class="fa fa-line-chart"></i></div>
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0">{{$total_sales}}</h3>
-                                <h5 class="text-muted m-b-0">Sales</h5>
+                                <h5 class="text-muted m-b-0">Invoices</h5>
                             </div>
                         </div>
                     </div>

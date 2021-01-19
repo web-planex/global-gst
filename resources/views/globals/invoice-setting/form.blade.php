@@ -208,6 +208,46 @@
                             </div>
                         </div>
 
+                        <!--estimate SETTING-->
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-header bg-primary">
+                                    <h4 class="m-b-0 text-white">Estimate Setting</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label for="credit_note_prefix" class="col-md-12 col-form-label">Estimate Prefix </label>
+                                                <div class="col-md-12">
+                                                    {!! Form::text('estimate_prefix', null, ['class' => 'form-control']) !!}
+                                                    @if ($errors->has('estimate_prefix'))
+                                                        <span class="text-danger">
+                                                            <strong>{{ $errors->first('estimate_prefix') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label for="estimate_number" class="col-md-12 col-form-label">Estimate Number </label>
+                                                <div class="col-md-12">
+                                                    {!! Form::number('estimate_number', null, ['class' => 'form-control']) !!}
+                                                    @if ($errors->has('estimate_number'))
+                                                        <span class="text-danger">
+                                                            <strong>{{ $errors->first('estimate_number') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!--PRODUCT PRICE SETTING-->
                         <div class="col-lg-12">
                             <div class="card">

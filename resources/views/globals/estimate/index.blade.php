@@ -129,7 +129,6 @@
                                     </th>
                                     <th>#</th>
                                     <th class="col_estimate_no">Estimate No.</th>
-                                    <th class="col_reference">Reference</th>
                                     <th class="col_customer">Customer</th>
                                     <th class="col_estimate_date">Estimate Date</th>
                                     <th class="col_due_date">Due Date</th>
@@ -149,7 +148,6 @@
                                         </td>
                                         <td>{{$i}}</td>
                                         <td class="col_estimate_no">{{$list['estimate_number']}}</td>
-                                        <td class="col_reference">{{$list['reference']}}</td>
                                         <td class="col_customer">{{$list['Payee']['name']}}</td>
                                         <td class="col_estimate_date">{{date('d F Y', strtotime($list['estimate_date']))}}</td>
                                         <td class="col_due_date">{{date('d F Y', strtotime($list['expiry_date']))}}</td>
