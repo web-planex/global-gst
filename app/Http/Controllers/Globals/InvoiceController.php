@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Globals;
 use App\Http\Controllers\Controller;
 use App\Jobs\GenerateBlukCreditNote;
 use App\Jobs\GenerateBlukSalesInvoice;
+use App\Models\Globals\Bills;
 use App\Models\Globals\CompanySettings;
 use App\Models\Globals\Customers;
 use App\Models\Globals\Employees;
@@ -23,6 +24,7 @@ use App\Models\Globals\Product;
 use App\Models\Globals\States;
 use App\Models\Globals\Suppliers;
 use App\Models\Globals\Taxes;
+use Carbon\Carbon;
 use Symfony\Component\CssSelector\Parser\Reader;
 use WKPDF;
 use Illuminate\Http\Request;
@@ -88,11 +90,13 @@ class InvoiceController extends Controller
         $data['end_date'] = $request['end_date'];
         $data['invoice'] = $query->orderBy('id','DESC')->paginate($this->pagination);
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
+        $data['payment_method'] = PaymentMethod::where('user_id',Auth::user()->id)->pluck('method_name', 'id')->toArray();
         $data['custom_column'] = [
             'Invoice No',
             'Customer',
             'Invoice Date',
             'Due Date',
+            'Notes',
             'Status'
         ];
         return view('globals.invoice.index',$data);
@@ -128,7 +132,8 @@ class InvoiceController extends Controller
         $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $data['first_product'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
-        $data['payment_terms'] = PaymentTerms::pluck('terms_name','id');
+        $data['payment_terms'] = PaymentTerms::all();
+        $data['address_states'] = States::orderBy('state_name','ASC')->select('state_name','id')->get();
         return view('globals.invoice.create',$data);
     }
 
@@ -155,19 +160,36 @@ class InvoiceController extends Controller
         $invoice->customer_id = $request['customer'];
         $invoice->invoice_date = date('Y-m-d', strtotime($request['invoice_date']));
         $invoice->due_date = date('Y-m-d', strtotime($request['due_date']));
+        $invoice->payment_date = isset($request['payment_date'])&&!empty($request['payment_date'])?date('Y-m-d', strtotime($request['payment_date'])):null;
         $invoice->amount_before_tax = $request['amount_before_tax'];
         $invoice->tax_amount = $request['tax_amount'];
-        $invoice->payment_method = $request['payment_method'];
+        $invoice->payment_method = isset($request['payment_method'])&&!empty($request['payment_method'])?$request['payment_method']:null;
+        $invoice->order_number = isset($request['order_number'])&&!empty($request['order_number'])?$request['order_number']:null;
+        $invoice->reference_number = isset($request['reference_number'])&&!empty($request['reference_number'])?$request['reference_number']:null;
         $invoice->shipping_charge_amount = $request['shipping_charge_amount'];
         $invoice->shipping_charge = isset($request['shipping_charge'])&&!empty($request['shipping_charge'])?1:0;
         $invoice->status = $request['status'];
+        $invoice->payment_terms = isset($request['payment_terms'])&&!empty($request['payment_terms'])?$request['payment_terms']:null;
+        $invoice->discount_level = $request['discount_level'];
 
         $company = CompanySettings::where('id',$this->Company())->first();
 
-        $invoice->invoice_number = !empty($company['invoice_prefix'])?$company['invoice_prefix'].'/'.$company['invoice_number']:1;
+        if(!empty($company['invoice_prefix'])){
+            $invoice->invoice_number = $company['invoice_prefix'].'/'.$company['invoice_number'];
+        }elseif (empty($company['invoice_prefix']) && !empty($company['invoice_number'])){
+            $invoice->invoice_number = $company['invoice_number'];
+        }else{
+            $invoice->invoice_number = 1;
+        }
 
         if(in_array($request['status'],[3,4])){
-            $invoice->credit_note_number = !empty($company['credit_note_prefix'])?$company['credit_note_prefix'].'/'.$company['credit_note_number']:1;
+            if(!empty($company['credit_note_prefix'])){
+                $invoice->credit_note_number = $company['credit_note_prefix'].'/'.$company['credit_note_number'];
+            }elseif (empty($company['credit_note_prefix']) && !empty($company['credit_note_number'])){
+                $invoice->credit_note_number = $company['credit_note_number'];
+            }else{
+                $invoice->credit_note_number = 1;
+            }
         }
 
         if($request['discount_type'] != '') {
@@ -177,6 +199,7 @@ class InvoiceController extends Controller
         }
         $invoice->discount_type = $request['discount_type'];
         $invoice->total = $request['total'];
+        $invoice->notes = $request['notes'];
 
         if($photo = $request->file('files')){
             $invoice->files = $this->allFiles($photo,$user->id.'/invoice/invoice_attachment');
@@ -200,7 +223,13 @@ class InvoiceController extends Controller
                     'quantity' => $request['quantity'][$i],
                     'rate' => $request['rate'][$i],
                     'amount' => $request['amount'][$i],
+                    'discount_type' => $request['discount_type_items'][$i]
                 ];
+                if($request['discount_type_items'][$i] != '') {
+                    $data['discount'] = $request['discount_type_items'][$i]==2?str_replace( ',', '', $request['discount_items'][$i]):str_replace( ' %', '', $request['discount_items'][$i]);
+                } else {
+                    $data['discount'] = '';
+                }
                 InvoiceItems::create($data);
             }
             return redirect('sales')->with('message','Sales has been created successfully!');
@@ -255,7 +284,8 @@ class InvoiceController extends Controller
         $data['products'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $data['first_product'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
-        $data['payment_terms'] = PaymentTerms::pluck('terms_name','id');
+        $data['payment_terms'] = PaymentTerms::all();
+        $data['address_states'] = States::orderBy('state_name','ASC')->select('state_name','id')->get();
         return view('globals.invoice.create',$data);
     }
 
@@ -282,17 +312,28 @@ class InvoiceController extends Controller
         $invoice->customer_id = $request['customer'];
         $invoice->invoice_date = date('Y-m-d', strtotime($request['invoice_date']));
         $invoice->due_date = date('Y-m-d', strtotime($request['due_date']));
+        $invoice->payment_date = isset($request['payment_date'])&&!empty($request['payment_date'])?date('Y-m-d', strtotime($request['payment_date'])):null;
         $invoice->amount_before_tax = $request['amount_before_tax'];
         $invoice->tax_amount = $request['tax_amount'];
         $invoice->payment_method = $request['payment_method'];
+        $invoice->order_number = isset($request['order_number'])&&!empty($request['order_number'])?$request['order_number']:null;
+        $invoice->reference_number = isset($request['reference_number'])&&!empty($request['reference_number'])?$request['reference_number']:null;
         $invoice->shipping_charge_amount = $request['shipping_charge_amount'];
         $invoice->shipping_charge = isset($request['shipping_charge'])&&!empty($request['shipping_charge'])?1:0;
         $invoice->status = $request['status'];
+        $invoice->payment_terms = isset($request['payment_terms'])&&!empty($request['payment_terms'])?$request['payment_terms']:null;
+        $invoice->discount_level = $request['discount_level'];
 
         $company = CompanySettings::where('id',$this->Company())->first();
 
         if(in_array($request['status'],[3,4])){
-            $invoice->credit_note_number = !empty($company['credit_note_prefix'])?$company['credit_note_prefix'].'/'.$company['credit_note_number']:1;
+            if(!empty($company['credit_note_prefix'])){
+                $invoice->credit_note_number = $company['credit_note_prefix'].'/'.$company['credit_note_number'];
+            }elseif (empty($company['credit_note_prefix']) && !empty($company['credit_note_number'])){
+                $invoice->credit_note_number = $company['credit_note_number'];
+            }else{
+                $invoice->credit_note_number = 1;
+            }
         }
 
         if($request['discount_type'] != '') {
@@ -302,6 +343,7 @@ class InvoiceController extends Controller
         }
         $invoice->discount_type = $request['discount_type'];
         $invoice->total = $request['total'];
+        $invoice->notes = $request['notes'];
 
         if($photo = $request->file('files')){
             $invoice->files = $this->allFiles($photo,$user->id.'/invoice/invoice_attachment');
@@ -326,7 +368,13 @@ class InvoiceController extends Controller
                     'quantity' => $request['quantity'][$i],
                     'rate' => $request['rate'][$i],
                     'amount' => $request['amount'][$i],
+                    'discount_type' => $request['discount_type_items'][$i]
                 ];
+                if($request['discount_type_items'][$i] != '') {
+                    $data['discount'] = $request['discount_type_items'][$i]==2?str_replace( ',', '', $request['discount_items'][$i]):str_replace( ' %', '', $request['discount_items'][$i]);
+                } else {
+                    $data['discount'] = '';
+                }
                 InvoiceItems::create($data);
             }
             return redirect('sales')->with('message','Sales has been updated successfully!');
@@ -588,5 +636,40 @@ class InvoiceController extends Controller
             'job_status' => $job_status
         ];
         return view('globals.invoice.get_credit_note_pdf_zip',$data);
+    }
+
+    public function void($id) {
+        $company = CompanySettings::where('id',$this->Company())->first();
+
+        $invoice = Invoice::where('id',$id)->first();
+        $input['void_date'] = Carbon::now()->format('Y-m-d');
+
+        if(!empty($company['credit_note_prefix'])){
+            $invoice->credit_note_number = $company['credit_note_prefix'].'/'.$company['credit_note_number'];
+        }elseif (empty($company['credit_note_prefix']) && !empty($company['credit_note_number'])){
+            $invoice->credit_note_number = $company['credit_note_number'];
+        }else{
+            $invoice->credit_note_number = 1;
+        }
+        $input['status'] = 3;
+        $invoice->update($input);
+
+        $input['credit_note_number'] = $company['credit_note_number']+1;
+        $company->update($input);
+        \Session::flash('error-message', 'Invoice has been voided successfully!');
+        return redirect('sales');
+    }
+
+    public function make_payment(Request $request, $in_id){
+        $invoice = Invoice::where('id',$in_id)->first();
+        if(!empty($invoice)){
+            $input['payment_date'] = date('Y-m-d', strtotime($request['pdate']));
+            $input['payment_method'] = $request['pmethod'];
+            $input['invoice_number'] = $request['invoice_number'];
+            $input['notes'] = $request['note'];
+            $input['status'] = 2;
+            $invoice->update($input);
+        }
+        return ;
     }
 }

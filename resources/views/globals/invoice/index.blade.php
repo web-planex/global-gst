@@ -102,7 +102,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="{{url('download-invoice-pdf-zip')}}" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Invoices Zip"><i class="fas fa-cloud-download-alt"></i></a>
+                            <a href="{{url('download-invoice-pdf-zip')}}" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" ><i class="fas fa-cloud-download-alt"></i></a>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -128,7 +128,7 @@
                     </div>
                 </div>
                 <div class="gstinvoice-table-data">
-                    <div class="table-responsive data-table-gst-box pb-3">
+                    <div class="table-responsive data-table-gst-box pb-3" id="invoice_data">
                         <table id="myTable0" class="table table-hover">
                             <thead>
                                 <tr>
@@ -138,11 +138,11 @@
                                             <label class="custom-control-label" for="all_checked"></label>
                                         </div>
                                     </th>
-                                    <th>#</th>
                                     <th class="col_invoice_no">Invoice No.</th>
                                     <th class="col_customer">Customer</th>
                                     <th class="col_invoice_date">Invoice Date</th>
                                     <th class="col_due_date">Due Date</th>
+                                    <th class="col_notes">Notes</th>
                                     <th class="col_status">Status</th>
                                     <th>Invoice</th>
                                     <th>Action</th>
@@ -159,20 +159,20 @@
                                                 <label class="custom-control-label" for="check_{{$list['id']}}"></label>
                                             </div>
                                         </td>
-                                        <td>{{$i}}</td>
                                         <td class="col_invoice_no">{{$list['invoice_number']}}</td>
                                         <td class="col_customer">{{$list['Payee']['name']}}</td>
                                         <td class="col_invoice_date">{{date('d F Y', strtotime($list['invoice_date']))}}</td>
                                         <td class="col_due_date">{{date('d F Y', strtotime($list['due_date']))}}</td>
+                                        <td class="col_notes"><a href="javascript:;" class="text-dark" data-toggle="modal" data-target="#NotesModal{{$list['id']}}" style="cursor: pointer">{{ substr($list['notes'], 0 ,25) }}... </a></td>
                                         <td class="col_status">
                                             @if($list['status']==1)
                                                 <label class="label label-warning">Pending</label>
                                             @elseif($list['status']==2)
                                                 <label class="label label-danger">Paid</label>
                                             @elseif($list['status']==3)
-                                                <label class="label label-primary">Refunded</label>
+                                                <label class="label label-primary">Void</label>
                                             @else
-                                                <label class="label label-warning">Voided</label>
+                                                <label class="label label-warning">Refund</label>
                                             @endif
                                         </td>
                                         <td>
@@ -198,6 +198,10 @@
                                                 <div class="dropdown-menu">
                                                     <a class="dropdown-item" href="{{url('sales/'.$list['id'].'/edit')}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="delete_invoice_records({{$list['id']}})">Delete</a>
+                                                    @if(!in_array($list['status'],[2,3]))
+                                                        <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#MakePaymentModal{{$list['id']}}">Make Payment</a>
+                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="void_bills({{$list['id']}})">Void</a>
+                                                    @endif
                                                     <a class="dropdown-item" target="_blank" href="{{route('invoice-download_pdf',['id'=>$list['id'],'output'=>'print'])}}">Print</a>
                                                     @if(!empty($list['files']) && file_exists($list['files']))
                                                         <a class="dropdown-item" href="{{url($list['files'])}}" download>Download Receipt</a>
@@ -210,6 +214,64 @@
                                         </td>
                                     </tr>
                                     @php $i++; @endphp
+
+                                    <!-------------------------NOTES MODAL------------------------->
+                                    <div id="NotesModal{{$list['id']}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title font-bold-500 font-16" id="tooltipmodel">Notes</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>{{$list['notes']}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-------------------------MAKE PAYMENT MODAL------------------------->
+                                    <div id="MakePaymentModal{{$list['id']}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title font-bold-500 font-16 text-primary" id="tooltipmodel">Make Payment</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-row">
+                                                        <div class="form-group mb-3 col-md-12">
+                                                            <label for="payment_date">Payment Date <span class="text-danger">*</span></label>
+                                                            {!! Form::text('payment_date', date('d-m-Y'), ['class' => 'form-control payment_date','id'=>'payment_date'.$list['id']]) !!}
+                                                            <span class="text-danger hide" id="pdate_msg"></span>
+                                                        </div>
+                                                        <div class="form-group mb-3 col-md-12">
+                                                            <label for="payment_method">Payment Method <span class="text-danger">*</span></label>
+                                                            {!! Form::select('payment_method', $payment_method, isset($list['payment_method'])&&!empty($list['payment_method'])?$list['payment_method']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method'.$list['id'],'style'=>'width:100%;']) !!}
+                                                            <span class="text-danger hide" id="pmethod_msg"></span>
+                                                        </div>
+                                                        <div class="form-group mb-3 col-md-12">
+                                                            <label for="invoice_number">Invoice No <span class="text-danger">*</span></label>
+                                                            {!! Form::text('invoice_number', isset($list['invoice_number'])&&!empty($list['invoice_number'])?$list['invoice_number']:null, ['class' => 'form-control','id'=>'invoice_number'.$list['id']]) !!}
+                                                            <span class="text-danger hide" id="invoiceno_msg"></span>
+                                                        </div>
+                                                        <div class="form-group mb-0 col-md-12">
+                                                            <label for="note">Note <span class="text-danger"></span></label>
+                                                            {!! Form::textarea('note', isset($list['notes'])&&!empty($list['notes'])?$list['notes']:null, ['rows'=>'3','class' => 'form-control','id'=>'note'.$list['id']]) !!}
+                                                            @if ($errors->has('note'))
+                                                                <span class="text-danger">
+                                                                    <strong>{{ $errors->first('note') }}</strong>
+                                                                </span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary" onclick="MakePayment({{$list['id']}})">Make Payment</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endforeach
                             </tbody>
                             @else
@@ -322,6 +384,72 @@
                 window.location.href = '{{url('sales/delete')}}/'+invoice_id;
             }
         })
+    }
+
+    function MakePayment(inid){
+        var flag = 1;
+        var pdate = $('#payment_date'+inid).val();
+        var pmethod = $('#payment_method'+inid).val();
+        var in_no = $('#invoice_number'+inid).val();
+        var note = $('#note'+inid).val();
+
+        if(pdate == ""){
+            $('#pdate_msg').html('<strong>The payment date field is required</strong>');
+            $('#pdate_msg').removeClass('hide');
+            flag = 0;
+        }else{
+            $('#pdate_msg').addClass('hide');
+        }
+
+        if(pmethod == ""){
+            $('#pmethod_msg').html('<strong>The payment method field is required</strong>');
+            $('#pmethod_msg').removeClass('hide');
+            flag = 0;
+        }else{
+            $('#pmethod_msg').addClass('hide');
+        }
+
+        if(in_no == ""){
+            $('#invoiceno_msg').html('<strong>The invoice number field is required</strong>');
+            $('#invoiceno_msg').removeClass('hide');
+            flag = 0;
+        }else{
+            $('#billno_msg').addClass('hide');
+        }
+
+        if(flag ==0){
+            return false;
+        }else{
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{url('sales/make_payment')}}/'+inid,
+                type: 'POST',
+                data: {'pdate':pdate,'pmethod':pmethod,'invoice_number':in_no,'note':note},
+                success: function (result) {
+                    $('#MakePaymentModal'+inid).modal('hide');
+                    $("#invoice_data").load(location.href + " #invoice_data");
+                    $("#payment_msg").html('Payment successfully done.');
+                    $("#payment_msg").removeClass('hide');
+                }
+            });
+        }
+    }
+
+    function void_bills(invoice_id){
+        Swal.fire({
+            title: 'Are you sure to void this invoice?',
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#01c0c8",
+            confirmButtonText: 'Yes, void it!'
+        }).then((result) => {
+            if (result.value) {
+            window.location.href = '{{url('sales/void')}}/'+invoice_id;
+        }
+    })
     }
 </script>
 @endsection

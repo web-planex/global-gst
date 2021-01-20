@@ -44,7 +44,6 @@
                     <div class="table-responsive data-table-gst-box pb-3">
                         <table id="myTable0" class="table table-hover">
                             <thead>
-                                <th>#</th>
                                 <th>Account Type</th>
                                 <th>Detail Type</th>
                                 <th>Name</th>
@@ -59,7 +58,6 @@
                                     <?php $i=1;?>
                                     @foreach($payment_accounts as $payment_account)
                                         <tr>
-                                            <td>{{$i}}</td>
                                             <td>{{\App\Models\Globals\PaymentAccount::$account_type[$payment_account['account_type']]}}</td>
                                             @if($payment_account['account_type'] == 1)
                                             <td>{{\App\Models\Globals\PaymentAccount::$current_assets[$payment_account['detail_type']]}}</td>

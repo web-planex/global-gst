@@ -57,7 +57,6 @@
                         <table id="myTable0" class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>#</th>
                                     <th class="col_title">Title</th>
                                     <th class="col_hsn_code">HSN / SAC Code</th>
                                     <th class="col_sku">SKU</th>
@@ -71,7 +70,6 @@
                                 <?php $i=1;?>
                                 @foreach($products as $list)
                                     <tr>
-                                        <td>{{$i}}</td>
                                         <td class="col_title">{{$list['title']}}</td>
                                         <td class="col_hsn_code">{{$list['hsn_code']}}</td>
                                         <td class="col_sku">{{$list['sku']}}</td>
@@ -159,6 +157,7 @@
                     $('.'+$(this).val()).addClass('hide');
                 }
             });
+
             $('.custom-column-checkbox').on('click',function(){
                 var class_name = $(this).val();
                 if(!$(this).is(':checked')) {
@@ -173,11 +172,13 @@
                 $('.'+class_name).toggleClass('hide');
                 setCookie("productColumns", json_str, 365);
             });
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
             $('#ImportForm').submit(function(e) {
                 var element = $('#import').val();
                 if(element == ""){

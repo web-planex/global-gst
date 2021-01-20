@@ -221,7 +221,7 @@
 </script>
 <script>
     $('#start_date_orderlist, #end_date_orderlist').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false });
-    $('#star#star, #released, #date_of_birth, #as_of, #expense_date, #invoice_date, #due_date,#estimate_date, #expiry_date, #bill_date, #payment_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false});
+    $('#hire_date, #released, #date_of_birth, #as_of, #expense_date, #invoice_date, #due_date,#estimate_date, #expiry_date, #bill_date, #payment_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false});
     $('.payment_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart: 0, time: false});
     $('#timepicker').bootstrapMaterialDatePicker({ format: 'HH:mm', time: true, date: false });
     $('#date-format').bootstrapMaterialDatePicker({ format: 'DD MMMM YYYY' });
@@ -232,9 +232,9 @@
         $('#due_date').bootstrapMaterialDatePicker('setMinDate', date);
     });
 
-    $('#send_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart : 0, time: false });
+    $('#end_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart : 0, time: false });
     $('#start_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart : 0, time: false }).on('change', function(e, date) {
-        $('#send_date').bootstrapMaterialDatePicker('setMinDate', date);
+        $('#end_date').bootstrapMaterialDatePicker('setMinDate', date);
     });
     $(function () {
         // Switchery

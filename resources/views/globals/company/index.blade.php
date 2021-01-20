@@ -34,7 +34,6 @@
                         <table id="myTable0" class="table table-hover">
                             <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Company Name</th>
                                 <th>GSTIN</th>
                                 <th>Company Email</th>
@@ -47,7 +46,6 @@
                                 <?php $i=1;?>
                                 @foreach($companies as $list)
                                     <tr>
-                                        <td>{{$i}}</td>
                                         <td>{{$list['company_name']}}</td>
                                         <td>{{$list['gstin']}}</td>
                                         <td>{{$list['company_email']}}</td>

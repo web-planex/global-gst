@@ -25,9 +25,12 @@ class CreateInvoicesTable extends Migration
             $table->integer('customer_id');
             $table->date('invoice_date');
             $table->date('due_date');
+            $table->date('void_date')->nullable();
+            $table->date('payment_date')->nullable();
             $table->string('place_of_supply',15);
             $table->string('amount_before_tax',20);
             $table->string('tax_amount',20);
+            $table->integer('discount_level')->comment('0 => Transaction Level, 1 => Item Level');
             $table->string('discount',20);
             $table->integer('discount_type',20);
             $table->string('total',20);
@@ -37,6 +40,7 @@ class CreateInvoicesTable extends Migration
             $table->integer('status')->nullable();
             $table->integer('shipping_charge')->default(0);
             $table->string('shipping_charge_amount',20)->nullable();
+            $table->longText('notes')->nullable();
             $table->timestamps();
         });
     }

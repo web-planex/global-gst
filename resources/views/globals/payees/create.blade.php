@@ -1147,8 +1147,7 @@
 
         $('#same_as_billing').change(function(){
            if($(this).prop('checked')){
-               $('#shipping_first_name').val($('#billing_first_name').val());
-               $('#shipping_last_name').val($('#billing_last_name').val());
+               $('#shipping_name').val($('#billing_name').val());
                $('#shipping_phone').val($('#billing_phone').val());
                $('#shipping_street').val($('#billing_street').val());
                $('#shipping_city').val($('#billing_city').val());
@@ -1156,8 +1155,7 @@
                $('#shipping_pincode').val($('#billing_pincode').val());
                $('#shipping_country').val($('#billing_country').val());
            }else{
-               $('#shipping_first_name').val('');
-               $('#shipping_last_name').val('');
+               $('#shipping_name').val('');
                $('#shipping_phone').val('');
                $('#shipping_street').val('');
                $('#shipping_city').val('');

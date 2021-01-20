@@ -331,6 +331,11 @@ function taxCalculation() {
         }
     }
 
+    if($('#shipping_charge_amount').val() != '') {
+        var shipping_charge = $('#shipping_charge_amount').val();
+        total = total + parseFloat(shipping_charge) ;
+    }
+
     $('#total').val('Rs. '+ parseFloat(total).toFixed(2));
     $('#amount_before_tax').val(amount_before_tax);
     $('#tax_amount').val(total_tax.toFixed(2));
