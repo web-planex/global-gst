@@ -18,7 +18,7 @@ class CreatePdfZipsTable extends Migration
             $table->integer('user_id');
             $table->integer('company_id');
             $table->string('zip_name', 255);
-            $table->tinyInteger('zip_type')->comment("1 = Expense, 2 = Sales, 3 = Credit Note");
+            $table->tinyInteger('zip_type')->comment("1=Expense, 2=Sales, 3=Credit Note, 4=Estimate, 5=Bill");
             $table->tinyInteger('status')->comment("0=Not Downloaded,1=Downloaded");
             $table->timestamps();
         });

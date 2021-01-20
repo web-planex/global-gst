@@ -197,6 +197,7 @@
 <script src="{{ asset('assets/select2/dist/select2.js')}}"></script>
 @yield('page_confirmation_script')
 @yield('tax_calculations_discount')
+@yield('custom-cookies')
 <script>
     $(document).ready(function() {
         if ($("#message_body").length > 0) {
@@ -232,9 +233,9 @@
         $('#due_date').bootstrapMaterialDatePicker('setMinDate', date);
     });
 
-    $('#send_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart : 0, time: false });
+    $('#end_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart : 0, time: false });
     $('#start_date').bootstrapMaterialDatePicker({ format: 'DD-MM-YYYY', weekStart : 0, time: false }).on('change', function(e, date) {
-        $('#send_date').bootstrapMaterialDatePicker('setMinDate', date);
+        $('#end_date').bootstrapMaterialDatePicker('setMinDate', date);
     });
     $(function () {
         // Switchery

@@ -134,3 +134,6 @@ Route::get('bills/void/{id}', 'Globals\BillController@void');
 Route::post('ajax/payment-terms-store', 'Globals\BillController@payment_terms_store')->name('payment-terms-store');
 Route::post('ajax/make_payment/{bid}', 'Globals\BillController@make_payment')->name('make_payment');
 Route::post('ajax/bill_delete_attachment', 'Globals\BillController@delete_attachment')->name('bill-delete-attachment');
+Route::get('bills/download_pdf/{id}', 'Globals\BillController@download_pdf')->name('download-bill-pdf');
+Route::post('generate-multiple-bills', 'Globals\BillController@multiple_pdf')->name('bill-multiple-pdf');
+Route::get('download-bill-pdf-zip', 'Globals\BillController@downloadPdfZip')->name('download-bill-pdf-zip');

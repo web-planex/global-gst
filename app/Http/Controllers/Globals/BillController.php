@@ -15,6 +15,12 @@ use App\Models\Globals\Product;
 use App\Models\Globals\States;
 use App\Models\Globals\PaymentMethod;
 use App\Models\Globals\PaymentTerms;
+use Illuminate\Support\Facades\Log;
+use App\Models\Globals\Customers;
+use App\Jobs\GenerateBulkBill;
+use WKPDF;
+use App\Models\Globals\PdfZips;
+use App\Models\Globals\Job;
 
 class BillController extends Controller
 {
@@ -349,5 +355,155 @@ class BillController extends Controller
         $bill->update($input);
         \Session::flash('error-message', 'Bill has been voided successfully!');
         return redirect('bills');
+    }
+
+    public function download_pdf(Request $request, $id){
+        $user = Auth::user();
+        $data['menu']  = 'Bill';
+        $data['company'] = CompanySettings::where('id',$this->Company())->first();
+        $state = States::where('id',$data['company']['state'])->first();
+        $data['company']['state'] = $state['state_name'];
+        $data['company']['state_code'] = $state['state_number'];
+        $company_address_arr = [
+            $data['company']['street'],
+            $data['company']['city'],
+            $data['company']['state'],
+            $data['company']['pincode'],
+            $data['company']['country'],
+        ];
+
+        $data['company']['address'] = implode(', ', $company_address_arr);
+
+        $data['bill'] = Bills::with('BillItems')->where('id',$id)->first();
+        $data['taxes'] = Taxes::where('status', 1)->get();
+
+        if(!empty($data['bill']['BillItems'])){
+            $b=0;
+            foreach($data['bill']['BillItems'] as $exp){
+                $tax = Taxes::where('id',$exp['tax_id'])->first();
+                if($tax['is_cess'] == 0) {
+                    $data['bill']['BillItems'][$b]['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'];
+                } else {
+                    $data['bill']['BillItems'][$b]['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS';
+                }
+                $b++;
+            }
+        }
+
+        $data['bill']['total_in_word'] = $this->convert_digit_to_words($data['bill']['total']);
+
+        $payee = Payees::where('id',$data['bill']['payee_id'])->first();
+        $data['user'] = Customers::where('id',$payee['type_id'])->first();
+        $state = States::where('id',$data['user']['billing_state'])->first();
+        $shipping_state = States::where('id',$data['user']['shipping_state'])->first();
+        $data['user']['state'] = $state['state_name'];
+        $data['user']['billing_state'] = $state['state_name'];
+        $data['user']['shipping_state'] = $shipping_state['state_name'];
+        $data['user']['billing_state_code'] = $state['state_number'];
+        $data['user']['shipping_state_code'] = $shipping_state['state_number'];
+        $data['user']['is_shipping'] = true;
+        $billing_address_arr = [
+            $data['user']['billing_street'],
+            $data['user']['billing_city'],
+            $data['user']['billing_state'],
+            $data['user']['billing_pincode'],
+            $data['user']['billing_country']
+        ];
+        $data['user']['billing_address'] = implode(', ', $billing_address_arr);
+        $shipping_address_arr = [
+            $data['user']['shipping_street'],
+            $data['user']['shipping_city'],
+            $data['user']['shipping_state'],
+            $data['user']['shipping_pincode'],
+            $data['user']['shipping_country']
+        ];
+        $data['user']['shipping_address'] = implode(', ', $shipping_address_arr);
+
+        $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
+        $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
+        $taxes_without_cess_arr = [];
+        $taxes_with_cess_arr = [];
+
+        $a=0;
+        foreach($taxes_without_cess as $tax) {
+            $taxes_without_cess_arr[$a] = $tax['rate'].'_'.$tax['tax_name'];
+            $a++;
+        }
+        $i=0;
+        foreach($taxes_with_cess as $tax) {
+            $taxes_with_cess_arr[$i] = $tax['rate'].'_'.$tax['tax_name'];
+            $taxes_with_cess_arr[$i+1] = $tax['cess'].'_CESS';
+            $i = $i+2;
+        }
+        $data['all_tax_labels'] = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
+        $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
+        $company = CompanySettings::select('company_name')->where('id',$this->Company())->first();
+        $data['company_name'] = $company['company_name'];
+        $data['bill']['status_image'] = '';
+
+        if($data['bill']['status'] == 1) {
+            $data['bill']['status_image'] = asset('images/pending_img.png');
+        }elseif($data['bill']['status'] == 2) {
+            $data['bill']['status_image'] = asset('images/paid_imag.png');
+        }elseif($data['bill']['status'] == 3) {
+            $data['bill']['status_image'] = asset('images/voided_imag.png');
+        }
+
+        $data['name'] = 'Bill';
+        $pdf = new WKPDF($this->globalPdfOption());
+        //return $data;
+        $pdf->addPage(view('globals.bills.pdf_bill',$data));
+        // return View('globals.bills.pdf_bill',$data);
+        if($request->output == 'download') {
+            if (!$pdf->send('bill.pdf')) {
+                $error = $pdf->getError();
+                return $error;
+            }
+        } else {
+            if (!$pdf->send()) {
+                $error = $pdf->getError();
+                Log::error($error);
+            }
+        }
+    }
+
+    public function multiple_pdf(Request $request){
+        $user = Auth::user();
+        $company_id = $this->Company();
+        $checkboxes = $request['all_bills_check'];
+        $download_type = $request['download_type'];
+        $job = (new GenerateBulkBill($user,$company_id,$checkboxes,$download_type))->onQueue('multiple_bill_pdf');
+        dispatch($job);
+        return redirect('download-bill-pdf-zip');
+    }
+
+    public function downloadPdfZip() {
+
+        $user = Auth::user();
+        $company_id = $this->Company();
+        $company = CompanySettings::where('id',$company_id)->first();
+        $job_id = $company['job_id'];
+        $pdfZip = PdfZips::where('user_id',$user->id)->where('company_id',$company_id)->where('zip_type',5)->orderBy('id','DESC')->get();
+        $job_details = Job::where('id',$job_id)->first();
+        $job_status = '';
+        if($job_details){
+            if($job_details->attempts == 0){
+                $job_status = "Pending";
+            }
+            if($job_details->attempts > 0 ){
+                $job_status = "Processing";
+            }
+        } else {
+            if($job_id != ""){
+                $job_status = "Finished";
+            }
+        }
+        $data = [
+            'menu' => 'Bill',
+            'user_id' => $user->id,
+            'zip_files' => $pdfZip,
+            'job_status' => $job_status
+        ];
+        return view('globals.bills.get_pdf_zip',$data);
     }
 }

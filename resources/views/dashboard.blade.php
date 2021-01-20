@@ -22,7 +22,7 @@
                 </div>
             </a>
         </div>
-        
+
         <div class="col-lg-3 col-md-6">
             <a href="{{url('expense')}}" class="text-dark">
                 <div class="card mr-1">
@@ -32,6 +32,22 @@
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0">{{$total_expense}}</h3>
                                 <h5 class="text-muted m-b-0">Expenses</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <a href="{{route('bills.index')}}" class="text-dark">
+                <div class="card mr-1">
+                    <div class="card-body">
+                        <div class="d-flex no-block">
+                            <div class="round align-self-center round-success"><i class="fa fa-money"></i></div>
+                            <div class="m-l-10 align-self-center">
+                                <h3 class="m-b-0">{{$total_bills}}</h3>
+                                <h5 class="text-muted m-b-0">Bills</h5>
                             </div>
                         </div>
                     </div>
@@ -86,7 +102,7 @@
                 </div>
             </a>
         </div>
-        
+
         <div class="col-lg-3 col-md-6">
             <a href="{{url('companies')}}" class="text-dark">
                 <div class="card mr-1">

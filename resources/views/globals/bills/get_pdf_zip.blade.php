@@ -2,7 +2,7 @@
 @section('content')
 <div class="row page-titles">
     <div class="col-sm-12 align-self-center">
-        <h4 class="text-themecolor">Download Expense Zip files</h4>
+        <h4 class="text-themecolor">Download Bill Zip files</h4>
     </div>
 </div>
 <div class="row">
@@ -12,7 +12,7 @@
                 @include('inc.message')
                 <div class="row">
                     <div class="col-md-12">
-                        <p>We got your request and your PDF can be downloaded from this page once process to generate selected PDF is completed. It may possible that your request comes in the queue if some other user requested bulk expenses before you. So keep checking this page and refresh after Some time to check the status of your request. Zip file will be available for single day, After it will be removed.</p>
+                        <p>We got your request and your PDF can be downloaded from this page once process to generate selected PDF is completed. It may possible that your request comes in the queue if some other user requested bulk bills before you. So keep checking this page and refresh after Some time to check the status of your request. Zip file will be available for single day, After it will be removed.</p>
                         <p><strong class="font-bold">Please wait for a while for a new request.</strong></p>
                     </div>
                     <div class="col-md-12 text-left mb-3">
@@ -64,23 +64,15 @@
                                         <td>{{$zip_file_date}}</td>
                                         <td>Done</td>
                                         {{-- //Credit Note change --}}
+                                        <td>Bill</td>
                                         <td>
-                                            @if($zip_file->zip_type == 1)
-                                                Expense
-                                            @elseif($zip_file->zip_type == 2)
-                                                Invoice
-                                            @elseif($zip_file->zip_type == 3)
-                                                CreditNote
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <a href="{{ URL::to('/') }}/upload/{{$user_id}}/expense_voucher/{{$zip_file->zip_name}}" class="btn waves-effect waves-light btn-success" target="_blank"><i class="fas fa-download"></i> Download</a>
+                                            <a href="{{ URL::to('/') }}/upload/{{$user_id}}/bill/{{$zip_file->zip_name}}" class="btn waves-effect waves-light btn-success" target="_blank"><i class="fas fa-download"></i> Download</a>
                                         </td>
                                     </tr>
                                     @endforeach
                                     @else
                                         @if($job_status != "Pending" && $job_status != "Processing")
-                                        <tr><td colspan="3">No Files Found </td></tr>
+                                        <tr><td align="center" colspan="4">No Files Found </td></tr>
                                         @endif
                                     @endif
                                 </tbody>

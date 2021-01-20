@@ -60,20 +60,20 @@
                 </div>
             {!! Form::close() !!}
 
-            {!! Form::open(['url' => url('bills/multiple_pdf'),'class' => 'form-horizontal','files'=>true,'id'=>'MultiplePdfForm']) !!}
+            {!! Form::open(['url' => route('bill-multiple-pdf'),'class' => 'form-horizontal','files'=>true,'id'=>'MultiplePdfForm']) !!}
             <div class="card">
                 <div class="row results-top" style="margin: 0 5px;">
-                    <div class="col-md-3 action">
+                    <div class="col-md-2 action">
                         <div class="action-invoice">
-                            <div class="action-on">
+                            <div class="action-on mt-2">
                                 <div>Action on </div>
                                 <div><span id="selected_unfulfilled_count">0</span> Selected</div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2 btn-group">
+                    <div class="col-md-3 btn-group">
                         <div class="col-left">
-                            <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
+                            <div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <!-- Modal content-->
                                     <div class="modal-content">
@@ -83,7 +83,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <p>
-                                                <label><input type="radio" name="download_type" value="1" checked="checked"> Download selected bills as single PDF</label>
+                                                <label><input type="radio" name="download_type" value="1" checked="checked"> Download selected as single PDF</label>
                                                 <label><input type="radio" name="download_type" value="2"> Download selected bills as individual PDF</label>
                                             </p>
                                         </div>
@@ -93,7 +93,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="{{url('download-bill-pdf-zip')}}" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Bills Zip"><i class="fas fa-cloud-download-alt"></i></a>
+                            <a href="javascript:;" id="download_multi_bill" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Bills Zip"><i class="fas fa-cloud-download-alt"></i></a>
                         </div>
                     </div>
                     <div class="col-md-7">
@@ -181,7 +181,8 @@
                                                         <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#MakePaymentModal{{$list['id']}}">Make Payment</a>
                                                         <a class="dropdown-item" href="javascript:void(0)" onclick="void_bills({{$list['id']}})">Void</a>
                                                     @endif
-                                                    <a class="dropdown-item" target="_blank" href="{{route('invoice-download_pdf',['id'=>$list['id'],'output'=>'print'])}}">Print</a>
+                                                    <a class="dropdown-item" target="_blank" href="{{route('download-bill-pdf',['id'=>$list['id'],'output'=>'print'])}}">Print</a>
+                                                    <a class="dropdown-item" href="{{route('download-bill-pdf',['id'=>$list['id'],'output'=>'download'])}}">Download</a>
                                                     @if(!empty($list['files']) && file_exists($list['files']))
                                                         <a class="dropdown-item" href="{{url($list['files'])}}" download>Download Receipt</a>
                                                     @endif
@@ -254,6 +255,9 @@
             {!! Form::close() !!}
         </div>
     </div>
+@section('custom-cookies')
+<script src="{{asset('js/custom-cookies.js')}}"></script>
+@endsection
 <script type='text/javascript'>
     $(document).ready(function(){
         $(document).on('click', '.custom-column-display .dropdown-menu', function (e) {
@@ -286,29 +290,15 @@
             setCookie("billsColumns", json_str, 365);
         });
 
+        $('#download_multi_bill').click(function(){
+            if($('[name="all_bills_check[]"]:checked').length == 0){
+                Swal.fire("Select at least one bill");
+                return false;
+            }
+            $('#myModal').modal('show');
+            return false;
+        });
     });
-
-    function setCookie(cname, cvalue, exdays) {
-        var d = new Date();
-        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-        var expires = "expires="+d.toUTCString();
-        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-    }
-
-    function getCookie(cname) {
-        var name = cname + "=";
-        var ca = document.cookie.split(';');
-        for(var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return "";
-    }
 
     $("#all_checked").click(function () {
         $('input:checkbox').not(this).prop('checked', this.checked);

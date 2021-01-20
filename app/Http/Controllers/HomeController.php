@@ -7,6 +7,7 @@ use App\Models\Globals\Expense;
 use App\Models\Globals\Invoice;
 use App\Models\Globals\Payees;
 use App\Models\Globals\PaymentAccount;
+use App\Models\Globals\Bills;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -46,6 +47,7 @@ class HomeController extends Controller
         $data['menu'] = 'Dashboard';
         $data['total_product'] = \App\Models\Globals\Product::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
         $data['total_expense'] = Expense::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
+        $data['total_bills'] = Bills::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
         $data['total_sales'] = Invoice::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
         $data['total_credit_note'] = Invoice::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->whereIn('status',[3,4])->count();
         $data['total_payee'] = Payees::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();

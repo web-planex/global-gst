@@ -127,16 +127,16 @@
                         <div class="form-group mb-3 col-md-3">
                             <label for="discount_level">Discount Level</label>
                             <select class="form-control discount-level-select2" name="discount_level" id="discount_level">
-                                <option value="0" @if(isset($bill) && $bill['discount_level']==0)) selected @endif>At transaction level</option>
-                                <option value="1" @if(isset($bill) && $bill['discount_level']==1)) selected @endif>At item level</option>
+                                <option value="0" @if(isset($bill) && $bill['discount_level']==0) selected @endif>At transaction level</option>
+                                <option value="1" @if(isset($bill) && $bill['discount_level']==1) selected @endif>At item level</option>
                             </select>
                         </div>
                         <div class="form-group mb-3 col-md-3" style="position:absolute;right:0">
                             <label for="amounts_are">Amounts are</label>
                             <select class="form-control amounts-are-select2" name="tax_type" id="amounts_are">
-                                <option value="exclusive" @if(isset($bill) && $bill['tax_type']==1)) selected @endif>Exclusive of Tax</option>
-                                <option value="inclusive" @if(isset($bill) && $bill['tax_type']==2)) selected @endif>Inclusive of Tax</option>
-                                <option value="out_of_scope" @if(isset($bill) && $bill['tax_type']==3)) selected @endif>Out of scope of Tax</option>
+                                <option value="exclusive" @if(isset($bill) && $bill['tax_type']==1) selected @endif>Exclusive of Tax</option>
+                                <option value="inclusive" @if(isset($bill) && $bill['tax_type']==2) selected @endif>Inclusive of Tax</option>
+                                <option value="out_of_scope" @if(isset($bill) && $bill['tax_type']==3) selected @endif>Out of scope of Tax</option>
                             </select>
                         </div>
                     </div>
@@ -211,7 +211,7 @@
                                                             </td>
                                                             <td>
                                                                 @if($i>1)
-                                                                    <button type="button" class="btn btn-danger btn-circle remove-line-item"><i class="fa fa-times"></i></button>
+                                                                    <button type="button" class="btn btn-danger btn-circle btn-sm remove-line-item"><i class="fa fa-times"></i></button>
                                                                 @endif
                                                             </td>
                                                         </tr>
@@ -410,11 +410,10 @@
 
 @section('page_confirmation_script')
     <script src="{{asset('js/page_confirmation_script.js')}}"></script>
-@stop
+@endsection
 @section('tax_calculations_discount')
     <script src="{{asset('js/tax_calculations_discount.js')}}"></script>
-@stop
-
+@endsection
 <script type="text/javascript">
     @if(isset($bill) && !empty($bill))
         $(document).ready(function(){
@@ -433,6 +432,7 @@
             setTimeout(function(){
                 $('#discount_level').trigger('change');
             },500);
+            taxCalculation();
         });
     @else
         $(document).ready(function(){
@@ -716,7 +716,7 @@
                     } else {
                         html += "<td class='tax_column'><select class='form-control tax-input' name=\"taxes["+numItems+"]\">@foreach($taxes as $tax) @if($tax['is_cess'] == 0)<option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name']}}</option> @else <option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option> @endif @endforeach</select></td>";
                     }
-                    html += "<td><button type=\"button\" class=\"btn btn-danger btn-circle remove-line-item \"><i class=\"fa fa-times\"></i> </button></td>";
+                    html += "<td><button type=\"button\" class=\"btn btn-danger btn-sm btn-circle remove-line-item \"><i class=\"fa fa-times\"></i> </button></td>";
                     html += "</tr>";
                     $("#items_list_body").append(html);
                     $(".floatTextBox").inputFilter(function(value) {
@@ -816,37 +816,6 @@
             day = '0' + day;
         return [day, month, year].join('-');
     }
-
-    @if(isset($bill) && !empty($bill))
-        $(document).ready(function(){
-            taxCalculation();
-        });
-
-        function deleteAttachment(aid){
-        Swal.fire({
-            title: 'Do you want to delete this receipt?',
-            text: "",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#01c0c8",
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.value) {
-                $.ajax({
-                    url: '{{route('bill-delete-attachment')}}',
-                    type: 'POST',
-                    data: {'data':aid},
-                    success: function (result) {
-                        $('[data-toggle="tooltip"]').tooltip("hide");
-                        $('#attachment_file').remove();
-                        $('#attachment_div').remove();
-                        $('#att_del_msg').hide().html('Receipt deleted!').fadeIn('slow').delay(5000).hide(1);
-                    }
-                });
-            }
-        })
-    }
-    @endif
 
     (function($) {
         $.fn.inputFilter = function(inputFilter) {

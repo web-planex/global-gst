@@ -226,7 +226,7 @@
                                                             </td>
                                                             <td>
                                                                 @if($i>1)
-                                                                    <button type="button" class="btn btn-danger btn-circle remove-line-item"><i class="fa fa-times"></i></button>
+                                                                    <button type="button" class="btn btn-danger btn-circle btn-sm remove-line-item"><i class="fa fa-times"></i></button>
                                                                 @endif
                                                             </td>
                                                         </tr>
@@ -434,7 +434,7 @@
             setTimeout(function(){
                 $('.ex-product').trigger('change');
             },500);
-        }); 
+        });
     @endif
 
     function OpenUserTypeModal(){
@@ -455,7 +455,7 @@
         Inputmask.extendDefaults({
             'removeMaskOnSubmit': true
         });
-        
+
         $(document).on('click', '.add-new-prod-link', function(){
             dropdown_id = $(this).data('id');
         });
@@ -714,7 +714,7 @@
                     } else {
                         html += "<td class='tax_column'><select class='form-control tax-input' name=\"taxes["+numItems+"]\">@foreach($taxes as $tax) @if($tax['is_cess'] == 0)<option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name']}}</option> @else <option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option> @endif @endforeach</select></td>";
                     }
-                    html += "<td><button type=\"button\" class=\"btn btn-danger btn-circle remove-line-item \"><i class=\"fa fa-times\"></i> </button></td>";
+                    html += "<td><button type=\"button\" class=\"btn btn-danger btn-circle btn-sm remove-line-item \"><i class=\"fa fa-times\"></i> </button></td>";
                     html += "</tr>";
                     $("#items_list_body").append(html);
                     $(".floatTextBox").inputFilter(function(value) {
@@ -727,7 +727,7 @@
                     });
 
                     $('.amounts-are-select3').select2();
-                    $('.ex-product').trigger('change')
+                    $('#product_select'+i).trigger('change');
                 }
             });
         });
