@@ -197,6 +197,7 @@
 <script src="{{ asset('assets/select2/dist/select2.js')}}"></script>
 @yield('page_confirmation_script')
 @yield('tax_calculations_discount')
+@yield('custom-cookies')
 <script>
     $(document).ready(function() {
         if ($("#message_body").length > 0) {

@@ -58,7 +58,7 @@
                                         date_default_timezone_set('Asia/Kolkata');
                                         $zip_file_date = new DateTime($zip_file->created_at);
                                         $zip_file_date->setTimezone(new DateTimeZone('Asia/Kolkata'));
-                                        $zip_file_date = $zip_file_date->format('d-m-Y H:i:s');
+                                        $zip_file_date = $zip_file_date->format('d-m-Y h:i:s');
                                         @endphp
 
                                         <td>{{$zip_file_date}}</td>

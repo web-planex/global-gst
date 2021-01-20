@@ -17,4 +17,7 @@ class BillItems extends Model
         'discount',
         'discount_type'
     ];
+    public function Product(){
+        return $this->belongsTo('App\Models\Globals\Product','product_id');
+    }
 }
