@@ -8,7 +8,7 @@
             <div class="modal-body" style="overflow-x: hidden;">
                 <form id="BillingAddressForm" method="POST" class="form-horizontal">
                     @csrf
-                    <input type="hidden" name="customer_id" id="billing_cust_id" value="{{$invoice['customer_id']}}">
+                    <input type="hidden" name="customer_id" id="billing_cust_id" value="@if(isset($invoice)) {{$invoice['customer_id']}} @endif">
                     <div class="row" id="CustomersBillingAddress">
                         <div class="col-md-12">
                             <div class="form-group mb-3 row">

@@ -8,7 +8,7 @@
             <div class="modal-body">
                 <form id="ShippingAddressForm" method="POST" class="form-horizontal">
                     @csrf
-                    <input type="hidden" name="customer_id" id="shipping_cust_id" value="{{$estimate['customer_id']}}">
+                    <input type="hidden" name="customer_id" id="shipping_cust_id" value="@if(isset($estimate)) {{$estimate['customer_id']}} @endif">
                     <div class="row" id="Customers">
                         <div class="col-md-12">
                             <div class="form-group mb-3 row">
