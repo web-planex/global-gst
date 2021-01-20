@@ -40,7 +40,6 @@
                         <table id="myTable0" class="table table-hover">
                             <thead>
                             <tr>
-                                <th>#</th>
                                 <th style="width: 30%">Name</th>
                                 <th>Email</th>
                                 <th>Mobile</th>
@@ -53,7 +52,6 @@
                                 <?php $i=1;?>
                                 @foreach($payees as $list)
                                     <tr>
-                                        <td>{{$i}}</td>
                                         <td>{{$list['name']}}</td>
                                         @if($list['type'] == 1)
                                         <td>{{$list['Suppliers']['email']}}</td>

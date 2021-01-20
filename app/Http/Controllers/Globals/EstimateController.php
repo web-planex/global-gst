@@ -70,7 +70,6 @@ class EstimateController extends Controller
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
         $data['custom_column'] = [
             'Estimate No',
-            'Reference',
             'Customer',
             'Estimate Date',
             'Due Date'
@@ -105,6 +104,7 @@ class EstimateController extends Controller
         $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $data['first_product'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
+        $data['address_states'] = States::orderBy('state_name','ASC')->select('state_name','id')->get();
         return view('globals.estimate.create',$data);
     }
 
@@ -139,7 +139,13 @@ class EstimateController extends Controller
         $estimate->shipping_charge = isset($request['shipping_charge'])&&!empty($request['shipping_charge'])?1:0;
         $company = CompanySettings::where('id',$this->Company())->first();
 
-        $estimate->estimate_number = !empty($company['estimate_prefix'])?$company['estimate_prefix'].'/'.$company['estimate_number']:1;
+        if(!empty($company['invoice_prefix'])){
+            $estimate->estimate_number = $company['estimate_prefix'].'/'.$company['estimate_number'];
+        }elseif (empty($company['estimate_prefix']) && !empty($company['estimate_number'])){
+            $estimate->estimate_number = $company['estimate_number'];
+        }else{
+            $estimate->estimate_number = 1;
+        }
 
         if($request['discount_type'] != '') {
             $estimate->discount = $request['discount_type']==2?str_replace( ',', '', $request['discount']):str_replace( ' %', '', $request['discount']);
@@ -230,6 +236,7 @@ class EstimateController extends Controller
         $data['products'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $data['first_product'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
+        $data['address_states'] = States::orderBy('state_name','ASC')->select('state_name','id')->get();
         return view('globals.estimate.create',$data);
     }
 
@@ -454,34 +461,93 @@ class EstimateController extends Controller
         $address = '';
         $billing_state = States::where('id',$customer['billing_state'])->first();
         $shipping_state = States::where('id',$customer['shipping_state'])->first();
+        $billing_address = [$customer['billing_name'],$customer['billing_phone'],$customer['billing_street'],$customer['billing_city'],$customer['billing_state'],$customer['billing_pincode']];
+        $shipping_address = [$customer['shipping_name'],$customer['shipping_phone'],$customer['shipping_street'],$customer['shipping_city'],$customer['shipping_state'],$customer['shipping_pincode']];
         $address .= '<div class="col-md-6">
                         <div class="card border-info mb-0" style="background-color: #f5f5f5;">
                             <div class="card-header bg-primary">
-                                <h4 class="m-b-0 text-white">Billing Address</h4></div>
+                                <h4 class="m-b-0 text-white pull-left">Billing Address</h4>
+                                <a href="javascript:;" data-toggle="modal" data-target="#BillingAddressModal">
+                                    <h4 class="m-b-0 text-white text-right">Change</h4>
+                                </a>    
+                            </div>
                             <div class="card-body pt-2 pb-2">
-                                <p class="card-text mb-0">'.$customer['billing_name'].'</p>
-                                <p class="card-text mb-0">'.$customer['billing_phone'].'</p>
-                                <p class="card-text mb-0">'.$customer['billing_street'].'</p>
-                                <p class="card-text mb-0">'.$customer['billing_city'].' - '.$customer['billing_pincode'].'</p>
-                                <p class="card-text mb-0">'.$billing_state['state_name'].'</p>
-                                <p class="card-text mb-0">'.$customer['billing_country'].'</p>
+                                <div id="BillingDiv">
+                                    <p class="card-text mb-0">'.$customer['billing_name'].'</p>
+                                    <p class="card-text mb-0">'.$customer['billing_phone'].'</p>
+                                    <p class="card-text mb-0">'.$customer['billing_street'].'</p>
+                                    <p class="card-text mb-0">'.$customer['billing_city'].' - '.$customer['billing_pincode'].'</p>
+                                    <p class="card-text mb-0">'.$billing_state['state_name'].'</p>
+                                    <p class="card-text mb-0">'.$customer['billing_country'].'</p>
+                                </div>
+                                <div id="billing_msg" class="text-info font-weight-bolder"></div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="card border-info mb-0" style="background-color: #f5f5f5;">
                             <div class="card-header bg-primary">
-                                <h4 class="m-b-0 text-white">Shipping Address</h4></div>
+                                <h4 class="m-b-0 text-white pull-left">Shipping Address</h4>
+                                <a href="javascript:;" data-toggle="modal" data-target="#ShippingAddressModal">
+                                    <h4 class="m-b-0 text-white text-right">Change</h4>
+                                </a>    
+                            </div>
                             <div class="card-body pt-2 pb-2">
-                                <p class="card-text mb-0">'.$customer['shipping_name'].'</p>
-                                <p class="card-text mb-0">'.$customer['shipping_phone'].'</p>
-                                <p class="card-text mb-0">'.$customer['shipping_street'].'</p>
-                                <p class="card-text mb-0">'.$customer['shipping_city'].' - '.$customer['shipping_pincode'].'</p>
-                                <p class="card-text mb-0">'.$shipping_state['state_name'].'</p>
-                                <p class="card-text mb-0">'.$customer['shipping_country'].'</p>
+                                <div id="ShippingDiv">
+                                    <p class="card-text mb-0">'.$customer['shipping_name'].'</p>
+                                    <p class="card-text mb-0">'.$customer['shipping_phone'].'</p>
+                                    <p class="card-text mb-0">'.$customer['shipping_street'].'</p>
+                                    <p class="card-text mb-0">'.$customer['shipping_city'].' - '.$customer['shipping_pincode'].'</p>
+                                    <p class="card-text mb-0">'.$shipping_state['state_name'].'</p>
+                                    <p class="card-text mb-0">'.$customer['shipping_country'].'</p>
+                                </div>
+                                <div id="shipping_msg" class="text-info font-weight-bolder"></div>    
                             </div>
                         </div>
                     </div>';
+
+
+        $data['address'] = $address;
+        $data['billing_address'] = $billing_address;
+        $data['shipping_address'] = $shipping_address;
+        $data['customer_id'] = $customer['id'];
+
+        return $data;
+    }
+
+    public function update_billing_address(Request $request){
+        $payee = Payees::where('id',$request['customer_id'])->first();
+        $customer = Customers::where('id',$payee['type_id'])->first();
+        $input = $request->all();
+        $customer->update($input);
+
+        $state = States::where('id',$customer['billing_state'])->first();
+
+        $address ='<p class="card-text mb-0">'.$customer['billing_name'].'</p>
+                    <p class="card-text mb-0">'.$customer['billing_phone'].'</p>
+                    <p class="card-text mb-0">'.$customer['billing_street'].'</p>
+                    <p class="card-text mb-0">'.$customer['billing_city'].' - '.$customer['billing_pincode'].'</p>
+                    <p class="card-text mb-0">'.$state['state_name'].'</p>
+                    <p class="card-text mb-0">'.$customer['billing_country'].'</p>';
+
+        return $address;
+    }
+
+    public function update_shipping_address(Request $request){
+        $payee = Payees::where('id',$request['customer_id'])->first();
+        $customer = Customers::where('id',$payee['type_id'])->first();
+        $input = $request->all();
+        $customer->update($input);
+
+        $state = States::where('id',$customer['shipping_state'])->first();
+
+        $address ='<p class="card-text mb-0">'.$customer['shipping_name'].'</p>
+                    <p class="card-text mb-0">'.$customer['shipping_phone'].'</p>
+                    <p class="card-text mb-0">'.$customer['shipping_street'].'</p>
+                    <p class="card-text mb-0">'.$customer['shipping_city'].' - '.$customer['shipping_pincode'].'</p>
+                    <p class="card-text mb-0">'.$state['state_name'].'</p>
+                    <p class="card-text mb-0">'.$customer['shipping_country'].'</p>';
+
         return $address;
     }
 }

@@ -781,6 +781,7 @@
                 $("#due_date").val(bill_date);
             }
         });
+
         $("#bill_date").change(function(){
             var due_date = $(this).val();
             var days = $("#payment_terms").find(":selected").data('days');

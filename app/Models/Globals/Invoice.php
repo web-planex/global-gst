@@ -7,20 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 class Invoice extends Model
 {
     protected $fillable = ['user_id','company_id','invoice_number','order_number','reference_number',
-        'credit_note_number','tax_type','customer_id','invoice_date','due_date','amount_before_tax',
-        'tax_amount','discount','discount_type','total','files','payment_method','payment_terms','status',
-        'shipping_charge','shipping_charge_amount'];
+        'credit_note_number','tax_type','customer_id','invoice_date','due_date','void_date','payment_date','amount_before_tax',
+        'tax_amount','discount','discount_level','discount_type','total','files','payment_method','payment_terms','status',
+        'shipping_charge','shipping_charge_amount','notes'];
 
     const STATUS_PENDING = 1;
     const STATUS_PAID = 2;
-//    const STATUS_REFUNDED = 3;
-//    const STATUS_VOIDED= 4;
+//    const STATUS_VOIDED= 3;
+//    const STATUS_REFUNDED = 4;
+
 
     public static $invoice_status = [
         self::STATUS_PENDING => 'Pending',
         self::STATUS_PAID => 'Paid',
-//        self::STATUS_REFUNDED => 'Refunded',
 //        self::STATUS_VOIDED => 'Voided',
+//        self::STATUS_REFUNDED => 'Refunded',
+
     ];
 
     const PAYMENT_METHOD_CASH = 1;

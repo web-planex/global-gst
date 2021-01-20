@@ -127,7 +127,6 @@
                                             <label class="custom-control-label" for="all_checked"></label>
                                         </div>
                                     </th>
-                                    <th>#</th>
                                     <th class="col_estimate_no">Estimate No.</th>
                                     <th class="col_customer">Customer</th>
                                     <th class="col_estimate_date">Estimate Date</th>
@@ -146,7 +145,6 @@
                                                 <label class="custom-control-label" for="check_{{$list['id']}}"></label>
                                             </div>
                                         </td>
-                                        <td>{{$i}}</td>
                                         <td class="col_estimate_no">{{$list['estimate_number']}}</td>
                                         <td class="col_customer">{{$list['Payee']['name']}}</td>
                                         <td class="col_estimate_date">{{date('d F Y', strtotime($list['estimate_date']))}}</td>

@@ -122,7 +122,6 @@
                                         <label class="custom-control-label" for="all_checked"></label>
                                     </div>
                                 </th>
-                                <th>#</th>
                                 <th class="col_invoice_no">Invoice No.</th>
                                 <th class="col_credit_note_no">Credit Note No.</th>
                                 <th class="col_customer">Customer</th>
@@ -145,7 +144,6 @@
                                                 <label class="custom-control-label" for="check_{{$list['id']}}"></label>
                                             </div>
                                         </td>
-                                        <td>{{$i}}</td>
                                         <td class="col_invoice_no">{{$list['invoice_number']}}</td>
                                         <td class="col_credit_note_no">{{$list['credit_note_number']}}</td>
                                         <td class="col_customer">{{$list['Payee']['name']}}</td>
@@ -154,9 +152,9 @@
                                         <td class="col_total_tax">Rs. {{$list['tax_amount']}}</td>
                                         <td class="col_status">
                                             @if($list['status']==3)
-                                                <label class="label label-primary">Refunded</label>
+                                                <label class="label label-primary">Void</label>
                                             @else
-                                                <label class="label label-warning">Voided</label>
+                                                <label class="label label-warning">Refund</label>
                                             @endif
                                         </td>
                                         <td class="col_total">Rs. {{$list['total']}}</td>

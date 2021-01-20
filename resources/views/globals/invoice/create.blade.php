@@ -1,19 +1,5 @@
 @extends('layouts.app')
 @section('content')
-<style>
-    .tr-tax-lable {
-        display:block;
-        margin-top:10px;
-        width:100%;
-        padding:5px 0 !important;
-        border:none;
-    }
-    .btn-circle.btn-sm, .btn-group-sm>.btn-circle.btn {
-        width: 30px;
-        height: 30px;
-        padding: 4px 5px!important;
-    }
-</style>
 <div class="row page-titles">
     <div class="col-sm-6 align-self-center">
         <h4 class="text-themecolor">@if(isset($invoice)) Edit @else Add @endif {{$menu}}</h4>
@@ -47,34 +33,46 @@
                                 <div class="col-md-6">
                                     <div class="card border-info mb-0" style="background-color: #ECF0F4;">
                                         <div class="card-header bg-primary">
-                                            <h4 class="m-b-0 text-white">Billing Address</h4>
+                                            <h4 class="m-b-0 text-white pull-left">Billing Address</h4>
+                                            <a href="javascript:;" data-toggle="modal" data-target="#BillingAddressModal">
+                                                <h4 class="m-b-0 text-white text-right">Change</h4>
+                                            </a>
                                         </div>
                                         <div class="card-body pt-2 pb-2">
-                                            @if(isset($invoice) && !empty($invoice))
-                                                <p class="card-text mb-0">{{$invoice['customer']['billing_name']}}</p>
-                                                <p class="card-text mb-0">{{$invoice['customer']['billing_phone']}}</p>
-                                                <p class="card-text mb-0">{{$invoice['customer']['billing_street']}}</p>
-                                                <p class="card-text mb-0">{{$invoice['customer']['billing_city']}} - {{$invoice['customer']['billing_pincode']}}</p>
-                                                <p class="card-text mb-0">{{$invoice['customer']['billing_state_name']}}</p>
-                                                <p class="card-text mb-0">{{$invoice['customer']['billing_country']}}</p>
-                                            @endif
+                                            <div id="BillingDiv">
+                                                @if(isset($invoice) && !empty($invoice))
+                                                    <p class="card-text mb-0">{{$invoice['customer']['billing_name']}}</p>
+                                                    <p class="card-text mb-0">{{$invoice['customer']['billing_phone']}}</p>
+                                                    <p class="card-text mb-0">{{$invoice['customer']['billing_street']}}</p>
+                                                    <p class="card-text mb-0">{{$invoice['customer']['billing_city']}} - {{$invoice['customer']['billing_pincode']}}</p>
+                                                    <p class="card-text mb-0">{{$invoice['customer']['billing_state_name']}}</p>
+                                                    <p class="card-text mb-0">{{$invoice['customer']['billing_country']}}</p>
+                                                @endif
+                                            </div>
+                                            <div id="billing_msg" class="text-info font-weight-bolder"></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="card border-info mb-0" style="background-color: #ECF0F4;">
                                         <div class="card-header bg-primary">
-                                            <h4 class="m-b-0 text-white">Shipping Address</h4>
+                                            <h4 class="m-b-0 text-white pull-left">Shipping Address</h4>
+                                            <a href="javascript:;" data-toggle="modal" data-target="#ShippingAddressModal">
+                                                <h4 class="m-b-0 text-white text-right">Change</h4>
+                                            </a>
                                         </div>
                                         <div class="card-body pt-2 pb-2">
-                                            @if(isset($invoice) && !empty($invoice))
-                                                <p class="card-text mb-0">{{$invoice['customer']['shipping_name']}}</p>
-                                                <p class="card-text mb-0">{{$invoice['customer']['shipping_phone']}}</p>
-                                                <p class="card-text mb-0">{{$invoice['customer']['shipping_street']}}</p>
-                                                <p class="card-text mb-0">{{$invoice['customer']['shipping_city']}} - {{$invoice['customer']['shipping_pincode']}}</p>
-                                                <p class="card-text mb-0">{{$invoice['customer']['shipping_state_name']}}</p>
-                                                <p class="card-text mb-0">{{$invoice['customer']['shipping_country']}}</p>
-                                            @endif
+                                            <div id="ShippingDiv">
+                                                @if(isset($invoice) && !empty($invoice))
+                                                    <p class="card-text mb-0">{{$invoice['customer']['shipping_name']}}</p>
+                                                    <p class="card-text mb-0">{{$invoice['customer']['shipping_phone']}}</p>
+                                                    <p class="card-text mb-0">{{$invoice['customer']['shipping_street']}}</p>
+                                                    <p class="card-text mb-0">{{$invoice['customer']['shipping_city']}} - {{$invoice['customer']['shipping_pincode']}}</p>
+                                                    <p class="card-text mb-0">{{$invoice['customer']['shipping_state_name']}}</p>
+                                                    <p class="card-text mb-0">{{$invoice['customer']['shipping_country']}}</p>
+                                                @endif
+                                            </div>
+                                            <div id="shipping_msg" class="text-info font-weight-bolder"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -83,7 +81,7 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group mb-3 col-md-4" id="order_div">
+                        <div class="form-group mb-3 col-md-6" id="order_div">
                             <label for="order_number">Order Number <span class="text-danger"></span></label>
                             {!! Form::text('order_number', null, ['class' => 'form-control','id'=>'order_number']) !!}
                             @if ($errors->has('order_number'))
@@ -92,7 +90,7 @@
                                 </span>
                             @endif
                         </div>
-                        <div class="form-group mb-3 col-md-4">
+                        <div class="form-group mb-3 col-md-6">
                             <label for="invoice_date">Invoice Date <span class="text-danger">*</span></label>
                             {!! Form::text('invoice_date', isset($invoice)&&!empty($invoice)?date('d-m-Y',strtotime($invoice['invoice_date'])):date('d-m-Y'), ['class' => 'form-control','id'=>'invoice_date']) !!}
                             @if ($errors->has('invoice_date'))
@@ -101,7 +99,16 @@
                                 </span>
                             @endif
                         </div>
-                        <div class="form-group mb-3 col-md-4">
+                        <div class="form-group mb-3 col-md-6">
+                            <label for="due_date">Due Date <span class="text-danger">*</span></label>
+                            {!! Form::text('due_date', isset($invoice)&&!empty($invoice)?date('d-m-Y',strtotime($invoice['due_date'])):null, ['class' => 'form-control','id'=>'due_date']) !!}
+                            @if ($errors->has('due_date'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('due_date') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                        <div class="form-group mb-3 col-md-6">
                             <label for="status">Status <span class="text-danger">*</span></label>
                             {!! Form::select('status', \App\Models\Globals\Invoice::$invoice_status, null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
                             @if ($errors->has('status'))
@@ -110,15 +117,29 @@
                                 </span>
                             @endif
                         </div>
+                        <div class="form-group mb-3 col-md-6 @if(isset($invoice) && $invoice['status']==2) hide @endif " id="pay_terms_div">
+                            <label for="payment_terms">Payment Terms <span class="text-danger"></span></label>
+                            <select name="payment_terms" class="form-control ex-payment-terms amounts-are-select2" id="payment_terms" style="width: 100%;">
+                                <option data-days="0" value="">Due on Receipt</option>
+                                @foreach ($payment_terms as $payment_term)
+                                    <option @if(isset($invoice)&&$invoice['payment_terms']==$payment_term['id']) selected @endif data-days="{{$payment_term['terms_days']}}" value="{{$payment_term['id']}}">{{$payment_term['terms_name']}}</option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('payment_terms'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('payment_terms') }}</strong>
+                                </span>
+                            @endif
+                        </div>
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group mb-3 col-md-4 @if(isset($invoice) && $invoice['status']==1) hide @elseif(!isset($invoice)) hide @endif " id="due_date_div">
-                            <label for="due_date">Due Date <span class="text-danger">*</span></label>
-                            {!! Form::text('due_date', isset($invoice)&&!empty($invoice)?date('d-m-Y',strtotime($invoice['due_date'])):null, ['class' => 'form-control','id'=>'due_date']) !!}
-                            @if ($errors->has('due_date'))
+                        <div class="form-group mb-3 col-md-4 @if(isset($invoice) && $invoice['status']==1) hide @elseif(!isset($invoice)) hide @endif " id="payment_date_div">
+                            <label for="payment_date">Payment Date <span class="text-danger"></span></label>
+                            {!! Form::text('payment_date', isset($invoice)&&!empty($invoice)?date('d-m-Y',strtotime($invoice['payment_date'])):null, ['class' => 'form-control payment_date','id'=>'payment_date']) !!}
+                            @if ($errors->has('payment_date'))
                                 <span class="text-danger">
-                                    <strong>{{ $errors->first('due_date') }}</strong>
+                                    <strong>{{ $errors->first('payment_date') }}</strong>
                                 </span>
                             @endif
                         </div>
@@ -140,47 +161,56 @@
                                 </span>
                             @endif
                         </div>
-                        <div class="form-group mb-3 col-md-4 @if(isset($invoice) && $invoice['status']==2) hide @endif " id="pay_terms_div">
-                            <label for="payment_terms">Payment Terms <span class="text-danger"></span></label>
-                            {!! Form::select('payment_terms', $payment_terms, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_terms','style'=>'width:100%']) !!}
-                            @if ($errors->has('payment_terms'))
-                                <span class="text-danger">
-                                    <strong>{{ $errors->first('payment_terms') }}</strong>
-                                </span>
-                            @endif
-                        </div>
-                    </div>
-
-                    <div class="form-row" style="flex-direction:row-reverse">
-                        <div class="form-group mb-3 col-md-3 pull-right">
-                            <label>Amounts are</label>
-                            <select class="form-control amounts-are-select2" name="tax_type" id="amounts_are">
-                                <option value="exclusive" @if(isset($invoice) && $invoice['tax_type']==1)) selected @endif>Exclusive of Tax</option>
-                                <option value="inclusive" @if(isset($invoice) && $invoice['tax_type']==2)) selected @endif>Inclusive of Tax</option>
-                                <option value="out_of_scope" @if(isset($invoice) && $invoice['tax_type']==3)) selected @endif>Out of scope of Tax</option>
-                            </select>
-                        </div>
                     </div>
 
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header bg-primary">
-                                    <h4 class="m-b-0 text-white">Item Details</h4>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group mb-0">
+                                                <h4 class="col-form-label m-b-0 text-white">Item Details</h4>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group mb-0 row">
+                                                <label for="discount_level" class="col-4 col-form-label text-right text-white">Discount Level</label>
+                                                <div class="col-8">
+                                                    <select class="form-control discount-level-select2" name="discount_level" id="discount_level">
+                                                        <option value="0" @if(isset($invoice) && $invoice['discount_level']==0)) selected @endif>At transaction level</option>
+                                                        <option value="1" @if(isset($invoice) && $invoice['discount_level']==1)) selected @endif>At item level</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group mb-0 row">
+                                                <label for="amounts_are" class="col-4 col-form-label text-right text-white">Amounts are</label>
+                                                <div class="col-8">
+                                                    <select class="form-control amounts-are-select2" name="tax_type" id="amounts_are">
+                                                        <option value="exclusive" @if(isset($invoice) && $invoice['tax_type']==1)) selected @endif>Exclusive of Tax</option>
+                                                        <option value="inclusive" @if(isset($invoice) && $invoice['tax_type']==2)) selected @endif>Inclusive of Tax</option>
+                                                        <option value="out_of_scope" @if(isset($invoice) && $invoice['tax_type']==3)) selected @endif>Out of scope of Tax</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="gstinvoice-table-data">
                                         <div class="table-responsive data-table-gst-box pb-3">
                                             <table class="table table-hover">
                                                 <thead>
-                                                <th width="3%">#</th>
-                                                <th width="22%">Product <span class="text-danger">*</span></th>
+                                                <th width="20%">Product <span class="text-danger">*</span></th>
                                                 <th width="13%">HSN Code <span class="text-danger">*</span></th>
                                                 <th width="10%">QTY <span class="text-danger">*</span></th>
-                                                <th width="14%">Rate <span class="text-danger">*</span></th>
-                                                <th width="14%">Amount <span class="text-danger">*</span></th>
-                                                <th width="20%" class="tax_column @if(isset($invoice)&&$invoice['tax_type']==3) hide @endif">Tax <span class="text-danger">*</span></th>
-                                                <th width="4%">&nbsp;</th>
+                                                <th width="12%">Rate <span class="text-danger">*</span></th>
+                                                <th width="12%" style="display: none;" class="discount-line-section">Discount</th>
+                                                <th width="15%">Amount <span class="text-danger">*</span></th>
+                                                <th width="18%" class="tax_column @if(isset($invoice)&&$invoice['tax_type']==3) hide @endif">Tax <span class="text-danger">*</span></th>
+                                                <th width="3%">&nbsp;</th>
                                                 </thead>
                                                 <tbody id="items_list_body">
                                                 @php $i=1; @endphp
@@ -190,7 +220,6 @@
                                                             <tr class="itemTr"></tr>
                                                         @endif
                                                         <tr class="{{$i > 1 ? 'itemNewCheckTr' : 'itemTr'}}">
-                                                            <td>{{$i}}</td>
                                                             <td id="pro_list">
                                                                 <select name="product[]" id="product_select_{{$i}}" class="form-control ex-product product_select_edit amounts-are-select2" data-id="{{$i}}" style="width: 100%;" required="">
                                                                     @foreach($products as $pro)
@@ -209,6 +238,13 @@
                                                             </td>
                                                             <td>
                                                                 <input type="text" min="0" class="form-control rate-input floatTextBox" name="rate[]" value="{{$item['rate']}}">
+                                                            </td>
+                                                            <td style="display: none;" class="discount-line-section">
+                                                                <input style="width: 65px" type="text" name="discount_items[]" value="{{$item['discount']}}" class="form-control discount-items">
+                                                                <select name="discount_type_items[]" class="discount-type-items">
+                                                                    <option value="1" @if($item['discount_type'] == 1)  selected @endif>%</option>
+                                                                    <option value="2" @if($item['discount_type'] == 2)  selected @endif>Rs.</option>
+                                                                </select>
                                                             </td>
                                                             <td>
                                                                 <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[]" value="{{$item['amount']}}">
@@ -234,7 +270,6 @@
                                                     @endforeach
                                                 @else
                                                     <tr class="itemTr">
-                                                        <td>1</td>
                                                         <td id="pro_list">
                                                             <!--<input type="text" class="form-control" name="item_name[0]" required>-->
                                                             <select name="product[0]" id="product_select" class="form-control ex-product amounts-are-select2" style="width: 100%;" required="">
@@ -254,6 +289,13 @@
                                                         </td>
                                                         <td>
                                                             <input type="text" min="0" class="form-control rate-input floatTextBox" id="rate_0"  name="rate[0]" value="{{$first_product['price']}}" required>
+                                                        </td>
+                                                        <td style="display: none;" class="discount-line-section">
+                                                            <input style="width: 65px" type="text" name="discount_items[]" class="form-control discount-items">
+                                                            <select name="discount_type_items[]" class="discount-type-items">
+                                                                <option value="1">%</option>
+                                                                <option value="2">Rs.</option>
+                                                            </select>
                                                         </td>
                                                         <td>
                                                             <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[0]" required>
@@ -303,7 +345,7 @@
                                                         </tr>
                                                     @endif
                                                 @endforeach
-                                                <tr>
+                                                <tr class="discount-section">
                                                     <th>Discount Type</th>
                                                     <td>
                                                         <select name="discount_type" id="discount_type" class="form-control">
@@ -313,7 +355,7 @@
                                                         </select>
                                                     </td>
                                                 </tr>
-                                                <tr>
+                                                <tr class="discount-section">
                                                     <th>Discount Amount</th>
                                                     <td>{!! Form::text('discount', null, ['class' => 'form-control','id'=>'discount']) !!}</td>
                                                 </tr>
@@ -413,6 +455,19 @@
 <!--PRODUCT MODAL-->
 @include('globals.invoice.product_model')
 
+<!--BILLING ADDRESS MODAL-->
+@include('globals.invoice.billing_address_model')
+
+<!--SHIPPING ADDRESS MODAL-->
+@include('globals.invoice.shipping_address_model')
+
+@section('page_confirmation_script')
+    <script src="{{asset('js/page_confirmation_script.js')}}"></script>
+@stop
+@section('tax_calculations_discount')
+    <script src="{{asset('js/tax_calculations_discount.js')}}"></script>
+@stop
+
 <script type="text/javascript">
     @if(isset($invoice) && !empty($invoice))
         $(document).ready(function(){
@@ -428,6 +483,9 @@
                 $('#discount').inputmask("currency");
                 $('#discount').parent('td').siblings('th').html('Discount Amount');
             }
+        setTimeout(function(){
+            $('#discount_level').trigger('change');
+        },500);
         });
     @else
         $(document).ready(function(){
@@ -611,33 +669,17 @@
         $('#status').change( function(){
            if($(this).val()==1){
                $('#pay_terms_div').removeClass('hide');
-               $('#due_date_div').addClass('hide');
+               $('#payment_date_div').addClass('hide');
                $('#pay_method_div').addClass('hide');
                $('#reference_div').addClass('hide');
            }else{
-               $('#due_date_div').removeClass('hide');
+               $('#payment_date_div').removeClass('hide');
                $('#pay_method_div').removeClass('hide');
                $('#reference_div').removeClass('hide');
                $('#pay_terms_div').addClass('hide');
            }
         });
     });
-
-    function getAddress(cust_id) {
-        $.ajax({
-            url: '{{url('ajax/get_address')}}',
-            type: 'get',
-            data: {'data':cust_id},
-            success: function (result) {
-                if(cust_id != ""){
-                    $('#cust_address').html(result);
-                    $('#cust_address').removeClass('hide');
-                }else{
-                    $('#cust_address').addClass('hide');
-                }
-            }
-        });
-    }
 
     $('#shipping_charge').click(function () {
         Inputmask.extendDefaults({
@@ -652,6 +694,84 @@
             $('#shipping_charge_amount').val('');
             taxCalculation();
         }
+    });
+
+    function getAddress(cust_id) {
+        $.ajax({
+            url: '{{url('ajax/get_address')}}',
+            type: 'get',
+            data: {'data':cust_id},
+            success: function (result) {
+                if(cust_id != ""){
+                    $('#cust_address').html(result['address']);
+                    $('#cust_address').removeClass('hide');
+
+                    /*Value Set In Both Address Modal */
+
+                    /*---Billing Address---*/
+                    $('#billing_cust_id').val(cust_id);
+                    $('#billing_name_1').val(result['billing_address'][0]);
+                    $('#billing_phone_1').val(result['billing_address'][1]);
+                    $('#billing_street_1').val(result['billing_address'][2]);
+                    $('#billing_city_1').val(result['billing_address'][3]);
+                    $('#billing_state_1').val(result['billing_address'][4]).change();
+                    $('#billing_pincode_1').val(result['billing_address'][5]);
+
+                    /*---Shipping Address---*/
+                    $('#shipping_cust_id').val(cust_id);
+                    $('#shipping_name_1').val(result['shipping_address'][0]);
+                    $('#shipping_phone_1').val(result['shipping_address'][1]);
+                    $('#shipping_street_1').val(result['shipping_address'][2]);
+                    $('#shipping_city_1').val(result['shipping_address'][3]);
+                    $('#shipping_state_1').val(result['shipping_address'][4]).change();
+                    $('#shipping_pincode_1').val(result['shipping_address'][5]);
+                }else{
+                    $('#cust_address').addClass('hide');
+                }
+            }
+        });
+    }
+
+    $('#BillingAddressForm').submit(function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+            type:'POST',
+            url: "{{ url('ajax/update_billing_address')}}",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: formData,
+            cache:false,
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                $("#BillingDiv").html(result);
+                $('#BillingAddressModal').modal('hide');
+                $('#billing_msg').html('Billing address updated successfully.').fadeIn('slow').delay(5000).hide(1);
+            }
+        });
+    });
+
+    $('#ShippingAddressForm').submit(function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+            type:'POST',
+            url: "{{ url('ajax/update_shipping_address')}}",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: formData,
+            cache:false,
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                $("#ShippingDiv").html(result);
+                $('#ShippingAddressModal').modal('hide');
+                $('#shipping_msg').html('Shipping address updated successfully.').fadeIn('slow').delay(5000).hide(1);
+            }
+        });
     });
 
     $(document).ready(function(){
@@ -678,6 +798,7 @@
             var numItems = $('.itemTr').length;
             var i = numItems + 1;
             var tax_type = $('#amounts_are').find(":selected").val();
+            var discount_level = $("#discount_level").find(":selected").val();
             var row = $("<tr>").addClass("itemTr");
             var product_select = "<select name=\"product["+numItems+"]\" id=\"product_select"+i+"\" class='product_select ex-product form-control amounts-are-select3' style=\"width: 100%;\" required>";
             /*Product Get*/
@@ -695,20 +816,24 @@
                     $("#items_list_body").append(row);
                     var tax_input = $('#taxes').html();
                     var products = $('#pro_list').html();
+                    var discount_field_style = "";
+                    if(discount_level == 0) {
+                        discount_field_style = "style=display:none;";
+                    }
                     var html = "<tr class=\"itemNewCheckTr\">";
-                    html += "<td>" + i + "</td>";
-//            html += "<td><input type=\"text\" class=\"form-control\" name=\"item_name["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
                     html += "<td>" + product_select +
                         "<div class=\"wrapper\" id=\"prowrp"+i+"\" style=\"display: none;\">"+
                         "<a href=\"javascript:;\" class=\"font-weight-300 add-new-prod-link\" data-id=\"product_select"+i+"\" onclick=\"OpenProductModel('product_select"+i+"')\"><i class=\"fa fa-plus-circle\"></i> Add New</a>"+
                         "</div>"+
                         "</td>";
-                    //html += "<td><input type=\"text\" class=\"form-control description_input\" name=\"description["+numItems+"]\" id=\"description_"+numItems+"\" value='{{$first_product['description']}}' required><span class=\"multi-error\"></span></td>";
                     html += "<td><input type=\"text\" class=\"form-control hsn_code_input\" name=\"hsn_code["+numItems+"]\" id=\"hsn_code_"+numItems+"\" value='{{$first_product['hsn_code']}}' required><span class=\"multi-error\"></span></td>";
                     html += "<td><input type=\"number\" min=\"1\" value=\"1\" class=\"form-control quantity-input floatTextBox\" name=\"quantity["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
                     html += "<td><input type=\"text\" min=\"0\" class=\"form-control rate-input floatTextBox\" id=\"rate_"+numItems+"\" name=\"rate["+numItems+"]\" value='{{$first_product['price']}}' required><span class=\"multi-error\"></span></td>";
+                    html += "<td "+discount_field_style+" class='discount-line-section'>";
+                    html += "<input style='width: 65px' type='text' name='discount_items[]' class='form-control discount-items'>";
+                    html += "<select name='discount_type_items[]' class='discount-type-items'>";
+                    html += "<option value='1'>%</option><option value='2'>Rs.</option></select></td>";
                     html += "<td><input type=\"text\" min=\"0\" class=\"form-control amount-input floatTextBox\" name=\"amount["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
-                    {{--html += "<td><select class='form-control tax-input' name=\"taxes["+numItems+"]\">@foreach($taxes as $tax) <option value='{{$tax['id']}}'>{{$tax['rate'].'% '.$tax['tax_name']}}</option> @endforeach</select></td>";--}}
                     if(tax_type == 'out_of_scope') {
                         html += "<td class='tax_column hide'><select class='form-control tax-input' name=\"taxes["+numItems+"]\">@foreach($taxes as $tax) @if($tax['is_cess'] == 0)<option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name']}}</option> @else <option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option> @endif @endforeach</select></td>";
                     } else {
@@ -727,7 +852,7 @@
                     });
 
                     $('.amounts-are-select3').select2();
-                    $('.ex-product').trigger('change')
+                    $('#product_select'+i).trigger('change');
                 }
             });
         });
@@ -748,50 +873,6 @@
            });
         });
 
-        $(document).on('keyup change','.rate-input',function(){
-            var qty = $(this).parent('td').siblings('td').find('.quantity-input').val();
-            if(qty == null || qty == '') {
-                qty = 0;
-            }
-            var amount = $(this).val() * qty;
-            $(this).parent('td').next('td').find('.amount-input').val(amount);
-            taxCalculation();
-        });
-
-        $(document).on('keyup change','.quantity-input',function(){
-            var rate = $(this).parent('td').next('td').find('.rate-input').val();
-            var val = $(this).val();
-            if(rate == null || rate == '') {
-                rate = 0;
-            }
-            if(val == null || val == '') {
-                val = 0;
-            }
-            var amount = val * rate;
-            $(this).parent('td').next('td').next('td').find('.amount-input').val(amount);
-            if(val == 0 || val == '') {
-                $(this).parent('td').next('td').find('.rate-input').val(0);
-            }
-            taxCalculation();
-        });
-
-        $(document).on('keyup change','.amount-input',function(){
-            var qty = $(this).parent('td').prev('td').prev('td').find('.quantity-input').val();
-            var val = $(this).val();
-            if(qty == null || qty == '') {
-                qty = 0;
-            }
-            if(val == null || val == '') {
-                val = 0;
-            }
-            var rate = val / qty;
-            if(isNaN(rate)) {
-                rate = 0;
-            }
-            $(this).parent('td').prev('td').find('.rate-input').val(rate);
-            taxCalculation();
-        });
-
         $(document).on('click', '.remove-line-item', function(){
             $(this).parents('.itemNewCheckTr').prev('.itemTr').remove();
             $(this).parents('.itemNewCheckTr').remove();
@@ -803,256 +884,54 @@
             taxCalculation();
         });
 
-        $(document).on('change','.tax-input, #amounts_are', function(){
-            if($('#amounts_are').val()=='out_of_scope'){
-                $('.tax_column').each(function(){
-                    $(this).hide();
-                });
-            }else{
-                $('.tax_column').each(function(){
-                    $(this).show();
-                });
+        $("#payment_terms").change(function(){
+            var due_date = $("#invoice_date").val();
+            var days = $(this).find(":selected").data('days');
+            if(days != 0) {
+                var parts = due_date.split('-');
+                var new_date = new Date(parts[2], parts[1] - 1, parts[0]);
+                var final_date = addDays(new_date.toDateString(),days);
+                $("#due_date").val(formatDate(final_date));
+            } else {
+                var invoice_date = $("#invoice_date").val();
+                $("#due_date").val(invoice_date);
             }
-            taxCalculation();
         });
+
+        $("#invoice_date").change(function(){
+            var due_date = $(this).val();
+            var days = $("#payment_terms").find(":selected").data('days');
+            if(days != 0) {
+                var parts = due_date.split('-');
+                var new_date = new Date(parts[2], parts[1] - 1, parts[0]);
+                // var new_date = new Date(due_date);
+                var final_date = addDays(new_date.toDateString(),days);
+                $("#due_date").val(formatDate(final_date));
+            } else {
+                var invoice_date = $(this).val();
+                $("#due_date").val(invoice_date);
+            }
+        });
+
         $('form.formInvoice').validate();
     });
 
-    function subTotal() {
-        amount = 0;
-        $('.amount-input').each(function(){
-            var val = $(this).val();
-            if(val == null || val == '') {
-                val = 0;
-            }
-            amount += parseFloat(val);
-        });
-
-        var tax_type = $('#amounts_are').find(":selected").val();
-        var final_amount = 0;
-        if(tax_type == 'exclusive') {
-            final_amount = amount;
-        } else if(tax_type == 'inclusive') {
-            var total_tax_amount = getTotalTax();
-            final_amount = parseFloat(amount) - parseFloat(total_tax_amount);
-        } else {
-            final_amount = amount;
-        }
-        $('#subtotal').val('Rs. ' + final_amount.toFixed(2));
-
-        $('.tax-label').html(final_amount.toFixed(2));
-        return final_amount.toFixed(2);
+    function addDays(date, days) {
+        var result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
     }
 
-    function getTotalTax() {
-        total_tax_amount = 0;
-        $('.tax-input-row').each(function() {
-            var val = $(this).val();
-            if(!$(this).parent('td').parent('tr').hasClass('hide')){
-                val = val.replace('Rs. ','');
-                if(val == null || val == '') {
-                    val = 0;
-                }
-                total_tax_amount += parseFloat(val);
-            }
-        });
-        return total_tax_amount;
-    }
-
-    function taxCalculation() {
-
-        var subtotal = subTotal();
-        var tax_type = $('#amounts_are').find(":selected").val();
-        var tax = 0;
-        var total = 0;
-        var amount_before_tax = 0;
-
-        var tax_arr = [];
-        var tax_total_arr = [];
-        var i = 0;
-
-        var discount_type = $('#discount_type').val();
-
-        $('.tax-input').find('option').each(function() {
-            var str = $(this).filter(":selected").text();
-            var opt = $(this).text();
-            var opt_str = opt.replace("% ", "_").replace(" + ","+").replace(" ", "_").replace("%", "");
-            var tax_str = str.replace("% ", "_").replace(" + ","+").replace(" ", "_").replace("%", "");
-            var is_cess = false;
-            var cess_arr = [];
-            if (tax_str.indexOf('CESS') > -1) {
-                is_cess = true;
-                cess_arr = tax_str.split("+");
-            }
-            var amount = 0;
-            amount = $(this).parent('select').parent('td').prev('td').find('.amount-input').val();
-
-            if(cess_arr.length > 0 && is_cess) {
-                for(var r=0;r < cess_arr.length;r++){
-                    tax_str = cess_arr[r];
-                    var opt1_str = opt_str.substr(0, opt_str.indexOf('+'));
-                    var opt2_str = opt_str.split('+').pop();
-                    var tax_name = tax_str.split('_').pop();
-                    var tax_rate = tax_str.substr(0, tax_str.indexOf('_'));
-                    var tax_raw_html = '';
-                    var tax_id = $(this).val();
-                    if(tax_str != '') {
-                        var tax_hidden = 0;
-                        tax_hidden += parseFloat(amount);
-                        $("#id_"+ tax_str).val(tax_hidden);
-                    }
-
-                    var cls_opt_str1 = "." + opt1_str;
-                    var cls_opt_str2 = "." + opt2_str;
-
-                    $(cls_opt_str1).addClass("hide");
-                    $(cls_opt_str2).addClass("hide");
-
-                    if(tax_str != '' && tax_str !=  null) {
-                        tax_arr[i] = tax_str;
-                        if(tax_total_arr.hasOwnProperty(tax_str)) {
-                            tax_total_arr[tax_str] += parseFloat(amount);
-                        } else {
-                            tax_total_arr[tax_str] = parseFloat(amount);
-                        }
-                        i++;
-                    }
-                }
-            } else {
-                var tax_name = tax_str.split('_').pop();
-                var tax_rate = tax_str.substr(0, tax_str.indexOf('_'));
-                var tax_raw_html = '';
-                var tax_id = $(this).val();
-
-                if(tax_str != '') {
-                    var tax_hidden = 0;
-                    tax_hidden += parseFloat(amount);
-                    $("#id_"+ tax_str).val(tax_hidden);
-                }
-                if (opt_str.indexOf('CESS') > -1) {
-                    var opt_str2 = opt_str.substr(0, opt_str.indexOf('+'));
-                    opt_str = opt_str.split('+').pop();
-                    $('.'+opt_str2).addClass("hide");
-                }
-                var cls_opt_str = "." + opt_str;
-                $(cls_opt_str).addClass("hide");
-                if(tax_str != '' && tax_str !=  null) {
-                    tax_arr[i] = tax_str;
-                    if(tax_total_arr.hasOwnProperty(tax_str)) {
-                        tax_total_arr[tax_str] += parseFloat(amount);
-                    } else {
-                        tax_total_arr[tax_str] = parseFloat(amount);
-                    }
-                    i++;
-                }
-            }
-        });
-        $('.amount-input').each(function() {
-            var tax_text = $(this).parent('td').next('td').find('.tax-input').find(":selected").text();
-            var amount = parseFloat($(this).val());
-        });
-
-        if(tax_type != 'out_of_scope') {
-            for(var a=0; a < tax_arr.length; a++) {
-                $("."+tax_arr[a]).removeClass("hide");
-            }
-        }
-
-        for (var key in tax_total_arr) {
-
-            var value = parseFloat(tax_total_arr[key]);
-            var tax = key.split('_')[1];
-            var tax_rate = key.substr(0, key.indexOf('_'));
-            var tax_amount = 0;
-
-            if(tax == 'GST') {
-                if(tax_type == 'exclusive') {
-                    var tax_rate_gst = tax_rate / 2;
-                    if(isNaN(value)) {
-                        value=0;
-                    }
-                    $("#label_1_"+key).html(value.toFixed(2));
-                    $("#label_2_"+key).html(value.toFixed(2));
-                    tax_amount = value * tax_rate_gst / 100;
-                    amount_before_tax = parseFloat(subtotal).toFixed(2);
-                    if(isNaN(tax_amount)) {
-                        tax_amount=0;
-                    }
-                    $("#input_1_"+key).val("Rs. "+tax_amount.toFixed(2));
-                    $("#input_2_"+key).val("Rs. "+tax_amount.toFixed(2));
-                } else if(tax_type == 'inclusive') {
-                    var tax_rate_gst = tax_rate / 2;
-                    tax_amount = value * tax_rate / (parseInt(100) + parseInt(tax_rate));
-                    var new_value = parseFloat(value) - parseFloat(tax_amount);
-                    if(isNaN(new_value)) {
-                        new_value=0;
-                    }
-                    amount_before_tax = parseFloat(new_value).toFixed(2);
-                    $("#label_1_"+key).html(new_value.toFixed(2));
-                    $("#label_2_"+key).html(new_value.toFixed(2));
-                    var new_tax_value = tax_amount / 2;
-                    if(isNaN(new_tax_value)) {
-                        new_tax_value=0;
-                    }
-                    $("#input_1_"+key).val("Rs. "+new_tax_value.toFixed(2));
-                    $("#input_2_"+key).val("Rs. "+new_tax_value.toFixed(2));
-                }
-            } else {
-                if(tax_type == 'exclusive') {
-                    tax_amount = value * tax_rate / 100;
-                    amount_before_tax = parseFloat(subtotal).toFixed(2);
-                    if(isNaN(value)) {
-                        value=0;
-                    }
-                    $("#label_"+key).html(value.toFixed(2));
-                } else if(tax_type == 'inclusive') {
-                    tax_amount = value * tax_rate / (parseInt(100) + parseInt(tax_rate));
-                    var new_value = parseFloat(value) - parseFloat(tax_amount);
-                    if(isNaN(new_value)) {
-                        new_value=0;
-                    }
-                    amount_before_tax = parseFloat(new_value).toFixed(2);
-                    $("#label_"+key).html(new_value.toFixed(2));
-                }
-                if(isNaN(tax_amount)) {
-                    tax_amount=0;
-                }
-                $("#input_"+key).val("Rs. "+tax_amount.toFixed(2));
-            }
-        }
-        var total_tax = getTotalTax();
-        if(tax_type == 'exclusive') {
-            total = parseFloat(subtotal) + parseFloat(total_tax);
-        } else if(tax_type == 'inclusive') {
-            subtotal = subTotal();
-            amount_before_tax = parseFloat(subtotal);
-            total = parseFloat(subtotal) + parseFloat(total_tax);
-        } else {
-            total_tax = 0;
-            amount_before_tax = parseFloat(subtotal).toFixed(2);
-            total = parseFloat(subtotal);
-        }
-
-        if(discount_type != '') {
-            if(discount_type == '1'){
-                var percentage = $('#discount').inputmask('unmaskedvalue');
-                var percentage_amount = (total * percentage) / 100;
-                total = total - percentage_amount;
-            } else if(discount_type == '2'){
-                var discount = $('#discount').inputmask('unmaskedvalue');
-                total = total - discount;
-            }
-        }
-
-        if($('#shipping_charge_amount').val() != '') {
-            var shipping_charge = $('#shipping_charge_amount').val();
-            total = total + parseFloat(shipping_charge) ;
-        }
-
-        $('#total').val('Rs. '+ parseFloat(total).toFixed(2));
-        $('#amount_before_tax').val(amount_before_tax);
-        $('#tax_amount').val(total_tax.toFixed(2));
-        $('#total_amount').val(parseFloat(total).toFixed(2));
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+        return [day, month, year].join('-');
     }
 
     @if(isset($invoice) && !empty($invoice))
