@@ -27,12 +27,15 @@
                             @endif
                         </div>
                     </div>
-                    <button type="submit" name="submit" class="btn btn-default btn-lg btn-primary">Submit</button>
+                    <button type="submit" id="submit" name="submit" class="btn btn-default btn-lg btn-primary">Submit</button>
                 {!! Form::close() !!}
             </div>
         </div>
     </div>
 </div>
+@section('page_confirmation_script')
+<script src="{{asset('js/page_confirmation_script.js')}}"></script>
+@endsection
 <script>
     $(document).ready(function() {
         $("#PaymentMethodForm").validate({

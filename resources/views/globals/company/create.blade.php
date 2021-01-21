@@ -151,7 +151,9 @@
             </div>
         </div>
     </div>
-
+@section('page_confirmation_script')
+<script src="{{asset('js/page_confirmation_script.js')}}"></script>
+@endsection
 
     <script>
         $(function(){

@@ -109,7 +109,7 @@
                             <span class="hide-menu">Sales</span>
                         </a>
                         <ul aria-expanded="false" class="collapse @if(isset($menu) && $menu == 'Invoices' || isset($menu) && $menu == 'Credit Notes' || isset($menu) && $menu == 'Estimate') in @endif">
-                            <li><a href="{{url('estimate')}}" class="@if(isset($menu) && $menu == 'Estimate' ) active @endif">Estimate</a></li>
+                            <li><a href="{{url('estimate')}}" class="@if(isset($menu) && $menu == 'Estimate' ) active @endif">Estimates</a></li>
                             <li><a href="{{ url('sales')}}" class="@if(isset($menu) && $menu == 'Invoices' ) active @endif">Invoices</a></li>
                             <li><a href="{{url('credit-note')}}" class="@if(isset($menu) && $menu == 'Credit Notes' ) active @endif">Credit Notes</a></li>
                         </ul>

@@ -15,40 +15,43 @@
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
                             <label for="old_password">Old Password <span class="text-danger">*</span></label>
-                                <input type="password" id="password" name="old_password" class="form-control" >
-                            @if ($errors->has('old_password'))
-                                <span class="text-danger">
-                                    <strong>{{ $errors->first('old_password') }}</strong>
-                                </span>
-                            @endif
+                            <input type="password" id="password" name="old_password" class="form-control" >
+                            @error('old_password')
+                            <span class="text-danger">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
                         <div class="col-md-6"></div>
 
                         <div class="form-group mb-3 col-md-6">
                             <label for="password">New Password <span class="text-danger">*</span></label>
                             <input type="password" id="password" name="password" class="form-control" >
-                            @if ($errors->has('password'))
-                                <span class="text-danger">
-                                    <strong>{{ $errors->first('password') }}</strong>
-                                </span>
-                            @endif
+                            @error('password')
+                            <span class="text-danger">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
                         <div class="col-md-6"></div>
 
                         <div class="form-group mb-3 col-md-6">
                             <label for="password_confirmation">Confirm Password <span class="text-danger">*</span></label>
                             <input type="password" id="password-confirm" name="password_confirmation" class="form-control" >
-                            @if ($errors->has('password_confirmation'))
-                                <span class="text-danger">
-                                    <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                </span>
-                            @endif
+                            @error('password_confirmation')
+                            <span class="text-danger">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                         </div>
                     </div>
-                    <button type="submit" name="submit" class="btn btn-default btn-lg btn-primary">Submit</button>
+                    <button type="submit" id="submit" name="submit" class="btn btn-default btn-lg btn-primary">Submit</button>
                     {!! Form::close() !!}
                 </div>
             </div>
         </div>
     </div>
+@section('page_confirmation_script')
+<script src="{{asset('js/page_confirmation_script.js')}}"></script>
+@endsection
 @endsection

@@ -51,7 +51,6 @@ class ProductController extends Controller
             'sku' => 'required',
             'price' => 'required',
             'sale_price' => 'required',
-            'description' => 'required',
             'status' => 'required',
         ]);
 
@@ -80,7 +79,6 @@ class ProductController extends Controller
             'sku' => 'required',
             'price' => 'required',
             'sale_price' => 'required',
-            'description' => 'required',
             'status' => 'required',
         ]);
 

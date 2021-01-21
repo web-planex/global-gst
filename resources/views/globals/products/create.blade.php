@@ -107,7 +107,7 @@
                         </div>
 
                         <div class="form-group col-md-12 mb-0">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" id="submit" class="btn btn-primary">Save</button>
                         </div>
                     </div>
                     {!! Form::close() !!}
@@ -115,7 +115,9 @@
             </div>
         </div>
     </div>
-
+@section('page_confirmation_script')
+<script src="{{asset('js/page_confirmation_script.js')}}"></script>
+@endsection
     <script>
         $(function(){
             $("#uploadFile").on("change", function(){
