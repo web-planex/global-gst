@@ -12,7 +12,7 @@
                 <div class="card mr-1">
                     <div class="card-body">
                         <div class="d-flex no-block">
-                            <div class="round align-self-center round-primary"><i class="fab  fa-product-hunt"></i></div>
+                            <div class="round align-self-center round-lg round-primary"><i class="fab  fa-product-hunt"></i></div>
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0">{{$total_product}}</h3>
                                 <h5 class="text-muted m-b-0">Products</h5>
@@ -28,7 +28,7 @@
                 <div class="card mr-1">
                     <div class="card-body">
                         <div class="d-flex no-block">
-                            <div class="round align-self-center round-success"><i class="fa fa-money"></i></div>
+                            <div class="round align-self-center round-lg round-success"><i class="fa fa-money"></i></div>
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0">{{$total_expense}}</h3>
                                 <h5 class="text-muted m-b-0">Expenses</h5>
@@ -44,7 +44,7 @@
                 <div class="card mr-1">
                     <div class="card-body">
                         <div class="d-flex no-block">
-                            <div class="round align-self-center round-success"><i class="fa fa-money"></i></div>
+                            <div class="round align-self-center round-lg round-danger"><i class="fa fa-file-text"></i></div>
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0">{{$total_bills}}</h3>
                                 <h5 class="text-muted m-b-0">Bills</h5>
@@ -56,11 +56,27 @@
         </div>
 
         <div class="col-lg-3 col-md-6">
+            <a href="{{route('estimate.index')}}" class="text-dark">
+                <div class="card mr-1">
+                    <div class="card-body">
+                        <div class="d-flex no-block">
+                            <div class="round align-self-center round-lg round-warning"><i class="fa fa-money"></i></div>
+                            <div class="m-l-10 align-self-center">
+                                <h3 class="m-b-0">{{$total_estimates}}</h3>
+                                <h5 class="text-muted m-b-0">Estimates</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="col-lg-3 col-md-6">
             <a href="{{url('sales')}}" class="text-dark">
                 <div class="card mr-1">
                     <div class="card-body">
                         <div class="d-flex no-block">
-                            <div class="round align-self-center round-danger"><i class="fa fa-line-chart"></i></div>
+                            <div class="round align-self-center round-lg round-danger"><i class="fa fa-line-chart"></i></div>
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0">{{$total_sales}}</h3>
                                 <h5 class="text-muted m-b-0">Invoices</h5>
@@ -76,7 +92,7 @@
                 <div class="card mr-1">
                     <div class="card-body">
                         <div class="d-flex no-block">
-                            <div class="round align-self-center round-warning"><i class="fas fa-clipboard"></i></div>
+                            <div class="round align-self-center round-lg round-warning"><i class="fas fa-clipboard"></i></div>
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0">{{$total_credit_note}}</h3>
                                 <h5 class="text-muted m-b-0">Credit Notes</h5>
@@ -92,7 +108,7 @@
                 <div class="card mr-1">
                     <div class="card-body">
                         <div class="d-flex no-block">
-                            <div class="round align-self-center round-primary"><i class="fa fa-user-plus"></i></div>
+                            <div class="round align-self-center round-lg round-primary"><i class="fa fa-user-plus"></i></div>
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0">{{$total_payee}}</h3>
                                 <h5 class="text-muted m-b-0">Payees</h5>
@@ -108,7 +124,7 @@
                 <div class="card mr-1">
                     <div class="card-body">
                         <div class="d-flex no-block">
-                            <div class="round align-self-center round-danger"><i class="fa fa-building"></i></div>
+                            <div class="round align-self-center round-lg round-danger"><i class="fa fa-building"></i></div>
                             <div class="m-l-10 align-self-center">
                                 <h3 class="m-b-0">{{$total_companies}}</h3>
                                 <h5 class="text-muted m-b-0">Companies</h5>

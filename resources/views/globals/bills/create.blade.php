@@ -817,6 +817,31 @@
             day = '0' + day;
         return [day, month, year].join('-');
     }
+    
+    function deleteAttachment(aid){
+        Swal.fire({
+            title: 'Do you want to delete this receipt?',
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#01c0c8",
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+            $.ajax({
+                url: '{{url('ajax/bill_delete_attachment')}}',
+                type: 'POST',
+                data: {'data':aid},
+                success: function (result) {
+                    $('[data-toggle="tooltip"]').tooltip("hide");
+                    $('#attachment_file').remove();
+                    $('#attachment_div').remove();
+                    $('#att_del_msg').hide().html('Receipt deleted!').fadeIn('slow').delay(5000).hide(1);
+                }
+            });
+        }
+    })
+    }
 
     (function($) {
         $.fn.inputFilter = function(inputFilter) {

@@ -367,12 +367,14 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" name="submit" class="btn btn-default btn-lg btn-primary mb-3">Submit</button>
+                    <button type="submit" id="submit" name="submit" class="btn btn-default btn-lg btn-primary mb-3">Submit</button>
                 {!! Form::close() !!}
             </div>
         </div>
     </div>
-
+@section('page_confirmation_script')
+<script src="{{asset('js/page_confirmation_script.js')}}"></script>
+@endsection
     <script>
         function AjaxUploadImage(obj,id){
             var reader = new FileReader();
