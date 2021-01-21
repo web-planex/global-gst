@@ -10,6 +10,7 @@ use App\Models\Globals\CompanySettings;
 use App\Models\Globals\Customers;
 use App\Models\Globals\Estimate;
 use App\Models\Globals\EstimateItems;
+use App\Models\Globals\Invoice;
 use App\Models\Globals\Job;
 use App\Models\Globals\Payees;
 use App\Models\Globals\PaymentAccount;
@@ -17,6 +18,7 @@ use App\Models\Globals\PdfZips;
 use App\Models\Globals\Product;
 use App\Models\Globals\States;
 use App\Models\Globals\Taxes;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use WKPDF;
@@ -139,12 +141,25 @@ class EstimateController extends Controller
         $estimate->shipping_charge = isset($request['shipping_charge'])&&!empty($request['shipping_charge'])?1:0;
         $company = CompanySettings::where('id',$this->Company())->first();
 
-        if(!empty($company['invoice_prefix'])){
+        $total_estimate = Estimate::count();
+
+        if(empty($company['estimate_prefix']) && empty($company['estimate_number'])){
+            $estimate->estimate_number = $total_estimate + 1;
+            $input['estimate_number'] = $estimate->estimate_number;
+            $company->update($input);
+        }elseif(!empty($company['estimate_prefix']) && !empty($company['estimate_number'])){
             $estimate->estimate_number = $company['estimate_prefix'].'/'.$company['estimate_number'];
-        }elseif (empty($company['estimate_prefix']) && !empty($company['estimate_number'])){
+            $input['estimate_number'] = $company['estimate_number'] + 1;
+            $company->update($input);
+        }elseif(empty($company['estimate_prefix']) && !empty($company['estimate_number'])){
             $estimate->estimate_number = $company['estimate_number'];
-        }else{
-            $estimate->estimate_number = 1;
+            $input['estimate_number'] = $company['estimate_number'] + 1;
+            $company->update($input);
+        }elseif(!empty($company['estimate_prefix']) && empty($company['estimate_number'])){
+            $e_no = $total_estimate + 1;
+            $estimate->estimate_number = $company['estimate_prefix'].'/'.$e_no;
+            $input['estimate_number'] = $company['estimate_number'] + 1;
+            $company->update($input);
         }
 
         if($request['discount_type'] != '') {
@@ -162,8 +177,8 @@ class EstimateController extends Controller
         if($request->has('submit')) {
             $estimate->save();
 
-            $input['estimate_number'] = $company['estimate_number']+1;
-            $company->update($input);
+//            $input['estimate_number'] = $company['estimate_number']+1;
+//            $company->update($input);
 
             $estimate_id = $estimate->id;
             $data = [];
@@ -549,5 +564,62 @@ class EstimateController extends Controller
                     <p class="card-text mb-0">'.$customer['shipping_country'].'</p>';
 
         return $address;
+    }
+
+    public function convert_to_invoice(Request $request){
+        $estimate = Estimate::where('id',$request['estimate_id'])->first();
+        if(!empty($estimate)){
+            $input['user_id'] = $estimate['user_id'];
+            $input['company_id'] = $estimate['company_id'];
+            
+            $company = CompanySettings::where('id',$this->Company())->first();
+            $total_invoice = Invoice::count();
+
+            if(empty($company['invoice_prefix']) && empty($company['invoice_number'])){
+                $input['invoice_number'] = $total_invoice + 1;
+                $input1['invoice_number'] = $input['invoice_number'];
+                $company->update($input1);
+            }elseif(!empty($company['invoice_prefix']) && !empty($company['invoice_number'])){
+                $input['invoice_number'] = $company['invoice_prefix'].'/'.$company['invoice_number'];
+                $input1['invoice_number'] = $company['invoice_number'] + 1;
+                $company->update($input1);
+            }elseif(empty($company['invoice_prefix']) && !empty($company['invoice_number'])){
+                $input['invoice_number'] = $company['invoice_number'];
+                $input1['invoice_number'] = $company['invoice_number'] + 1;
+                $company->update($input1);
+            }elseif(!empty($company['invoice_prefix']) && empty($company['invoice_number'])){
+                $in_no = $total_invoice + 1;
+                $input['invoice_number'] = $company['invoice_prefix'].'/'.$in_no;
+                $input1['invoice_number'] = $company['invoice_number'] + 1;
+                $company->update($input1);
+            }
+            
+            $input['order_number'] = null;
+            $input['reference_number'] = null;
+            $input['credit_note_number'] = null;
+            $input['tax_type'] = $estimate['tax_type'];
+            $input['customer_id'] = $estimate['customer_id'];
+            $input['invoice_date'] = Carbon::now()->format('Y-m-d');
+            $input['due_date'] = Carbon::now()->format('Y-m-d');
+            $input['void_date'] = null;
+            $input['payment_date'] = null;
+            $input['amount_before_tax'] = $estimate['amount_before_tax'];
+            $input['tax_amount'] = $estimate['tax_amount'];
+            $input['discount'] = $estimate['discount'];
+            $input['discount_level'] = $estimate['discount_level'];
+            $input['discount_type'] = $estimate['discount_type'];
+            $input['total'] = $estimate['total'];
+            $input['files'] = $estimate['files'];
+            $input['shipping_charge'] = $estimate['shipping_charge'];
+            $input['shipping_charge_amount'] = $estimate['shipping_charge_amount'];
+            $input['payment_method'] = null;
+            $input['payment_terms'] = null;
+            $input['notes'] = null;
+            $input['status'] = 1;
+
+            Invoice::create($input);
+            $estimate->delete();
+        }
+        return ;
     }
 }

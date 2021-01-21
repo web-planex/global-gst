@@ -163,7 +163,7 @@
                                         <td class="col_customer">{{$list['Payee']['name']}}</td>
                                         <td class="col_invoice_date">{{date('d F Y', strtotime($list['invoice_date']))}}</td>
                                         <td class="col_due_date">{{date('d F Y', strtotime($list['due_date']))}}</td>
-                                        <td class="col_notes"><a href="javascript:;" class="text-dark" data-toggle="modal" data-target="#NotesModal{{$list['id']}}" style="cursor: pointer">{{ substr($list['notes'], 0 ,25) }}... </a></td>
+                                        <td class="col_notes">@if(!empty($list['notes']))<a href="javascript:;" class="text-dark" data-toggle="modal" data-target="#NotesModal{{$list['id']}}" style="cursor: pointer">{{ substr($list['notes'], 0 ,25) }}... </a>@endif</td>
                                         <td class="col_status">
                                             @if($list['status']==1)
                                                 <label class="label label-warning">Pending</label>

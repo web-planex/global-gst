@@ -26,6 +26,7 @@
     <div class="row">
         <div class="col-12 page-min-height">
             @include('inc.message')
+            <div class="alert alert-info hide" id="convert_msg"></div>
             {!! Form::open(['url' => url('estimate'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
                 <div class="row">
                     <div class="col-md-2">
@@ -117,7 +118,7 @@
                     </div>
                 </div>
                 <div class="gstinvoice-table-data">
-                    <div class="table-responsive data-table-gst-box pb-3">
+                    <div class="table-responsive data-table-gst-box pb-3" id="estimate_data">
                         <table id="myTable0" class="table table-hover">
                             <thead>
                                 <tr>
@@ -158,6 +159,7 @@
                                                 <div class="dropdown-menu">
                                                     <a class="dropdown-item" href="{{url('estimate/'.$list['id'].'/edit')}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="delete_invoice_records({{$list['id']}})">Delete</a>
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="convert_to_invoice({{$list['id']}})">Convert To Invoice</a>
                                                     <a class="dropdown-item" target="_blank" href="{{route('estimate-download_pdf',['id'=>$list['id'],'output'=>'print'])}}">Print</a>
                                                     <a class="dropdown-item" target="_blank" href="{{route('estimate-download_pdf',['id'=>$list['id'],'output'=>'download'])}}">Download</a>
                                                     @if(!empty($list['files']) && file_exists($list['files']))
@@ -264,6 +266,34 @@
                 window.location.href = '{{url('estimate/delete')}}/'+invoice_id;
             }
         })
+    }
+
+    function convert_to_invoice(estimate_id){
+        Swal.fire({
+            title: 'Are you sure to convert to invoice?',
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#01c0c8",
+            confirmButtonText: 'Yes, convert it!'
+        }).then((result) => {
+            if (result.value) {
+            estimate_convert(estimate_id)
+            }
+        })
+    }
+
+    function estimate_convert(eid){
+        $.ajax({
+            url: '{{url('ajax/convert_to_invoice')}}',
+            type: 'POST',
+            data: {'estimate_id':eid},
+            success: function (result) {
+                $('#convert_msg').html('Estimate converted into invoice successfully.');
+                $('#convert_msg').removeClass('hide');
+                $("#estimate_data").load(location.href + " #estimate_data");
+            }
+        });
     }
 </script>
 @endsection

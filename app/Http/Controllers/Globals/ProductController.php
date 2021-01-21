@@ -150,7 +150,7 @@ class ProductController extends Controller
         }
 
         for ($i=0; $i<count($arrResult); $i++){
-            $old_product = Product::where('title',$arrResult[$i][0])->first();
+            $old_product = Product::where('title',$arrResult[$i][0])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->first();
             if(empty($old_product)){
                 if(!empty($arrResult[$i][0])){
                     $input['user_id'] = Auth::user()->id;

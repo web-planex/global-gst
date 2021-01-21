@@ -107,6 +107,7 @@ Route::get('/estimate/delete/{id}', 'Globals\EstimateController@destroy')->name(
 Route::get('/estimate/download_pdf/{id}', 'Globals\EstimateController@download_pdf')->name('estimate-download_pdf');
 Route::post('ajax/update_billing_address', 'Globals\EstimateController@update_billing_address');
 Route::post('ajax/update_shipping_address', 'Globals\EstimateController@update_shipping_address');
+Route::post('ajax/convert_to_invoice', 'Globals\EstimateController@convert_to_invoice');
 
 
 // PAYMENT TERMS

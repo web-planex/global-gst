@@ -202,15 +202,16 @@
                         contentType: false,
                         processData: false,
                         success: function (result) {
-                           $('#import_msg').html('Product imported successfully.');
-                           $('#import_msg').removeClass('hide');
-                           $('#ImportProduct').modal('toggle');
-                           $("#pro_list").load(location.href + " #pro_list");
+                            $('#import_msg').html('Product imported successfully.');
+                            $('#import_msg').removeClass('hide');
+                            $('#ImportProduct').modal('toggle');
+                            $("#pro_list").load(location.href + " #pro_list");
                         }
                     });
                 }
             });
         });
+
         function setCookie(cname, cvalue, exdays) {
             var d = new Date();
             d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
