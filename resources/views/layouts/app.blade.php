@@ -45,9 +45,10 @@
             <div class="navbar-header">
                 <a class="navbar-brand" href="javascript:void(0);">
                     <b>
-                        <img src="{{ asset('assets/images/logo-light-icon.png') }}" alt="homepage" class="light-logo" />
+                        <img id="logo-icon-small" src="{{ asset('assets/images/logo-light-icon-small.png') }}" style="width:50px" alt="homepage" class="light-logo big-small-logo-hide border-0">
+                        <img id="logo-icon-big" src="{{ asset('assets/images/logo-light-icon.png') }}" width="200px" alt="homepage" class="light-logo border-0" />
                     </b>
-                    <span class="hidden-xs text-white"><span class="font-bold">GST</span> Invoices</span>
+                    <!--<span class="hidden-xs text-white"><span class="font-bold">GST</span> Invoices</span>-->
                 </a>
             </div>
             <div class="navbar-collapse">
