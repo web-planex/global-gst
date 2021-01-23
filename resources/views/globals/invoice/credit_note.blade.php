@@ -152,7 +152,7 @@
                                         <td class="col_total_tax">Rs. {{$list['tax_amount']}}</td>
                                         <td class="col_status">
                                             @if($list['status']==3)
-                                                <label class="label label-primary">Void</label>
+                                                <label class="label label-danger">Void</label>
                                             @else
                                                 <label class="label label-warning">Refund</label>
                                             @endif

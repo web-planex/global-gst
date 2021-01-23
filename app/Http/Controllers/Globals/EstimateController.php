@@ -11,6 +11,7 @@ use App\Models\Globals\Customers;
 use App\Models\Globals\Estimate;
 use App\Models\Globals\EstimateItems;
 use App\Models\Globals\Invoice;
+use App\Models\Globals\InvoiceItems;
 use App\Models\Globals\Job;
 use App\Models\Globals\Payees;
 use App\Models\Globals\PaymentAccount;
@@ -617,7 +618,25 @@ class EstimateController extends Controller
             $input['notes'] = null;
             $input['status'] = 1;
 
-            Invoice::create($input);
+            $invoice = Invoice::create($input);
+
+            //Estimate Items -> Invoice Items
+            $estimateItems = EstimateItems::where('estimate_id',$request['estimate_id'])->get();
+
+            if(!empty($estimateItems)){
+                foreach ($estimateItems as $item){
+                    $in['invoice_id'] = $invoice['id'];
+                    $in['product_id'] = $item['product_id'];
+                    $in['hsn_code'] = $item['hsn_code'];
+                    $in['quantity'] = $item['quantity'];
+                    $in['rate'] = $item['rate'];
+                    $in['amount'] = $item['amount'];
+                    $in['tax_id'] = $item['tax_id'];
+                    $in['discount'] = $item['discount'];
+                    $in['discount_type'] = $item['discount_type'];
+                    InvoiceItems::create($in);
+                }
+            }
             $estimate->delete();
         }
         return ;

@@ -127,6 +127,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="gstinvoice-table-data">
                     <div class="table-responsive data-table-gst-box pb-3" id="invoice_data">
                         <table id="myTable0" class="table table-hover">
@@ -142,7 +143,7 @@
                                     <th class="col_customer">Customer</th>
                                     <th class="col_invoice_date">Invoice Date</th>
                                     <th class="col_due_date">Due Date</th>
-                                    <th class="col_notes">Notes</th>
+                                    <th class="col_notes">Note</th>
                                     <th class="col_status">Status</th>
                                     <th>Invoice</th>
                                     <th>Action</th>
@@ -163,14 +164,22 @@
                                         <td class="col_customer">{{$list['Payee']['name']}}</td>
                                         <td class="col_invoice_date">{{date('d F Y', strtotime($list['invoice_date']))}}</td>
                                         <td class="col_due_date">{{date('d F Y', strtotime($list['due_date']))}}</td>
-                                        <td class="col_notes">@if(!empty($list['notes']))<a href="javascript:;" class="text-dark" data-toggle="modal" data-target="#NotesModal{{$list['id']}}" style="cursor: pointer">{{ substr($list['notes'], 0 ,25) }}... </a>@endif</td>
+                                        <td class="col_notes">
+                                            @if(!empty($list['notes']) && strlen($list['notes']) > 25)
+                                                <span class="text-dark" onclick="ShowNotes('{{$list['notes']}}')" style="cursor: pointer;">
+                                                    {{ substr($list['notes'], 0 ,25) }}...
+                                                </span>
+                                            @else
+                                                {{ $list['notes'] }}
+                                            @endif
+                                        </td>
                                         <td class="col_status">
                                             @if($list['status']==1)
                                                 <label class="label label-warning">Pending</label>
                                             @elseif($list['status']==2)
-                                                <label class="label label-danger">Paid</label>
+                                                <label class="label label-success">Paid</label>
                                             @elseif($list['status']==3)
-                                                <label class="label label-primary">Void</label>
+                                                <label class="label label-danger">Void</label>
                                             @else
                                                 <label class="label label-warning">Refund</label>
                                             @endif
@@ -208,28 +217,10 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                            <form name="frm_delete_{{$list['id']}}" id="frm_delete_{{$list['id']}}" action="{{route('sales-delete',$list['id'])}}" method="get">
-
-                                            </form>
+                                            <form name="frm_delete_{{$list['id']}}" id="frm_delete_{{$list['id']}}" action="{{route('sales-delete',$list['id'])}}" method="get"></form>
                                         </td>
                                     </tr>
                                     @php $i++; @endphp
-
-                                    <!-------------------------NOTES MODAL------------------------->
-                                    <div id="NotesModal{{$list['id']}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title font-bold-500 font-16" id="tooltipmodel">Notes</h4>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>{{$list['notes']}}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <!-------------------------MAKE PAYMENT MODAL------------------------->
                                     <div id="MakePaymentModal{{$list['id']}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
@@ -293,6 +284,7 @@
             {!! Form::close() !!}
         </div>
     </div>
+
 <script type='text/javascript'>
     $(document).ready(function(){
         $(document).on('click', '.custom-column-display .dropdown-menu', function (e) {
@@ -450,6 +442,10 @@
             window.location.href = '{{url('sales/void')}}/'+invoice_id;
         }
     })
+    }
+
+    function ShowNotes(notes) {
+        Swal.fire('Note', notes);
     }
 </script>
 @endsection

@@ -381,6 +381,19 @@
                                             <button type="button" id="addItem" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>&nbsp;Add Lines</button>
                                             <div class="card">
                                                 <div class="card-body">
+                                                    <div class="form-group mb-0">
+                                                        <label for="notes">Notes</label>
+                                                        {!! Form::textarea('notes', null, ['class' => 'form-control','id'=>'notes','rows' => '3']) !!}
+                                                        @error('notes')
+                                                        <span class="text-danger">
+                                                            <strong>{{ $message }}</strong>
+                                                        </span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card">
+                                                <div class="card-body">
                                                     <label for="memo">Receipt</label>
                                                     <div class="form-group mb-0 border p-2">
                                                         {!! Form::file('files', ['class' => 'mb-2 border-0', 'id'=> 'files']) !!}

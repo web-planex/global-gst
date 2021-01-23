@@ -251,7 +251,7 @@ class InvoiceController extends Controller
                 }
                 InvoiceItems::create($data);
             }
-            return redirect('sales')->with('message','Sales has been created successfully!');
+            return redirect('sales')->with('message','Invoice has been created successfully!');
         }
     }
 
@@ -404,7 +404,7 @@ class InvoiceController extends Controller
                 }
                 InvoiceItems::create($data);
             }
-            return redirect('sales')->with('message','Sales has been updated successfully!');
+            return redirect('sales')->with('message','Invoice has been updated successfully!');
         }
     }
 
@@ -414,7 +414,7 @@ class InvoiceController extends Controller
             unlink($invoice['files']);
         }
         $invoice->delete();
-        \Session::flash('error-message', 'Sales has been deleted successfully!');
+        \Session::flash('error-message', 'Invoice has been deleted successfully!');
         return redirect()->back();
     }
 
