@@ -123,43 +123,55 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group mb-3 col-md-3">
-                            <label for="discount_level">Discount Level</label>
-                            <select class="form-control discount-level-select2" name="discount_level" id="discount_level">
-                                <option value="0" @if(isset($bill) && $bill['discount_level']==0) selected @endif>At transaction level</option>
-                                <option value="1" @if(isset($bill) && $bill['discount_level']==1) selected @endif>At item level</option>
-                            </select>
-                        </div>
-                        <div class="form-group mb-3 col-md-3" style="position:absolute;right:0">
-                            <label for="amounts_are">Amounts are</label>
-                            <select class="form-control amounts-are-select2" name="tax_type" id="amounts_are">
-                                <option value="exclusive" @if(isset($bill) && $bill['tax_type']==1) selected @endif>Exclusive of Tax</option>
-                                <option value="inclusive" @if(isset($bill) && $bill['tax_type']==2) selected @endif>Inclusive of Tax</option>
-                                <option value="out_of_scope" @if(isset($bill) && $bill['tax_type']==3) selected @endif>Out of scope of Tax</option>
-                            </select>
-                        </div>
-                    </div>
 
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header bg-primary">
-                                    <h4 class="m-b-0 text-white">Item Details</h4>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group mb-0">
+                                                <h4 class="col-form-label m-b-0 text-white">Item Details</h4>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group mb-0 row">
+                                                <label for="discount_level" class="col-4 col-form-label text-right text-white">Discount Level</label>
+                                                <div class="col-8">
+                                                    <select class="form-control discount-level-select2" name="discount_level" id="discount_level">
+                                                        <option value="0" @if(isset($bill) && $bill['discount_level']==0) selected @endif>At transaction level</option>
+                                                        <option value="1" @if(isset($bill) && $bill['discount_level']==1) selected @endif>At item level</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group mb-0 row">
+                                                <label for="amounts_are" class="col-4 col-form-label text-right text-white">Amounts are</label>
+                                                <div class="col-8">
+                                                    <select class="form-control amounts-are-select2" name="tax_type" id="amounts_are">
+                                                        <option value="exclusive" @if(isset($bill) && $bill['tax_type']==1) selected @endif>Exclusive of Tax</option>
+                                                        <option value="inclusive" @if(isset($bill) && $bill['tax_type']==2) selected @endif>Inclusive of Tax</option>
+                                                        <option value="out_of_scope" @if(isset($bill) && $bill['tax_type']==3) selected @endif>Out of scope of Tax</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="gstinvoice-table-data">
                                         <div class="table-responsive data-table-gst-box pb-3">
                                             <table class="table table-hover">
                                                 <thead>
-                                                <th width="14%">Product <span class="text-danger">*</span></th>
-                                                <th width="12%">HSN Code <span class="text-danger">*</span></th>
+                                                <th width="13%">Product <span class="text-danger">*</span></th>
+                                                <th width="14%">HSN Code <span class="text-danger">*</span></th>
                                                 <th width="10%">QTY <span class="text-danger">*</span></th>
                                                 <th width="12%">Rate <span class="text-danger">*</span></th>
                                                 <th width="16%" style="display: none;" class="discount-line-section">Discount</th>
-                                                <th width="12%">Amount <span class="text-danger">*</span></th>
+                                                <th width="13%">Amount <span class="text-danger">*</span></th>
                                                 <th width="18%" class="tax_column @if(isset($bill)&&$bill['tax_type']==3) hide @endif">Tax <span class="text-danger">*</span></th>
-                                                <th width="3%">&nbsp;</th>
+                                                <th width="2%">&nbsp;</th>
                                                 </thead>
                                                 <tbody id="items_list_body">
                                                 @php $i=1; @endphp

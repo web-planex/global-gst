@@ -111,7 +111,7 @@
                                                     <th width="10%">QTY <span class="text-danger">*</span></th>
                                                     <th width="14%">Rate <span class="text-danger">*</span></th>-->
                                                     <th width="14%">Amount <span class="text-danger">*</span></th>
-                                                    <th width="25%" class="tax-column" @if(isset($expense['tax_type']) && $expense['tax_type']==3) style="display: none;" @endif>Tax <span class="text-danger">*</span></th>
+                                                    <th width="25%" class="tax-column" @if(isset($expense['tax_type']) && $expense['tax_type']==3) style="display: none;" @endif>Tax</th>
                                                     <th width="4%">&nbsp;</th>
                                                 </thead>
                                                 <tbody id="items_list_body">
@@ -150,6 +150,7 @@
                                                             </td>
                                                             <td class="tax-column" id="taxes" @if($expense['tax_type']==3) style='display: none;' @endif>
                                                                 <select id="taxes" class="form-control tax-input" name="taxes[]">
+                                                                    <option value="">Select Tax</option>
                                                                     @foreach($taxes as $tax)
                                                                         @if($tax['is_cess'] == 0)
                                                                         <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name']}}</option>
@@ -197,7 +198,8 @@
                                                             <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[0]" required>
                                                         </td>
                                                         <td class="tax-column" id="taxes">
-                                                            <select class="form-control tax-input" name="taxes[]" required>
+                                                            <select class="form-control tax-input" name="taxes[]">
+                                                                <option value="">Select Tax</option>
                                                                 @foreach($taxes as $tax)
                                                                     @if($tax['is_cess'] == 0)
                                                                     <option value="{{$tax['id']}}">{{$tax['rate'].'% '.$tax['tax_name']}}</option>
@@ -835,7 +837,7 @@
                     if(tax_type == 'out_of_scope') {
                         html += "<td class='tax-column hide'><select class='form-control tax-input' name=\"taxes["+numItems+"]\">@foreach($taxes as $tax) @if($tax['is_cess'] == 0)<option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name']}}</option> @else <option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option> @endif @endforeach</select></td>";
                     } else {
-                        html += "<td class='tax-column'><select class='form-control tax-input' name=\"taxes["+numItems+"]\">@foreach($taxes as $tax) @if($tax['is_cess'] == 0)<option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name']}}</option> @else <option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option> @endif @endforeach</select></td>";
+                        html += "<td class='tax-column'><select class='form-control tax-input' name=\"taxes["+numItems+"]\"><option value=''>Select Tax</option>@foreach($taxes as $tax) @if($tax['is_cess'] == 0)<option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name']}}</option> @else <option value=\"{{$tax['id']}}\">{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option> @endif @endforeach</select></td>";
                     }
                     html += "<td><button type=\"button\" class=\"btn btn-danger btn-circle btn-sm remove-line-item \"><i class=\"fa fa-times\"></i> </button></td>";
                     html += "</tr>";

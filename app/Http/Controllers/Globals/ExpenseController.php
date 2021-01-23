@@ -89,7 +89,7 @@ class ExpenseController extends Controller
             'Expense Date',
             'Payment Method',
             'Ref No',
-            'Memo',
+            'Note',
             'Status'
         ];
         return view('globals.expense.index',$data);
