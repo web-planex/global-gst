@@ -6,6 +6,7 @@ use App\Models\Globals\CompanySettings;
 use App\Http\Controllers\Controller;
 use App\Models\Globals\PaymentTerms;
 use App\Models\Globals\ExpenseType;
+use App\Models\Globals\EmailTemplates;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -133,6 +134,13 @@ class RegisterController extends Controller
                 'name' => $type
             ]);
         }
+        
+        // Email Template Entry
+        EmailTemplates::create([
+            'user_id' => $user['id'],
+            'name' => 'Invoice',
+            'slug' => 'invoice'
+        ]);
 
         $root = base_path() . '/public/upload/'.$user['id'];
         if (!file_exists($root)) {

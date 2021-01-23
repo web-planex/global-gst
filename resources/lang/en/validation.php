@@ -133,7 +133,10 @@ return [
         'email' => [
             'invalid_email' => 'Entered email address is invalid!',
         ],
+        'body' => [
+            'required' => 'Email template content is required!',
         ],
+    ],
 
     /*
     |--------------------------------------------------------------------------

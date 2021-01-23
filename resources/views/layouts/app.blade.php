@@ -87,58 +87,57 @@
         <div class="scroll-sidebar">
             <nav class="sidebar-nav">
                 <ul id="sidebarnav">
-                    <li class="@if(isset($menu) && $menu == 'Dashboard') active @endif">
+                    <li>
                         <a class="waves-effect waves-dark" href="{{ url('dashboard')}}"><i class="fa fa-home"></i><span class="hide-menu">Dashboard</span></a>
                     </li>
 
-                    <li class="@if(isset($menu) && $menu == 'Products') active @endif">
+                    <li>
                         <a class="waves-effect waves-dark" href="{{ url('products')}}"><i class="fab fa-product-hunt"></i><span class="hide-menu">Products / Services</span></a>
                     </li>
 
-                    <li class="@if(isset($menu) && ($menu == 'Expense' || $menu == 'Bill')) active @endif">
+                    <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-bag"></i>
                             <span class="hide-menu">Purchases</span>
                         </a>
-                        <ul aria-expanded="false" class="collapse @if(isset($menu) && ($menu == 'Expense' || $menu == 'Bill')) in @endif">
-                            <li class=""><a href="{{route('expense')}}" class="@if(isset($menu) && $menu == 'Expense' ) active @endif">Expenses</a></li>
-                            <li class=""><a href="{{route('bills.index')}}" class="@if(isset($menu) && $menu == 'Bill' ) active @endif">Bills</a></li>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a href="{{route('expense')}}">Expenses</a></li>
+                            <li><a href="{{route('bills.index')}}">Bills</a></li>
                         </ul>
                     </li>
 
-                    <li class="@if(isset($menu) && $menu == 'Invoices' || isset($menu) && $menu == 'Credit Notes' || isset($menu) && $menu == 'Estimate') active @endif">
+                    <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-shopping-cart"></i>
                             <span class="hide-menu">Sales</span>
                         </a>
-                        <ul aria-expanded="false" class="collapse @if(isset($menu) && $menu == 'Invoices' || isset($menu) && $menu == 'Credit Notes' || isset($menu) && $menu == 'Estimate') in @endif">
-                            <li><a href="{{url('estimate')}}" class="@if(isset($menu) && $menu == 'Estimate' ) active @endif">Estimates</a></li>
-                            <li><a href="{{ url('sales')}}" class="@if(isset($menu) && $menu == 'Invoices' ) active @endif">Invoices</a></li>
-                            <li><a href="{{url('credit-note')}}" class="@if(isset($menu) && $menu == 'Credit Notes' ) active @endif">Credit Notes</a></li>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a href="{{url('estimate')}}">Estimates</a></li>
+                            <li><a href="{{ url('sales')}}">Invoices</a></li>
+                            <li><a href="{{url('credit-note')}}">Credit Notes</a></li>
                         </ul>
                     </li>
 
-                    <li class="@if(isset($menu) && $menu == 'Company Setting' || isset($menu) && $menu == 'Payment Terms' || isset($menu) && $menu == 'Payment Methods') active @endif">
+                    <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i>
                             <span class="hide-menu">Settings</span>
                         </a>
-                        <ul aria-expanded="false" class="collapse @if(isset($menu) && $menu == 'Company Setting' || isset($menu) && $menu == 'Payment Terms' || isset($menu) && $menu == 'Payment Methods') in @endif">
-                            <li><a href="{{url('company-setting')}}" class="@if(isset($menu) && $menu == 'Company Setting' ) active @endif">Company Settings</a></li>
-                            <li><a href="{{url('payment-terms')}}" class="@if(isset($menu) && $menu == 'Payment Terms' ) active @endif">Payment Terms</a></li>
-                            <li><a href="{{url('payment-methods')}}" class="@if(isset($menu) && $menu == 'Payment Methods' ) active @endif">Payment Methods</a></li>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a href="{{url('company-setting')}}">Company Settings</a></li>
+                            <li><a href="{{url('payment-terms')}}">Payment Terms</a></li>
+                            <li><a href="{{url('payment-methods')}}">Payment Methods</a></li>
                         </ul>
                     </li>
 
-                    <li class="@if(isset($menu) && $menu == 'Payees') active @endif">
+                    <li>
                         <a class="waves-effect waves-dark" href="{{ url('payees')}}"><i class="fa fa-user-plus"></i>
                             <span class="hide-menu">Payees / Vendors</span>
                         </a>
                     </li>
 
-                    <li class="">
-                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-files"></i>
-                        <span class="hide-menu">Report Builder</span></a>
+                    <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-envelope"></i>
+                        <span class="hide-menu">Email Templates</span></a>
                         <ul aria-expanded="false" class="collapse">
-                            <li class=""> <a href="javascript:;">Export Report</a></li>
-                            <li class=""> <a href="javascript:;">Report Templates</a></li>
+                            <li><a href="{{route('show-email-template',['slug'=>'invoice'])}}">Invoices</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -201,7 +200,18 @@
 @yield('custom-cookies')
 <script>
     $(document).ready(function() {
-        if ($("#message_body").length > 0) {
+        // Set active class for sidebar menu
+        var url1 = window.location;
+        url1 = url1.toString().replace('/create','');
+        // Will only work if string in href matches with location
+        $('nav a[href="'+ url1 +'"]').addClass('active');
+
+        // Will also work for relative and absolute hrefs
+        $('nav a').filter(function() {
+            return this.href == url1;
+        }).addClass('active');
+        
+        //if ($("#message_body").length > 0) {
             tinymce.init({
                 selector: "textarea#message_body",
                 theme: "modern",
@@ -211,9 +221,9 @@
                     "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
                     "save table contextmenu directionality emoticons template paste textcolor"
                 ],
-                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",
+                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullpage | forecolor backcolor emoticons",
             });
-        }
+        //}
         $('.amounts-are-select2').select2();
         $('.amounts-are-select4').select2();
         $('.discount-level-select2').select2({

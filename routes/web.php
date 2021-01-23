@@ -95,6 +95,7 @@ Route::get('/sales/delete/{id}', 'Globals\InvoiceController@destroy')->name('sal
 Route::get('/sales/download_pdf/{id}', 'Globals\InvoiceController@download_pdf')->name('invoice-download_pdf');
 Route::get('sales/void/{id}', 'Globals\InvoiceController@void');
 Route::post('sales/make_payment/{bid}', 'Globals\InvoiceController@make_payment')->name('make_payment');
+Route::get('sales/send-mail/{id}', 'Globals\InvoiceController@send_invoice_mail')->name('send-invoice-mail');
 
 //Estimate Management
 Route::post('/estimate/multiple_pdf', 'Globals\EstimateController@multiple_pdf')->name('estimate-multiple_pdf');
@@ -143,3 +144,7 @@ Route::get('bills/download_pdf/{id}', 'Globals\BillController@download_pdf')->na
 Route::post('generate-multiple-bills', 'Globals\BillController@multiple_pdf')->name('bill-multiple-pdf');
 Route::get('download-bill-pdf-zip', 'Globals\BillController@downloadPdfZip')->name('download-bill-pdf-zip');
 Route::post('ajax/bill_delete_attachment', 'Globals\BillController@delete_attachment');
+
+// Email Templates Management
+Route::get('email-templates/{slug}', 'Globals\EmailTemplatesController@show')->name('show-email-template');
+Route::patch('email-templates/{slug}', 'Globals\EmailTemplatesController@update')->name('update-email-template');

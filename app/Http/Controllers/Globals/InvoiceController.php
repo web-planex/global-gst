@@ -31,6 +31,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Globals\InvoiceMail;
+use App\Models\Globals\EmailTemplates;
 
 class InvoiceController extends Controller
 {
@@ -671,5 +674,34 @@ class InvoiceController extends Controller
             $invoice->update($input);
         }
         return ;
+    }
+    
+    public function send_invoice_mail($id) {
+        $invoice = Invoice::findOrFail($id);
+        $customer = Customers::select('email','first_name','last_name')->where('id',$invoice['Payee']['type_id'])->first();
+        $company = CompanySettings::where('id',$this->Company())->first();
+        $template = EmailTemplates::select('body')->where('user_id',Auth::user()->id)->where('slug','invoice')->first();
+        $company_name = $company['company_name'];
+        $from_email = $company['company_email'];
+        $customer_email = $customer['email'];
+        $company_logo = $company['company_logo'];
+        $invoice_number = $invoice['invoice_number'];
+        $order_number = $invoice['invoice_number'];
+        $customer_name = $customer['first_name'].' '.$customer['last_name'];
+        $email_content = $template['body'];
+
+        $data = [
+            'company_name' => $company_name,
+            'from_name' => $company_name,
+            'from_email' => $from_email,
+            'customer_email' => $customer_email,
+            'invoice_number' => $invoice_number,
+            'order_number' => $order_number,
+            'customer_name' => $customer_name,
+            'company_logo' => $company_logo,
+            'email_content' => $email_content
+        ];
+        Mail::to('lalitv@webplanex.com')->send(new InvoiceMail($data));
+        return redirect()->back()->with('message','Email has been send successfully!');
     }
 }

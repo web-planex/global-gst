@@ -206,6 +206,7 @@
                                                     @if(!empty($list['files']) && file_exists($list['files']))
                                                         <a class="dropdown-item" href="{{url($list['files'])}}" download>Download Receipt</a>
                                                     @endif
+                                                    <a class="dropdown-item" href="{{route('send-invoice-mail', ['id' => $list['id']])}}">Email</a>
                                                 </div>
                                             </div>
                                             <form name="frm_delete_{{$list['id']}}" id="frm_delete_{{$list['id']}}" action="{{route('sales-delete',$list['id'])}}" method="get">
