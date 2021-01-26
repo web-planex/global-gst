@@ -137,7 +137,9 @@
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-envelope"></i>
                         <span class="hide-menu">Email Templates</span></a>
                         <ul aria-expanded="false" class="collapse">
-                            <li><a href="{{route('show-email-template',['slug'=>'invoice'])}}">Invoices</a></li>
+                            @foreach(\App\Http\Controllers\Controller::AllEmailTemplates() as $template)
+                                <li><a href="{{route('show-email-template',['slug'=>$template['slug']])}}">{{$template['name']}}</a></li>
+                            @endforeach
                         </ul>
                     </li>
                 </ul>

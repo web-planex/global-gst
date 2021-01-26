@@ -27,6 +27,7 @@ class InvoiceMail extends Mailable
         $this->customer_name = $request['customer_name'];
         $this->company_logo = $request['company_logo'];
         $this->email_content = $request['email_content'];
+        $this->invoice_id = $request['invoice_id'];
     }
 
     /**
@@ -44,7 +45,8 @@ class InvoiceMail extends Mailable
         return $this->view('globals.emails.invoice')->with([
             'company_name' =>  $this->company_name,
             'company_logo' =>  $this->company_logo,
-            'email_content' =>  $this->email_content
+            'email_content' =>  $this->email_content,
+            'invoice_id' => $this->invoice_id
         ])->from($from_email, $from_name)->subject($subject);
     }
 }

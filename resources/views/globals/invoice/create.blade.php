@@ -454,8 +454,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" name="submit" id="submit" class="btn btn-default btn-lg btn-primary">Submit</button>
-{{--                </form>--}}
+                    <button type="submit" name="submit" id="submit" class="btn btn-default btn-primary">Save and Send</button>
                 {!! Form::close() !!}
             </div>
         </div>

@@ -254,12 +254,10 @@ class InvoiceController extends Controller
                 }
                 InvoiceItems::create($data);
             }
+            // Send invoice email to customer
+            $this->send_invoice_mail($invoice_id, false);
             return redirect('sales')->with('message','Invoice has been created successfully!');
         }
-    }
-
-    public function show($id){
-        //
     }
 
     public function edit($id) {
@@ -703,7 +701,7 @@ class InvoiceController extends Controller
         return ;
     }
     
-    public function send_invoice_mail($id) {
+    public function send_invoice_mail($id, $redirect = true) {
         $invoice = Invoice::findOrFail($id);
         $customer = Customers::select('email','first_name','last_name')->where('id',$invoice['Payee']['type_id'])->first();
         $company = CompanySettings::where('id',$this->Company())->first();
@@ -716,6 +714,13 @@ class InvoiceController extends Controller
         $order_number = $invoice['invoice_number'];
         $customer_name = $customer['first_name'].' '.$customer['last_name'];
         $email_content = $template['body'];
+        $email_notification_for_site_admin = $company['email_notification_for_site_admin'];
+
+        $site_admin_email_arr = [];
+
+        if(!empty($email_notification_for_site_admin)) {
+            $site_admin_email_arr = explode(',',$email_notification_for_site_admin);
+        }
 
         $data = [
             'company_name' => $company_name,
@@ -726,9 +731,17 @@ class InvoiceController extends Controller
             'order_number' => $order_number,
             'customer_name' => $customer_name,
             'company_logo' => $company_logo,
-            'email_content' => $email_content
+            'email_content' => $email_content,
+            'invoice_id' => $id
         ];
-        Mail::to('lalitv@webplanex.com')->send(new InvoiceMail($data));
-        return redirect()->back()->with('message','Email has been send successfully!');
+
+        if(count($site_admin_email_arr) > 0) {
+            Mail::to($customer_email)->bcc($site_admin_email_arr)->send(new InvoiceMail($data));
+        } else {
+            Mail::to($customer_email)->send(new InvoiceMail($data));
+        }
+        if($redirect) {
+            return redirect()->back()->with('message','Email has been send successfully!');
+        }
     }
 }

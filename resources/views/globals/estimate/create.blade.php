@@ -83,7 +83,7 @@
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
                             <label for="estimate_date">Estimate Date <span class="text-danger">*</span></label>
-                            {!! Form::text('estimate_date', isset($estimate)&&!empty($estimate)?date('d-m-Y',strtotime($estimate['estimate_date'])):null, ['class' => 'form-control','id'=>'estimate_date']) !!}
+                            {!! Form::text('estimate_date', isset($estimate)&&!empty($estimate)?date('d-m-Y',strtotime($estimate['estimate_date'])):date('d-m-Y'), ['class' => 'form-control','id'=>'estimate_date']) !!}
                             @if ($errors->has('estimate_date'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('estimate_date') }}</strong>

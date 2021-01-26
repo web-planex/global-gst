@@ -24,7 +24,7 @@
                         <tr>
                             <td height="80" align="left" valign="middle" bgcolor="#FFFFFF" style="border-bottom: solid #3f4eae 5px; padding: 0px 10px;">
                                 @if(!empty($company_logo))
-                                <img src="{{$company_logo}}" alt="" width="auto" height="50" style="max-height:50px;"/>
+                                <img src="{{url($company_logo)}}" alt="" width="auto" height="50" style="max-height:50px;"/>
                                 @else
                                 <h2>{{$company_name}}</h2>
                                 @endif
@@ -46,7 +46,9 @@
                                     </tr>
                                     <tr>
                                         <td align="left" style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:20px;">
-                                            <a style="display:inline-block;background-color: #3f4eae; color: #ffffff; border-left:20px solid #3f4eae; border-right:20px solid #3f4eae; border-top:10px solid #3f4eae; border-bottom:10px solid #3f4eae; text-decoration:none;" href="" target="_blank">Download Invoice</a>
+                                            <a style="display:inline-block;background-color: #3f4eae; color: #ffffff; border-left:20px solid #3f4eae; border-right:20px solid #3f4eae; border-top:10px solid #3f4eae; border-bottom:10px solid #3f4eae; text-decoration:none;" href="{{route('invoice-download_pdf',['id'=>$invoice_id,'output'=>'download','download'=>'1'])}}" target="_blank">
+                                                Download Invoice
+                                            </a>
                                         </td>
                                     </tr>
                                     <tr>
