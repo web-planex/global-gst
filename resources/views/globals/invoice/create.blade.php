@@ -454,7 +454,9 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" name="submit" id="submit" class="btn btn-default btn-primary">Save and Send</button>
+                    <button type="submit" name="submit" id="submit" class="btn btn-default btn-primary">
+                        @if(isset($invoice)) Submit @else Save and Send @endif
+                    </button>
                 {!! Form::close() !!}
             </div>
         </div>

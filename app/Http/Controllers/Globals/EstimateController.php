@@ -204,6 +204,8 @@ class EstimateController extends Controller
                 }
                 EstimateItems::create($data);
             }
+            // Send estimate email to customer
+            $this->send_estimate_mail($estimate_id, false);
             return redirect('estimate')->with('message','Estimate has been created successfully!');
         }
     }

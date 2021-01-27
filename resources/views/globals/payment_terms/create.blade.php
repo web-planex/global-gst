@@ -30,7 +30,7 @@
 
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
-                            <label for="terms_days">Terms Days</label>
+                            <label for="terms_days">Terms Days <span class="text-danger">*</span></label>
                             {!! Form::number('terms_days', null, ['class' => 'form-control','id'=>'terms_days']) !!}
                             @if ($errors->has('terms_days'))
                                 <span class="text-danger">
@@ -39,7 +39,7 @@
                             @endif
                         </div>
                     </div>
-                    <button type="submit" id="submit" name="submit" class="btn btn-default btn-lg btn-primary">Submit</button>
+                    <button type="submit" id="submit" name="submit" class="btn btn-default btn-primary">Submit</button>
                 {!! Form::close() !!}
             </div>
         </div>
