@@ -178,6 +178,30 @@
     <footer class="footer text-center">
         © {{date('Y')}} WebPlanex. All Rights Reserved.
     </footer>
+    <div id="companySelectionModal" class="modal fade bs-example-modal-sm" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Select Company</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-0">
+                        <div class="col-md-12">
+                            <select class="form-control" id="company_select_modal">
+                                @foreach(\App\Http\Controllers\Controller::AllCompanies() as $com)
+                                    <option value="{{$com['id']}}" @if(\App\Http\Controllers\Controller::SetCompany() && \App\Http\Controllers\Controller::SetCompany()==$com['id']) selected @endif >{{$com['company_name']}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="select_company">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="{{ asset('assets/popper/popper.min.js') }}"></script>
 <script src="{{ asset('assets/bootstrap/dist/js/bootstrap.min.js') }}"></script>
@@ -202,6 +226,9 @@
 @yield('custom-cookies')
 <script>
     $(document).ready(function() {
+        @if(Session::get('company_selection'))
+            $('#companySelectionModal').modal('show');
+        @endif
         // Set active class for sidebar menu
         var url1 = window.location;
         url1 = url1.toString().replace('/create','');
@@ -310,6 +337,20 @@
 
     $('#company_list').change(function(){
        var cid = $(this).val();
+       if(cid>0){
+           $.ajax({
+               url: '{{url('ajax/set_company')}}',
+               type: 'POST',
+               data:  {'data':cid},
+               success: function (result) {
+                    window.location.href = '{{url('/dashboard')}}';
+               }
+           });
+       }
+    });
+    
+    $('#select_company').click(function(){
+       var cid = $("#company_select_modal").val();
        if(cid>0){
            $.ajax({
                url: '{{url('ajax/set_company')}}',

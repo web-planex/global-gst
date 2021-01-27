@@ -42,13 +42,18 @@ class LoginController extends Controller
     }
 
     protected function authenticated(Request $request, $user) {
-        $session = Session::get('company');
+        $session_company_selection = Session::get('company_selection');
+        
+        if(empty($session_company_selection)) {
+            session(['company_selection' => true]);
+        }
+        /*$session = Session::get('company');
         if(empty($session)){
             $company = CompanySettings::where('user_id',$user->id)->orderBy('id','DESC')->first();
             if(!empty($company)){
                  session(['company'=>$company['id']]);
             }
-        }
+        }*/
     }
 
 }

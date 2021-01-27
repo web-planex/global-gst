@@ -143,6 +143,9 @@ class UserController extends Controller
 
     public function set_company(Request $request){
         session(['company'=>$request['data']]);
+        if(Session::get('company_selection')) {
+            Session::forget('company_selection');
+        }
         return;
     }
 }
