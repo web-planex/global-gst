@@ -109,7 +109,7 @@ Route::get('/estimate/download_pdf/{id}', 'Globals\EstimateController@download_p
 Route::post('ajax/update_billing_address', 'Globals\EstimateController@update_billing_address');
 Route::post('ajax/update_shipping_address', 'Globals\EstimateController@update_shipping_address');
 Route::post('ajax/convert_to_invoice', 'Globals\EstimateController@convert_to_invoice');
-
+Route::get('estimate/send-mail/{id}', 'Globals\EstimateController@send_estimate_mail')->name('send-estimate-mail');
 
 // PAYMENT TERMS
 Route::resource('/payment-terms', 'Globals\PaymentTermsController');
@@ -122,6 +122,7 @@ Route::get('/payment-methods/delete/{id}', 'Globals\PaymentMethodController@dest
 Route::get('/credit-note', 'Globals\InvoiceController@credit_notes')->name('credit-note');
 Route::post('/credit-note/multiple_pdf', 'Globals\InvoiceController@multiple_credit_note_pdf')->name('credit-note-multiple_pdf');
 Route::get('download-credit-note-pdf-zip', 'Globals\InvoiceController@downloadCreditNotePdfZip')->name('download-credit-note-pdf-zip');
+Route::get('credit-note/send-mail/{id}', 'Globals\InvoiceController@send_credit_note_mail')->name('send-credit-note-mail');
 
 Route::get('/clear-cache-all', function() {
     Artisan::call('cache:clear');

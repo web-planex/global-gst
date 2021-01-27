@@ -186,7 +186,7 @@
                                         </td>
                                         <td>
                                             <div class="btn-group">
-                                                <button type="button" onclick="javascript:;" class="btn btn-secondary">Download</button>
+                                                <button type="button" onclick="javascript:;" class="btn btn-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download</button>
                                                 <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
@@ -215,7 +215,7 @@
                                                     @if(!empty($list['files']) && file_exists($list['files']))
                                                         <a class="dropdown-item" href="{{url($list['files'])}}" download>Download Receipt</a>
                                                     @endif
-                                                    <a class="dropdown-item" href="{{route('send-invoice-mail', ['id' => $list['id']])}}">Email</a>
+                                                    <a class="dropdown-item" href="{{route('send-invoice-mail', ['id' => $list['id']])}}">Send Invoice Email</a>
                                                 </div>
                                             </div>
                                             <form name="frm_delete_{{$list['id']}}" id="frm_delete_{{$list['id']}}" action="{{route('sales-delete',$list['id'])}}" method="get"></form>

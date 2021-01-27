@@ -23,11 +23,14 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use WKPDF;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Globals\EstimateMail;
+use App\Models\Globals\EmailTemplates;
 
 class EstimateController extends Controller
 {
     public function __construct(){
-        $this->middleware(['auth','verified']);
+        $this->middleware(['auth','verified'], ['except' => 'download_pdf']);
     }
 
     public function index(Request $request){
@@ -344,15 +347,17 @@ class EstimateController extends Controller
     }
 
     public function download_pdf(Request $request, $id){
-        $user = Auth::user();
+        $data['estimate'] = Estimate::with('EstimateItems')->where('id',$id)->first();
+        $user_id = $data['estimate']['user_id'];
+        $company_id = $data['estimate']['company_id'];
         $data['estimate_type'] = 'Estimate';
         $data['menu']  = 'Estimate';
         $data['print_type']  = isset($request['type'])&&$request['type']=='credit_note'?2:1;
-        $data['company'] = CompanySettings::where('id',$this->Company())->first();
+        $data['company'] = CompanySettings::where('id',$company_id)->first();
         $state = States::where('id',$data['company']['state'])->first();
         $data['company']['state'] = $state['state_name'];
         $data['company']['state_code'] = $state['state_number'];
-        $data['estimate'] = Estimate::with('EstimateItems')->where('id',$id)->first();
+        
 
         /*Count Discount Price*/
         if($data['estimate']['discount_type']==1){
@@ -410,8 +415,8 @@ class EstimateController extends Controller
             $i = $i+2;
         }
         $data['all_tax_labels'] = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
-        $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
-        $company = CompanySettings::select('company_name')->where('id',$this->Company())->first();
+        $data['products'] = Product::where('user_id',$user_id)->where('company_id',$company_id)->where('status',1)->get();
+        $company = CompanySettings::select('company_name')->where('id',$company_id)->first();
         $data['company_name'] = $company['company_name'];
         $data['name']  = 'Estimate';
         $data['content'] = 'This is test pdf.';
@@ -640,5 +645,47 @@ class EstimateController extends Controller
             $estimate->delete();
         }
         return ;
+    }
+    
+    public function send_estimate_mail($id, $redirect = true) {
+        $estimate = Estimate::findOrFail($id);
+        $customer = Customers::select('email','first_name','last_name')->where('id',$estimate['Payee']['type_id'])->first();
+        $company = CompanySettings::where('id',$this->Company())->first();
+        $template = EmailTemplates::select('body')->where('user_id',Auth::user()->id)->where('slug','estimate')->first();
+        $company_name = $company['company_name'];
+        $from_email = $company['company_email'];
+        $customer_email = $customer['email'];
+        $company_logo = $company['company_logo'];
+        $estimate_number = $estimate['estimate_number'];
+        $customer_name = $customer['first_name'].' '.$customer['last_name'];
+        $email_content = $template['body'];
+        $email_notification_for_site_admin = $company['email_notification_for_site_admin'];
+
+        $site_admin_email_arr = [];
+
+        if(!empty($email_notification_for_site_admin)) {
+            $site_admin_email_arr = explode(',',$email_notification_for_site_admin);
+        }
+
+        $data = [
+            'company_name' => $company_name,
+            'from_name' => $company_name,
+            'from_email' => $from_email,
+            'customer_email' => $customer_email,
+            'estimate_number' => $estimate_number,
+            'customer_name' => $customer_name,
+            'company_logo' => $company_logo,
+            'email_content' => $email_content,
+            'estimate_id' => $id
+        ];
+
+        if(count($site_admin_email_arr) > 0) {
+            Mail::to($customer_email)->bcc($site_admin_email_arr)->send(new EstimateMail($data));
+        } else {
+            Mail::to($customer_email)->send(new EstimateMail($data));
+        }
+        if($redirect) {
+            return redirect()->back()->with('message','Email has been sent successfully!');
+        }
     }
 }

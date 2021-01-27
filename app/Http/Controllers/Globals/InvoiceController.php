@@ -33,12 +33,13 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Globals\InvoiceMail;
+use App\Mail\Globals\CreditNoteMail;
 use App\Models\Globals\EmailTemplates;
 
 class InvoiceController extends Controller
 {
     public function __construct(){
-        $this->middleware(['auth','verified']);
+        $this->middleware(['auth','verified'], ['except' => 'download_pdf']);
     }
 
     public function index(Request $request){
@@ -436,15 +437,16 @@ class InvoiceController extends Controller
     }
 
     public function download_pdf(Request $request, $id){
-        $user = Auth::user();
+        $data['invoice'] = Invoice::with('InvoiceItems')->where('id',$id)->first();
+        $user_id = $data['invoice']['user_id'];
+        $company_id = $data['invoice']['company_id'];
         $data['invoice_type'] = isset($request['download'])&&$request['download']==1?'Original':(isset($request['download'])&&$request['download']==2?'Duplicate':(isset($request['download'])&&$request['download']==3?'Triplicate':'Original'));
         $data['menu']  = isset($request['type'])&&$request['type']=='credit_note'?'Credit Note':'Tax Invoice';
         $data['print_type']  = isset($request['type'])&&$request['type']=='credit_note'?2:1;
-        $data['company'] = CompanySettings::where('id',$this->Company())->first();
+        $data['company'] = CompanySettings::where('id',$company_id)->first();
         $state = States::where('id',$data['company']['state'])->first();
         $data['company']['state'] = $state['state_name'];
         $data['company']['state_code'] = $state['state_number'];
-        $data['invoice'] = Invoice::with('InvoiceItems')->where('id',$id)->first();
         $data['invoice']['status_image'] = $data['invoice']['status']==1?"pending_img.png":($data['invoice']['status']==2?"paid_imag.png":"voided_imag.png");
         $data['invoice']['payment_method'] = $data['invoice']['payment_method']==1?"Cash":($data['invoice']['payment_method']==2?"Cheque":"Credit Card");
 
@@ -504,8 +506,8 @@ class InvoiceController extends Controller
             $i = $i+2;
         }
         $data['all_tax_labels'] = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
-        $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
-        $company = CompanySettings::select('company_name')->where('id',$this->Company())->first();
+        $data['products'] = Product::where('user_id',$user_id)->where('company_id',$company_id)->where('status',1)->get();
+        $company = CompanySettings::select('company_name')->where('id',$company_id)->first();
         $data['company_name'] = $company['company_name'];
         $data['name']  = 'Sales Voucher';
         $data['content'] = 'This is test pdf.';
@@ -741,7 +743,47 @@ class InvoiceController extends Controller
             Mail::to($customer_email)->send(new InvoiceMail($data));
         }
         if($redirect) {
-            return redirect()->back()->with('message','Email has been send successfully!');
+            return redirect()->back()->with('message','Email has been sent successfully!');
         }
+    }
+    
+    public function send_credit_note_mail($id) {
+        $invoice = Invoice::findOrFail($id);
+        $customer = Customers::select('email','first_name','last_name')->where('id',$invoice['Payee']['type_id'])->first();
+        $company = CompanySettings::where('id',$this->Company())->first();
+        $template = EmailTemplates::select('body')->where('user_id',Auth::user()->id)->where('slug','credit-note')->first();
+        $company_name = $company['company_name'];
+        $from_email = $company['company_email'];
+        $customer_email = $customer['email'];
+        $company_logo = $company['company_logo'];
+        $credit_note_number = $invoice['credit_note_number'];
+        $customer_name = $customer['first_name'].' '.$customer['last_name'];
+        $email_content = $template['body'];
+        $email_notification_for_site_admin = $company['email_notification_for_site_admin'];
+
+        $site_admin_email_arr = [];
+
+        if(!empty($email_notification_for_site_admin)) {
+            $site_admin_email_arr = explode(',',$email_notification_for_site_admin);
+        }
+
+        $data = [
+            'company_name' => $company_name,
+            'from_name' => $company_name,
+            'from_email' => $from_email,
+            'customer_email' => $customer_email,
+            'credit_note_number' => $credit_note_number,
+            'customer_name' => $customer_name,
+            'company_logo' => $company_logo,
+            'email_content' => $email_content,
+            'credit_note_id' => $id
+        ];
+
+        if(count($site_admin_email_arr) > 0) {
+            Mail::to($customer_email)->bcc($site_admin_email_arr)->send(new CreditNoteMail($data));
+        } else {
+            Mail::to($customer_email)->send(new CreditNoteMail($data));
+        }
+        return redirect()->back()->with('message','Email has been sent successfully!');
     }
 }
