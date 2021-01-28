@@ -136,16 +136,45 @@ class RegisterController extends Controller
         }
         
         // Email Template Entry
-        EmailTemplates::create([
-            'user_id' => $user['id'],
-            'name' => 'Invoice',
-            'slug' => 'invoice'
-        ]);
-
+        $this->emailTemplateEntries($user['id']);
+        
         $root = base_path() . '/public/upload/'.$user['id'];
         if (!file_exists($root)) {
             mkdir($root, 0777, true);
         }
         return $user;
+    }
+    
+    public function emailTemplateEntries($user_id) {
+        EmailTemplates::create([
+            'user_id' => $user_id,
+            'name' => 'Invoice',
+            'slug' => 'invoice',
+            'body' => '<p><span style="font-family: manrope, sans-serif;">Hi <strong>CustomerName</strong>,</span></p>
+                        <h2><span style="font-family: manrope, sans-serif;">Thank you for your purchase!</span></h2>
+                        <p><span style="font-family: manrope, sans-serif;">we are getting your order ready to be shipped. We will notify you when it has been sent.</span></p>
+                        <p>&nbsp;</p>
+                        <p><span style="font-family: manrope, sans-serif;">Kindly Download your invoice<strong>&nbsp;InvoiceNumber</strong></span></p>'
+        ]);
+        EmailTemplates::create([
+            'user_id' => $user_id,
+            'name' => 'Estimate',
+            'slug' => 'estimate',
+            'body' => '<p><span style="font-family: manrope, sans-serif;">Hi <strong>CustomerName</strong>,</span></p>
+                        <h2><span style="font-family: manrope, sans-serif;">Thank you for your purchase!</span></h2>
+                        <p><span style="font-family: manrope, sans-serif;">we are getting your order ready to be shipped. We will notify you when it has been sent.</span></p>
+                        <p>&nbsp;</p>
+                        <p><span style="font-family: manrope, sans-serif;">Kindly Download your estimate<strong>&nbsp;EstimateNumber</strong></span></p>'
+        ]);
+        EmailTemplates::create([
+            'user_id' => $user_id,
+            'name' => 'Credit Note',
+            'slug' => 'credit-note',
+            'body' => '<p><span style="font-family: manrope, sans-serif;">Hi <strong>CustomerName</strong>,</span></p>
+                        <h2><span style="font-family: manrope, sans-serif;">Thank you for your purchase!</span></h2>
+                        <p><span style="font-family: manrope, sans-serif;">we are getting your order ready to be shipped. We will notify you when it has been sent.</span></p>
+                        <p>&nbsp;</p>
+                        <p><span style="font-family: manrope, sans-serif;">Kindly Download your credit note<strong>&nbsp;CreditNoteNumber</strong></span></p>'
+        ]);
     }
 }

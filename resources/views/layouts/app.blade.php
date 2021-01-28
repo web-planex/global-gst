@@ -71,7 +71,7 @@
 
                 <div class="dropdown u-pro mr-3">
                     <span class="dropdown-toggle text-white" style="cursor: pointer" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="hidden-md-down">{{\App\Http\Controllers\Controller::AuthUser()->name}} &nbsp;<i class="fa fa-angle-down"></i></span>
+                        {{\App\Http\Controllers\Controller::AuthUser()->name}} &nbsp;<i class="fa fa-angle-down"></i>
                     </span>
                     <div class="dropdown-menu dropdown-menu-header animated flipInY" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="{{url('edit-profile/'.\App\Http\Controllers\Controller::AuthUser()->id)}}"><i class="ti-user pr-2"></i>My Profile</a>

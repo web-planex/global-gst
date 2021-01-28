@@ -84,3 +84,42 @@ td.discount-line-section {
 .big-small-logo-hide {
     display: none !important;
 }
+@media (max-width: 1169px) {
+  #logo-icon-small {
+    display: block!important;
+  }
+  #logo-icon-big {
+     display: none!important
+  }
+  .mini-sidebar .top-navbar .navbar-header {
+    padding-left: 10px;
+  }
+  .topbar .top-navbar .navbar-header .navbar-brand {
+    display: flex;
+    align-items: center;
+ }
+}
+
+.sidebar-nav .has-arrow::after { 
+    border-color: #fff;
+}
+.skin-default-dark .sidebar-nav ul li a.active,
+.skin-default-dark .sidebar-nav ul li a.active i,
+.skin-default-dark .sidebar-nav > ul > li.active > a i {
+    color: #fb9678;
+}
+.skin-default-dark .sidebar-nav > ul > li.active > a {
+    border-left: 3px solid #fb9678;
+}
+.skin-default-dark .topbar .top-navbar .navbar-header .navbar-brand .light-logo {
+    border: 0;
+}
+.big-small-logo-hide{
+    display: none !important; 
+}
+.topbar .top-navbar .navbar-header {
+    background: transparent;
+}
+.skin-default-dark.mini-sidebar .sidebar-nav ul li a.active{
+    color: #fb9678;
+}
