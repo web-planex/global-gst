@@ -224,22 +224,28 @@
 @yield('page_confirmation_script')
 @yield('tax_calculations_discount')
 @yield('custom-cookies')
-<script>
+<script>   
     $(document).ready(function() {
         @if(Session::get('company_selection'))
             $('#companySelectionModal').modal('show');
         @endif
         // Set active class for sidebar menu
-        var url1 = window.location;
-        url1 = url1.toString().replace('/create','');
-        // Will only work if string in href matches with location
-        $('nav a[href="'+ url1 +'"]').addClass('active');
+        setTimeout(function(){
+            var url1 = window.location;
+            url1 = url1.toString().replace('/create','');
+            url1 = url1.split('/edit')[0];
+            var str = window.location.toString();
 
-        // Will also work for relative and absolute hrefs
-        $('nav a').filter(function() {
-            return this.href == url1;
-        }).addClass('active');
-        
+            // Will only work if string in href matches with location
+            $('nav a[href="'+ url1 +'"]').addClass('active');
+            if(str.includes("create") || str.includes("edit")) {
+                $('nav a[href="'+ url1 +'"]').parent('li').parent('ul').siblings('a').trigger('click');
+            }
+            // Will also work for relative and absolute hrefs
+            $('nav a').filter(function() {
+                return this.href == url1;
+            }).addClass('active');
+        },500);
         //if ($("#message_body").length > 0) {
             tinymce.init({
                 selector: "textarea#message_body",
