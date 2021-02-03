@@ -117,6 +117,16 @@
                     </li>
 
                     <li>
+                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-clipboard"></i>
+                            <span class="hide-menu">Report Builders</span>
+                        </a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a href="{{url('expense-report')}}">Expense Report</a></li>
+                            <li><a href="{{url('invoice-report')}}">Invoice Report</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
                         <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i>
                             <span class="hide-menu">Settings</span>
                         </a>
@@ -238,6 +248,7 @@
 
             // Will only work if string in href matches with location
             $('nav a[href="'+ url1 +'"]').addClass('active');
+
             if(str.includes("create") || str.includes("edit")) {
                 $('nav a[href="'+ url1 +'"]').parent('li').parent('ul').siblings('a').trigger('click');
             }

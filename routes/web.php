@@ -150,3 +150,7 @@ Route::post('ajax/bill_delete_attachment', 'Globals\BillController@delete_attach
 // Email Templates Management
 Route::get('email-templates/{slug}', 'Globals\EmailTemplatesController@show')->name('show-email-template');
 Route::patch('email-templates/{slug}', 'Globals\EmailTemplatesController@update')->name('update-email-template');
+
+//Report Builders
+Route::get('expense-report', 'Globals\ReportController@expense_report')->name('expense-report');
+Route::get('invoice-report', 'Globals\ReportController@invoice_report')->name('invoice-report');

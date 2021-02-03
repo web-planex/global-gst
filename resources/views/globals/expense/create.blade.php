@@ -1162,7 +1162,7 @@
             taxCalculation();
         });
 
-    function deleteAttachment(aid){
+        function deleteAttachment(aid){
         Swal.fire({
             title: 'Are you want to delete this receipt?',
             text: "",
