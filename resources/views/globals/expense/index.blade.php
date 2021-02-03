@@ -163,7 +163,7 @@
                                         <td class="col_ref_no">{{$list['ref_no']}}</td>
                                         <td class="col_note">
                                             @if($list['memo'] != '' && strlen($list['memo']) > 30)
-                                                <a href="javascript:void(0)" class="text-themecolor text-left" onclick="show_note('{{$list['memo']}}')">{{substr($list['memo'],0,25)}}...</a>
+                                                <a href="javascript:void(0)" class="text-themecolor text-left" onclick="show_note('{{strtr( $list['memo'], ["\n"=>"\\n","\r"=>"\\r"])}}')">{{substr($list['memo'],0,25)}}...</a>
                                             @elseif(strlen($list['memo']) > 0 && strlen($list['memo']) <= 30)
                                                 {{$list['memo']}}
                                             @endif

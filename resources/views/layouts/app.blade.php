@@ -234,11 +234,12 @@
 @yield('page_confirmation_script')
 @yield('tax_calculations_discount')
 @yield('custom-cookies')
-<script>   
+<script>
     $(document).ready(function() {
         @if(Session::get('company_selection'))
             $('#companySelectionModal').modal('show');
         @endif
+
         // Set active class for sidebar menu
         setTimeout(function(){
             var url1 = window.location;
@@ -257,6 +258,7 @@
                 return this.href == url1;
             }).addClass('active');
         },500);
+
         //if ($("#message_body").length > 0) {
             tinymce.init({
                 selector: "textarea#message_body",
@@ -365,7 +367,7 @@
            });
        }
     });
-    
+
     $('#select_company').click(function(){
        var cid = $("#company_select_modal").val();
        if(cid>0){
