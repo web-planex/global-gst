@@ -5,7 +5,7 @@
         <div class="text-center">
             <a href="javascript:void(0)" class="db"><img src="{{url('assets/images/logo-light-icon_old.png')}}" alt="Home" /></a>
         </div>
-        <h3 class="box-title m-t-40 m-b-0">Register Now</h3><small>Create your account and enjoy</small>
+        <h3 class="box-title m-t-20 m-b-0">Register Now</h3><small>Create your account and enjoy</small>
         <div class="form-group m-t-20">
             <div class="col-xs-12">
                 <input class="form-control" type="text" name="name" required="" placeholder="Name">
@@ -30,6 +30,16 @@
             <div class="col-xs-12">
                 <input class="form-control" type="text" name="company_name" required="" placeholder="Company Name">
                 @error('company_name')
+                <span class="text-danger" role="alert" style="color: #a94442!important;">
+                    <strong>{{ $message }}</strong>
+                </span>
+                @enderror
+            </div>
+        </div>
+        <div class="form-group ">
+            <div class="col-xs-12">
+                <input class="form-control" type="number" name="phone_number" placeholder="Phone Number" required="">
+                @error('phone_number')
                 <span class="text-danger" role="alert" style="color: #a94442!important;">
                     <strong>{{ $message }}</strong>
                 </span>

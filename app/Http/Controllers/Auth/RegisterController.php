@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Globals\PaymentTerms;
 use App\Models\Globals\ExpenseType;
 use App\Models\Globals\EmailTemplates;
+use App\Models\Globals\PaymentMethod;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -58,6 +59,7 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'company_name' => ['required', 'string', 'max:255'],
+            'phone_number' => ['required', 'digits:10']
         ]);
     }
 
@@ -85,6 +87,7 @@ class RegisterController extends Controller
         $new_company = CompanySettings::create([
             'user_id' => $user['id'],
             'company_name' => $data['company_name'],
+            'company_phone' => $data['phone_number']
         ]);
 
         //Payment Terms Entry
@@ -134,7 +137,21 @@ class RegisterController extends Controller
                 'name' => $type
             ]);
         }
-        
+
+        // Payment Method Entry
+        $payment_methods = [
+            'Cash',
+            'Cheque',
+            'Credit Card'
+        ];
+
+        foreach($payment_methods as $payment_method) {
+            PaymentMethod::create([
+                'user_id' => $user['id'],
+                'method_name' => $payment_method
+            ]);
+        }
+
         // Email Template Entry
         $this->emailTemplateEntries($user['id']);
         

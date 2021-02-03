@@ -150,7 +150,7 @@
         <table width="1182" border="1" cellspacing="0" cellpadding="0" class="td-gray" style="margin-top: -1px;">
             <tr>
                 <td width="30px" valign="top" align="center" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px;"><strong>#</strong></td>
-                <td width="280px" valign="top" align="center" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>Item</strong></td>
+                <td width="280px" valign="top" align="center" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>Expense Type</strong></td>
                 <!--<td width="80px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>HSN</strong></td>-->
                 <td width="120px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height: 30px;text-transform:uppercase;"><strong>Note</strong></td>
                 @if($expense['tax_type'] != 3)

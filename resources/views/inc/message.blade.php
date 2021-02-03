@@ -8,11 +8,16 @@
 @endif
 
 @if (Session::has('message'))
-<div class="alert alert-info">{{ Session::get('message') }}</div>
+<div class="alert alert-info">
+    {{ Session::get('message') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+</div>
 @endif
 
 @if (count($errors) > 0)
-<div class="alert alert-danger">        
+<div class="alert alert-danger">
     <ul style="list-style: none;">
         @foreach ($errors->all() as $error)
         <li>{{ $error }}</li>
@@ -21,8 +26,6 @@
 </div>
 @php session()->forget('errors'); @endphp
 @endif
-
-
 
 @if (session()->has('success_message'))
 <div class="alert alert-success">
@@ -34,6 +37,9 @@
 @if (session()->has('error_message'))
 <div class="alert alert-danger">
     {{ session()->get('error_message') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
 </div>
 @endif
 

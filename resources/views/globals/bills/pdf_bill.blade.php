@@ -226,7 +226,7 @@
                         <td valign="top" style="padding:15px 15px 5px 15px;border-bottom:solid 1px #444444;">
                             <table cellspacing="0" cellpadding="0" border="0">
                                 <tr>
-                                    <td><strong>Notes</strong></td>
+                                    <td><strong>Memo</strong></td>
                                 </tr>
                                 <tr>
                                     <td style="padding: 5px 0px;">{{$bill['memo']}}</td>
