@@ -245,15 +245,12 @@
             var url1 = window.location;
             url1 = url1.toString().replace('/create','');
             url1 = url1.split('/edit')[0];
+            url1 = url1.split('?')[0];
             var str = window.location.toString();
-
-            // Will only work if string in href matches with location
             $('nav a[href="'+ url1 +'"]').addClass('active');
-
-            if(str.includes("create") || str.includes("edit")) {
+            if(str.includes("create") || str.includes("edit") || str.includes("?")) {
                 $('nav a[href="'+ url1 +'"]').parent('li').parent('ul').siblings('a').trigger('click');
             }
-            // Will also work for relative and absolute hrefs
             $('nav a').filter(function() {
                 return this.href == url1;
             }).addClass('active');
