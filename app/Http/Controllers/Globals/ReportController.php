@@ -22,11 +22,16 @@ use App\Models\Globals\States;
 use App\Models\Globals\Suppliers;
 use App\Models\Globals\Taxes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use NunoMaduro\Collision\Adapters\Phpunit\State;
 
 class ReportController extends Controller
 {
+    public function __construct(){
+        $this->middleware(['auth','verified']);
+    }
+
     public function expense_report(Request $request){
         $data['menu'] = 'Expense Report';
         $data['sub_menu'] = 'EXPENSE';
@@ -42,7 +47,7 @@ class ReportController extends Controller
         $end_date = date('Y-m-d', strtotime($request['end_date']));
 
         if(isset($request['start_date']) && isset($request['end_date']) && !empty($request['start_date']) && !empty($request['end_date'])){
-            $expenses = Expense::whereBetween('expense_date',[$start_date, $end_date])->pluck('id');
+            $expenses = Expense::whereBetween('expense_date',[$start_date, $end_date])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->pluck('id');
 
             if($expenses->count()>0){
                 $expenseItem = ExpenseItems::whereIn('expense_id',$expenses)->get();
@@ -64,7 +69,7 @@ class ReportController extends Controller
                         }
                     }
                 }
-                $total_amount = Expense::whereIn('id',$expenses)->sum('total');
+                $total_amount = Expense::whereIn('id',$expenses)->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->sum('total');
             }
         }
         $data['cgst'] = $cgst>0?number_format($cgst,2):'-';
@@ -121,7 +126,7 @@ class ReportController extends Controller
                         $igst1 = 0;
                         $cess1 = 0;
                         $expense_type = ExpenseType::where('id',$subarray['expense_type_id'])->first();
-                        $main_expense = Expense::where('id',$subarray['expense_id'])->first();
+                        $main_expense = Expense::where('id',$subarray['expense_id'])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->first();
                         $payment_method = PaymentMethod::where('id',$main_expense['payment_method'])->first();
                         $payee = Payees::where('id',$main_expense['payee_id'])->first();
                         if(!empty($payee)){
@@ -254,7 +259,7 @@ class ReportController extends Controller
         $end_date = date('Y-m-d', strtotime($request['end_date']));
 
         if(isset($request['start_date']) && isset($request['end_date']) && !empty($request['start_date']) && !empty($request['end_date'])){
-            $invoice = Invoice::whereBetween('invoice_date',[$start_date, $end_date])->pluck('id');
+            $invoice = Invoice::whereBetween('invoice_date',[$start_date, $end_date])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->pluck('id');
 
             if($invoice->count()>0){
                 $invoiceItem = InvoiceItems::whereIn('invoice_id',$invoice)->get();
@@ -276,7 +281,7 @@ class ReportController extends Controller
                         }
                     }
                 }
-                $total_amount = Invoice::whereIn('id',$invoice)->sum('total');
+                $total_amount = Invoice::whereIn('id',$invoice)->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->sum('total');
             }
         }
         $data['cgst'] = $cgst>0?number_format($cgst,2):'-';
@@ -331,8 +336,8 @@ class ReportController extends Controller
                     $file = fopen('php://output', 'w');
                     fputcsv($file, $columns);
 
-                    $main_discount = Invoice::whereIn('id',$invoice)->sum('discount');
-                    $main_shipping_charge = Invoice::whereIn('id',$invoice)->sum('shipping_charge_amount');
+                    $main_discount = Invoice::whereIn('id',$invoice)->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->sum('discount');
+                    $main_shipping_charge = Invoice::whereIn('id',$invoice)->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->sum('shipping_charge_amount');
 
                     //All InvoiceItems List
                     foreach($main_array as $subarray) {
@@ -341,7 +346,7 @@ class ReportController extends Controller
                         $igst1 = 0;
                         $cess1 = 0;
                         $product = Product::where('id',$subarray['product_id'])->first();
-                        $main_invoice = Invoice::where('id',$subarray['invoice_id'])->first();
+                        $main_invoice = Invoice::where('id',$subarray['invoice_id'])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->first();
                         $payment_method = PaymentMethod::where('id',$main_invoice['payment_method'])->first();
                         $payee = Payees::where('id',$main_invoice['customer_id'])->first();
                         if(!empty($payee)){
@@ -569,7 +574,7 @@ class ReportController extends Controller
         $end_date = date('Y-m-d', strtotime($request['end_date']));
 
         if(isset($request['start_date']) && isset($request['end_date']) && !empty($request['start_date']) && !empty($request['end_date'])){
-            $estimate = Estimate::whereBetween('estimate_date',[$start_date, $end_date])->pluck('id');
+            $estimate = Estimate::whereBetween('estimate_date',[$start_date, $end_date])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->pluck('id');
 
             if($estimate->count()>0){
                 $estimateItem = EstimateItems::whereIn('estimate_id',$estimate)->get();
@@ -591,7 +596,7 @@ class ReportController extends Controller
                         }
                     }
                 }
-                $total_amount = Estimate::whereIn('id',$estimate)->sum('total');
+                $total_amount = Estimate::whereIn('id',$estimate)->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->sum('total');
             }
         }
         $data['cgst'] = $cgst>0?number_format($cgst,2):'-';
@@ -646,8 +651,8 @@ class ReportController extends Controller
                     $file = fopen('php://output', 'w');
                     fputcsv($file, $columns);
 
-                    $main_discount = Estimate::whereIn('id',$estimate)->sum('discount');
-                    $main_shipping_charge = Estimate::whereIn('id',$estimate)->sum('shipping_charge_amount');
+                    $main_discount = Estimate::whereIn('id',$estimate)->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->sum('discount');
+                    $main_shipping_charge = Estimate::whereIn('id',$estimate)->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->sum('shipping_charge_amount');
 
                     //All InvoiceItems List
                     foreach($main_array as $subarray) {
@@ -656,7 +661,7 @@ class ReportController extends Controller
                         $igst1 = 0;
                         $cess1 = 0;
                         $product = Product::where('id',$subarray['product_id'])->first();
-                        $main_estimate = Estimate::where('id',$subarray['estimate_id'])->first();
+                        $main_estimate = Estimate::where('id',$subarray['estimate_id'])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->first();
                         $payee = Payees::where('id',$main_estimate['customer_id'])->first();
                         if(!empty($payee)){
                             $pay_user = Customers::where('id',$payee['type_id'])->first();
@@ -871,7 +876,7 @@ class ReportController extends Controller
         $end_date = date('Y-m-d', strtotime($request['end_date']));
 
         if(isset($request['start_date']) && isset($request['end_date']) && !empty($request['start_date']) && !empty($request['end_date'])){
-            $invoice = Invoice::whereIn('status',[3,4])->whereBetween('invoice_date',[$start_date, $end_date])->pluck('id');
+            $invoice = Invoice::whereIn('status',[3,4])->whereBetween('invoice_date',[$start_date, $end_date])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->pluck('id');
             if($invoice->count()>0){
                 $invoiceItem = InvoiceItems::whereIn('invoice_id',$invoice)->get();
                 foreach ($invoiceItem as $list){
@@ -892,7 +897,7 @@ class ReportController extends Controller
                         }
                     }
                 }
-                $total_amount = Invoice::whereIn('id',$invoice)->whereIn('status',[3,4])->sum('total');
+                $total_amount = Invoice::whereIn('id',$invoice)->whereIn('status',[3,4])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->sum('total');
             }
         }
         $data['cgst'] = $cgst>0?number_format($cgst,2):'-';
@@ -947,8 +952,8 @@ class ReportController extends Controller
                     $file = fopen('php://output', 'w');
                     fputcsv($file, $columns);
 
-                    $main_discount = Invoice::whereIn('id',$invoice)->whereIn('status',[3,4])->sum('discount');
-                    $main_shipping_charge = Invoice::whereIn('id',$invoice)->whereIn('status',[3,4])->sum('shipping_charge_amount');
+                    $main_discount = Invoice::whereIn('id',$invoice)->whereIn('status',[3,4])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->sum('discount');
+                    $main_shipping_charge = Invoice::whereIn('id',$invoice)->whereIn('status',[3,4])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->sum('shipping_charge_amount');
 
                     //All InvoiceItems List
                     foreach($main_array as $subarray) {
@@ -957,7 +962,7 @@ class ReportController extends Controller
                         $igst1 = 0;
                         $cess1 = 0;
                         $product = Product::where('id',$subarray['product_id'])->first();
-                        $main_invoice = Invoice::where('id',$subarray['invoice_id'])->whereIn('status',[3,4])->first();
+                        $main_invoice = Invoice::where('id',$subarray['invoice_id'])->whereIn('status',[3,4])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->first();
                         $payment_method = PaymentMethod::where('id',$main_invoice['payment_method'])->first();
                         $payee = Payees::where('id',$main_invoice['customer_id'])->first();
                         if(!empty($payee)){
@@ -1185,7 +1190,7 @@ class ReportController extends Controller
         $end_date = date('Y-m-d', strtotime($request['end_date']));
 
         if(isset($request['start_date']) && isset($request['end_date']) && !empty($request['start_date']) && !empty($request['end_date'])){
-            $bill = Bills::whereBetween('bill_date',[$start_date, $end_date])->pluck('id');
+            $bill = Bills::whereBetween('bill_date',[$start_date, $end_date])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->pluck('id');
 
             if($bill->count()>0){
                 $billItem = BillItems::whereIn('bill_id',$bill)->get();
@@ -1207,7 +1212,7 @@ class ReportController extends Controller
                         }
                     }
                 }
-                $total_amount = Bills::whereIn('id',$bill)->sum('total');
+                $total_amount = Bills::whereIn('id',$bill)->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->sum('total');
             }
         }
         $data['cgst'] = $cgst>0?number_format($cgst,2):'-';
@@ -1262,7 +1267,7 @@ class ReportController extends Controller
                     $file = fopen('php://output', 'w');
                     fputcsv($file, $columns);
 
-                    $main_discount = Bills::whereIn('id',$bill)->sum('discount');
+                    $main_discount = Bills::whereIn('id',$bill)->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->sum('discount');
 
                     //All InvoiceItems List
                     foreach($main_array as $subarray) {
@@ -1271,7 +1276,7 @@ class ReportController extends Controller
                         $igst1 = 0;
                         $cess1 = 0;
                         $product = Product::where('id',$subarray['product_id'])->first();
-                        $main_bill = Bills::where('id',$subarray['bill_id'])->first();
+                        $main_bill = Bills::where('id',$subarray['bill_id'])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->first();
                         $payment_method = PaymentMethod::where('id',$main_bill['payment_method'])->first();
                         $payee = Payees::where('id',$main_bill['payee_id'])->first();
                         if(!empty($payee)){
