@@ -28,12 +28,22 @@
             <td align="left" valign="top" width="31%" style="border-top:solid 1px #444444;border-left:solid 1px #444444;font-size:22px; padding: 8px 0px 0px 5px;">
                 <h2>&nbsp;{{$menu}}</h2>
                 &nbsp;&nbsp;<strong style="font-size:16px;">GSTIN : {{$company['gstin']}}</strong>
+                @if($company['iec_code'] != '')
+                <div>&nbsp;&nbsp;<strong style="font-size:16px;">{{($company['iec_code'] != '') ? 'IEC CODE : '.$company['iec_code'] : '' }}</strong></div>
+                @endif 
+                @if($company['cin_number'] != '')
+                <div>&nbsp;<strong style="font-size:16px;"> {{($company['cin_number'] != '') ? 'CIN : '.$company['cin_number'] : '' }}</strong></div>
+                @endif
             </td>
             <td align="center" valign="top" width="38%" style="border-top:solid 1px #444444; padding: 10px 0px 0px;">
                 <img src="{{url($company['company_logo'])}}" alt="" width="100" height="100" style="max-height:100px;"/>
             </td>
             <td align="right" width="31%" valign="top" style="font-size:18px;border-top:solid 1px #444444;border-right:solid 1px #444444;line-height:22px; padding: 8px 5px 0px 0px;">
                 <strong>@if($menu != 'Credit Note') {{$invoice_type}}&nbsp;@endif</strong>
+                @if($company['fssai_lic_number'] != '')
+                    <br><br><br>
+                    <strong style="font-size:16px;"> {{($company['fssai_lic_number'] != '') ? 'FSSAI LIC NO. : '.$company['fssai_lic_number'] : '' }}</strong>
+                @endif 
             </td>
         </tr>
         <tr>
@@ -71,16 +81,16 @@
             <td align="left" width="591" style="padding:0 5px;border:solid 1px #444444;line-height:30px;">
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
-                        <td align="left" width="295" style="line-height:30px;">&nbsp;&nbsp;Invoice Date: <strong>{{date('d-m-Y', strtotime($invoice['invoice_date']))}}</strong></td>
+                        <td align="left" width="295" style="line-height:30px;">&nbsp;&nbsp; Invoice Date: <strong>{{date('d-m-Y', strtotime($invoice['invoice_date']))}}</strong></td>
                     </tr>
                 </table>
             </td>
-            <td align="left" width="591" style="padding:0 5px; border:solid 1px #444444;line-height:30px;">&nbsp;@if($print_type==1)Date of Supply: <strong>{{date('d-m-Y', strtotime($invoice['due_date']))}}</strong> @else Credit Note Date: <strong>{{date('d-m-Y', strtotime($invoice['updated_at']))}}</strong> @endif  </td>
+            <td align="left" width="591" style="padding:0 5px; border:solid 1px #444444;line-height:30px;">&nbsp;@if($print_type==1) Date of Supply: <strong>{{date('d-m-Y', strtotime($invoice['due_date']))}}</strong> @else Credit Note Date: <strong>{{date('d-m-Y', strtotime($invoice['updated_at']))}}</strong> @endif  </td>
         </tr>
         <tr>
             <td align="left" style="border-left: solid 1px #444444;"><table width="100%" border="0" cellspacing="0" cellpadding="0" >
                     <tr>
-                        <td align="left" width="68%" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;State: <strong>{{$company['state']}}</strong></td>
+                        <td align="left" width="68%" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp; State: <strong>{{$company['state']}}</strong></td>
                         <td width="16%" style="border-left: solid 1px #444444;line-height:30px;" align="center">&nbsp;&nbsp;Code</td>
                         <td width="16%" style="border-left: solid 1px #444444;line-height:30px;" align="center"><strong>{{$company['state_code']}}</strong></td>
                     </tr>
@@ -239,7 +249,7 @@
                                     <td><strong>Total Invoice Amount in Words</strong></td>
                                 </tr>
                                 <tr>
-                                    <td style="padding: 5px 0px;">{{ucwords($invoice['total_in_word'])}}</td>
+                                    <td style="padding: 5px 0px;">{{ucwords($invoice['total_in_word'])}} Rupees Only</td>
                                 </tr>
                             </table>
                         </td>
