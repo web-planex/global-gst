@@ -35,14 +35,12 @@
                                                 <strong>{{ $errors->first('company_logo') }}</strong>
                                             </span>
                                         @endif
-                                        <p class="mt-2">Note: Image dimension should be less than 100X100 pixels.</p>
+                                        <p class="mt-2">Note: Image dimension should be less than 100 X 100 pixels.</p>
                                     </div>
 
                                     <div class="form-group mb-0">
                                         @if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['company_logo']) && file_exists($invoice_setting['company_logo']))
                                             <img src="{{url($invoice_setting['company_logo'])}}" id="DisplayImage1" height="60px" width="60px">
-                                        @else
-                                            <img src="" id="DisplayImage1" height="60px" width="60px" style="display: none;">
                                         @endif
                                     </div>
                                 </div>
@@ -72,14 +70,12 @@
                                                 <strong>{{ $errors->first('signature_image') }}</strong>
                                             </span>
                                         @endif
-                                        <p class="mt-2">Note: Image dimension should be less than 150X80 pixels and Image type png only.</p>
+                                        <p class="mt-2">Note: Image dimension should be less than 150 X 80 pixels and Image type png only.</p>
                                     </div>
 
                                     <div class="form-group mb-0">
                                         @if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['signature_image']) && file_exists($invoice_setting['signature_image']))
                                             <img src="{{url($invoice_setting['signature_image'])}}" id="DisplayImage2" height="30px" width="120px">
-                                        @else
-                                            <img src="" id="DisplayImage2" height="30px" width="120px" style="display: none;">
                                         @endif
                                     </div>
                                 </div>
@@ -90,7 +86,7 @@
                         <div class="col-lg-12">
                             <div class="card signature-image-bg">
                                 <div class="card-header bg-primary">
-                                    <h4 class="m-b-0 text-white">GST Store Setting</h4>
+                                    <h4 class="m-b-0 text-white">GST Invoice Setting</h4>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -249,7 +245,8 @@
                         </div>
 
                         <!--PRODUCT PRICE SETTING-->
-                        <div class="col-lg-12">
+                        <!-- comment start -->
+                        {{--<div class="col-lg-12">
                             <div class="card">
                                 <div class="card-header bg-primary">
                                     <h4 class="m-b-0 text-white">Product Price Setting</h4>
@@ -290,10 +287,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>--}}
+                        <!-- comment end -->
 
                         <!--TERMS & CONDITION-->
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="card email-notifications-bg">
                                 <div class="card-header bg-primary">
                                     <h4 class="m-b-0 text-white">Terms and Condition</h4>
@@ -301,7 +299,7 @@
                                 <div class="card-body">
                                     <div class="form-group row">
                                         <div class="col-md-12">
-                                            {!! Form::textarea('terms_and_condition', null, ['class' => 'form-control','rows'=>5]) !!}
+                                            {!! Form::textarea('terms_and_condition', null, ['class' => 'form-control','rows'=>10]) !!}
                                             @if ($errors->has('terms_and_condition'))
                                                 <span class="text-danger">
                                                     <strong>{{ $errors->first('terms_and_condition') }}</strong>
@@ -314,7 +312,7 @@
                         </div>
 
                         <!--EMAIL NOTIFICATION-->
-                        <div class="col-lg-6">
+                        {{--<div class="col-lg-6">
                             <div class="card email-notifications-bg">
                                 <div class="card-header bg-primary">
                                     <h4 class="m-b-0 text-white">Email Notification</h4>
@@ -332,7 +330,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>--}}
 
                         <!--AUTOMATIC EMAIL NOTIFICATION SETTING-->
                         <div class="col-lg-12">
@@ -344,7 +342,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-12">
                                                     <label class="product-price-setting-section">Send a copy of all automatic emails to: (Enter comma separated for multiple email Ids)</label>
                                                 </div>
                                             </div>

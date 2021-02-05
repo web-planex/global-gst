@@ -11,6 +11,9 @@
         overflow-x: visible;
     }
 }
+.swal2-popup #swal2-content {
+    text-align: justify;
+}
 </style>
     <div class="row page-titles">
         <div class="col-sm-6 align-self-center">
@@ -155,7 +158,13 @@
                                         <td class="col_customer">{{$list['Payee']['name']}}</td>
                                         <td class="col_bill_date">{{date('d M Y', strtotime($list['bill_date']))}}</td>
                                         <td class="col_due_date">{{date('d M Y', strtotime($list['due_date']))}}</td>
-                                        <td class="col_memo">{{$list['memo']}}</td>
+                                        <td class="col_memo">
+                                            @if($list['memo'] != '' && strlen($list['memo']) > 30)
+                                                <a href="javascript:void(0)" class="text-themecolor text-left" onclick="show_note('{{strtr( $list['memo'], ["\n"=>"\\n","\r"=>"\\r"])}}')">{{substr($list['memo'],0,25)}}...</a>
+                                            @elseif(strlen($list['memo']) > 0 && strlen($list['memo']) <= 30)
+                                                {{$list['memo']}}
+                                            @endif
+                                        </td>
                                         <td class="col_status">
                                             @if($list['status']==1)
                                                 <label class="label label-warning">Open</label>
@@ -393,6 +402,12 @@
             window.location.href = '{{url('bills/void')}}/'+bill_id;
             }
         })
+    }
+    function show_note(note) {
+        Swal.fire({
+            title: 'Note',
+            text: note
+        });
     }
 </script>
 @endsection

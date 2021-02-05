@@ -19,8 +19,6 @@ Route::get('/dashboard', 'HomeController@index')->name('home');
 
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
-Auth::routes();
-
 Auth::routes(['verify' => true]);
 
 //Google Login

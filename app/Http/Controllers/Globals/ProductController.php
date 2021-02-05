@@ -47,8 +47,8 @@ class ProductController extends Controller
     public function store(Request $request){
         $this->validate($request, [
             'title' => 'required',
-            'hsn_code' => 'required',
-            'sku' => 'required',
+//            'hsn_code' => 'required',
+//            'sku' => 'required',
             'price' => 'required',
             'sale_price' => 'required',
             'status' => 'required',
@@ -75,8 +75,8 @@ class ProductController extends Controller
     public function update(Request $request, $id){
         $this->validate($request, [
             'title' => 'required',
-            'hsn_code' => 'required',
-            'sku' => 'required',
+//            'hsn_code' => 'required',
+//            'sku' => 'required',
             'price' => 'required',
             'sale_price' => 'required',
             'status' => 'required',
