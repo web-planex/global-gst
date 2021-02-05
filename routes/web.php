@@ -96,6 +96,7 @@ Route::get('/sales/download_pdf/{id}', 'Globals\InvoiceController@download_pdf')
 Route::get('sales/void/{id}', 'Globals\InvoiceController@void');
 Route::post('sales/make_payment/{bid}', 'Globals\InvoiceController@make_payment')->name('make_payment');
 Route::get('sales/send-mail/{id}', 'Globals\InvoiceController@send_invoice_mail')->name('send-invoice-mail');
+Route::post('ajax/get_invoice_product', 'Globals\InvoiceController@get_invoice_product')->name('get_invoice_product');
 
 //Estimate Management
 Route::post('/estimate/multiple_pdf', 'Globals\EstimateController@multiple_pdf')->name('estimate-multiple_pdf');
@@ -154,3 +155,6 @@ Route::patch('email-templates/{slug}', 'Globals\EmailTemplatesController@update'
 //Report Builders
 Route::get('expense-report', 'Globals\ReportController@expense_report')->name('expense-report');
 Route::get('invoice-report', 'Globals\ReportController@invoice_report')->name('invoice-report');
+Route::get('estimate-report', 'Globals\ReportController@estimate_report')->name('estimate-report');
+Route::get('credit-note-report', 'Globals\ReportController@credit_note_report')->name('credit-note-report');
+Route::get('bill-report', 'Globals\ReportController@bill_report')->name('bill-report');

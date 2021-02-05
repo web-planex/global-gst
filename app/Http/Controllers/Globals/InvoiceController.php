@@ -786,4 +786,17 @@ class InvoiceController extends Controller
         }
         return redirect()->back()->with('message','Email has been sent successfully!');
     }
+
+    public function get_invoice_product(Request $request) {
+        if($request['data'] != 0){
+            $product = Product::where('id',$request['data'])->first();
+            $data['description'] = $product['description'];
+            $data['hsn_code'] = $product['hsn_code'];
+            $data['price'] = $product['sale_price'];
+        }else{
+            $user = Auth::user();
+            $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->select('title','id')->get()->toArray();
+        }
+        return $data;
+    }
 }

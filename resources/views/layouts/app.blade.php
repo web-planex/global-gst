@@ -123,6 +123,9 @@
                         <ul aria-expanded="false" class="collapse">
                             <li><a href="{{url('expense-report')}}">Expense Report</a></li>
                             <li><a href="{{url('invoice-report')}}">Invoice Report</a></li>
+                            <li><a href="{{url('estimate-report')}}">Estimate Report</a></li>
+                            <li><a href="{{url('credit-note-report')}}">Credit Note Report</a></li>
+                            <li><a href="{{url('bill-report')}}">Bill Report</a></li>
                         </ul>
                     </li>
 
@@ -248,7 +251,7 @@
             url1 = url1.split('?')[0];
             var str = window.location.toString();
             $('nav a[href="'+ url1 +'"]').addClass('active');
-            if(str.includes("create") || str.includes("edit") || str.includes("?")) {
+            if(str.includes("/create") || str.includes("/edit") || str.includes("?")) {
                 $('nav a[href="'+ url1 +'"]').parent('li').parent('ul').siblings('a').trigger('click');
             }
             $('nav a').filter(function() {
