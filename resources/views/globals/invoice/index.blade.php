@@ -143,6 +143,7 @@
                                     <th class="col_customer">Customer</th>
                                     <th class="col_invoice_date">Invoice Date</th>
                                     <th class="col_due_date">Due Date</th>
+                                    <th class="col_total">Total</th>
                                     <th class="col_notes">Note</th>
                                     <th class="col_status">Status</th>
                                     <th>Invoice</th>
@@ -164,6 +165,7 @@
                                         <td class="col_customer">{{$list['Payee']['name']}}</td>
                                         <td class="col_invoice_date">{{date('d F Y', strtotime($list['invoice_date']))}}</td>
                                         <td class="col_due_date">{{date('d F Y', strtotime($list['due_date']))}}</td>
+                                        <td class="col_total">{{$list['total']}}</td>
                                         <td class="col_notes">
                                             @if(!empty($list['notes']) && strlen($list['notes']) > 25)
                                                 <span class="text-dark" onclick="ShowNotes('{{$list['notes']}}')" style="cursor: pointer;">

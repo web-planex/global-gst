@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Globals\CompanySettings;
 use App\Models\Globals\EmailTemplates;
+use App\Models\Globals\Taxes;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -117,4 +118,30 @@ class Controller extends BaseController
         ]; 
         return $global_options ;
     }
+
+    public function TaxCount($tid, $amount){
+        $cgst = 0;
+        $sgst = 0;
+        $igst = 0;
+        $cess = 0;
+        $tax = Taxes::where('id',$tid)->first();
+        if(!empty($tax)){
+            if(strtolower($tax['tax_name']) == 'gst'){
+                $total_tax = $tax['rate'] / 2;
+                $cgst = $cgst + ($amount * $total_tax / 100);
+                $sgst = $sgst + ($amount * $total_tax / 100);
+            }
+
+            if(strtolower($tax['tax_name']) == 'igst'){
+                $igst = $igst + ($amount * $tax['rate'] / 100);
+            }
+
+            if($tax['is_cess'] == 1){
+                $cess = $cess + ($amount * $tax['cess'] / 100);
+            }
+        }
+
+        return $all_tax = [$cgst, $sgst, $igst, $cess];
+    }
+
 }

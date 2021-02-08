@@ -100,6 +100,7 @@ class InvoiceController extends Controller
             'Customer',
             'Invoice Date',
             'Due Date',
+            'Total',
             'Notes',
             'Status'
         ];
