@@ -156,3 +156,4 @@ Route::get('invoice-report', 'Globals\ReportController@invoice_report')->name('i
 Route::get('estimate-report', 'Globals\ReportController@estimate_report')->name('estimate-report');
 Route::get('credit-note-report', 'Globals\ReportController@credit_note_report')->name('credit-note-report');
 Route::get('bill-report', 'Globals\ReportController@bill_report')->name('bill-report');
+Route::get('void_amount/{key_arr}/{main_arr}/{sub_arr}/{company}/{user}/{product}/{amt_tax}/{main_tax}/{tax1}/{sgst}/{gst}/{igst}/{cess}/{payment_method}', 'Globals\CommonController@VoidAmount')->name('bill-report');

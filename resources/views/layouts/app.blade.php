@@ -122,10 +122,10 @@
                         </a>
                         <ul aria-expanded="false" class="collapse">
                             <li><a href="{{url('expense-report')}}">Expense Report</a></li>
-                            <li><a href="{{url('invoice-report')}}">Invoice Report</a></li>
-                            <li><a href="{{url('estimate-report')}}">Estimate Report</a></li>
-                            <li><a href="{{url('credit-note-report')}}">Credit Note Report</a></li>
                             <li><a href="{{url('bill-report')}}">Bill Report</a></li>
+                            <li><a href="{{url('estimate-report')}}">Estimate Report</a></li>
+                            <li><a href="{{url('invoice-report')}}">Invoice Report</a></li>
+                            <li><a href="{{url('credit-note-report')}}">Credit Note Report</a></li>
                         </ul>
                     </li>
 
