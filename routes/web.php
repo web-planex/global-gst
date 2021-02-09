@@ -156,3 +156,6 @@ Route::get('invoice-report', 'Globals\ReportController@invoice_report')->name('i
 Route::get('estimate-report', 'Globals\ReportController@estimate_report')->name('estimate-report');
 Route::get('credit-note-report', 'Globals\ReportController@credit_note_report')->name('credit-note-report');
 Route::get('bill-report', 'Globals\ReportController@bill_report')->name('bill-report');
+
+// Debit Notes
+Route::resource('debit-notes', 'Globals\DebitNoteController');
