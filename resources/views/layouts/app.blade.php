@@ -113,6 +113,7 @@
                             <li><a href="{{url('estimate')}}">Estimates</a></li>
                             <li><a href="{{ url('sales')}}">Invoices</a></li>
                             <li><a href="{{url('credit-note')}}">Credit Notes</a></li>
+                            <li><a href="{{route('debit-notes.index')}}">Debit Notes</a></li>
                         </ul>
                     </li>
 
