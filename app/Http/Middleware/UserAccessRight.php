@@ -21,7 +21,7 @@ class UserAccessRight
             if($access == 1){
                 return $next($request);
             }else{
-                return redirect()->back();
+                return redirect('/');
             }
         }else{
             return redirect()->back();

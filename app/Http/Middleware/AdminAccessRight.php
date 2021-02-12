@@ -21,7 +21,7 @@ class AdminAccessRight
             if($access == 1){
                 return $next($request);
             }else{
-                return redirect()->back();
+                return redirect('/admin');
             }
         }else{
             return redirect()->back();

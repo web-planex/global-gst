@@ -14,8 +14,7 @@ class InvoiceSettingController extends Controller
 {
     public function __construct(){
         $this->middleware(['auth','verified']);
-        $this->middleware('UserAccessRight:1');
-        $this->middleware('AdminAccessRight:0');
+
     }
 
     public function index(){
