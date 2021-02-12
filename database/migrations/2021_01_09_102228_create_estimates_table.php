@@ -26,7 +26,7 @@ class CreateEstimatesTable extends Migration
             $table->string('tax_amount',20);
             $table->integer('discount_level')->comment('0 => Transaction Level, 1 => Item Level');
             $table->string('discount',20);
-            $table->integer('discount_type');
+            $table->integer('discount_type')->nullable();
             $table->string('total',20);
             $table->text('files')->nullable();
             $table->integer('shipping_charge')->default(0);

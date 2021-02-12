@@ -22,6 +22,7 @@ class ProductController extends Controller
             $query->where(function ($q) use($request){
                     $q->orwhere('title','like','%'.$request['search'].'%');
                     $q->orwhere('price',$request['search']);
+                    $q->orwhere('sale_price',$request['search']);
                     $q->orwhere('hsn_code','like','%'.$request['search'].'%');
                     $q->orwhere('sku','like','%'.$request['search'].'%');
             });

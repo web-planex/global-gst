@@ -28,13 +28,8 @@ class CreateTaxesTable extends Migration
             ]
         );
         \Illuminate\Support\Facades\DB::table('taxes')->insert([
-                'tax_name' => 'CGST',
+                'tax_name' => 'IGST',
                 'rate' => '6'
-            ]
-        );
-        \Illuminate\Support\Facades\DB::table('taxes')->insert([
-                'tax_name' => 'SGST',
-                'rate' => '18'
             ]
         );
     }

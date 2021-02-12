@@ -27,7 +27,7 @@ class CreateEmployeesTable extends Migration
             $table->string('city',45);
             $table->string('state',45);
             $table->string('pincode',10);
-            $table->string('country',45);
+            $table->string('country',45)->default('india');
             $table->integer('gender');
             $table->date('hire_date');
             $table->date('released')->nullable();

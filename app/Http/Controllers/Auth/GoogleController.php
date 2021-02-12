@@ -33,6 +33,7 @@ class GoogleController extends Controller
                     'email' => $user->email,
                     'google_id'=> $user->id,
                     'password' => Hash::make('12345678'),
+                    'role' => 'user',
                 ]);
                 Auth::login($newUser);
                 return redirect('/dashboard');

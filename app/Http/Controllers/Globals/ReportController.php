@@ -30,6 +30,7 @@ class ReportController extends Controller
 {
     public function __construct(){
         $this->middleware(['auth','verified']);
+        $this->common_controller = new CommonController();
     }
 
     public function expense_report(Request $request){
@@ -52,7 +53,7 @@ class ReportController extends Controller
             if($expenses->count()>0){
                 $expenseItem = ExpenseItems::whereIn('expense_id',$expenses)->get();
                 foreach ($expenseItem as $list){
-                    $all_taxes = $this->AllTaxes(1,$list['expense_id'],$list['tax_id'], $list['amount']);
+                    $all_taxes = $this->common_controller->AllTaxes(1,$list['expense_id'],$list['tax_id'], $list['amount']);
                     $cgst = $cgst + $all_taxes[0];
                     $sgst = $sgst + $all_taxes[1];
                     $igst = $igst + $all_taxes[2];
@@ -98,14 +99,6 @@ class ReportController extends Controller
                 $total_cess = 0;
                 $total_main_tax = 0;
 
-                $headers = array(
-                    "Content-type" => "text/csv",
-                    "Content-Disposition" => "attachment; filename=expense_report.csv",
-                    "Pragma" => "no-cache",
-                    "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-                    "Expires" => "0"
-                );
-
                 $callback = function() use ($main_array, $columns, $fields_key_array, $total_before_tax, $total_after_tax, $total_sgst, $total_cgst, $total_igst, $total_cess, $total_main_tax)
                 {
                     $file = fopen('php://output', 'w');
@@ -118,27 +111,11 @@ class ReportController extends Controller
                         $expense_type = ExpenseType::where('id',$subarray['expense_type_id'])->first();
                         $main_expense = Expense::where('id',$subarray['expense_id'])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->first();
                         $payment_method = PaymentMethod::where('id',$main_expense['payment_method'])->first();
-                        $payee = Payees::where('id',$main_expense['payee_id'])->first();
-                        if(!empty($payee)){
-                            if($payee['type']==1){
-                                $pay_user = Suppliers::where('id',$payee['type_id'])->first();
-                            }elseif ($payee['type']==2){
-                                $pay_user = Employees::where('id',$payee['type_id'])->first();
-                            }else{
-                                $pay_user = Customers::where('id',$payee['type_id'])->first();
-                                $pay_user['street'] = $pay_user['billing_street'];
-                                $pay_user['city'] = $pay_user['billing_city'];
-                                $pay_user['pincode'] = $pay_user['billing_pincode'];
-                                $pay_user['country'] = $pay_user['billing_country'];
-                                $pay_user['state'] = $pay_user['billing_state'];
-                            }
-                            $state = States::where('id',$pay_user['state'])->first();
-                            $pay_user['state'] = $state['state_name'];
-                        }
+                        $pay_user = $this->common_controller->PayUser($main_expense['payee_id']);
                         $company = CompanySettings::where('id',$this->Company())->first();
+
                         //Tax calculation
                         $tax1 = Taxes::where('id',$subarray['tax_id'])->first();
-
                         $amount_before_tax = $subarray['amount'] * $tax1['rate'] / (100 + $tax1['rate']);
                         $new_amount_before_tax = $subarray['amount'] - $amount_before_tax;
 
@@ -172,7 +149,7 @@ class ReportController extends Controller
                             'payee_full_name' => $pay_user['first_name'].' '.$pay_user['last_name'],
                             'payee_phone' => $pay_user['mobile'],
                             'payee_address' => $pay_user['street'].', '.$pay_user['city'].'-'.$pay_user['pincode'].', '.$pay_user['state'].', '.$pay_user['country'],
-                            'payee_gstin' => $payee['type'] != 2?$pay_user['gstin']:'-',
+                            'payee_gstin' => $pay_user['type'] != 2?$pay_user['gstin']:'-',
                             'expense_type' => $expense_type['name'],
                             'tax_type' => $main_expense['tax_type']==1 ? 'Exclusive' : ($main_expense['tax_type']==2 ? 'Inclusive' : 'Out of scope'),
                             'amount_before_tax' => $main_expense['tax_type']==2 ? number_format($new_amount_before_tax,2) : number_format($subarray['amount'],2),
@@ -190,7 +167,7 @@ class ReportController extends Controller
                             'status' => $main_expense['status']==1?'Pending':($main_expense['status']==2?'Paid':'Voided'),
                             'total_amount' => number_format($subarray['amount'] + $main_tax,2),
                         ),
-                            function ($key) use ($fields_key_array) {
+                        function ($key) use ($fields_key_array) {
                                 return in_array($key, $fields_key_array);
                             }, ARRAY_FILTER_USE_KEY));
                         fputcsv($file, $data);
@@ -226,7 +203,7 @@ class ReportController extends Controller
                     fputcsv($file, $data);
                     fclose($file);
                 };
-                return Response::stream($callback, 200, $headers);
+                return Response::stream($callback, 200, $this->common_controller->Headers('expense'));
             }else{
                 return view('globals.report_builder.index',$data);
             }
@@ -257,7 +234,7 @@ class ReportController extends Controller
                 foreach ($invoiceItem as $list){
                     $main_type = Invoice::where('id',$list['invoice_id'])->first();
                     if($main_type['status'] != 3){
-                        $all_taxes = $this->AllTaxes(2,$list['invoice_id'],$list['tax_id'], $list['amount']);
+                        $all_taxes = $this->common_controller->AllTaxes(2,$list['invoice_id'],$list['tax_id'], $list['amount']);
                         $cgst = $cgst + $all_taxes[0];
                         $sgst = $sgst + $all_taxes[1];
                         $igst = $igst + $all_taxes[2];
@@ -306,14 +283,6 @@ class ReportController extends Controller
                 $total_cess = 0;
                 $total_main_tax = 0;
 
-                $headers = array(
-                    "Content-type" => "text/csv",
-                    "Content-Disposition" => "attachment; filename=invoice_report.csv",
-                    "Pragma" => "no-cache",
-                    "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-                    "Expires" => "0"
-                );
-
                 $callback = function() use ($invoice, $main_array, $columns, $fields_key_array, $total_before_tax, $total_after_tax, $total_sgst, $total_cgst, $total_igst, $total_cess, $total_main_tax, $total_discount)
                 {
                     $file = fopen('php://output', 'w');
@@ -324,50 +293,27 @@ class ReportController extends Controller
 
                     //All InvoiceItems List
                     foreach($main_array as $subarray) {
-                        $sgst1 = 0;
-                        $cgst1 = 0;
-                        $igst1 = 0;
-                        $cess1 = 0;
                         $product = Product::where('id',$subarray['product_id'])->first();
                         $main_invoice = Invoice::where('id',$subarray['invoice_id'])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->first();
                         $payment_method = PaymentMethod::where('id',$main_invoice['payment_method'])->first();
-                        $payee = Payees::where('id',$main_invoice['customer_id'])->first();
-                        if(!empty($payee)){
-                            $pay_user = Customers::where('id',$payee['type_id'])->first();
-                            $state = States::where('id',$pay_user['billing_state'])->first();
-                            $pay_user['state'] = $state['state_name'];
-                        }
+                        $pay_user = $this->common_controller->PayUser($main_invoice['customer_id']);
                         $company = CompanySettings::where('id',$this->Company())->first();
+
                         //Tax calculation
-                        $tax1 = Taxes::where('id',$subarray['tax_id'])->first();
+                        $tax_data = $this->common_controller->TaxCount($subarray['tax_id'],$subarray['amount'],$main_invoice['tax_type'],$main_invoice['status'],$total_sgst,$total_cgst, $total_igst,$total_cess,$total_main_tax,$total_before_tax,$total_after_tax);
 
-                        $amount_before_tax = $subarray['amount'] * $tax1['rate'] / (100 + $tax1['rate']);
-                        $new_amount_before_tax = $subarray['amount'] - $amount_before_tax;
-
-                        if(!empty($tax1)){
-                            if(strtolower($tax1['tax_name']) == 'gst'){
-                                $total_tax1 = $tax1['rate'] / 2;
-                                $cgst1 = $main_invoice['tax_type']==2 ? $amount_before_tax / 2 : ($main_invoice['tax_type']==1 ? $subarray['amount'] * $total_tax1 / 100 : 0);
-                                $sgst1 = $main_invoice['tax_type']==2 ? $amount_before_tax / 2 : ($main_invoice['tax_type']==1 ? $subarray['amount'] * $total_tax1 / 100 : 0);
-                            }
-                            if(strtolower($tax1['tax_name']) == 'igst'){
-                                $igst1 = $main_invoice['tax_type']==2 ? $amount_before_tax : ($main_invoice['tax_type']==1 ? $subarray['amount'] * $tax1['rate'] / 100 : 0);
-                            }
-                            if($tax1['is_cess'] == 1){
-                                $cess1 = $main_invoice['tax_type']==2 ? $subarray['amount'] * $tax1['cess'] / (100 + $tax1['cess']) : ($main_invoice['tax_type'] == 1 ?$subarray['amount'] * $tax1['cess'] / 100 : 0);
-                            }
-                        }
-                        $main_tax = $sgst1 + $cgst1 + $igst1 + $cess1;
+                        $main_tax = $tax_data[0] + $tax_data[1] + $tax_data[2] + $tax_data[3];
                         $amount = $main_invoice['tax_type']==2 ? $subarray['amount'] : ($main_invoice['tax_type'] == 1 ? $subarray['amount'] + $main_tax : $subarray['amount']);
                         if($main_invoice['status'] != 3){
-                            $total_sgst = $total_sgst + $sgst1;
-                            $total_cgst = $total_cgst + $cgst1;
-                            $total_igst = $total_igst + $igst1;
-                            $total_cess = $total_cess + $cess1;
+                            $total_sgst = $total_sgst + $tax_data[0];
+                            $total_cgst = $total_cgst + $tax_data[1];
+                            $total_igst = $total_igst + $tax_data[2];
+                            $total_cess = $total_cess + $tax_data[3];
                             $total_main_tax = $total_main_tax + $main_tax;
-                            $total_before_tax = $main_invoice['tax_type']==2 ? $total_before_tax + $new_amount_before_tax : ($main_invoice['tax_type'] == 1 ? $total_before_tax + $subarray['amount'] : $total_before_tax + $subarray['amount']);
+                            $total_before_tax = $main_invoice['tax_type']==2 ? $total_before_tax + $tax_data[4] : ($main_invoice['tax_type'] == 1 ? $total_before_tax + $subarray['amount'] : $total_before_tax + $subarray['amount']);
                             $total_after_tax = $total_after_tax + $amount;
                         }
+
                         if($subarray['discount_type']==1){
                             $dis = !empty($subarray['discount']) ? $subarray['rate'] * $subarray['discount'] / 100 :0;
                         }else{
@@ -389,16 +335,16 @@ class ReportController extends Controller
                             'quantity' => $subarray['quantity'],
                             'rate' => $subarray['rate'],
                             'tax_type' => $main_invoice['tax_type']==1 ? 'Exclusive' : ($main_invoice['tax_type']==2 ? 'Inclusive' : 'Out of scope'),
-                            'amount_before_tax' => $main_invoice['tax_type']==2 ? number_format($new_amount_before_tax,2) : number_format($subarray['amount'],2),
+                            'amount_before_tax' => $main_invoice['tax_type']==2 ? number_format($tax_data[4],2) : number_format($subarray['amount'],2),
                             'amount_after_tax' => $main_invoice['tax_type']==1 ? number_format($subarray['amount'] + $main_tax,2) : number_format($subarray['amount'],2),
-                            'sgst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'gst'?$tax1['rate'] / 2:0,
-                            'cgst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'gst'?$tax1['rate'] / 2:0,
-                            'igst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'igst'?$tax1['rate']:0,
-                            'cess_%' => in_array($main_invoice['tax_type'], [1,2]) && $tax1['is_cess'] == 1 ? $tax1['cess']:0,
-                            'sgst' => number_format($sgst1,2),
-                            'cgst' => number_format($cgst1,2),
-                            'igst' => number_format($igst1,2),
-                            'cess' => number_format($cess1,2),
+                            'sgst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'gst'?$tax_data[5]['rate'] / 2:0,
+                            'cgst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'gst'?$tax_data[5]['rate'] / 2:0,
+                            'igst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'igst'?$tax_data[5]['rate']:0,
+                            'cess_%' => in_array($main_invoice['tax_type'], [1,2]) && $tax_data[5]['is_cess'] == 1 ? $tax_data[5]['cess']:0,
+                            'sgst' => number_format($tax_data[0],2),
+                            'cgst' => number_format($tax_data[1],2),
+                            'igst' => number_format($tax_data[2],2),
+                            'cess' => number_format($tax_data[3],2),
                             'total_tax' => number_format($main_tax,2),
                             'discount_level' => $main_invoice['discount_level']==0 ? 'Transaction Level' : 'Item Level',
                             'discount_type' => $main_invoice['discount_level']==1 && $subarray['discount_type']==1  ? $subarray['discount'].' %' : ($main_invoice['discount_level']==1 && $subarray['discount_type']==2 ? 'Rs.' : ''),
@@ -427,16 +373,16 @@ class ReportController extends Controller
                                 'quantity' => $subarray['quantity'],
                                 'rate' => $subarray['rate'],
                                 'tax_type' => $main_invoice['tax_type']==1 ? 'Exclusive' : ($main_invoice['tax_type']==2 ? 'Inclusive' : 'Out of scope'),
-                                'amount_before_tax' => $main_invoice['tax_type']==2 ? '-'.number_format($new_amount_before_tax,2) : '-'.number_format($subarray['amount'],2),
+                                'amount_before_tax' => $main_invoice['tax_type']==2 ? '-'.number_format($tax_data[4],2) : '-'.number_format($subarray['amount'],2),
                                 'amount_after_tax' => $main_invoice['tax_type']==1 ? '-'.number_format($subarray['amount'] + $main_tax,2) : '-'.number_format($subarray['amount'],2),
-                                'sgst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'gst'?$tax1['rate'] / 2:0,
-                                'cgst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'gst'?$tax1['rate'] / 2:0,
-                                'igst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'igst'?$tax1['rate']:0,
-                                'cess_%' => in_array($main_invoice['tax_type'], [1,2]) && $tax1['is_cess'] == 1 ? $tax1['cess']:0,
-                                'sgst' => '-'.number_format($sgst1,2),
-                                'cgst' => '-'.number_format($cgst1,2),
-                                'igst' => '-'.number_format($igst1,2),
-                                'cess' => '-'.number_format($cess1,2),
+                                'sgst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'gst'?$tax_data[5]['rate'] / 2:0,
+                                'cgst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'gst'?$tax_data[5]['rate'] / 2:0,
+                                'igst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'igst'?$tax_data[5]['rate']:0,
+                                'cess_%' => in_array($main_invoice['tax_type'], [1,2]) && $tax_data[5]['is_cess'] == 1 ? $tax_data[5]['cess']:0,
+                                'sgst' => '-'.number_format($tax_data[0],2),
+                                'cgst' => '-'.number_format($tax_data[1],2),
+                                'igst' => '-'.number_format($tax_data[2],2),
+                                'cess' => '-'.number_format($tax_data[3],2),
                                 'total_tax' => '-'.number_format($main_tax,2),
                                 'discount_level' => $main_invoice['discount_level']==0 ? 'Transaction Level' : 'Item Level',
                                 'discount_type' => $main_invoice['discount_level']==1 && $subarray['discount_type']==1  ? $subarray['discount'].' %' : ($main_invoice['discount_level']==1 && $subarray['discount_type']==2 ? 'Rs.' : ''),
@@ -573,7 +519,7 @@ class ReportController extends Controller
                     fclose($file);
                 };
 
-                return Response::stream($callback, 200, $headers);
+                return Response::stream($callback, 200, $this->common_controller->Headers('invoice'));
             }else{
                 return view('globals.report_builder.index',$data);
             }
@@ -602,7 +548,7 @@ class ReportController extends Controller
             if($estimate->count()>0){
                 $estimateItem = EstimateItems::whereIn('estimate_id',$estimate)->get();
                 foreach ($estimateItem as $list){
-                    $all_taxes = $this->AllTaxes(3,$list['estimate_id'],$list['tax_id'], $list['amount']);
+                    $all_taxes = $this->common_controller->AllTaxes(3,$list['estimate_id'],$list['tax_id'], $list['amount']);
                     $cgst = $cgst + $all_taxes[0];
                     $sgst = $sgst + $all_taxes[1];
                     $igst = $igst + $all_taxes[2];
@@ -650,14 +596,6 @@ class ReportController extends Controller
                 $total_cess = 0;
                 $total_main_tax = 0;
 
-                $headers = array(
-                    "Content-type" => "text/csv",
-                    "Content-Disposition" => "attachment; filename=estimate_report.csv",
-                    "Pragma" => "no-cache",
-                    "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-                    "Expires" => "0"
-                );
-
                 $callback = function() use ($estimate, $main_array, $columns, $fields_key_array, $total_before_tax, $total_after_tax, $total_sgst, $total_cgst, $total_igst, $total_cess, $total_main_tax, $total_discount)
                 {
                     $file = fopen('php://output', 'w');
@@ -674,41 +612,19 @@ class ReportController extends Controller
                         $cess1 = 0;
                         $product = Product::where('id',$subarray['product_id'])->first();
                         $main_estimate = Estimate::where('id',$subarray['estimate_id'])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->first();
-                        $payee = Payees::where('id',$main_estimate['customer_id'])->first();
-                        if(!empty($payee)){
-                            $pay_user = Customers::where('id',$payee['type_id'])->first();
-                            $state = States::where('id',$pay_user['billing_state'])->first();
-                            $pay_user['state'] = $state['state_name'];
-                        }
+                        $pay_user = $this->common_controller->PayUser($main_estimate['customer_id']);
                         $company = CompanySettings::where('id',$this->Company())->first();
                         //Tax calculation
-                        $tax1 = Taxes::where('id',$subarray['tax_id'])->first();
+                        $tax_data = $this->common_controller->TaxCount($subarray['tax_id'],$subarray['amount'],$main_estimate['tax_type'],$main_estimate['status'],$total_sgst,$total_cgst, $total_igst,$total_cess,$total_main_tax,$total_before_tax,$total_after_tax);
 
-                        $amount_before_tax = $subarray['amount'] * $tax1['rate'] / (100 + $tax1['rate']);
-                        $new_amount_before_tax = $subarray['amount'] - $amount_before_tax;
-
-                        if(!empty($tax1)){
-                            if(strtolower($tax1['tax_name']) == 'gst'){
-                                $total_tax1 = $tax1['rate'] / 2;
-                                $cgst1 = $main_estimate['tax_type']==2 ? $amount_before_tax / 2 : ($main_estimate['tax_type']==1 ? $subarray['amount'] * $total_tax1 / 100 : 0);
-                                $sgst1 = $main_estimate['tax_type']==2 ? $amount_before_tax / 2 : ($main_estimate['tax_type']==1 ? $subarray['amount'] * $total_tax1 / 100 : 0);
-                            }
-                            if(strtolower($tax1['tax_name']) == 'igst'){
-                                $igst1 = $main_estimate['tax_type']==2 ? $amount_before_tax : ($main_estimate['tax_type']==1 ? $subarray['amount'] * $tax1['rate'] / 100 : 0);
-                            }
-                            if($tax1['is_cess'] == 1){
-                                $cess1 = $main_estimate['tax_type']==2 ? $subarray['amount'] * $tax1['cess'] / (100 + $tax1['cess']) : ($main_estimate['tax_type'] == 1 ?$subarray['amount'] * $tax1['cess'] / 100 : 0);
-                            }
-                        }
-                        $main_tax = $sgst1 + $cgst1 + $igst1 + $cess1;
-                        $total_sgst = $total_sgst + $sgst1;
-                        $total_cgst = $total_cgst + $cgst1;
-                        $total_igst = $total_igst + $igst1;
-                        $total_cess = $total_cess + $cess1;
-                        $total_main_tax = $total_main_tax + $main_tax;
-
-                        $total_before_tax = $main_estimate['tax_type']==2 ? $total_before_tax + $new_amount_before_tax : ($main_estimate['tax_type'] == 1 ? $total_before_tax + $subarray['amount'] : $total_before_tax + $subarray['amount']);
+                        $main_tax = $tax_data[0] + $tax_data[1] + $tax_data[2] + $tax_data[3];
                         $amount = $main_estimate['tax_type']==2 ? $subarray['amount'] : ($main_estimate['tax_type'] == 1 ? $subarray['amount'] + $main_tax : $subarray['amount']);
+                        $total_sgst = $total_sgst + $tax_data[0];
+                        $total_cgst = $total_cgst + $tax_data[1];
+                        $total_igst = $total_igst + $tax_data[2];
+                        $total_cess = $total_cess + $tax_data[3];
+                        $total_main_tax = $total_main_tax + $main_tax;
+                        $total_before_tax = $main_estimate['tax_type']==2 ? $total_before_tax + $tax_data[4] : ($main_estimate['tax_type'] == 1 ? $total_before_tax + $subarray['amount'] : $total_before_tax + $subarray['amount']);
                         $total_after_tax = $total_after_tax + $amount;
 
                         if($subarray['discount_type']==1){
@@ -731,16 +647,16 @@ class ReportController extends Controller
                             'quantity' => $subarray['quantity'],
                             'rate' => $subarray['rate'],
                             'tax_type' => $main_estimate['tax_type']==1 ? 'Exclusive' : ($main_estimate['tax_type']==2 ? 'Inclusive' : 'Out of scope'),
-                            'amount_before_tax' => $main_estimate['tax_type']==2 ? number_format($new_amount_before_tax,2) : number_format($subarray['amount'],2),
+                            'amount_before_tax' => $main_estimate['tax_type']==2 ? number_format($tax_data[4],2) : number_format($subarray['amount'],2),
                             'amount_after_tax' => $main_estimate['tax_type']==1 ? number_format($subarray['amount'] + $main_tax,2) : number_format($subarray['amount'],2),
-                            'sgst_%' => in_array($main_estimate['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'gst'?$tax1['rate'] / 2:0,
-                            'cgst_%' => in_array($main_estimate['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'gst'?$tax1['rate'] / 2:0,
-                            'igst_%' => in_array($main_estimate['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'igst'?$tax1['rate']:0,
-                            'cess_%' => in_array($main_estimate['tax_type'], [1,2]) && $tax1['is_cess'] == 1 ? $tax1['cess']:0,
-                            'sgst' => number_format($sgst1,2),
-                            'cgst' => number_format($cgst1,2),
-                            'igst' => number_format($igst1,2),
-                            'cess' => number_format($cess1,2),
+                            'sgst_%' => in_array($main_estimate['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'gst'?$tax_data[5]['rate'] / 2:0,
+                            'cgst_%' => in_array($main_estimate['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'gst'?$tax_data[5]['rate'] / 2:0,
+                            'igst_%' => in_array($main_estimate['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'igst'?$tax_data[5]['rate']:0,
+                            'cess_%' => in_array($main_estimate['tax_type'], [1,2]) && $tax_data[5]['is_cess'] == 1 ? $tax_data[5]['cess']:0,
+                            'sgst' => number_format($tax_data[0],2),
+                            'cgst' => number_format($tax_data[1],2),
+                            'igst' => number_format($tax_data[2],2),
+                            'cess' => number_format($tax_data[3],2),
                             'total_tax' => number_format($main_tax,2),
                             'discount_level' => $main_estimate['discount_level']==0 ? 'Transaction Level' : 'Item Level',
                             'discount_type' => $main_estimate['discount_level']==1 && $subarray['discount_type']==1  ? $subarray['discount'].' %' : ($main_estimate['discount_level']==1 && $subarray['discount_type']==2 ? 'Rs.' : ''),
@@ -865,7 +781,7 @@ class ReportController extends Controller
                     fclose($file);
                 };
 
-                return Response::stream($callback, 200, $headers);
+                return Response::stream($callback, 200, $this->common_controller->Headers('estimate'));
             }else{
                 return view('globals.report_builder.index',$data);
             }
@@ -893,7 +809,7 @@ class ReportController extends Controller
             if($invoice->count()>0){
                 $invoiceItem = InvoiceItems::whereIn('invoice_id',$invoice)->get();
                 foreach ($invoiceItem as $list){
-                    $all_taxes = $this->AllTaxes(2,$list['invoice_id'],$list['tax_id'], $list['amount']);
+                    $all_taxes = $this->common_controller->AllTaxes(2,$list['invoice_id'],$list['tax_id'], $list['amount']);
                     $cgst = $cgst + $all_taxes[0];
                     $sgst = $sgst + $all_taxes[1];
                     $igst = $igst + $all_taxes[2];
@@ -941,14 +857,6 @@ class ReportController extends Controller
                 $total_cess = 0;
                 $total_main_tax = 0;
 
-                $headers = array(
-                    "Content-type" => "text/csv",
-                    "Content-Disposition" => "attachment; filename=credit_note_report.csv",
-                    "Pragma" => "no-cache",
-                    "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-                    "Expires" => "0"
-                );
-
                 $callback = function() use ($invoice, $main_array, $columns, $fields_key_array, $total_before_tax, $total_after_tax, $total_sgst, $total_cgst, $total_igst, $total_cess, $total_main_tax, $total_discount)
                 {
                     $file = fopen('php://output', 'w');
@@ -966,41 +874,19 @@ class ReportController extends Controller
                         $product = Product::where('id',$subarray['product_id'])->first();
                         $main_invoice = Invoice::where('id',$subarray['invoice_id'])->whereIn('status',[3,4])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->first();
                         $payment_method = PaymentMethod::where('id',$main_invoice['payment_method'])->first();
-                        $payee = Payees::where('id',$main_invoice['customer_id'])->first();
-                        if(!empty($payee)){
-                            $pay_user = Customers::where('id',$payee['type_id'])->first();
-                            $state = States::where('id',$pay_user['billing_state'])->first();
-                            $pay_user['state'] = $state['state_name'];
-                        }
+                        $pay_user = $this->common_controller->PayUser($main_invoice['customer_id']);
                         $company = CompanySettings::where('id',$this->Company())->first();
+
                         //Tax calculation
-                        $tax1 = Taxes::where('id',$subarray['tax_id'])->first();
-
-                        $amount_before_tax = $subarray['amount'] * $tax1['rate'] / (100 + $tax1['rate']);
-                        $new_amount_before_tax = $subarray['amount'] - $amount_before_tax;
-
-                        if(!empty($tax1)){
-                            if(strtolower($tax1['tax_name']) == 'gst'){
-                                $total_tax1 = $tax1['rate'] / 2;
-                                $cgst1 = $main_invoice['tax_type']==2 ? $amount_before_tax / 2 : ($main_invoice['tax_type']==1 ? $subarray['amount'] * $total_tax1 / 100 : 0);
-                                $sgst1 = $main_invoice['tax_type']==2 ? $amount_before_tax / 2 : ($main_invoice['tax_type']==1 ? $subarray['amount'] * $total_tax1 / 100 : 0);
-                            }
-                            if(strtolower($tax1['tax_name']) == 'igst'){
-                                $igst1 = $main_invoice['tax_type']==2 ? $amount_before_tax : ($main_invoice['tax_type']==1 ? $subarray['amount'] * $tax1['rate'] / 100 : 0);
-                            }
-                            if($tax1['is_cess'] == 1){
-                                $cess1 = $main_invoice['tax_type']==2 ? $subarray['amount'] * $tax1['cess'] / (100 + $tax1['cess']) : ($main_invoice['tax_type'] == 1 ?$subarray['amount'] * $tax1['cess'] / 100 : 0);
-                            }
-                        }
-                        $main_tax = $sgst1 + $cgst1 + $igst1 + $cess1;
-                        $total_sgst = $total_sgst + $sgst1;
-                        $total_cgst = $total_cgst + $cgst1;
-                        $total_igst = $total_igst + $igst1;
-                        $total_cess = $total_cess + $cess1;
-                        $total_main_tax = $total_main_tax + $main_tax;
-
-                        $total_before_tax = $main_invoice['tax_type']==2 ? $total_before_tax + $new_amount_before_tax : ($main_invoice['tax_type'] == 1 ? $total_before_tax + $subarray['amount'] : $total_before_tax + $subarray['amount']);
+                        $tax_data = $this->common_controller->TaxCount($subarray['tax_id'],$subarray['amount'],$main_invoice['tax_type'],$main_invoice['status'],$total_sgst,$total_cgst, $total_igst,$total_cess,$total_main_tax,$total_before_tax,$total_after_tax);
+                        $main_tax = $tax_data[0] + $tax_data[1] + $tax_data[2] + $tax_data[3];
                         $amount = $main_invoice['tax_type']==2 ? $subarray['amount'] : ($main_invoice['tax_type'] == 1 ? $subarray['amount'] + $main_tax : $subarray['amount']);
+                        $total_sgst = $total_sgst + $tax_data[0];
+                        $total_cgst = $total_cgst + $tax_data[1];
+                        $total_igst = $total_igst + $tax_data[2];
+                        $total_cess = $total_cess + $tax_data[3];
+                        $total_main_tax = $total_main_tax + $main_tax;
+                        $total_before_tax = $main_invoice['tax_type']==2 ? $total_before_tax + $tax_data[4] : ($main_invoice['tax_type'] == 1 ? $total_before_tax + $subarray['amount'] : $total_before_tax + $subarray['amount']);
                         $total_after_tax = $total_after_tax + $amount;
 
                         if($subarray['discount_type']==1){
@@ -1024,16 +910,16 @@ class ReportController extends Controller
                             'quantity' => $subarray['quantity'],
                             'rate' => $subarray['rate'],
                             'tax_type' => $main_invoice['tax_type']==1 ? 'Exclusive' : ($main_invoice['tax_type']==2 ? 'Inclusive' : 'Out of scope'),
-                            'amount_before_tax' => $main_invoice['tax_type']==2 ? number_format($new_amount_before_tax,2) : number_format($subarray['amount'],2),
+                            'amount_before_tax' => $main_invoice['tax_type']==2 ? number_format($tax_data[4],2) : number_format($subarray['amount'],2),
                             'amount_after_tax' => $main_invoice['tax_type']==1 ? number_format($subarray['amount'] + $main_tax,2) : number_format($subarray['amount'],2),
-                            'sgst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'gst'?$tax1['rate'] / 2:0,
-                            'cgst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'gst'?$tax1['rate'] / 2:0,
-                            'igst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'igst'?$tax1['rate']:0,
-                            'cess_%' => in_array($main_invoice['tax_type'], [1,2]) && $tax1['is_cess'] == 1 ? $tax1['cess']:0,
-                            'sgst' => number_format($sgst1,2),
-                            'cgst' => number_format($cgst1,2),
-                            'igst' => number_format($igst1,2),
-                            'cess' => number_format($cess1,2),
+                            'sgst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'gst'?$tax_data[5]['rate'] / 2:0,
+                            'cgst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'gst'?$tax_data[5]['rate'] / 2:0,
+                            'igst_%' => in_array($main_invoice['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'igst'?$tax_data[5]['rate']:0,
+                            'cess_%' => in_array($main_invoice['tax_type'], [1,2]) && $tax_data[5]['is_cess'] == 1 ? $tax_data[5]['cess']:0,
+                            'sgst' => number_format($tax_data[0],2),
+                            'cgst' => number_format($tax_data[1],2),
+                            'igst' => number_format($tax_data[2],2),
+                            'cess' => number_format($tax_data[3],2),
                             'total_tax' => number_format($main_tax,2),
                             'discount_level' => $main_invoice['discount_level']==0 ? 'Transaction Level' : 'Item Level',
                             'discount_type' => $main_invoice['discount_level']==1 && $subarray['discount_type']==1  ? $subarray['discount'].' %' : ($main_invoice['discount_level']==1 && $subarray['discount_type']==2 ? 'Rs.' : ''),
@@ -1169,7 +1055,7 @@ class ReportController extends Controller
                     fclose($file);
                 };
 
-                return Response::stream($callback, 200, $headers);
+                return Response::stream($callback, 200, $this->common_controller->Headers('credit_note'));
             }else{
                 return view('globals.report_builder.index',$data);
             }
@@ -1200,7 +1086,7 @@ class ReportController extends Controller
                 foreach ($billItem as $list){
                     $main_type = Bills::where('id',$list['bill_id'])->first();
                     if($main_type['status'] != 3){
-                        $all_taxes = $this->AllTaxes(4,$list['bill_id'],$list['tax_id'], $list['amount']);
+                        $all_taxes = $this->common_controller->AllTaxes(4,$list['bill_id'],$list['tax_id'], $list['amount']);
                         $cgst = $cgst + $all_taxes[0];
                         $sgst = $sgst + $all_taxes[1];
                         $igst = $igst + $all_taxes[2];
@@ -1249,14 +1135,6 @@ class ReportController extends Controller
                 $total_cess = 0;
                 $total_main_tax = 0;
 
-                $headers = array(
-                    "Content-type" => "text/csv",
-                    "Content-Disposition" => "attachment; filename=bill_report.csv",
-                    "Pragma" => "no-cache",
-                    "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-                    "Expires" => "0"
-                );
-
                 $callback = function() use ($bill, $main_array, $columns, $fields_key_array, $total_before_tax, $total_after_tax, $total_sgst, $total_cgst, $total_igst, $total_cess, $total_main_tax, $total_discount)
                 {
                     $file = fopen('php://output', 'w');
@@ -1273,41 +1151,21 @@ class ReportController extends Controller
                         $product = Product::where('id',$subarray['product_id'])->first();
                         $main_bill = Bills::where('id',$subarray['bill_id'])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->first();
                         $payment_method = PaymentMethod::where('id',$main_bill['payment_method'])->first();
-                        $payee = Payees::where('id',$main_bill['payee_id'])->first();
-                        if(!empty($payee)){
-                            $pay_user = Customers::where('id',$payee['type_id'])->first();
-                            $state = States::where('id',$pay_user['billing_state'])->first();
-                            $pay_user['state'] = $state['state_name'];
-                        }
+                        $pay_user = $this->common_controller->PayUser($main_bill['payee_id']);
                         $company = CompanySettings::where('id',$this->Company())->first();
+
                         //Tax calculation
-                        $tax1 = Taxes::where('id',$subarray['tax_id'])->first();
+                        $tax_data = $this->common_controller->TaxCount($subarray['tax_id'],$subarray['amount'],$main_bill['tax_type'],$main_bill['status'],$total_sgst,$total_cgst, $total_igst,$total_cess,$total_main_tax,$total_before_tax,$total_after_tax);
 
-                        $amount_before_tax = $subarray['amount'] * $tax1['rate'] / (100 + $tax1['rate']);
-                        $new_amount_before_tax = $subarray['amount'] - $amount_before_tax;
-
-                        if(!empty($tax1)){
-                            if(strtolower($tax1['tax_name']) == 'gst'){
-                                $total_tax1 = $tax1['rate'] / 2;
-                                $cgst1 = $main_bill['tax_type']==2 ? $amount_before_tax / 2 : ($main_bill['tax_type']==1 ? $subarray['amount'] * $total_tax1 / 100 : 0);
-                                $sgst1 = $main_bill['tax_type']==2 ? $amount_before_tax / 2 : ($main_bill['tax_type']==1 ? $subarray['amount'] * $total_tax1 / 100 : 0);
-                            }
-                            if(strtolower($tax1['tax_name']) == 'igst'){
-                                $igst1 = $main_bill['tax_type']==2 ? $amount_before_tax : ($main_bill['tax_type']==1 ? $subarray['amount'] * $tax1['rate'] / 100 : 0);
-                            }
-                            if($tax1['is_cess'] == 1){
-                                $cess1 = $main_bill['tax_type']==2 ? $subarray['amount'] * $tax1['cess'] / (100 + $tax1['cess']) : ($main_bill['tax_type'] == 1 ?$subarray['amount'] * $tax1['cess'] / 100 : 0);
-                            }
-                        }
-                        $main_tax = $sgst1 + $cgst1 + $igst1 + $cess1;
+                        $main_tax = $tax_data[0] + $tax_data[1] + $tax_data[2] + $tax_data[3];
                         $amount = $main_bill['tax_type']==2 ? $subarray['amount'] : ($main_bill['tax_type'] == 1 ? $subarray['amount'] + $main_tax : $subarray['amount']);
                         if($main_bill['status'] != 3){
-                            $total_sgst = $total_sgst + $sgst1;
-                            $total_cgst = $total_cgst + $cgst1;
-                            $total_igst = $total_igst + $igst1;
-                            $total_cess = $total_cess + $cess1;
+                            $total_sgst = $total_sgst + $tax_data[0];
+                            $total_cgst = $total_cgst + $tax_data[1];
+                            $total_igst = $total_igst + $tax_data[2];
+                            $total_cess = $total_cess + $tax_data[3];
                             $total_main_tax = $total_main_tax + $main_tax;
-                            $total_before_tax = $main_bill['tax_type']==2 ? $total_before_tax + $new_amount_before_tax : ($main_bill['tax_type'] == 1 ? $total_before_tax + $subarray['amount'] : $total_before_tax + $subarray['amount']);
+                            $total_before_tax = $main_bill['tax_type']==2 ? $total_before_tax + $tax_data[4] : ($main_bill['tax_type'] == 1 ? $total_before_tax + $subarray['amount'] : $total_before_tax + $subarray['amount']);
                             $total_after_tax = $total_after_tax + $amount;
                         }
 
@@ -1332,16 +1190,16 @@ class ReportController extends Controller
                             'quantity' => $subarray['quantity'],
                             'rate' => $subarray['rate'],
                             'tax_type' => $main_bill['tax_type']==1 ? 'Exclusive' : ($main_bill['tax_type']==2 ? 'Inclusive' : 'Out of scope'),
-                            'amount_before_tax' => $main_bill['tax_type']==2 ? number_format($new_amount_before_tax,2) : number_format($subarray['amount'],2),
+                            'amount_before_tax' => $main_bill['tax_type']==2 ? number_format($tax_data[4],2) : number_format($subarray['amount'],2),
                             'amount_after_tax' => $main_bill['tax_type']==1 ? number_format($subarray['amount'] + $main_tax,2) : number_format($subarray['amount'],2),
-                            'sgst_%' => in_array($main_bill['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'gst'?$tax1['rate'] / 2:0,
-                            'cgst_%' => in_array($main_bill['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'gst'?$tax1['rate'] / 2:0,
-                            'igst_%' => in_array($main_bill['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'igst'?$tax1['rate']:0,
-                            'cess_%' => in_array($main_bill['tax_type'], [1,2]) && $tax1['is_cess'] == 1 ? $tax1['cess']:0,
-                            'sgst' => number_format($sgst1,2),
-                            'cgst' => number_format($cgst1,2),
-                            'igst' => number_format($igst1,2),
-                            'cess' => number_format($cess1,2),
+                            'sgst_%' => in_array($main_bill['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'gst'?$tax_data[5]['rate'] / 2:0,
+                            'cgst_%' => in_array($main_bill['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'gst'?$tax_data[5]['rate'] / 2:0,
+                            'igst_%' => in_array($main_bill['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'igst'?$tax_data[5]['rate']:0,
+                            'cess_%' => in_array($main_bill['tax_type'], [1,2]) && $tax_data[5]['is_cess'] == 1 ? $tax_data[5]['cess']:0,
+                            'sgst' => number_format($tax_data[0],2),
+                            'cgst' => number_format($tax_data[1],2),
+                            'igst' => number_format($tax_data[2],2),
+                            'cess' => number_format($tax_data[3],2),
                             'total_tax' => number_format($main_tax,2),
                             'discount_level' => $main_bill['discount_level']==0 ? 'Transaction Level' : 'Item Level',
                             'discount_type' => $main_bill['discount_level']==1 && $subarray['discount_type']==1  ? $subarray['discount'].' %' : ($main_bill['discount_level']==1 && $subarray['discount_type']==2 ? 'Rs.' : ''),
@@ -1370,16 +1228,16 @@ class ReportController extends Controller
                                 'quantity' => $subarray['quantity'],
                                 'rate' => $subarray['rate'],
                                 'tax_type' => $main_bill['tax_type']==1 ? 'Exclusive' : ($main_bill['tax_type']==2 ? 'Inclusive' : 'Out of scope'),
-                                'amount_before_tax' => $main_bill['tax_type']==2 ? '-'.number_format($new_amount_before_tax,2) : '-'.number_format($subarray['amount'],2),
+                                'amount_before_tax' => $main_bill['tax_type']==2 ? '-'.number_format($tax_data[4],2) : '-'.number_format($subarray['amount'],2),
                                 'amount_after_tax' => $main_bill['tax_type']==1 ? '-'.number_format($subarray['amount'] + $main_tax,2) : '-'.number_format($subarray['amount'],2),
-                                'sgst_%' => in_array($main_bill['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'gst'?$tax1['rate'] / 2:0,
-                                'cgst_%' => in_array($main_bill['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'gst'?$tax1['rate'] / 2:0,
-                                'igst_%' => in_array($main_bill['tax_type'], [1,2]) && strtolower($tax1['tax_name']) == 'igst'?$tax1['rate']:0,
-                                'cess_%' => in_array($main_bill['tax_type'], [1,2]) && $tax1['is_cess'] == 1 ? $tax1['cess']:0,
-                                'sgst' => '-'.number_format($sgst1,2),
-                                'cgst' => '-'.number_format($cgst1,2),
-                                'igst' => '-'.number_format($igst1,2),
-                                'cess' => '-'.number_format($cess1,2),
+                                'sgst_%' => in_array($main_bill['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'gst'?$tax_data[5]['rate'] / 2:0,
+                                'cgst_%' => in_array($main_bill['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'gst'?$tax_data[5]['rate'] / 2:0,
+                                'igst_%' => in_array($main_bill['tax_type'], [1,2]) && strtolower($tax_data[5]['tax_name']) == 'igst'?$tax_data[5]['rate']:0,
+                                'cess_%' => in_array($main_bill['tax_type'], [1,2]) && $tax_data[5]['is_cess'] == 1 ? $tax_data[5]['cess']:0,
+                                    'sgst' => '-'.number_format($tax_data[0],2),
+                                'cgst' => '-'.number_format($tax_data[1],2),
+                                'igst' => '-'.number_format($tax_data[2],2),
+                                'cess' => '-'.number_format($tax_data[3],2),
                                 'total_tax' => '-'.number_format($main_tax,2),
                                 'discount_level' => $main_bill['discount_level']==0 ? 'Transaction Level' : 'Item Level',
                                 'discount_type' => $main_bill['discount_level']==1 && $subarray['discount_type']==1  ? $subarray['discount'].' %' : ($main_bill['discount_level']==1 && $subarray['discount_type']==2 ? 'Rs.' : ''),
@@ -1514,7 +1372,7 @@ class ReportController extends Controller
                     fputcsv($file, $data);
                     fclose($file);
                 };
-                return Response::stream($callback, 200, $headers);
+                return Response::stream($callback, 200, $this->common_controller->Headers('bill'));
             }else{
                 return view('globals.report_builder.index',$data);
             }

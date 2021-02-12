@@ -29,7 +29,7 @@ class CreateSuppliersTable extends Migration
             $table->string('city',45);
             $table->string('state',45);
             $table->string('pincode',10);
-            $table->string('country',45);
+            $table->string('country',45)->default('india');
             $table->integer('billing_rate')->nullable();
             $table->string('pan_no',15)->nullable();
             $table->string('account_no',25)->nullable();
