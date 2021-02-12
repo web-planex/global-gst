@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('mobile')->nullable();
-            $table->string('role');
+            $table->string('role')->comment("user, admin");
             $table->string('status')->default(1);
             $table->string('google_id')->nullable();
             $table->integer('plan_id')->nullable();
