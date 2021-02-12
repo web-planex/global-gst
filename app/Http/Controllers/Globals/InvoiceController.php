@@ -40,6 +40,8 @@ class InvoiceController extends Controller
 {
     public function __construct(){
         $this->middleware(['auth','verified'], ['except' => 'download_pdf']);
+        $this->middleware('UserAccessRight:1');
+        $this->middleware('AdminAccessRight:0');
     }
 
     public function index(Request $request){

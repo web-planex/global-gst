@@ -12,6 +12,8 @@ class EmailTemplatesController extends Controller
 
     public function __construct(){
         $this->middleware(['auth','verified']);
+        $this->middleware('UserAccessRight:1');
+        $this->middleware('AdminAccessRight:0');
     }
 
     public function show($slug) {

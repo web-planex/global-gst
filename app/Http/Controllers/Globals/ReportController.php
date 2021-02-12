@@ -30,6 +30,8 @@ class ReportController extends Controller
 {
     public function __construct(){
         $this->middleware(['auth','verified']);
+        $this->middleware('UserAccessRight:1');
+        $this->middleware('AdminAccessRight:0');
         $this->common_controller = new CommonController();
     }
 
