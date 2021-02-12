@@ -26,12 +26,14 @@ use WKPDF;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Globals\EstimateMail;
 use App\Models\Globals\EmailTemplates;
+use App\Http\Controllers\Globals\CommonController;
 
 class EstimateController extends Controller
 {
+    protected $common_controller;
     public function __construct(){
         $this->middleware(['auth','verified'], ['except' => 'download_pdf']);
-
+        $this->common_controller = new CommonController();
     }
 
     public function index(Request $request){
@@ -387,7 +389,7 @@ class EstimateController extends Controller
                 }
             }
         }
-        $data['estimate']['total_in_word'] = $this->convert_digit_to_words($data['estimate']['total']);
+        $data['estimate']['total_in_word'] = $this->common_controller->convert_digit_to_words($data['estimate']['total']);
 
         $payee = Payees::where('id',$data['estimate']['customer_id'])->first();
         if(!empty($payee)){
@@ -423,7 +425,7 @@ class EstimateController extends Controller
         $data['company_name'] = $company['company_name'];
         $data['name']  = 'Estimate';
         $data['content'] = 'This is test pdf.';
-        $pdf = new WKPDF($this->globalPdfOption());
+        $pdf = new WKPDF($this->common_controller->globalPdfOption());
         $pdf->addPage(view('globals.estimate.pdf_estimate',$data));
         if($request->output == 'download') {
             if (!$pdf->send('estimate.pdf')) {

@@ -1014,7 +1014,7 @@
     */ 
     if ($(".navbar-nav > li > a, footer ul li a").length > 0) {
         $(".navbar-nav > li > a, footer ul li a").on("click", function (e) {
-            e.preventDefault();
+            //e.preventDefault();
             $("html, body").animate({scrollTop: $($(this).attr("href")).offset().top + "px"}, 1600, "swing");
         });
     }

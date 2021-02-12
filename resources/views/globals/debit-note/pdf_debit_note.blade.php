@@ -62,6 +62,7 @@
                         <td align="left" width="295" style="line-height:30px;">&nbsp;&nbsp;Debit Note No:&nbsp;&nbsp;</strong>{{$debit_note['debit_note_number']}} </td>
                     </tr>
                 </table>
+                <td align="left" width="591" style="padding:0 5px; border:solid 1px #444444;line-height:30px;">&nbsp;Invoice No: {{$invoice['invoice_number']}}</td>
             </td>
         </tr>
         <tr>
@@ -71,16 +72,19 @@
                         <td align="left" width="295" style="line-height:30px;">&nbsp;&nbsp;Debit Note Date: <strong>{{date('d-m-Y', strtotime($debit_note['debit_note_date']))}}</strong></td>
                     </tr>
                 </table>
+                <td align="left" width="591" style="padding:0 5px; border:solid 1px #444444;line-height:30px;">&nbsp;Invoice Date: {{$debit_note['ref_invoice_date']}}</td>
             </td>
         </tr>
         <tr>
-            <td align="left" style="border-left: solid 1px #444444;border-right:solid 1px #444444;"><table width="100%" border="0" cellspacing="0" cellpadding="0" >
+            <td align="left" style="border-left: solid 1px #444444;border-right:solid 1px #444444;">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" >
                     <tr>
                         <td align="left" width="68%" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;State: <strong>{{$company['state']}}</strong></td>
                         <td width="16%" style="border-left: solid 1px #444444;line-height:30px;" align="center">&nbsp;&nbsp;Code</td>
                         <td width="16%" style="border-left: solid 1px #444444;line-height:30px;" align="center"><strong>{{$company['state_code']}}</strong></td>
                     </tr>
                 </table>
+                <td align="left" width="591" style="padding:0 5px; border-right:solid 1px #444444;line-height:30px;">&nbsp;Order Number: {{$debit_note['order_number']!='' ? $debit_note['order_number'] : '-'}}</td>
             </td>
         </tr>
     </table>
@@ -94,8 +98,8 @@
             <td align="center" bgcolor="#eeeeee" align="center" style="padding:0 5px;line-height:30px;"><strong>SHIP TO PARTY / DELIVERY ADDRESS</strong></td>
         </tr>
         <tr>
-            <td align="left" width="50%" style="padding:0 5px;line-height:30px;" >&nbsp;&nbsp;<strong>{{$user['billing_first_name']}} {{$user['billing_last_name']}}</strong></td>
-            <td align="left" width="50%" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>{{$user['shipping_first_name']}} {{$user['shipping_last_name']}}</strong></td>
+            <td align="left" width="50%" style="padding:0 5px;line-height:30px;" >&nbsp;&nbsp;<strong>{{$user['billing_name']}}</strong></td>
+            <td align="left" width="50%" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>{{$user['shipping_name']}}</strong></td>
         </tr>
         <tr>
             <td align="left" valign="top" style="padding:0 14px;line-height:30px;">{{$user['billing_street']}}, {{$user['billing_city']}}-{{$user['billing_pincode']}}, {{$user['state']}}, {{$user['billing_country']}}.</td>
@@ -308,6 +312,10 @@
                         <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">{{$debit_note['total']}}/-&nbsp;&nbsp;</td>
                     </tr>
                     <tr>
+                        <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Shipping Charge</td>
+                        <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">{{$debit_note['shipping_charge']==1 ? $debit_note['shipping_charge_amount'].'/-' : '-' }}&nbsp;&nbsp;</td>
+                    </tr>
+                    <tr>
                         <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Round Off</td>
                         <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">-&nbsp;&nbsp;</td>
                     </tr>
@@ -321,7 +329,7 @@
         <tr><td colspan="2" align="left" style="padding: 3px 5px; border-left:solid 1px #444444;border-right: solid 1px #444444;border-top: solid 1px #444444;">E. & O.E</td></tr>
         <tr>
             <td align="left" style="border-left:solid 1px #444444;border-bottom: solid 1px #444444;line-height:30px;">
-                @if(in_array($debit_note['status'],[1,2,4]))
+                @if(in_array($debit_note['status'],[1,2,4]) && $debit_note['status_image']!='')
                     <img src="{{$debit_note['status_image']}}" alt="" width="150" height="70" />
                 @endif
             </td>

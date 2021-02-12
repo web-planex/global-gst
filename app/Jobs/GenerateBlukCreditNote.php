@@ -17,7 +17,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use WKPDF;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Globals\CommonController;
 
 class GenerateBlukCreditNote implements ShouldQueue
 {
@@ -28,7 +28,7 @@ class GenerateBlukCreditNote implements ShouldQueue
     protected $user;
     protected $download_type;
     protected $invoice_type;
-    protected $controller;
+    protected $common_controller;
 
     public function __construct($user, $company_id, $checkboxes, $download_type, $invoice_type)
     {
@@ -37,7 +37,7 @@ class GenerateBlukCreditNote implements ShouldQueue
         $this->checkboxes = $checkboxes;
         $this->download_type = $download_type;
         $this->invoice_type = $invoice_type;
-        $this->controller = new Controller;
+        $this->common_controller = new CommonController();
     }
 
     public function handle()
@@ -110,7 +110,7 @@ class GenerateBlukCreditNote implements ShouldQueue
                 }
             }
 
-            $data['invoice']['total_in_word'] = $this->controller->convert_digit_to_words($data['invoice']['total']);
+            $data['invoice']['total_in_word'] = $this->common_controller->convert_digit_to_words($data['invoice']['total']);
 
             $payee = Payees::where('id',$data['invoice']['customer_id'])->first();
             if(!empty($payee)){
@@ -147,7 +147,7 @@ class GenerateBlukCreditNote implements ShouldQueue
             $data['company_name'] = $company['company_name'];
             $data['name'] = 'Credit Note';
             $data['content'] = 'This is credit note pdf.';
-            $pdf = new WKPDF($this->controller->globalPdfOption());
+            $pdf = new WKPDF($this->common_controller->globalPdfOption());
             //return $data;
             $pdf->addPage(view('globals.invoice.pdf_invoice',$data));
             $path = $this->user->id.'/credit_note/';
@@ -206,7 +206,7 @@ class GenerateBlukCreditNote implements ShouldQueue
         ];
 
         $company['address'] = implode(', ', $company_address_arr);
-        $pdf = new WKPDF($this->controller->globalPdfOption());
+        $pdf = new WKPDF($this->common_controller->globalPdfOption());
 
         foreach($this->checkboxes as $id){
             $invoice = Invoice::with('InvoiceItems')->where('id',$id)->first();
@@ -223,7 +223,7 @@ class GenerateBlukCreditNote implements ShouldQueue
                     $ct++;
                 }
             }
-            $invoice['total_in_word'] = $this->controller->convert_digit_to_words($invoice['total']);
+            $invoice['total_in_word'] = $this->common_controller->convert_digit_to_words($invoice['total']);
 
             $payee = Payees::where('id',$invoice['customer_id'])->first();
             if(!empty($payee)){

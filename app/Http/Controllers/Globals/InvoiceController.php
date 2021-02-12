@@ -35,12 +35,14 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\Globals\InvoiceMail;
 use App\Mail\Globals\CreditNoteMail;
 use App\Models\Globals\EmailTemplates;
+use App\Http\Controllers\Globals\CommonController;
 
 class InvoiceController extends Controller
 {
+    protected $common_controller;
     public function __construct(){
         $this->middleware(['auth','verified'], ['except' => 'download_pdf']);
-
+        $this->common_controller = new CommonController();
     }
 
     public function index(Request $request){
@@ -477,7 +479,7 @@ class InvoiceController extends Controller
                 }
             }
         }
-        $data['invoice']['total_in_word'] = $this->convert_digit_to_words($data['invoice']['total']);
+        $data['invoice']['total_in_word'] = $this->common_controller->convert_digit_to_words($data['invoice']['total']);
 
         $payee = Payees::where('id',$data['invoice']['customer_id'])->first();
         if(!empty($payee)){
@@ -513,7 +515,7 @@ class InvoiceController extends Controller
         $data['company_name'] = $company['company_name'];
         $data['name']  = 'Sales Voucher';
         $data['content'] = 'This is test pdf.';
-        $pdf = new WKPDF($this->globalPdfOption());
+        $pdf = new WKPDF($this->common_controller->globalPdfOption());
 
 //        return view('globals.invoice.pdf_invoice',$data);
 

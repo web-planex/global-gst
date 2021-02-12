@@ -16,12 +16,12 @@
             }
         </script>
     </head>
-    <body>
+    <body style="font-family:Arial, Helvetica, sans-serif;font-size:16px; margin:0; padding:0; font-weight:normal;">
         <div style="padding:0px 0 10px 0px;">
             <table cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
                     <td align="left" style="font-size: 10px;"><strong>Thank you for your business </strong></td>
-                    <td align="right" style="font-size:10px; Color:#5e5e5e;">Generated from: <a href="https://gst.webplanex.com">www.webplanex.com</a>&nbsp;&nbsp;&nbsp;&nbsp;Page <span id="pdfkit_page_current"></span> of <span id="pdfkit_page_count"></span></td>
+                    <td align="right" style="font-size:10px; Color:#5e5e5e;">Generated from: <a target="_blank" href="https://gst.webplanex.com">www.webplanex.com</a>&nbsp;&nbsp;&nbsp;&nbsp;Page <span id="pdfkit_page_current"></span> of <span id="pdfkit_page_count"></span></td>
                 </tr>
             </table>
         </div>

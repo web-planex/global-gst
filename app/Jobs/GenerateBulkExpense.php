@@ -20,7 +20,7 @@ use App\Models\Globals\PdfZips;
 use WKPDF;
 use Illuminate\Support\Facades\Log;
 use App\Models\Globals\ExpenseType;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Globals\CommonController;
 
 class GenerateBulkExpense implements ShouldQueue
 {
@@ -30,7 +30,7 @@ class GenerateBulkExpense implements ShouldQueue
     protected $company_id;
     protected $user;
     protected $download_type;
-    protected $controller;
+    protected $common_controller;
     /**
      * Create a new job instance.
      *
@@ -42,7 +42,7 @@ class GenerateBulkExpense implements ShouldQueue
         $this->company_id = $company_id;
         $this->checkboxes = $checkboxes;
         $this->download_type = $download_type;
-        $this->controller = new Controller;
+        $this->common_controller = new CommonController();
     }
 
     /**
@@ -100,7 +100,7 @@ class GenerateBulkExpense implements ShouldQueue
                     }
                 }
             }
-            $data['expense']['total_in_word'] = $this->controller->convert_digit_to_words($data['expense']['total']);
+            $data['expense']['total_in_word'] = $this->common_controller->convert_digit_to_words($data['expense']['total']);
 
             $payee = Payees::where('id',$data['expense']['payee_id'])->first();
             if(!empty($payee)){
@@ -198,7 +198,7 @@ class GenerateBulkExpense implements ShouldQueue
 
             $data['name'] = 'Expense Voucher';
             $data['content'] = 'This is test pdf.';
-            $pdf = new WKPDF($this->controller->globalPdfOption());
+            $pdf = new WKPDF($this->common_controller->globalPdfOption());
             //return $data;
             $pdf->addPage(view('globals.expense.pdf_expense',$data));
             $path = $this->user->id.'/expense_voucher/';
@@ -256,7 +256,7 @@ class GenerateBulkExpense implements ShouldQueue
         ];
 
         $company['address'] = implode(', ', $company_address_arr);
-        $pdf = new WKPDF($this->controller->globalPdfOption());
+        $pdf = new WKPDF($this->common_controller->globalPdfOption());
 
         foreach($this->checkboxes as $id){
 
@@ -275,7 +275,7 @@ class GenerateBulkExpense implements ShouldQueue
                     $ct++;
                 }
             }
-            $expense['total_in_word'] = $this->controller->convert_digit_to_words($expense['total']);
+            $expense['total_in_word'] = $this->common_controller->convert_digit_to_words($expense['total']);
 
             $payee = Payees::where('id',$expense['payee_id'])->first();
             if(!empty($payee)){

@@ -24,12 +24,14 @@ use App\Jobs\GenerateBulkExpense;
 use Illuminate\Support\Facades\Log;
 use App\Models\Globals\Job;
 use App\Models\Globals\ExpenseType;
+use App\Http\Controllers\Globals\CommonController;
 
 class ExpenseController extends Controller
 {
+    protected $common_controller;
     public function __construct(){
-        $this->middleware(['auth','verified']);
-
+        $this->middleware(['auth','verified'], ['except' => 'download_pdf']);
+        $this->common_controller = new CommonController();
     }
 
     public function index(Request $request){
@@ -419,7 +421,7 @@ class ExpenseController extends Controller
                 }
             }
         }
-        $data['expense']['total_in_word'] = $this->convert_digit_to_words($data['expense']['total']);
+        $data['expense']['total_in_word'] = $this->common_controller->convert_digit_to_words($data['expense']['total']);
 
         $payee = Payees::where('id',$data['expense']['payee_id'])->first();
         if(!empty($payee)){
@@ -517,7 +519,7 @@ class ExpenseController extends Controller
 
         $data['name'] = 'Expense Voucher';
         $data['content'] = 'This is test pdf.';
-        $pdf = new WKPDF($this->globalPdfOption());
+        $pdf = new WKPDF($this->common_controller->globalPdfOption());
         //return $data;
         $pdf->addPage(view('globals.expense.pdf_expense',$data));
 //        return View('globals.expense.pdf_expense',$data);

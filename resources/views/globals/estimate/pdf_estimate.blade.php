@@ -269,6 +269,10 @@
                     <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">{{$estimate['total']}}/-&nbsp;&nbsp;</td>
                 </tr>
                 <tr>
+                    <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Shipping Charge</td>
+                    <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">{{$estimate['shipping_charge']==1 ? $estimate['shipping_charge_amount'].'/-' : '-' }}&nbsp;&nbsp;</td>
+                </tr>
+                <tr>
                     <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Round Off</td>
                     <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">-&nbsp;&nbsp;</td>
                 </tr>
