@@ -11,8 +11,7 @@ class UserController extends Controller
 {
     public function __construct(){
         $this->middleware(['auth','verified']);
-        $this->middleware('UserAccessRight:0');
-        $this->middleware('AdminAccessRight:1');
+        $this->middleware('AdminAccessRight');
     }
 
     public function index(Request $request){

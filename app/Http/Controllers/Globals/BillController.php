@@ -26,6 +26,7 @@ class BillController extends Controller
 {
     public function __construct(){
         $this->middleware(['auth','verified']);
+        $this->middleware('UserAccessRight');
     }
 
     public function index(Request $request) {

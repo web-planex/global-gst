@@ -14,17 +14,13 @@ class UserAccessRight
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next, $access=0)
+    public function handle($request, Closure $next)
     {
         $user = Auth::user();
         if($user->role == 'user'){
-            if($access == 1){
-                return $next($request);
-            }else{
-                return redirect('/');
-            }
+            return $next($request);
         }else{
-            return redirect()->back();
+            return redirect('admin');
         }
     }
 }

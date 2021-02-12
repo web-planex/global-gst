@@ -16,9 +16,10 @@ class SignUpMail extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($request)
     {
-        //
+        $this->company_logo = $request['company_logo'];
+        $this->customer_name = $request['customer_name'];
     }
 
     /**
@@ -28,6 +29,13 @@ class SignUpMail extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        $subject =   'Welcome to GST WebPlanex';
+        $from_email = 'noreply@webplanex.biz';
+        $from_name  = 'GST WebPlanex';
+
+        return $this->view('globals.emails.sign-up')->with([
+            'company_logo' =>  $this->company_logo,
+            'customer_name' =>  $this->customer_name,
+        ])->from($from_email, $from_name)->subject($subject);
     }
 }

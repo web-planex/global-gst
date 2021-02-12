@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Globals;
 
+use App\Http\Controllers\Globals\CommonController;
 use App\Http\Controllers\Controller;
 use App\Models\Globals\PaymentAccount;
 use App\Models\Globals\Taxes;
@@ -13,7 +14,7 @@ class PaymentAccountController extends Controller
 {
     public function __construct(){
         $this->middleware(['auth','verified']);
-
+        $this->middleware('UserAccessRight');
     }
 
     public function index(){

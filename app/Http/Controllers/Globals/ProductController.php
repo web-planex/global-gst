@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Response;
 class ProductController extends Controller
 {
     public function __construct(){
-          $this->middleware(['auth','verified']);
-
-      }
+        $this->middleware(['auth','verified']);
+        $this->middleware('UserAccessRight');
+    }
 
     public function index(Request $request){
         $data['menu'] = 'Products';

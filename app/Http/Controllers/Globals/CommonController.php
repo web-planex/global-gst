@@ -17,6 +17,10 @@ use Illuminate\Http\Request;
 
 class CommonController extends Controller
 {
+    public function CommonMiddleware(){
+        $this->middleware('UserAccessRight');
+    }
+
     public function AllTaxes($type, $type_id, $tax_id, $amount){
         $cgst = 0;
         $sgst = 0;

@@ -57,6 +57,43 @@
     </div>
 </div>
 <div class="body_wrapper">
+    <header class="header_area">
+        <nav class="navbar navbar-expand-lg menu_one menu_four">
+            <div class="container custom_container p0">
+                <a class="navbar-brand" href="{{url('/')}}"><img src="{{url('website/img/logo.png')}}"  alt="logo"></a>
+                <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="menu_toggle">
+                        <span class="hamburger">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </span>
+                        <span class="hamburger-cross">
+                            <span></span>
+                            <span></span>
+                        </span>
+                    </span>
+                </button>
+                <div class="collapse navbar-collapse top-header-section" id="navbarSupportedContent">
+                    <ul class="navbar-nav menu pl_120 mr-auto ml-auto">
+                        <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#cantacts">Contact Us</a></li>
+                        <li class="nav-item">
+                            <img src="{{url('website/img/flag.png')}}" alt="">
+                            <div class="callUp-box">
+                                <b>Call Us</b>: +91-281-2331006, +91-9724382401
+                                <p>Mon - Fri 10:00 AM - 7:30 PM</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <a href="{{url('/login')}}" class="about_btn white_btn wow fadeInLeft" data-wow-delay="0.3s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;">Login</a>
+                    <a href="{{url('/register')}}" class="about_btn sign_in_btn wow fadeInRight" data-wow-delay="0.4s" style="visibility: visible; animation-delay: 0.4s; animation-name: fadeInRight;">Register</a>
+                </div>
+            </div>
+        </nav>
+    </header>
 
 @yield('content')
 

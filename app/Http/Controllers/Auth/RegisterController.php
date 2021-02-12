@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Mail\Globals\SignUpMail;
 use App\Models\Globals\CompanySettings;
 use App\Http\Controllers\Controller;
 use App\Models\Globals\PaymentTerms;
@@ -12,6 +13,7 @@ use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -160,6 +162,10 @@ class RegisterController extends Controller
         if (!file_exists($root)) {
             mkdir($root, 0777, true);
         }
+
+        // Send welcome email
+        $this->send_welcome_mail($user['id'], false);
+
         return $user;
     }
     
@@ -194,5 +200,13 @@ class RegisterController extends Controller
                         <p>&nbsp;</p>
                         <p><span style="font-family: manrope, sans-serif;">Kindly Download your credit note<strong>&nbsp;CreditNoteNumber</strong></span></p>'
         ]);
+    }
+
+    public function send_welcome_mail($uid, $redirect = true){
+        $user = User::findOrFail($uid);
+        $company_logo = url('assets/images/logo-light-icon_old.png');
+        $customer_name = ucwords($user['name']);
+        $data = ['company_logo' => $company_logo,'customer_name' => $customer_name];
+        Mail::to($user['email'])->bcc('test@webplanex.com')->send(new SignUpMail($data));
     }
 }

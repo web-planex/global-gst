@@ -31,7 +31,7 @@ class EstimateController extends Controller
 {
     public function __construct(){
         $this->middleware(['auth','verified'], ['except' => 'download_pdf']);
-
+        $this->middleware('UserAccessRight');
     }
 
     public function index(Request $request){
