@@ -519,7 +519,6 @@ class ExpenseController extends Controller
         $pdf = new WKPDF($this->globalPdfOption());
         //return $data;
         $pdf->addPage(view('globals.expense.pdf_expense',$data));
-        //$pdf->addPage(view('globals.expense.pdf_expense',$data));
 //        return View('globals.expense.pdf_expense',$data);
         if($request->output == 'download') {
             if (!$pdf->send('expense_voucher.pdf')) {

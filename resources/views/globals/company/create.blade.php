@@ -143,7 +143,7 @@
 {{--                        </div>--}}
 
                         <div class="form-group col-md-12 mb-0">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary" id="submit">Save</button>
                         </div>
                     </div>
                     {!! Form::close() !!}

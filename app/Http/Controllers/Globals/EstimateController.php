@@ -611,6 +611,7 @@ class EstimateController extends Controller
             $input['due_date'] = Carbon::now()->format('Y-m-d');
             $input['void_date'] = null;
             $input['payment_date'] = null;
+            $input['place_of_supply'] = null;
             $input['amount_before_tax'] = $estimate['amount_before_tax'];
             $input['tax_amount'] = $estimate['tax_amount'];
             $input['discount'] = $estimate['discount'];

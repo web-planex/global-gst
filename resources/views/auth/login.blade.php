@@ -1,5 +1,6 @@
 @extends('layouts.app_admin')
 @section('content')
+
     <form class="form-horizontal form-material" id="loginform" method="post" action="{{ route('login') }}">
         {{ csrf_field() }}
         <div class="text-center">

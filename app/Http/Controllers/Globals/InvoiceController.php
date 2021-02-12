@@ -110,7 +110,7 @@ class InvoiceController extends Controller
     public function create(){
         $user = Auth::user();
         $data['menu'] = 'Invoices';
-        $payment_accounts = PaymentAccount::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
+//        $payment_accounts = PaymentAccount::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
         $data['taxes'] = Taxes::where('status', 1)->get();
         $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
         $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
@@ -132,7 +132,7 @@ class InvoiceController extends Controller
         $tax_without_cess = Taxes::where('is_cess',0)->where('status',1)->get();
         $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
         $data['payees'] = payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->pluck('name','id')->prepend('Select Customer','')->toArray();
-        $data['payment_accounts'] = $payment_accounts;
+//        $data['payment_accounts'] = $payment_accounts;
         $data['payment_method'] = PaymentMethod::where('user_id',$user->id)->pluck('method_name', 'id')->toArray();
         $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $data['first_product'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
@@ -282,7 +282,7 @@ class InvoiceController extends Controller
         }
         $data['invoice_items'] = InvoiceItems::where('invoice_id',$id)->get()->toArray();
         $data['payees'] = payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->pluck('name','id')->prepend('Select Customer','')->toArray();
-        $data['payment_accounts'] = PaymentAccount::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
+//        $data['payment_accounts'] = PaymentAccount::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
         $data['taxes'] = Taxes::where('status', 1)->get();
         $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
         $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();

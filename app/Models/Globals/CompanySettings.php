@@ -33,9 +33,9 @@ class CompanySettings extends Model
         return $this->hasMany('App\Models\Globals\Customers','company_id');
     }
 
-    public function PaymentAccount(){
-        return $this->hasMany('App\Models\Globals\PaymentAccount','company_id');
-    }
+//    public function PaymentAccount(){
+//        return $this->hasMany('App\Models\Globals\PaymentAccount','company_id');
+//    }
 
     public function Invoice(){
         return $this->hasMany('App\Models\Globals\Invoice','company_id');
@@ -54,7 +54,7 @@ class CompanySettings extends Model
             $post->Suppliers()->delete();
             $post->Employee()->delete();
             $post->Customers()->delete();
-            $post->PaymentAccount()->delete();
+//            $post->PaymentAccount()->delete();
             $post->Invoice()->delete();
             $post->InvoiceSetting()->delete();
         });

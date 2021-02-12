@@ -59,28 +59,36 @@
                             class="nav-link sidebartoggler d-none d-lg-block d-md-block waves-effect waves-dark"
                             href="javascript:void(0)"><i class="icon-menu"></i></a> </li>
                 </ul>
+
                 <div class="fullscreen-icon">
                     <svg id="svg_fullscreen" width="18" data-toggle="tooltip" data-placement="top" data-original-title="Full Screen" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="expand" class="svg-inline--fa fa-expand fa-w-14 fullscreen-icon-expand" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="#fff" d="M0 180V56c0-13.3 10.7-24 24-24h124c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H64v84c0 6.6-5.4 12-12 12H12c-6.6 0-12-5.4-12-12zM288 44v40c0 6.6 5.4 12 12 12h84v84c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12V56c0-13.3-10.7-24-24-24H300c-6.6 0-12 5.4-12 12zm148 276h-40c-6.6 0-12 5.4-12 12v84h-84c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h124c13.3 0 24-10.7 24-24V332c0-6.6-5.4-12-12-12zM160 468v-40c0-6.6-5.4-12-12-12H64v-84c0-6.6-5.4-12-12-12H12c-6.6 0-12 5.4-12 12v124c0 13.3 10.7 24 24 24h124c6.6 0 12-5.4 12-12z"></path></svg>
                     <svg id="svg_exit_fullscreen" style="display:none;" width="18" data-toggle="tooltip" data-placement="top" data-original-title="Exit Full Screen" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="compress" class="svg-inline--fa fa-compress fa-w-14 fullscreen-icon-compress" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="#fff" d="M436 192H312c-13.3 0-24-10.7-24-24V44c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v84h84c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm-276-24V44c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v84H12c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h124c13.3 0 24-10.7 24-24zm0 300V344c0-13.3-10.7-24-24-24H12c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h84v84c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-84h84c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12H312c-13.3 0-24 10.7-24 24v124c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12z"></path></svg>
                 </div>
-                <div class="dropdown u-pro mr-5">
-                    <select class="form-control amounts-are-select2" name="company" id="company_list">
-                        <option value="0">Select Company</option>
-                        @foreach(\App\Http\Controllers\Controller::AllCompanies() as $com)
-                            <option value="{{$com['id']}}" @if(\App\Http\Controllers\Controller::SetCompany() && \App\Http\Controllers\Controller::SetCompany()==$com['id']) selected @endif >{{$com['company_name']}}</option>
-                        @endforeach
-                    </select>
-                </div>
+                @if(\Illuminate\Support\Facades\Auth::user()->role == 'user')
+                    <div class="dropdown u-pro mr-5">
+                        <select class="form-control amounts-are-select2" name="company" id="company_list">
+                            <option value="0">Select Company</option>
+                            @foreach(\App\Http\Controllers\Controller::AllCompanies() as $com)
+                                <option value="{{$com['id']}}" @if(\App\Http\Controllers\Controller::SetCompany() && \App\Http\Controllers\Controller::SetCompany()==$com['id']) selected @endif >{{$com['company_name']}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
 
                 <div class="dropdown u-pro mr-3">
                     <span class="dropdown-toggle text-white" style="cursor: pointer" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{\App\Http\Controllers\Controller::AuthUser()->name}} &nbsp;<i class="fa fa-angle-down"></i>
                     </span>
                     <div class="dropdown-menu dropdown-menu-header animated flipInY" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="{{url('edit-profile/'.\App\Http\Controllers\Controller::AuthUser()->id)}}"><i class="ti-user pr-2"></i>My Profile</a>
-                        <a class="dropdown-item" href="{{url('companies')}}"><i class="fa fa-building pr-2"></i>My Companies</a>
-                        <a class="dropdown-item" href="{{url('change-password/'.\App\Http\Controllers\Controller::AuthUser()->id)}}"><i class="ti-settings pr-2"></i>Change Password</a>
-                        <a class="dropdown-item" href="{{url('logout')}}"><i class="fa fa-power-off pr-2"></i>Logout</a>
+                        @if(\Illuminate\Support\Facades\Auth::user()->role == 'user')
+                            <a class="dropdown-item" href="{{url('edit-profile/'.\App\Http\Controllers\Controller::AuthUser()->id)}}"><i class="ti-user pr-2"></i>My Profile</a>
+                            <a class="dropdown-item" href="{{url('companies')}}"><i class="fa fa-building pr-2"></i>My Companies</a>
+                            <a class="dropdown-item" href="{{url('change-password/'.\App\Http\Controllers\Controller::AuthUser()->id)}}"><i class="ti-settings pr-2"></i>Change Password</a>
+                            <a class="dropdown-item" href="{{url('logout')}}"><i class="fa fa-power-off pr-2"></i>Logout</a>
+                        @else
+                            <a class="dropdown-item" href="{{url('admin/edit-profile/'.\Illuminate\Support\Facades\Auth::user()->id)}}"><i class="ti-user pr-2"></i>My Profile</a>
+                            <a class="dropdown-item" href="{{url('admin/logout')}}"><i class="fa fa-power-off pr-2"></i>Logout</a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -90,75 +98,87 @@
         <div class="scroll-sidebar">
             <nav class="sidebar-nav">
                 <ul id="sidebarnav">
-                    <li>
-                        <a class="waves-effect waves-dark" href="{{ url('dashboard')}}"><i class="fa fa-home"></i><span class="hide-menu">Dashboard</span></a>
-                    </li>
+                    @if(\Illuminate\Support\Facades\Auth::user()->role == 'user')
+                        <li>
+                            <a class="waves-effect waves-dark" href="{{ url('dashboard')}}"><i class="fa fa-home"></i><span class="hide-menu">Dashboard</span></a>
+                        </li>
 
-                    <li>
-                        <a class="waves-effect waves-dark" href="{{ url('products')}}"><i class="fab fa-product-hunt"></i><span class="hide-menu">Products / Services</span></a>
-                    </li>
+                        <li>
+                            <a class="waves-effect waves-dark" href="{{ url('products')}}"><i class="fab fa-product-hunt"></i><span class="hide-menu">Products / Services</span></a>
+                        </li>
 
-                    <li>
-                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-bag"></i>
-                            <span class="hide-menu">Purchases</span>
-                        </a>
-                        <ul aria-expanded="false" class="collapse">
-                            <li><a href="{{route('expense')}}">Expenses</a></li>
-                            <li><a href="{{route('bills.index')}}">Bills</a></li>
-                            <li><a href="{{route('debit-notes.index')}}">Debit Notes</a></li>
-                        </ul>
-                    </li>
+                        <li>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-bag"></i>
+                                <span class="hide-menu">Purchases</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="{{route('expense')}}">Expenses</a></li>
+                                <li><a href="{{route('bills.index')}}">Bills</a></li>
+                                <li><a href="{{route('debit-notes.index')}}">Debit Notes</a></li>
+                            </ul>
+                        </li>
 
-                    <li>
-                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-shopping-cart"></i>
-                            <span class="hide-menu">Sales</span>
-                        </a>
-                        <ul aria-expanded="false" class="collapse">
-                            <li><a href="{{url('estimate')}}">Estimates</a></li>
-                            <li><a href="{{ url('sales')}}">Invoices</a></li>
-                            <li><a href="{{url('credit-note')}}">Credit Notes</a></li>
-                        </ul>
-                    </li>
+                        <li>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-shopping-cart"></i>
+                                <span class="hide-menu">Sales</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="{{url('estimate')}}">Estimates</a></li>
+                                <li><a href="{{ url('sales')}}">Invoices</a></li>
+                                <li><a href="{{url('credit-note')}}">Credit Notes</a></li>
+                            </ul>
+                        </li>
 
-                    <li>
-                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-clipboard"></i>
-                            <span class="hide-menu">Report Builders</span>
-                        </a>
-                        <ul aria-expanded="false" class="collapse">
-                            <li><a href="{{url('expense-report')}}">Expense Report</a></li>
-                            <li><a href="{{url('bill-report')}}">Bill Report</a></li>
-                            <li><a href="{{url('estimate-report')}}">Estimate Report</a></li>
-                            <li><a href="{{url('invoice-report')}}">Invoice Report</a></li>
-                            <li><a href="{{url('credit-note-report')}}">Credit Note Report</a></li>
-                        </ul>
-                    </li>
+                        <li>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-clipboard"></i>
+                                <span class="hide-menu">Report Builders</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="{{url('expense-report')}}">Expense Report</a></li>
+                                <li><a href="{{url('bill-report')}}">Bill Report</a></li>
+                                <li><a href="{{url('estimate-report')}}">Estimate Report</a></li>
+                                <li><a href="{{url('invoice-report')}}">Invoice Report</a></li>
+                                <li><a href="{{url('credit-note-report')}}">Credit Note Report</a></li>
+                            </ul>
+                        </li>
 
-                    <li>
-                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i>
-                            <span class="hide-menu">Settings</span>
-                        </a>
-                        <ul aria-expanded="false" class="collapse">
-                            <li><a href="{{url('company-setting')}}">Company Settings</a></li>
-                            <li><a href="{{url('payment-terms')}}">Payment Terms</a></li>
-                            <li><a href="{{url('payment-methods')}}">Payment Methods</a></li>
-                        </ul>
-                    </li>
+                        <li>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-settings"></i>
+                                <span class="hide-menu">Settings</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="{{url('company-setting')}}">Company Settings</a></li>
+                                <li><a href="{{url('payment-terms')}}">Payment Terms</a></li>
+                                <li><a href="{{url('payment-methods')}}">Payment Methods</a></li>
+                            </ul>
+                        </li>
 
-                    <li>
-                        <a class="waves-effect waves-dark" href="{{ url('payees')}}"><i class="fa fa-user-plus"></i>
-                            <span class="hide-menu">Payees / Vendors</span>
-                        </a>
-                    </li>
+                        <li>
+                            <a class="waves-effect waves-dark" href="{{ url('payees')}}"><i class="fa fa-user-plus"></i>
+                                <span class="hide-menu">Payees / Vendors</span>
+                            </a>
+                        </li>
 
-                    <li>
-                        <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-envelope"></i>
-                        <span class="hide-menu">Email Templates</span></a>
-                        <ul aria-expanded="false" class="collapse">
-                            @foreach(\App\Http\Controllers\Controller::AllEmailTemplates() as $template)
-                                <li><a href="{{route('show-email-template',['slug'=>$template['slug']])}}">{{$template['name']}}</a></li>
-                            @endforeach
-                        </ul>
-                    </li>
+                        <li>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-envelope"></i>
+                            <span class="hide-menu">Email Templates</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                @foreach(\App\Http\Controllers\Controller::AllEmailTemplates() as $template)
+                                    <li><a href="{{route('show-email-template',['slug'=>$template['slug']])}}">{{$template['name']}}</a></li>
+                                @endforeach
+                            </ul>
+                        </li>
+                    @else
+                        <li>
+                            <a class="waves-effect waves-dark" href="{{ url('admin')}}"><i class="fa fa-home"></i><span class="hide-menu">Dashboard</span></a>
+                        </li>
+
+                        <li>
+                            <a class="waves-effect waves-dark" href="{{ url('admin/users')}}"><i class="fa fa-users"></i>
+                                <span class="hide-menu">Users</span>
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </nav>
         </div>

@@ -147,7 +147,6 @@ function getTotalTax() {
 }
 
 function taxCalculation() {
-
     var subtotal = subTotal();
     var tax_type = $('#amounts_are').find(":selected").val();
     var tax = 0;
@@ -331,10 +330,11 @@ function taxCalculation() {
         }
     }
 
-    if($('#shipping_charge_amount').val() != '') {
-        var shipping_charge = $('#shipping_charge_amount').val();
-        if(shipping_charge != undefined) {
-            total = total + parseFloat(shipping_charge);
+    var shipping_charge_val = $('#shipping_charge_amount').inputmask('unmaskedvalue');
+    console.log(shipping_charge_val);
+    if(shipping_charge_val != '') {
+        if(shipping_charge_val != undefined) {
+            total = total + parseFloat(shipping_charge_val);
         }
     }
 

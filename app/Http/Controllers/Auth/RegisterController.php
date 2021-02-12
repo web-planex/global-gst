@@ -81,13 +81,14 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'mobile' => $data['phone_number'],
+            'role' => 'user',
         ]);
 
         //Company Entry
         $new_company = CompanySettings::create([
             'user_id' => $user['id'],
             'company_name' => $data['company_name'],
-            'company_phone' => $data['phone_number']
         ]);
 
         //Payment Terms Entry

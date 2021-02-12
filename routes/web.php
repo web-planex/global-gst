@@ -13,10 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'Auth\LoginController@showLoginForm');
+//--------------------FOR BUSINESS--------------------
 
-Route::get('/dashboard', 'HomeController@index')->name('home');
-
+Route::get('/login', 'Auth\LoginController@showLoginForm');
+Route::get('/dashboard', 'Globals\DashboardController@index');
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Auth::routes(['verify' => true]);
@@ -156,6 +156,7 @@ Route::get('estimate-report', 'Globals\ReportController@estimate_report')->name(
 Route::get('credit-note-report', 'Globals\ReportController@credit_note_report')->name('credit-note-report');
 Route::get('bill-report', 'Globals\ReportController@bill_report')->name('bill-report');
 
+
 // Debit Notes
 Route::resource('debit-notes', 'Globals\DebitNoteController');
 Route::get('debit-notes/delete/{id}', 'Globals\DebitNoteController@destroy');
@@ -163,3 +164,29 @@ Route::post('ajax/debit_note_delete_attachment', 'Globals\DebitNoteController@de
 Route::get('debit-notes/download_pdf/{id}', 'Globals\DebitNoteController@download_pdf')->name('download-debit-note-pdf');
 Route::post('generate-multiple-debit-notes', 'Globals\DebitNoteController@multiple_pdf')->name('debit-note-multiple-pdf');
 Route::get('download-debit-notes-pdf-zip', 'Globals\DebitNoteController@downloadPdfZip')->name('download-debit-note-pdf-zip');
+
+//--------------------FOR ADMIN SIDE--------------------
+Route::group(['prefix' => 'admin','admin/home', 'guard' => 'admin'], function() {
+    Route::get('locale/{locale}', function ($locale){
+        Session::put('locale', $locale);
+        return redirect()->back();
+    });
+    Route::get('login', 'Auth\LoginController@showAdminLoginForm')->name('admin-login');
+    Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+    Route::get('/','Admin\DashboardController@index');
+    Route::get('dashboard','Admin\DashboardController@index');
+
+    //Admin Profile
+    Route::get('/edit-profile/{id}', 'Admin\UserController@edit_profile');
+    Route::patch('/profile_update/{id}', 'Admin\UserController@update_profile');
+
+    //User Management
+    Route::get('/users/delete/{id}', 'Admin\UserController@destroy');
+    Route::resource('users', 'Admin\UserController');
+});
+
+//--------------------FOR FRONT SIDE--------------------
+Route::get('/', 'HomeController@index');
+Route::get('/terms-and-conditions', 'HomeController@terms_condition');
+Route::get('/privacy-policy', 'HomeController@privacy_policy');
+
