@@ -112,13 +112,13 @@ class Controller extends BaseController
         }
     }
     
-    public function globalPdfOption() {
+    public function globalPdfOption($data) {
          $global_options = [
             'binary' => 'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf',
 //            'binary' => '/usr/bin/wkhtmltopdf',
 //            'header-html' => $header_html,
 //            'footer-html' => $footer_html,
-            'minimum-font-size' => 12
+            'footer-html' => view('globals.pdf-footer',$data)
         ]; 
         return $global_options ;
     }

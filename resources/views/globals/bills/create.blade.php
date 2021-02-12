@@ -642,7 +642,8 @@
                     success: function (result) {
                         optionValue = result['id'];
                         optionText = result['terms_name'];
-                        $('.ex-payment-terms').append(`<option value="${optionValue}">${optionText}</option>`);
+                        optionDays = result['terms_days'];
+                        $('.ex-payment-terms').append(`<option data-days="${optionDays}" value="${optionValue}">${optionText}</option>`);
                         $('#PaymentTermsModal').modal('hide');
                         $('html, body').css('overflowY', 'auto');
                         $("#PaymentTermsForm")[0].reset();

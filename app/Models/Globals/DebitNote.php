@@ -29,4 +29,20 @@ class DebitNote extends Model
         'shipping_charge_amount',
         'notes',
     ];
+    
+    public function DebitNoteItems(){
+        return $this->hasMany('App\Models\Globals\DebitNoteItems','debit_note_id');
+    }
+
+    public function Payee(){
+        return $this->belongsTo('App\Models\Globals\Payees','customer_id');
+    }
+
+    protected static function boot() {
+        parent::boot();
+
+        static::deleting(function($debit_note) {
+            $debit_note->DebitNoteItems()->delete();
+        });
+    }
 }

@@ -2,7 +2,7 @@ $(document).ready(function() {
     window.onbeforeunload = function(){
         return 'Are you sure you want to leave?';
     };
-    $("#submit").click(function(){
+    $("#submit,#CustomerBtn").click(function(){
         window.onbeforeunload = null;
     });
     $('.left-sidebar, .topbar').click(function(e) {

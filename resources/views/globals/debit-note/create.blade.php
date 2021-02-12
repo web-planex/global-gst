@@ -11,9 +11,9 @@
         <div class="col-lg-12">
             <div class="box card">
                 @if(isset($debit_note) && !empty($debit_note))
-                    {!! Form::model($debit_note,['url' => url('sales/'.$debit_note->id),'method'=>'patch' ,'class' => 'form-horizontal','files'=>true,'id'=>'DebitNoteForm']) !!}
+                    {!! Form::model($debit_note,['url' => route('debit-notes.update',['debit_note'=>$debit_note->id]),'method'=>'patch' ,'class' => 'form-horizontal','files'=>true,'id'=>'DebitNoteForm']) !!}
                 @else
-                    {!! Form::open(['url' => url('sales'), 'class' => 'form-horizontal','files'=>true,'id'=>'DebitNoteForm']) !!}
+                    {!! Form::open(['url' => route('debit-notes.store'), 'class' => 'form-horizontal','files'=>true,'id'=>'DebitNoteForm']) !!}
                 @endif
                     @csrf
                     <div class="form-row">
@@ -81,8 +81,30 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
+                            <label for="invoice_date">Debit Note Date <span class="text-danger">*</span></label>
+                            {!! Form::text('debit_note_date', isset($debit_note)&&!empty($debit_note)?date('d-m-Y',strtotime($debit_note['debit_note_date'])):date('d-m-Y'), ['class' => 'form-control','id'=>'invoice_date']) !!}
+                            @error('debit_note_date')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group mb-3 col-md-6">
+                            <label for="debit_note_number">Debit Note Number <span class="text-danger">*</span></label>
+                            {!! Form::text('debit_note_number', isset($debit_note)&&!empty($debit_note)?$debit_note['debit_note_number']:null, ['class' => 'form-control','id'=>'debit_note_number']) !!}
+                            @error('debit_note_number')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group mb-3 col-md-6">
                             <label for="ref_invoice_id">Invoice# <span class="text-danger">*</span></label>
-                            {!! Form::select('ref_invoice_id', $invoice_ids, isset($debit_note)&&!empty($debit_note)?$debit_note['ref_invoice_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'ref_invoice_id', 'onchange'=>'']) !!}
+                            <select id="ref_invoice_id" name="ref_invoice_id" class="form-control" onchange="set_invoice_date()">
+                                @foreach($invoice_ids as $invoice_id)
+                                <option value="{{$invoice_id['id']}}" data-date="{{date('d-m-Y',strtotime($invoice_id['invoice_date']))}}" @if(isset($debit_note)&&$debit_note['ref_invoice_id']==$invoice_id['id']) selected="" @endif>{{$invoice_id['invoice_number']}}</option>
+                                @endforeach
+                            </select>
                             @error('ref_invoice_id')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
@@ -90,22 +112,13 @@
                             @enderror
                         </div>
                         <div class="form-group mb-3 col-md-6">
-                            <label for="ref_invoice_id">Invoice Date</label>
-                            <br /><small>09/01/2021</small>
+                            <label for="ref_invoice_date">Invoice Date</label>
+                            {!! Form::text('ref_invoice_date', null, ['class' => 'form-control','id'=>'ref_invoice_date', 'readonly'=>'']) !!}
                         </div>
                         <div class="form-group mb-3 col-md-6" id="order_div">
                             <label for="order_number">Order Number</label>
                             {!! Form::text('order_number', null, ['class' => 'form-control','id'=>'order_number']) !!}
                             @error('order_number')
-                                <span class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="invoice_date">Invoice Date <span class="text-danger">*</span></label>
-                            {!! Form::text('invoice_date', isset($debit_note)&&!empty($debit_note)?date('d-m-Y',strtotime($debit_note['invoice_date'])):date('d-m-Y'), ['class' => 'form-control','id'=>'invoice_date']) !!}
-                            @error('invoice_date')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -121,6 +134,15 @@
                             @enderror
                         </div>
                         <div class="form-group mb-3 col-md-6">
+                            <label for="payment_method">Payment Method <span class="text-danger">*</span></label>
+                            {!! Form::select('payment_method', $payment_method, isset($debit_note)&&!empty($debit_note)?$debit_note['payment_method']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method']) !!}
+                            @error('payment_method')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        {{--<div class="form-group mb-3 col-md-6">
                             <label for="status">Status <span class="text-danger">*</span></label>
                             {!! Form::select('status', \App\Models\Globals\Invoice::$invoice_status, null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
                             @error('status')
@@ -128,15 +150,18 @@
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
-                        </div>
-                        <div class="form-group mb-3 col-md-6 @if(isset($debit_note) && $debit_note['status']==2) hide @endif " id="pay_terms_div">
-                            <label for="payment_terms">Payment Terms <span class="text-danger"></span></label>
-                            <select name="payment_terms" class="form-control ex-payment-terms amounts-are-select2" id="payment_terms" style="width: 100%;">
+                        </div>--}}
+                        <div class="form-group mb-3 col-md-4">
+                            <label for="payment_terms">Payment Terms</label>
+                            <select name="payment_terms" class="form-control ex-payment-terms amounts-are-select2" id="payment_terms">
                                 <option data-days="0" value="">Due on Receipt</option>
                                 @foreach ($payment_terms as $payment_term)
-                                    <option @if(isset($debit_note)&&$debit_note['payment_terms']==$payment_term['id']) selected @endif data-days="{{$payment_term['terms_days']}}" value="{{$payment_term['id']}}">{{$payment_term['terms_name']}}</option>
+                                <option @if(isset($debit_note)&&$debit_note['payment_term_id']==$payment_term['id']) selected @endif data-days="{{$payment_term['terms_days']}}" value="{{$payment_term['id']}}">{{$payment_term['terms_name']}}</option>
                                 @endforeach
                             </select>
+                            <div class="wrapper" id="wrp_terms" style="display: none;">
+                                <a href="javascript:;" class="font-weight-300" onclick="OpenPaymentTermsModal()"><i class="fa fa-plus-circle"></i> Add New</a>
+                            </div>
                             @error('payment_terms')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
@@ -144,37 +169,6 @@
                             @enderror
                         </div>
                     </div>
-
-                    <div class="form-row">
-                        <div class="form-group mb-3 col-md-4 @if(isset($debit_note) && $debit_note['status']==1) hide @elseif(!isset($debit_note)) hide @endif " id="payment_date_div">
-                            <label for="payment_date">Payment Date <span class="text-danger"></span></label>
-                            {!! Form::text('payment_date', isset($debit_note)&&!empty($debit_note)?date('d-m-Y',strtotime($debit_note['payment_date'])):null, ['class' => 'form-control payment_date','id'=>'payment_date']) !!}
-                            @error('payment_date')
-                                <span class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="form-group mb-3 col-md-4 @if(isset($debit_note) && $debit_note['status']==1) hide @elseif(!isset($debit_note)) hide @endif" id="reference_div">
-                            <label for="reference_number">Reference Number <span class="text-danger"></span></label>
-                            {!! Form::text('reference_number', null, ['class' => 'form-control','id'=>'reference_number']) !!}
-                            @error('reference_number')
-                                <span class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="form-group mb-3 col-md-4 @if(isset($debit_note) && $debit_note['status']==1) hide @elseif(!isset($debit_note)) hide @endif" id="pay_method_div">
-                            <label for="payment_method">Payment Method <span class="text-danger">*</span></label>
-                            {!! Form::select('payment_method', $payment_method, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method','style'=>'width:100%']) !!}
-                            @error('payment_method')
-                                <span class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                    </div>
-
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
@@ -478,6 +472,9 @@
 <!--CUSTOMERS MODAL-->
 @include('globals.invoice.customer_modal')
 
+<!--Payment Terms Modal-->
+@include('globals.bills.payment_terms_modal')
+
 <!--PRODUCT MODAL-->
 @include('globals.invoice.product_model')
 
@@ -509,9 +506,12 @@
                 $('#discount').inputmask("currency");
                 $('#discount').parent('td').siblings('th').html('Discount Amount');
             }
-        setTimeout(function(){
-            $('#discount_level').trigger('change');
-        },500);
+            if($("#shipping_charge").is(':checked')){
+                $('#shipping_charge_amount').inputmask("currency");
+            }
+            setTimeout(function(){
+                $('#discount_level').trigger('change');
+            },500);
         });
     @else
         $(document).ready(function(){
@@ -534,8 +534,19 @@
         $('#ProductModal').modal('show');
         $('#'+selectID).select2('close');
     }
+    function OpenPaymentTermsModal(){
+        $('#PaymentTermsModal').modal('show');
+        $('#payment_terms').select2('close');
+    }
+    
+    function set_invoice_date() {
+        var date = $('#ref_invoice_id').find(":selected").data('date');
+        $('#ref_invoice_date').val(date);
+    }
 
     $(document).ready(function() {
+        set_invoice_date();
+        //$('#customer').trigger('change');
         Inputmask.extendDefaults({
             'removeMaskOnSubmit': true
         });
@@ -647,6 +658,39 @@
                         $('#cust_address').removeClass('hide');
                         $("#CustomersForm")[0].reset();
                         getEmail($('#customer').val());
+                    }
+                });
+            }
+        });
+        
+        $("#PaymentTermsForm").validate({
+            rules: {
+                terms_name: "required",
+                terms_days: "required"
+            },
+            messages: {
+                terms_name: "Enter a valid term name.",
+                terms_days: "Enter a valid number of days."
+            },
+            normalizer: function(value) {
+                return $.trim(value);
+            },
+            submitHandler:function(){
+                var data2 = $('#PaymentTermsForm').serialize();
+                $.ajax({
+                    url: '{{route('payment-terms-store')}}',
+                    type: 'POST',
+                    data: {'data':data2},
+                    success: function (result) {
+                        optionValue = result['id'];
+                        optionText = result['terms_name'];
+                        optionDays = result['terms_days'];
+                        $('.ex-payment-terms').append(`<option data-days="${optionDays}" value="${optionValue}">${optionText}</option>`);
+                        $('#PaymentTermsModal').modal('hide');
+                        $('html, body').css('overflowY', 'auto');
+                        $("#PaymentTermsForm")[0].reset();
+                        $('.ex-payment-terms option:last').attr("selected", "selected");
+                        $('.ex-payment-terms').trigger('change');
                     }
                 });
             }
@@ -802,6 +846,7 @@
 
     $(document).ready(function(){
         var flg = 0;
+        var flg2 = 0;
         var flg3 = 0;
         $('#customer').on("select2:open", function() {
             flg++;
@@ -817,6 +862,15 @@
             if (flg3 == 1) {
                 $this_html = jQuery('#prowrp').html();
                 $(".select2-results").prepend("<div class='select2-results__option'>" + $this_html + "</div>");
+            }
+        });
+        
+        $('#payment_terms').on("select2:open", function() {
+            flg2++;
+            if (flg2 == 1) {
+                $this_html = jQuery('#wrp_terms').html();
+                $(".select2-results").prepend("<div class='select2-results__option'>" +
+                $this_html + "</div>");
             }
         });
 

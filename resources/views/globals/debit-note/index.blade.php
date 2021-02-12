@@ -26,7 +26,7 @@
     <div class="row">
         <div class="col-12 page-min-height">
             @include('inc.message')
-            {!! Form::open(['url' => route('sales.index'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
+            {!! Form::open(['url' => route('debit-notes.index'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
                 <div class="row">
                     <div class="col-md-2">
                         <div class="form-group">
@@ -59,7 +59,7 @@
                 </div>
             {!! Form::close() !!}
 
-            {!! Form::open(['url' => url('sales/multiple_pdf'),'class' => 'form-horizontal','files'=>true,'id'=>'MultiplePdfForm']) !!}
+            {!! Form::open(['url' => route('debit-note-multiple-pdf'),'class' => 'form-horizontal','files'=>true,'id'=>'MultiplePdfForm']) !!}
             <div class="card">
                 <div class="row results-top" style="margin: 0 5px;">
                     <div class="col-md-2 action">
@@ -77,22 +77,22 @@
                                     <!-- Modal content-->
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h4 class="modal-title font-bold-500 font-16 text-primary" id="tooltipmodel">Bulk Invoice Download</h4>
+                                            <h4 class="modal-title font-bold-500 font-16 text-primary" id="tooltipmodel">Bulk Debit Note Download</h4>
                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                                         </div>
                                         <div class="modal-body">
                                             <p>
-                                                <label><input type="radio" name="download_type" value="1" checked="checked"> Download selected invoices as single PDF</label>
-                                                <label><input type="radio" name="download_type" value="2"> Download selected invoices as individual PDF</label>
+                                                <label><input type="radio" name="download_type" value="1" checked="checked"> Download selected debit notes as single PDF</label>
+                                                <label><input type="radio" name="download_type" value="2"> Download selected debit notes as individual PDF</label>
                                             </p>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-download" aria-hidden="true" style="font-size:20px;" title="Generate Invoices Zip"></i></button>
+                                            <button type="submit" class="btn btn-primary"><i class="fa fa-download" aria-hidden="true" style="font-size:20px;" title="Generate Debit Note Zip"></i></button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <a href="{{url('download-invoice-pdf-zip')}}" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" ><i class="fas fa-cloud-download-alt"></i></a>
+                            <a href="{{route('download-debit-note-pdf-zip')}}" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" ><i class="fas fa-cloud-download-alt"></i></a>
                         </div>
                     </div>
                     <div class="col-md-8">
@@ -129,9 +129,9 @@
                                             <label class="custom-control-label" for="all_checked"></label>
                                         </div>
                                     </th>
-                                    <th class="col_invoice_no">Debit Note No.</th>
+                                    <th class="col_debit_note_no">Debit Note No.</th>
                                     <th class="col_customer">Customer</th>
-                                    <th class="col_invoice_date">Debit Note Date</th>
+                                    <th class="col_debit_note_date">Debit Note Date</th>
                                     <th class="col_due_date">Due Date</th>
                                     <th class="col_total">Total</th>
                                     <th class="col_notes">Note</th>
@@ -177,18 +177,14 @@
                                         </td>
                                         <td>
                                             <div class="btn-group">
-                                                <button type="button" onclick="javascript:window.location.href='{{route('debit-notes.edit',['id'=>$list['id']])}}'" class="btn btn-secondary">Edit</button>
+                                                <button type="button" onclick="javascript:window.location.href='{{route('debit-notes.edit',['debit_note'=>$list['id']])}}'" class="btn btn-secondary">Edit</button>
                                                 <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
                                                 <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="{{route('debit-notes.edit',['id'=>$list['id']])}}">Edit</a>
+                                                    <a class="dropdown-item" href="{{route('debit-notes.edit',['debit_note'=>$list['id']])}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="delete_debit_note_records({{$list['id']}})">Delete</a>
-                                                    @if(!in_array($list['status'],[2,3]))
-                                                        <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#MakePaymentModal{{$list['id']}}">Make Payment</a>
-                                                        <a class="dropdown-item" href="javascript:void(0)" onclick="void_bills({{$list['id']}})">Void</a>
-                                                    @endif
-                                                    <a class="dropdown-item" target="_blank" href="{{route('invoice-download_pdf',['id'=>$list['id'],'output'=>'print'])}}">Print</a>
+                                                    <a class="dropdown-item" target="_blank" href="{{route('download-debit-note-pdf',['id'=>$list['id'],'output'=>'print'])}}">Print</a>
                                                     @if(!empty($list['files']) && file_exists($list['files']))
                                                         <a class="dropdown-item" href="{{url($list['files'])}}" download>Download Receipt</a>
                                                     @endif
@@ -198,48 +194,6 @@
                                         </td>
                                     </tr>
                                     @php $i++; @endphp
-                                    <!-------------------------MAKE PAYMENT MODAL------------------------->
-                                    <div id="MakePaymentModal{{$list['id']}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title font-bold-500 font-16 text-primary" id="tooltipmodel">Make Payment</h4>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="form-row">
-                                                        <div class="form-group mb-3 col-md-12">
-                                                            <label for="payment_date">Payment Date <span class="text-danger">*</span></label>
-                                                            {!! Form::text('payment_date', date('d-m-Y'), ['class' => 'form-control payment_date','id'=>'payment_date'.$list['id']]) !!}
-                                                            <span class="text-danger hide" id="pdate_msg"></span>
-                                                        </div>
-                                                        <div class="form-group mb-3 col-md-12">
-                                                            <label for="payment_method">Payment Method <span class="text-danger">*</span></label>
-                                                            {!! Form::select('payment_method', $payment_method, isset($list['payment_method'])&&!empty($list['payment_method'])?$list['payment_method']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method'.$list['id'],'style'=>'width:100%;']) !!}
-                                                            <span class="text-danger hide" id="pmethod_msg"></span>
-                                                        </div>
-                                                        <div class="form-group mb-3 col-md-12">
-                                                            <label for="invoice_number">Invoice No <span class="text-danger">*</span></label>
-                                                            {!! Form::text('invoice_number', isset($list['invoice_number'])&&!empty($list['invoice_number'])?$list['invoice_number']:null, ['class' => 'form-control','id'=>'invoice_number'.$list['id']]) !!}
-                                                            <span class="text-danger hide" id="invoiceno_msg"></span>
-                                                        </div>
-                                                        <div class="form-group mb-0 col-md-12">
-                                                            <label for="note">Note <span class="text-danger"></span></label>
-                                                            {!! Form::textarea('note', isset($list['notes'])&&!empty($list['notes'])?$list['notes']:null, ['rows'=>'3','class' => 'form-control','id'=>'note'.$list['id']]) !!}
-                                                            @if ($errors->has('note'))
-                                                                <span class="text-danger">
-                                                                    <strong>{{ $errors->first('note') }}</strong>
-                                                                </span>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary" onclick="MakePayment({{$list['id']}})">Make Payment</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 @endforeach
                             </tbody>
                             @else
@@ -353,72 +307,6 @@
                 window.location.href = '{{url('debit-notes/delete')}}/'+debit_note_id;
             }
         })
-    }
-
-    function MakePayment(inid){
-        var flag = 1;
-        var pdate = $('#payment_date'+inid).val();
-        var pmethod = $('#payment_method'+inid).val();
-        var in_no = $('#invoice_number'+inid).val();
-        var note = $('#note'+inid).val();
-
-        if(pdate == ""){
-            $('#pdate_msg').html('<strong>The payment date field is required</strong>');
-            $('#pdate_msg').removeClass('hide');
-            flag = 0;
-        }else{
-            $('#pdate_msg').addClass('hide');
-        }
-
-        if(pmethod == ""){
-            $('#pmethod_msg').html('<strong>The payment method field is required</strong>');
-            $('#pmethod_msg').removeClass('hide');
-            flag = 0;
-        }else{
-            $('#pmethod_msg').addClass('hide');
-        }
-
-        if(in_no == ""){
-            $('#invoiceno_msg').html('<strong>The invoice number field is required</strong>');
-            $('#invoiceno_msg').removeClass('hide');
-            flag = 0;
-        }else{
-            $('#billno_msg').addClass('hide');
-        }
-
-        if(flag ==0){
-            return false;
-        }else{
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: '{{url('sales/make_payment')}}/'+inid,
-                type: 'POST',
-                data: {'pdate':pdate,'pmethod':pmethod,'invoice_number':in_no,'note':note},
-                success: function (result) {
-                    $('#MakePaymentModal'+inid).modal('hide');
-                    $("#invoice_data").load(location.href + " #invoice_data");
-                    $("#payment_msg").html('Payment successfully done.');
-                    $("#payment_msg").removeClass('hide');
-                }
-            });
-        }
-    }
-
-    function void_bills(invoice_id){
-        Swal.fire({
-            title: 'Are you sure to void this invoice?',
-            text: "",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#01c0c8",
-            confirmButtonText: 'Yes, void it!'
-        }).then((result) => {
-            if (result.value) {
-            window.location.href = '{{url('sales/void')}}/'+invoice_id;
-        }
-    })
     }
 
     function ShowNotes(notes) {

@@ -422,6 +422,9 @@
                 $('#discount').inputmask("currency");
                 $('#discount').parent('td').siblings('th').html('Discount Amount');
             }
+            if($("#shipping_charge").is(':checked')){
+                $('#shipping_charge_amount').inputmask("currency");
+            }
             setTimeout(function(){
                 $('#discount_level').trigger('change');
             },500);

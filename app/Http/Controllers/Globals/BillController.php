@@ -322,6 +322,7 @@ class BillController extends Controller
 
         $data['id'] = $payment_terms['id'];
         $data['terms_name'] = $payment_terms['terms_name'];
+        $data['terms_days'] = $payment_terms['terms_days'];
         return $data;
     }
 

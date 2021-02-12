@@ -25,12 +25,12 @@ class CreateDebitNotesTable extends Migration
             $table->string('payment_method',50);
             $table->date('debit_note_date');
             $table->date('due_date');
-            $table->integer('payment_term_id');
+            $table->integer('payment_term_id')->nullable();;
             $table->string('amount_before_tax',20);
             $table->string('tax_amount',20);
             $table->integer('discount_level')->comment('0 => Transaction Level, 1 => Item Level');
-            $table->string('discount',20);
-            $table->tinyInteger('discount_type')->comment('1 => Percentage (%), 2 => Rs.');
+            $table->string('discount',20)->nullable();
+            $table->tinyInteger('discount_type')->nullable()->comment('1 => Percentage (%), 2 => Rs.');
             $table->string('total',20);
             $table->text('files')->nullable();
             $table->integer('status')->nullable();

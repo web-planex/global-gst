@@ -59,7 +59,10 @@
                             class="nav-link sidebartoggler d-none d-lg-block d-md-block waves-effect waves-dark"
                             href="javascript:void(0)"><i class="icon-menu"></i></a> </li>
                 </ul>
-
+                <div class="fullscreen-icon">
+                    <svg id="svg_fullscreen" width="18" data-toggle="tooltip" data-placement="top" data-original-title="Full Screen" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="expand" class="svg-inline--fa fa-expand fa-w-14 fullscreen-icon-expand" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="#fff" d="M0 180V56c0-13.3 10.7-24 24-24h124c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H64v84c0 6.6-5.4 12-12 12H12c-6.6 0-12-5.4-12-12zM288 44v40c0 6.6 5.4 12 12 12h84v84c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12V56c0-13.3-10.7-24-24-24H300c-6.6 0-12 5.4-12 12zm148 276h-40c-6.6 0-12 5.4-12 12v84h-84c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h124c13.3 0 24-10.7 24-24V332c0-6.6-5.4-12-12-12zM160 468v-40c0-6.6-5.4-12-12-12H64v-84c0-6.6-5.4-12-12-12H12c-6.6 0-12 5.4-12 12v124c0 13.3 10.7 24 24 24h124c6.6 0 12-5.4 12-12z"></path></svg>
+                    <svg id="svg_exit_fullscreen" style="display:none;" width="18" data-toggle="tooltip" data-placement="top" data-original-title="Exit Full Screen" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="compress" class="svg-inline--fa fa-compress fa-w-14 fullscreen-icon-compress" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="#fff" d="M436 192H312c-13.3 0-24-10.7-24-24V44c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v84h84c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm-276-24V44c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v84H12c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h124c13.3 0 24-10.7 24-24zm0 300V344c0-13.3-10.7-24-24-24H12c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h84v84c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-84h84c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12H312c-13.3 0-24 10.7-24 24v124c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12z"></path></svg>
+                </div>
                 <div class="dropdown u-pro mr-5">
                     <select class="form-control amounts-are-select2" name="company" id="company_list">
                         <option value="0">Select Company</option>
@@ -102,6 +105,7 @@
                         <ul aria-expanded="false" class="collapse">
                             <li><a href="{{route('expense')}}">Expenses</a></li>
                             <li><a href="{{route('bills.index')}}">Bills</a></li>
+                            <li><a href="{{route('debit-notes.index')}}">Debit Notes</a></li>
                         </ul>
                     </li>
 
@@ -113,7 +117,6 @@
                             <li><a href="{{url('estimate')}}">Estimates</a></li>
                             <li><a href="{{ url('sales')}}">Invoices</a></li>
                             <li><a href="{{url('credit-note')}}">Credit Notes</a></li>
-                            <li><a href="{{route('debit-notes.index')}}">Debit Notes</a></li>
                         </ul>
                     </li>
 
@@ -235,10 +238,23 @@
 <script src="{{ asset('assets/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
 <script src="{{ asset('assets/sweetalert2/sweet-alert.init.js') }}"></script>
 <script src="{{ asset('assets/select2/dist/select2.js')}}"></script>
+<script id="sbinit" src="{{ asset('supportboard/js/main.js') }}"></script>
+
 @yield('page_confirmation_script')
 @yield('tax_calculations_discount')
 @yield('custom-cookies')
 <script>
+    document.addEventListener('fullscreenchange', exitHandler);
+    document.addEventListener('webkitfullscreenchange', exitHandler);
+    document.addEventListener('mozfullscreenchange', exitHandler);
+    document.addEventListener('MSFullscreenChange', exitHandler);
+
+    function exitHandler() {
+        if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+            $('#svg_fullscreen').css('display','block');
+            $('#svg_exit_fullscreen').css('display','none');
+        }
+    }  
     $(document).ready(function() {
         @if(Session::get('company_selection'))
             $('#companySelectionModal').modal('show');
@@ -277,6 +293,33 @@
         $('.amounts-are-select4').select2();
         $('.discount-level-select2').select2({
             minimumResultsForSearch: -1
+        });
+        $('.fullscreen-icon').on('click',function() {
+            if(document.fullscreenElement||document.webkitFullscreenElement||document.mozFullScreenElement||document.msFullscreenElement) { //in fullscreen, so exit it
+                if(document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if(document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                } else if(document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if(document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+                $('#svg_fullscreen').css('display','block');
+                $('#svg_exit_fullscreen').css('display','none');
+            } else { //not fullscreen, so enter it
+                if(document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if(document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen();
+                } else if(document.documentElement.mozRequestFullScreen) {
+                    document.documentElement.mozRequestFullScreen();
+                } else if(document.documentElement.msRequestFullscreen) {
+                    document.documentElement.msRequestFullscreen();
+                }
+                $('#svg_fullscreen').css('display','none');
+                $('#svg_exit_fullscreen').css('display','block');
+            }
         });
     });
 </script>

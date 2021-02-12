@@ -144,7 +144,6 @@ Route::post('ajax/bill_delete_attachment', 'Globals\BillController@delete_attach
 Route::get('bills/download_pdf/{id}', 'Globals\BillController@download_pdf')->name('download-bill-pdf');
 Route::post('generate-multiple-bills', 'Globals\BillController@multiple_pdf')->name('bill-multiple-pdf');
 Route::get('download-bill-pdf-zip', 'Globals\BillController@downloadPdfZip')->name('download-bill-pdf-zip');
-Route::post('ajax/bill_delete_attachment', 'Globals\BillController@delete_attachment');
 
 // Email Templates Management
 Route::get('email-templates/{slug}', 'Globals\EmailTemplatesController@show')->name('show-email-template');
@@ -159,3 +158,8 @@ Route::get('bill-report', 'Globals\ReportController@bill_report')->name('bill-re
 
 // Debit Notes
 Route::resource('debit-notes', 'Globals\DebitNoteController');
+Route::get('debit-notes/delete/{id}', 'Globals\DebitNoteController@destroy');
+Route::post('ajax/debit_note_delete_attachment', 'Globals\DebitNoteController@delete_attachment')->name('debit-note-delete-attachment');
+Route::get('debit-notes/download_pdf/{id}', 'Globals\DebitNoteController@download_pdf')->name('download-debit-note-pdf');
+Route::post('generate-multiple-debit-notes', 'Globals\DebitNoteController@multiple_pdf')->name('debit-note-multiple-pdf');
+Route::get('download-debit-notes-pdf-zip', 'Globals\DebitNoteController@downloadPdfZip')->name('download-debit-note-pdf-zip');
