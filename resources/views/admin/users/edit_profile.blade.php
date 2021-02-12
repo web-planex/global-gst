@@ -38,7 +38,7 @@
 
                         <div class="form-row">
                             <div class="form-group mb-3 col-md-6">
-                                <label for="email">Password <span class="text-danger">*</span></label>
+                                <label for="email">Password <span class="text-danger"></span></label>
                                 <input class="form-control" type="password" name="password" placeholder="Password">
                                 @if ($errors->has('password'))
                                     <span class="text-danger">

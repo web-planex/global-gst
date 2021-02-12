@@ -27,7 +27,6 @@ class CreateInvoicesTable extends Migration
             $table->date('due_date');
             $table->date('void_date')->nullable();
             $table->date('payment_date')->nullable();
-            $table->string('place_of_supply',15)->nullable();
             $table->string('amount_before_tax',20);
             $table->string('tax_amount',20);
             $table->integer('discount_level')->comment('0 => Transaction Level, 1 => Item Level');
