@@ -18,7 +18,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use WKPDF;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Globals\CommonController;
 
 class GenerateBlukEstimate implements ShouldQueue
 {
@@ -29,7 +29,7 @@ class GenerateBlukEstimate implements ShouldQueue
     protected $user;
     protected $download_type;
     protected $estimate_type;
-    protected $controller;
+    protected $common_controller;
 
     public function __construct($user, $company_id, $checkboxes, $download_type, $estimate_type){
         $this->user = $user;
@@ -37,7 +37,7 @@ class GenerateBlukEstimate implements ShouldQueue
         $this->checkboxes = $checkboxes;
         $this->download_type = $download_type;
         $this->estimate_type = $estimate_type;
-        $this->controller = new Controller;
+        $this->common_controller = new CommonController();
     }
 
     public function handle(){
@@ -109,7 +109,7 @@ class GenerateBlukEstimate implements ShouldQueue
                 }
             }
 
-            $data['estimate']['total_in_word'] = $this->controller->convert_digit_to_words($data['estimate']['total']);
+            $data['estimate']['total_in_word'] = $this->common_controller->convert_digit_to_words($data['estimate']['total']);
 
             $payee = Payees::where('id',$data['estimate']['customer_id'])->first();
             if(!empty($payee)){
@@ -145,7 +145,7 @@ class GenerateBlukEstimate implements ShouldQueue
             $data['company_name'] = $company['company_name'];
             $data['name'] = 'Estimate';
             $data['content'] = 'This is estimate pdf.';
-            $pdf = new WKPDF($this->controller->globalPdfOption());
+            $pdf = new WKPDF($this->common_controller->globalPdfOption());
             //return $data;
             $pdf->addPage(view('globals.estimate.pdf_estimate',$data));
             $path = $this->user->id.'/estimate/';
@@ -204,7 +204,7 @@ class GenerateBlukEstimate implements ShouldQueue
         ];
 
         $company['address'] = implode(', ', $company_address_arr);
-        $pdf = new WKPDF($this->controller->globalPdfOption());
+        $pdf = new WKPDF($this->common_controller->globalPdfOption());
 
         foreach($this->checkboxes as $id){
             $estimate = Estimate::with('EstimateItems')->where('id',$id)->first();
@@ -221,7 +221,7 @@ class GenerateBlukEstimate implements ShouldQueue
                     $ct++;
                 }
             }
-            $estimate['total_in_word'] = $this->controller->convert_digit_to_words($estimate['total']);
+            $estimate['total_in_word'] = $this->common_controller->convert_digit_to_words($estimate['total']);
 
             $payee = Payees::where('id',$estimate['customer_id'])->first();
             if(!empty($payee)){

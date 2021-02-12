@@ -114,9 +114,9 @@
             @endif
         </tr>
         <tr>
-            <td @if($print_type==2) colspan="2" @endif align="left" width="50%" style="padding:0 5px;line-height:30px;" >&nbsp;&nbsp;<strong>{{$user['billing_first_name']}} {{$user['billing_last_name']}}</strong></td>
+            <td @if($print_type==2) colspan="2" @endif align="left" width="50%" style="padding:0 5px;line-height:30px;" >&nbsp;&nbsp;<strong>{{$user['billing_name']}}</strong></td>
             @if($print_type==1)
-                <td align="left" width="50%" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>{{$user['shipping_first_name']}} {{$user['shipping_last_name']}}</strong></td>
+                <td align="left" width="50%" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>{{$user['shipping_name']}}</strong></td>
             @endif
         </tr>
         <tr>
@@ -313,6 +313,10 @@
                     <tr>
                         <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Total Amount After Tax</td>
                         <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">{{$invoice['total']}}/-&nbsp;&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Shipping Charge</td>
+                        <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">{{$invoice['shipping_charge']==1 ? $invoice['shipping_charge_amount'].'/-' : '-' }}&nbsp;&nbsp;</td>
                     </tr>
                     <tr>
                         <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Round Off</td>

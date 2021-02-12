@@ -18,7 +18,7 @@ use App\Models\Globals\States;
 use App\Models\Globals\Taxes;
 use Illuminate\Support\Facades\Log;
 use WKPDF;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Globals\CommonController;
 
 class GenerateBulkBill implements ShouldQueue
 {
@@ -28,7 +28,7 @@ class GenerateBulkBill implements ShouldQueue
     protected $company_id;
     protected $user;
     protected $download_type;
-    protected $controller;
+    protected $common_controller;
 
     /**
      * Create a new job instance.
@@ -41,7 +41,7 @@ class GenerateBulkBill implements ShouldQueue
         $this->company_id = $company_id;
         $this->checkboxes = $checkboxes;
         $this->download_type = $download_type;
-        $this->controller = new Controller;
+        $this->common_controller = new CommonController();
     }
 
     /**
@@ -98,7 +98,7 @@ class GenerateBulkBill implements ShouldQueue
                     }
                 }
             }
-            $data['bill']['total_in_word'] = $this->controller->convert_digit_to_words($data['bill']['total']);
+            $data['bill']['total_in_word'] = $this->common_controller->convert_digit_to_words($data['bill']['total']);
 
             $payee = Payees::where('id',$data['bill']['payee_id'])->first();
 
@@ -160,7 +160,7 @@ class GenerateBulkBill implements ShouldQueue
 
             $data['name'] = 'Bill';
             $data['content'] = 'This is test pdf.';
-            $pdf = new WKPDF($this->controller->globalPdfOption());
+            $pdf = new WKPDF($this->common_controller->globalPdfOption());
             //return $data;
             $pdf->addPage(view('globals.bills.pdf_bill',$data));
             $path = $this->user->id.'/bill/';
@@ -218,7 +218,7 @@ class GenerateBulkBill implements ShouldQueue
         ];
 
         $company['address'] = implode(', ', $company_address_arr);
-        $pdf = new WKPDF($this->controller->globalPdfOption());
+        $pdf = new WKPDF($this->common_controller->globalPdfOption());
 
         foreach($this->checkboxes as $id){
 
@@ -237,7 +237,7 @@ class GenerateBulkBill implements ShouldQueue
                     $ct++;
                 }
             }
-            $bill['total_in_word'] = $this->controller->convert_digit_to_words($bill['total']);
+            $bill['total_in_word'] = $this->common_controller->convert_digit_to_words($bill['total']);
 
             $payee = Payees::where('id',$bill['payee_id'])->first();
             if(!empty($payee)){

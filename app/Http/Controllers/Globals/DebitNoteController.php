@@ -23,12 +23,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\Globals\CommonController;
 
 class DebitNoteController extends Controller
 {
+    protected $common_controller;
     public function __construct(){
         $this->middleware(['auth','verified'], ['except' => 'download_pdf']);
         $this->middleware('UserAccessRight');
+        $this->common_controller = new CommonController();
     }
 
     public function index(Request $request){
@@ -387,7 +390,7 @@ class DebitNoteController extends Controller
             }
         }
 
-        $data['debit_note']['total_in_word'] = $this->convert_digit_to_words($data['debit_note']['total']);
+        $data['debit_note']['total_in_word'] = $this->common_controller->convert_digit_to_words($data['debit_note']['total']);
 
         $payee = Payees::where('id',$data['debit_note']['customer_id'])->first();
         $data['user'] = Customers::where('id',$payee['type_id'])->first();
@@ -438,19 +441,20 @@ class DebitNoteController extends Controller
         $data['company_name'] = $company['company_name'];
         $data['debit_note']['status_image'] = '';
 
-        if($data['debit_note']['status'] == 1) {
+        /*if($data['debit_note']['status'] == 1) {
             $data['debit_note']['status_image'] = asset('images/pending_img.png');
         }elseif($data['debit_note']['status'] == 2) {
             $data['debit_note']['status_image'] = asset('images/paid_imag.png');
         }elseif($data['debit_note']['status'] == 3) {
             $data['debit_note']['status_image'] = asset('images/voided_imag.png');
-        }
+        }*/
+        $data['invoice'] = Invoice::select('invoice_number')->where('id',$data['debit_note']['Invoice']['id'])->first();
 
         $data['name'] = 'Debit Note';
-        $pdf = new WKPDF($this->globalPdfOption());
+        $pdf = new WKPDF($this->common_controller->globalPdfOption());
         //return $data;
-        //$pdf->addPage(view('globals.debit-note.pdf_debit_note',$data));
-        return View('globals.debit-note.pdf_debit_note',$data);
+        $pdf->addPage(view('globals.debit-note.pdf_debit_note',$data));
+//        return View('globals.debit-note.pdf_debit_note',$data);
         if($request->output == 'download') {
             if (!$pdf->send('debit_note.pdf')) {
                 $error = $pdf->getError();

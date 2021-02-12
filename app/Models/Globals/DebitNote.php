@@ -37,6 +37,10 @@ class DebitNote extends Model
     public function Payee(){
         return $this->belongsTo('App\Models\Globals\Payees','customer_id');
     }
+    
+    public function Invoice(){
+        return $this->belongsTo('App\Models\Globals\Invoice','ref_invoice_id');
+    }
 
     protected static function boot() {
         parent::boot();

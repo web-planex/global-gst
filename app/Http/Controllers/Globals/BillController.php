@@ -21,12 +21,16 @@ use App\Jobs\GenerateBulkBill;
 use WKPDF;
 use App\Models\Globals\PdfZips;
 use App\Models\Globals\Job;
+use App\Http\Controllers\Globals\CommonController;
 
 class BillController extends Controller
 {
+    protected $common_controller;
     public function __construct(){
         $this->middleware(['auth','verified']);
         $this->middleware('UserAccessRight');
+        $this->middleware(['auth','verified'], ['except' => 'download_pdf']);
+        $this->common_controller = new CommonController();
     }
 
     public function index(Request $request) {
@@ -392,7 +396,7 @@ class BillController extends Controller
             }
         }
 
-        $data['bill']['total_in_word'] = $this->convert_digit_to_words($data['bill']['total']);
+        $data['bill']['total_in_word'] = $this->common_controller->convert_digit_to_words($data['bill']['total']);
 
         $payee = Payees::where('id',$data['bill']['payee_id'])->first();
         $data['user'] = Customers::where('id',$payee['type_id'])->first();
@@ -452,7 +456,7 @@ class BillController extends Controller
         }
 
         $data['name'] = 'Bill';
-        $pdf = new WKPDF($this->globalPdfOption());
+        $pdf = new WKPDF($this->common_controller->globalPdfOption());
         //return $data;
         $pdf->addPage(view('globals.bills.pdf_bill',$data));
         // return View('globals.bills.pdf_bill',$data);
