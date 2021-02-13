@@ -189,4 +189,5 @@ Route::group(['prefix' => 'admin','admin/home', 'guard' => 'admin'], function() 
 Route::get('/', 'HomeController@index');
 Route::get('/terms-and-conditions', 'HomeController@terms_condition');
 Route::get('/privacy-policy', 'HomeController@privacy_policy');
+Route::post('/send_contact_mail', 'HomeController@send_contact_mail');
 

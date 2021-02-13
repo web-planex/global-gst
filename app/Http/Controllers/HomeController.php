@@ -2,17 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Globals\CompanySettings;
-use App\Models\Globals\Expense;
-use App\Models\Globals\Invoice;
-use App\Models\Globals\Payees;
-use App\Models\Globals\PaymentAccount;
-use App\Models\Globals\Bills;
-use App\Models\Globals\Estimate;
-use Illuminate\Contracts\Auth\Guard;
+use App\Mail\Globals\ContactMail;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -29,5 +21,29 @@ class HomeController extends Controller
     public function privacy_policy(){
         $data['menu'] = 'Privacy_Policy';
         return view('website.privacy_policy',$data);
+    }
+
+    public function send_contact_mail(Request $request){
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email',
+            'subject' => 'required',
+            'message' => 'required',
+        ]);
+
+        $company_logo = url('assets/images/logo-light-icon_old.png');
+        $customer_name = ucwords($request['name']);
+        $from_mail = $request['email'];
+        $subject = $request['subject'];
+        $message = $request['message'];
+
+        $data = [
+            'company_logo' => $company_logo,
+            'customer_name' => $customer_name,
+            'from_mail' => $from_mail,
+            'subject' => $subject,
+            'message' => $message,
+        ];
+        Mail::to('test@webplanex.com')->send(new ContactMail($data));
     }
 }
