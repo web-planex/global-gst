@@ -440,6 +440,7 @@ class DebitNoteController extends Controller
         $company = CompanySettings::select('company_name')->where('id',$this->Company())->first();
         $data['company_name'] = $company['company_name'];
         $data['debit_note']['status_image'] = '';
+        $data['payment_method'] = PaymentMethod::select('method_name')->where('id',$data['debit_note']['payment_method'])->first();
 
         /*if($data['debit_note']['status'] == 1) {
             $data['debit_note']['status_image'] = asset('images/pending_img.png');
