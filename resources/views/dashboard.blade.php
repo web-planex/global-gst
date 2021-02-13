@@ -134,6 +134,22 @@
                 </div>
             </a>
         </div>
+        
+        <div class="col-lg-3 col-md-6">
+            <a href="{{route('debit-notes.index')}}" class="text-dark">
+                <div class="card mr-1">
+                    <div class="card-body">
+                        <div class="d-flex no-block">
+                            <div class="round align-self-center round-lg round-warning"><i class="fa fa-clipboard"></i></div>
+                            <div class="m-l-10 align-self-center">
+                                <h3 class="m-b-0">{{$total_debit_notes}}</h3>
+                                <h5 class="text-muted m-b-0">Debit Notes</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
     </div>
 </div>
 @endsection

@@ -8,6 +8,7 @@ use App\Models\Globals\CompanySettings;
 use App\Models\Globals\Estimate;
 use App\Models\Globals\Expense;
 use App\Models\Globals\Invoice;
+use App\Models\Globals\DebitNote;
 use App\Models\Globals\Payees;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,6 +45,7 @@ class DashboardController extends Controller
         $data['total_credit_note'] = Invoice::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->whereIn('status',[3,4])->count();
         $data['total_payee'] = Payees::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
 //        $data['total_payment_account'] = PaymentAccount::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
+        $data['total_debit_notes'] = DebitNote::where('user_id',Auth::user()->id)->where('company_id',$data['session_company'] )->count();
         $data['total_companies'] =CompanySettings::where('user_id',Auth::user()->id)->count();
         $data['user_id'] = Auth::user()->id;
         return view('dashboard',$data);
