@@ -11,7 +11,7 @@
                         <h2 class="f_700 t_color3 mb_40 wow fadeInLeft" data-wow-delay="0.3s">GST Invoicing Solutions for Small and Medium businesses.</h2>
                         <p class="f_400 l_height28 wow fadeInLeft" data-wow-delay="0.4s">Create GST Invoices, Credit Notes, Estimates, Purchase Bills and useful Reports for GSTR-1, GSTR-2 and GSTR-3B returns.</p>
                         <div class="action_btn d-flex align-items-center mt_60">
-                            <a href="#" class="btn_hover agency_banner_btn wow fadeInLeft" data-wow-delay="0.5s">Join Now</a>
+                            <a href="{{url('/register')}}" class="btn_hover agency_banner_btn wow fadeInLeft" data-wow-delay="0.5s">Join Now</a>
                         </div>
                     </div>
                 </div>
@@ -274,7 +274,7 @@
     <!-- End Pricing -->
 
     <!-- Begin Contact Us -->
-    <section id="cantacts" class="contact_info_area sec_pad bg_color">
+    <section id="contacts" class="contact_info_area sec_pad bg_color">
         <div class="container">
             <div class="sec_title text-center mb_70">
                 <h2 class="f_p f_size_30 l_height50 f_600 t_color3">Contact Us</h2>
@@ -295,31 +295,51 @@
                 </div>
                 <div class="col-lg-8 offset-lg-1">
                     <div class="contact_form">
-                        <form action="#" class="contact_form_box" method="post" id="contactForm">
+                        {!! Form::open(['url' => url('send_contact_mail'), 'class' => 'contact_form_box','files'=>true,'id'=>'contactForm']) !!}
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group text_box">
-                                        <input type="text" name="name" placeholder="Your Name">
+                                        {!! Form::text('name', null, ['placeholder' => 'Your Name','id'=>'name']) !!}
+                                        @if ($errors->has('name'))
+                                            <span class="error">
+                                                {{ $errors->first('name') }}
+                                            </span>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group text_box">
-                                        <input type="text" name="email" placeholder="Your Email">
+                                        {!! Form::text('email', null, ['placeholder' => 'Your Email','id'=>'email']) !!}
+                                        @if ($errors->has('email'))
+                                            <span class="text-danger">
+                                                {{ $errors->first('email') }}
+                                            </span>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group text_box">
-                                        <input type="text" name="subject" placeholder="Subject">
+                                        {!! Form::text('subject', null, ['placeholder' => 'Your Subject','id'=>'subject']) !!}
+                                        @if ($errors->has('subject'))
+                                            <span class="text-danger">
+                                                {{ $errors->first('subject') }}
+                                            </span>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group text_box">
-                                        <textarea name="message" cols="30" rows="10" placeholder="Enter Your Message . . ."></textarea>
+                                        {!! Form::textarea('message', null, ['cols'=>'30','rows'=>'10', 'placeholder' => 'Enter Your Message . . .','id'=>'message']) !!}
+                                        @if ($errors->has('message'))
+                                            <span class="text-danger">
+                                                {{ $errors->first('message') }}
+                                            </span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
                             <button type="submit" class="btn_three">Send Message</button>
-                        </form>
+                        {!! Form::close() !!}
                         <div id="success">Your message succesfully sent!</div>
                         <div id="error">Opps! There is something wrong. Please try again</div>
                     </div>
@@ -386,4 +406,9 @@
             </div>
         </div>
     </section>
+
+    <script>
+
+    </script>
+
 @endsection

@@ -32,18 +32,20 @@
                 <tr>
                     <td align="center" valign="top" bgcolor="#FFFFFF">
                         <table width="94%" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                                <td width="50%" align="left">
-                                    <h1 style="margin-bottom: 20px; color: #07085B;">
-                                        Hi, {{$customer_name}}
-                                    </h1>
-                                </td>
-                            </tr>
+                            <tr><td width="50%" align="left">&nbsp;</td></tr>
                             <tr>
                                 <td align="left" style="font-family:Arial, Helvetica, sans-serif; font-size: 14px; line-height:20px;">
-                                    <h2>Thanks for checking out GST WebPlanex,</h2>
-                                    <p style="font-family: manrope, sans-serif">
-                                        We hope our products can make your morning routine a little more enjoyable.
+                                    <p style="font-family: manrope, sans-serif; font-weight: 400; font-size: 15px">
+                                        <span style="font-weight: 500; color: #000; padding-right: 15px;">Subject:</span>{{$subject}}
+                                    </p>
+                                    <p style="font-family: manrope, sans-serif; font-weight: 400; font-size: 15px">
+                                        <span style="font-weight: 500; color: #000; padding-right: 15px;">Name:</span>{{$customer_name}}
+                                    </p>
+                                    <p style="font-family: manrope, sans-serif; font-weight: 400; font-size: 15px">
+                                        <span style="font-weight: 500; color: #000; padding-right: 15px;">Email:</span>{{$email}}
+                                    </p>
+                                    <p style="font-family: manrope, sans-serif; font-weight: 400; font-size: 15px">
+                                        <span style="font-weight: 500; color: #000; padding-right: 15px;">Message:</span>{{$email_content}}
                                     </p>
                                 </td>
                             </tr>

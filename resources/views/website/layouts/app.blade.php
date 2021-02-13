@@ -17,6 +17,11 @@
     <link rel="stylesheet" href="{{ asset('website/vendors/scroll/jquery.mCustomScrollbar.min.css') }}">
     <link rel="stylesheet" href="{{ asset('website/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('website/css/responsive.css') }}">
+    <script src="{{ asset('website/js/jquery-3.2.1.min.js') }}"></script>
+    <script src="{{ asset('assets/dist/js/jquery.validate.js') }}"></script>
+    <style>
+        .err-msg{color: #dc3545!important}
+    </style>
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="104">
 <div id="preloader">
@@ -76,10 +81,18 @@
                 </button>
                 <div class="collapse navbar-collapse top-header-section" id="navbarSupportedContent">
                     <ul class="navbar-nav menu pl_120 mr-auto ml-auto">
-                        <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#cantacts">Contact Us</a></li>
+                        @if($menu=='Home')
+                            <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#contacts">Contact Us</a></li>
+                        @else
+                            <li class="nav-item"><a class="nav-link active" href="{{url('/')}}/#home">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{url('/')}}/#features">Features</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{url('/')}}/#pricing">Pricing</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{url('/')}}/#contacts">Contact Us</a></li>
+                        @endif
+
                         <li class="nav-item">
                             <img src="{{url('website/img/flag.png')}}" alt="">
                             <div class="callUp-box">
@@ -106,10 +119,17 @@
                             <a href="#" class="f-logo"><img src="{{url('website/img/logo.png')}}" srcset="{{url('website/img/logo2x.png 2x')}}" alt=""></a>
                             <div class="f_widget about-widget pl_40">
                                 <ul class="list-unstyled f_list">
-                                    <li><a href="#home">Home</a></li>
-                                    <li><a href="#features">Features</a></li>
-                                    <li><a href="#pricing">Pricing</a></li>
-                                    <li><a href="#cantacts">Contact Us</a></li>
+                                    @if($menu=='Home')
+                                        <li><a href="#home">Home</a></li>
+                                        <li><a href="#features">Features</a></li>
+                                        <li><a href="#pricing">Pricing</a></li>
+                                        <li><a href="#contacts">Contact Us</a></li>
+                                    @else
+                                        <li><a href="{{url('/')}}/#home">Home</a></li>
+                                        <li><a href="{{url('/')}}/#features">Features</a></li>
+                                        <li><a href="{{url('/')}}/#pricing">Pricing</a></li>
+                                        <li><a href="{{url('/')}}/#contacts">Contact Us</a></li>
+                                    @endif
                                 </ul>
                                 <ol class="list-unstyled f_list">
                                     <li class="mt-0"><a href="{{url('/terms-and-conditions')}}">Terms & Conditions</a></li>
@@ -131,7 +151,7 @@
 </div>
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="{{ asset('website/js/jquery-3.2.1.min.js') }}"></script>
+{{--<script src="{{ asset('website/js/jquery-3.2.1.min.js') }}"></script>--}}
 <script src="{{ asset('website/js/propper.js') }}"></script>
 <script src="{{ asset('website/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('website/vendors/bootstrap-selector/js/bootstrap-select.min.js') }}"></script>
@@ -145,5 +165,43 @@
 <script src="{{ asset('website/js/plugins.js') }}"></script>
 <script src="{{ asset('website/vendors/scroll/jquery.mCustomScrollbar.concat.min.js') }}"></script>
 <script src="{{ asset('website/js/main.js') }}"></script>
+
+@if($menu =='Home')
+    <script>
+        if ($(".navbar-nav > li > a, footer ul li a").length > 0) {
+            $(".navbar-nav > li > a, footer ul li a").on("click", function (e) {
+                e.preventDefault();
+                $("html, body").animate({scrollTop: $($(this).attr("href")).offset().top + "px"}, 1600, "swing");
+            });
+        }
+        history.pushState("", document.title, window.location.pathname);
+
+
+        //Contact Mail Form
+        $(document).ready(function() {
+            $("#contactForm").validate({
+                rules: {
+                    name: "required",
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    subject: "required",
+                    message: "required"
+                },
+                messages: {
+                    name: "The name field is required",
+                    email:{
+                        required: 'The email field is required',
+                        email: 'Please enter a valid email address'
+                    },
+                    subject: "The subject field is required",
+                    message: "The message field is required"
+                }
+            });
+        });
+
+    </script>
+@endif
 </body>
 </html>
