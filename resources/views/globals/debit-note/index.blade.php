@@ -92,7 +92,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="{{route('download-debit-note-pdf-zip')}}" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" ><i class="fas fa-cloud-download-alt"></i></a>
+                            <a href="javascript:;" id="download_multi_debit_note" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Debit Note Zip"><i class="fas fa-cloud-download-alt"></i></a>
+                            <!--<a href="{{route('download-debit-note-pdf-zip')}}" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" ><i class="fas fa-cloud-download-alt"></i></a>-->
                         </div>
                     </div>
                     <div class="col-md-8">
@@ -262,9 +263,9 @@
             $('#selected_unfulfilled_count').html($('[name="all_debit_note_check[]"]:checked').length);
         });
 
-        $('#invoice_type').change(function(){
+        $('#download_multi_debit_note').click(function(){
         if($('[name="all_debit_note_check[]"]:checked').length == 0){
-            Swal.fire("Select at least one sales");
+            Swal.fire("Select at least one debit note");
             return false;
         }
             $('#myModal').modal('show');

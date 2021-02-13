@@ -461,7 +461,7 @@
                         </div>
                     </div>
                     <button type="submit" name="submit" id="submit" class="btn btn-default btn-primary">
-                        @if(isset($debit_note)) Submit @else Save and Send @endif
+                        @if(isset($debit_note)) Submit @else Submit @endif
                     </button>
                 {!! Form::close() !!}
             </div>

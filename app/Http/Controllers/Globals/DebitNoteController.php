@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Globals\CommonController;
+use App\Jobs\GenerateBulkDebitNote;
 
 class DebitNoteController extends Controller
 {
@@ -92,8 +93,7 @@ class DebitNoteController extends Controller
             'Debit Note Date',
             'Due Date',
             'Total',
-            'Notes',
-            'Status'
+            'Notes'
         ];
         return view('globals.debit-note.index',$data);
     }
@@ -182,7 +182,7 @@ class DebitNoteController extends Controller
         $debit_note->discount_type = $request['discount_type'];
         $debit_note->notes = $request['notes'];
         if($photo = $request->file('files')){
-            $debit_note->files = $this->allFiles($photo,$user->id.'/debit-note/debit_note_attachment');
+            $debit_note->files = $this->allFiles($photo,$user->id.'/debit_note/debit_note_attachment');
         }
         if($request->has('submit')) {
             $debit_note->save();
@@ -473,9 +473,9 @@ class DebitNoteController extends Controller
         $company_id = $this->Company();
         $checkboxes = $request['all_debit_note_check'];
         $download_type = $request['download_type'];
-        $job = (new GenerateBulkBill($user,$company_id,$checkboxes,$download_type))->onQueue('multiple_debit_note_pdf');
+        $job = (new GenerateBulkDebitNote($user,$company_id,$checkboxes,$download_type))->onQueue('multiple_debit_note_pdf');
         dispatch($job);
-        return redirect('download-debit-note-pdf-zip');
+        return redirect('download-debit-notes-pdf-zip');
     }
 
     public function downloadPdfZip() {
@@ -484,7 +484,7 @@ class DebitNoteController extends Controller
         $company_id = $this->Company();
         $company = CompanySettings::where('id',$company_id)->first();
         $job_id = $company['job_id'];
-        $pdfZip = PdfZips::where('user_id',$user->id)->where('company_id',$company_id)->where('zip_type',5)->orderBy('id','DESC')->get();
+        $pdfZip = PdfZips::where('user_id',$user->id)->where('company_id',$company_id)->where('zip_type',6)->orderBy('id','DESC')->get();
         $job_details = Job::where('id',$job_id)->first();
         $job_status = '';
         if($job_details){
