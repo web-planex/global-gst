@@ -20,7 +20,8 @@ class UserController extends Controller
         $this->middleware('UserAccessRight');
     }
 
-    public function edit($id){
+    public function edit(){
+        $id = Auth::user()->id;
         $data['menu'] = 'Profile';
         $data['user'] = User::where('id',$id)->first();
         $data['company'] = CompanySettings::where('id',$this->Company())->first();

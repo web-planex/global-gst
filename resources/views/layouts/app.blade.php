@@ -81,9 +81,9 @@
                     </span>
                     <div class="dropdown-menu dropdown-menu-header animated flipInY" aria-labelledby="dropdownMenuButton">
                         @if(\Illuminate\Support\Facades\Auth::user()->role == 'user')
-                            <a class="dropdown-item" href="{{url('edit-profile/'.\App\Http\Controllers\Controller::AuthUser()->id)}}"><i class="ti-user pr-2"></i>My Profile</a>
+                            <a class="dropdown-item" href="{{route('edit-profile')}}"><i class="ti-user pr-2"></i>My Profile</a>
                             <a class="dropdown-item" href="{{url('companies')}}"><i class="fa fa-building pr-2"></i>My Companies</a>
-                            <a class="dropdown-item" href="{{url('change-password/'.\App\Http\Controllers\Controller::AuthUser()->id)}}"><i class="ti-settings pr-2"></i>Change Password</a>
+                            <a class="dropdown-item" href="{{route('change-password')}}"><i class="ti-settings pr-2"></i>Change Password</a>
                             <a class="dropdown-item" href="{{url('logout')}}"><i class="fa fa-power-off pr-2"></i>Logout</a>
                         @else
                             <a class="dropdown-item" href="{{url('admin/edit-profile/'.\Illuminate\Support\Facades\Auth::user()->id)}}"><i class="ti-user pr-2"></i>My Profile</a>

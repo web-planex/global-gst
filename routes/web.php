@@ -29,7 +29,7 @@ Route::get('auth/google/callback', 'Auth\GoogleController@handleGoogleCallback')
 Route::post('ajax/set_company', 'Globals\UserController@set_company');
 
 //User
-Route::get('/edit-profile/{id}', 'Globals\UserController@edit')->name('edit-profile');
+Route::get('edit-profile', 'Globals\UserController@edit')->name('edit-profile');
 Route::patch('/profile_update/{id}', 'Globals\UserController@update')->name('update-profile');
 Route::get('change-password', 'Globals\UserController@edit_password')->name('change-password');
 Route::patch('/update_password/{id}', 'Globals\UserController@update_password')->name('update-password');
