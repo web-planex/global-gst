@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="{{url('website/img/favicon.png')}}" type="image/x-icon">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>GST Invoices</title>
     <link rel="stylesheet" href="{{ asset('website/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('website/vendors/bootstrap-selector/css/bootstrap-select.min.css') }}">
@@ -197,10 +198,41 @@
                     },
                     subject: "The subject field is required",
                     message: "The message field is required"
+                },
+                normalizer: function(value) {
+                    return $.trim(value);
+                },
+                submitHandler:function(){
+                    var name = $('#name').val();
+                    var email = $('#email').val();
+                    var subject = $('#subject').val();
+                    var message = $('#message').val();
+
+                    SendMail(name, email, subject, message);
                 }
             });
         });
 
+        function SendMail(name, email, subject, message) {
+            $.ajax({
+                url: '{{url('send_contact_mail')}}',
+                type: 'POST',
+                data: {'name':name,'email':email,'subject':subject,'message':message,'_token': "{{ csrf_token() }}",},
+                success: function (result) {
+                    $('#name').val('');
+                    $('#email').val('');
+                    $('#subject').val('');
+                    $('#message').val('');
+                    if(result == 0){
+                        $('#success').hide();
+                        $('#error').hide().html('Opps! There is something wrong. Please try again').fadeIn('slow').delay(5000).hide(1);
+                    }else{
+                        $('#error').hide();
+                        $('#success').hide().html('Your message succesfully sent!').fadeIn('slow').delay(5000).hide(1);
+                    }
+                }
+            });
+        }
     </script>
 @endif
 </body>

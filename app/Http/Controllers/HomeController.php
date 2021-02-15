@@ -24,12 +24,12 @@ class HomeController extends Controller
     }
 
     public function send_contact_mail(Request $request){
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email',
-            'subject' => 'required',
-            'message' => 'required',
-        ]);
+//        $this->validate($request, [
+//            'name' => 'required',
+//            'email' => 'required|email',
+//            'subject' => 'required',
+//            'message' => 'required',
+//        ]);
 
         $company_logo = url('assets/images/logo-light-icon_old.png');
         $customer_name = ucwords($request['name']);
@@ -45,5 +45,11 @@ class HomeController extends Controller
             'message' => $message,
         ];
         Mail::to('test@webplanex.com')->send(new ContactMail($data));
+
+        if (Mail::failures()) {
+            return 0;
+        }else{
+            return 1;
+        }
     }
 }

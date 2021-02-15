@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Globals\CompanySettings;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -79,6 +80,7 @@ class UserController extends Controller
             unset($request['password']);
         }
         $input = $request->all();
+        $input['password'] = Hash::make($request['password']);
         $user = User::where('id',$id)->first();
         $user->update($input);
         \Session::flash('message', 'Profile has been updated successfully!');

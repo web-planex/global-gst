@@ -1,7 +1,6 @@
 @extends('website.layouts.app')
 @section('content')
     <!-- Begin Home Banner -->
-
     <section id="home" class="agency_banner_area bg_color agency_banner_area-pdng-btm">
         <img class="banner_shap" src="{{url('website/img/home4/banner_bg.png')}}" alt="">
         <div class="container custom_container">
@@ -296,6 +295,7 @@
                 <div class="col-lg-8 offset-lg-1">
                     <div class="contact_form">
                         {!! Form::open(['url' => url('send_contact_mail'), 'class' => 'contact_form_box','files'=>true,'id'=>'contactForm']) !!}
+                            {{ csrf_field() }}
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="form-group text_box">
