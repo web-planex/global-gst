@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -66,7 +67,8 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function edit_password($id){
+    public function edit_password(){
+        $id = Auth::user()->id;
         $data['menu'] = 'Password';
         $data['user'] = User::where('id',$id)->first();
         return view('user.edit_password',$data);
