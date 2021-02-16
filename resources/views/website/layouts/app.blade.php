@@ -166,6 +166,7 @@
 <script src="{{ asset('website/js/plugins.js') }}"></script>
 <script src="{{ asset('website/vendors/scroll/jquery.mCustomScrollbar.concat.min.js') }}"></script>
 <script src="{{ asset('website/js/main.js') }}"></script>
+<script id="sbinit" src="{{ asset('supportboard/js/main.js') }}"></script>
 
 @if($menu =='Home')
     <script>

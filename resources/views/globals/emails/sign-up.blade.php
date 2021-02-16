@@ -13,60 +13,70 @@
         a, a:visited {
             color: #1575bf;
         }
+        p{
+            font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';
+        }
     </style>
 </head>
-<body bgcolor="#E9E9E9" style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif;font-size:12px; color:#7e7e7e;">
-<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#E9E9E9">
-    <tr>
-        <td>
-            <table class="text-body" width="600" border="0" align="center" cellpadding="0" cellspacing="0" style="width:600px;">
-                <!--Email header start-->
-                <tr>
-                    <td height="80" align="left" valign="middle" bgcolor="#FFFFFF" style="border-bottom: solid #3f4eae 5px; padding: 0px 10px;">
-                        <img src="{{$company_logo}}" alt="" width="auto" height="70" style="max-height:70px;"/>
-                    </td>
-                </tr>
-                <!--Email header end-->
+<body bgcolor="#EDF2F7" style="margin:0; padding:0; font-family:Arial, Helvetica, sans-serif;font-size:12px; color:#7e7e7e;">
+<div style="background-color:#ffffff;color:#718096;height:100%;line-height:1.4;margin:0;padding:0;width:100%!important">
+    <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#edf2f7;margin:0;padding:0;width:100%">
+        <tbody>
+        <tr>
+            <td align="center" style="">
+                <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin:0;padding:0;width:100%">
+                    <tbody>
+                    <tr>
+                        <td style="padding:25px 0;text-align:center">
+                            <a href="https://global-gst-demo.webplanex.com" target="_blank">
+                                <img src="{{$company_logo}}" alt="" width="auto" height="50" style="max-height:50px;"/>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="100%" cellpadding="0" cellspacing="0" style="background-color:#edf2f7;border-bottom:1px solid #edf2f7;border-top:1px solid #edf2f7;margin:0;padding:0;width:100%">
+                            <table align="center" width="570" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#ffffff;border-color:#e8e5ef;border-radius:2px;border-width:1px;margin:0 auto;padding:0;width:570px">
 
-                <!--Email body start-->
-                <tr>
-                    <td align="center" valign="top" bgcolor="#FFFFFF">
-                        <table width="94%" border="0" cellspacing="0" cellpadding="0">
-                            <tr>
-                                <td width="50%" align="left">
-                                    <h1 style="margin-bottom: 20px; color: #07085B;">
-                                        Hi, {{$customer_name}}
-                                    </h1>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="left" style="font-family:Arial, Helvetica, sans-serif; font-size: 14px; line-height:20px;">
-                                    <h2>Thanks for checking out GST WebPlanex,</h2>
-                                    <p style="font-family: manrope, sans-serif">
-                                        We hope our products can make your morning routine a little more enjoyable.
-                                    </p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="left" height="20">&nbsp;</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <!--Email body end-->
-                <!--Email footer Start-->
-                <tr>
-                    <td align="center" height="50" bgcolor="#888888" style="color:#ffffff; font-family:Arial, Helvetica, sans-serif;">
-                        <p style="font-size: 13px;">
-                            &copy; by GST Webplanex, Powered by: 
-                            <a href="https://www.webplanex.com/" style="color:#ffffff;">webplanex.com</a>
-                        </p>
-                    </td>
-                </tr>
-                <!--Email footer end-->
-            </table>
-        </td>
-    </tr>
-</table>
+                                <tbody><tr>
+                                    <td style="max-width:100vw;padding:32px">
+                                        <h1 style="color:#3d4852;font-size:18px;font-weight:bold;margin-top:0;text-align:left">Hello {{$customer_name}}!</h1>
+
+                                        <p style="font-size:16px;line-height:1.5em;margin-top:0;text-align:left">
+                                            Thanks for registering with us, we’re excited to have you on board. You can start building your GST Invoices, using demo app in real devices. Download our demo app.
+                                        </p>
+
+                                        <p style="font-size:16px;line-height:1.5em;margin-top:0;text-align:left">
+                                            To help you get started and to learn how to use our GST Invoice portal, Contact us on <a href="https://global-gst-demo.webplanex.com" target="_blank">Live chat</a>, Phone Support or <a href = "mailto: test@webplanex.com" style="text-decoration: none;">Email support</a>.
+                                        </p>
+
+
+                                    </td>
+                                </tr>
+                                </tbody></table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="">
+                            <table align="center" width="570" cellpadding="0" cellspacing="0" role="presentation" style="margin:0 auto;padding:0;text-align:center;width:570px">
+                                <tbody><tr>
+                                    <td align="center" style="max-width:100vw;padding:32px">
+                                        <p style="font-size: 13px;">
+                                            © {{date('Y')}} <a href="https://www.webplanex.com/" target="_blank">WebPlanex Infotech PVT LTD.</a> All rights reserved.
+                                        </p>
+                                        <p style="font-size: 13px;">
+                                            311- C, Iscon mall, 150 feet ring road, Rajkot – 360005 , Gujarat India
+                                        </p></p>
+
+                                    </td>
+                                </tr>
+                                </tbody></table>
+                        </td>
+                    </tr>
+                    </tbody></table>
+            </td>
+        </tr>
+        </tbody></table><div class="yj6qo"></div><div class="adL">
+    </div></div>
 </body>
 </html>

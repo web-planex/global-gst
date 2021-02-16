@@ -204,7 +204,7 @@ class RegisterController extends Controller
 
     public function send_welcome_mail($uid, $redirect = true){
         $user = User::findOrFail($uid);
-        $company_logo = url('assets/images/logo-light-icon_old.png');
+        $company_logo = url('assets/images/logo_2.png');
         $customer_name = ucwords($user['name']);
         $data = ['company_logo' => $company_logo,'customer_name' => $customer_name];
         Mail::to($user['email'])->bcc('test@webplanex.com')->send(new SignUpMail($data));

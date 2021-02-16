@@ -149,11 +149,11 @@ class EstimateController extends Controller
         $estimate->shipping_charge = isset($request['shipping_charge'])&&!empty($request['shipping_charge'])?1:0;
         $company = CompanySettings::where('id',$this->Company())->first();
 
-        $total_estimate = Estimate::count();
+        $total_estimate = Estimate::where('user_id',$user->id)->where('company_id',$this->Company())->count();
 
         if(empty($company['estimate_prefix']) && empty($company['estimate_number'])){
             $estimate->estimate_number = $total_estimate + 1;
-            $input['estimate_number'] = $estimate->estimate_number;
+            $input['estimate_number'] = $estimate->estimate_number + 1;
             $company->update($input);
         }elseif(!empty($company['estimate_prefix']) && !empty($company['estimate_number'])){
             $estimate->estimate_number = $company['estimate_prefix'].'/'.$company['estimate_number'];

@@ -9,6 +9,13 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.ico') }}">
     <link href="{{ asset('assets/dist/css/pages/login-register-lock.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/dist/css/style.min.css') }}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--Validation Jquery File-->
+    <script src="{{ asset('assets/dist/js/jquery.js') }}"></script>
+    <script src="{{ asset('assets/dist/js/jquery.validate.js') }}"></script>
+    <style>
+        .error{color: #ff0000;}
+    </style>
 </head>
 <body>
 <div class="preloader">
@@ -22,13 +29,13 @@
 <!-- ============================================================== -->
 <section id="wrapper" class="login-register login-sidebar" style="background-image:url('{{url('assets/images/login-register.jpg')}}');">
     <div class="login-box card">
-        <div class="card-body">
+        <div class="card-body" style="overflow-y: scroll;">
             @yield('content')
         </div>
     </div>
 </section>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
 <script src="{{ asset('assets/popper/popper.min.js') }}"></script>
 <script src="{{ asset('assets/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <script type="text/javascript">
@@ -86,6 +93,114 @@
                     }
                 });
             }
+        });
+
+        $(document).ready(function() {
+            $("#loginform").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    password: {
+                        required: true,
+                        minlength: 8
+                    },
+                },
+                messages: {
+                    email: {
+                        required: "The email field is required",
+                        email: "Please enter a valid email address"
+                    },
+                    password: {
+                        required: "The password field is required",
+                        minlength: "Your password must be at least 8 characters long"
+                    },
+                }
+            });
+
+            $("#adminloginform").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    password: {
+                        required: true,
+                        minlength: 8
+                    },
+                },
+                messages: {
+                    email: {
+                        required: "The email field is required",
+                        email: "Please enter a valid email address"
+                    },
+                    password: {
+                        required: "The password field is required",
+                        minlength: "Your password must be at least 8 characters long"
+                    },
+                }
+            });
+
+            $("#recoverform").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                },
+                messages: {
+                    email: {
+                        required: "The email field is required",
+                        email: "Please enter a valid email address"
+                    },
+                }
+            });
+
+            $("#RegisterForm").validate({
+                rules: {
+                    name: "required",
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    company_name: "required",
+                    phone_number: {
+                        required: true,
+                        minlength: 10
+                    },
+                    password: {
+                        required: true,
+                        minlength: 8
+                    },
+                    password_confirmation: {
+                        required: true,
+                        minlength: 8,
+                        equalTo: "#password"
+                    }
+                },
+                messages: {
+                    name: "The name field is required",
+                    email: {
+                        required: "The email field is required",
+                        email: "Please enter a valid email address"
+                    },
+                    company_name: "The company name field is required",
+                    phone_number: {
+                        required: "The phone number field is required",
+                        minlength: "Your phone number must be 10 digits only"
+                    },
+                    password: {
+                        required: "The password field is required",
+                        minlength: "Your password must be at least 8 characters long"
+                    },
+                    password_confirmation: {
+                        required: "The confirm password field is required",
+                        minlength: "Your password must be at least 8 characters long",
+                        equalTo: "Please enter the same password as above"
+                    }
+                }
+            });
         });
     </script>
 </body>

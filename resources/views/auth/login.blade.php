@@ -4,7 +4,7 @@
     <form class="form-horizontal form-material" id="loginform" method="post" action="{{ route('login') }}">
         {{ csrf_field() }}
         <div class="text-center">
-            <a href="javascript:void(0)" class="db"><img src="{{url('assets/images/logo-light-icon_old.png')}}" alt="Home" /></a>
+            <a href="https://global-gst-demo.webplanex.com/" class="db"><img src="{{url('assets/images/logo_2.png')}}" alt="Home" /></a>
         </div>
         <h3 class="box-title m-t-40 m-b-0">Login Now</h3><small>Create your session and enjoy</small>
         <div class="form-group m-t-20">
@@ -69,7 +69,7 @@
         </div>
         <div class="form-group ">
             <div class="col-xs-12">
-                <input class="form-control" type="text" name="email" id="recover_email" required="" placeholder="Email">
+                <input class="form-control" type="text" name="email" id="recover_email" placeholder="Email">
                 <span class="text-danger hide" id="recover_email_msg"></span>
                 @if ($errors->has('recover_email'))
                     <span class="text-danger">
@@ -96,6 +96,4 @@
             </div>
         </div>
     </form>
-
-
 @endsection

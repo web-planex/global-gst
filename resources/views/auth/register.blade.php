@@ -1,14 +1,14 @@
 @extends('layouts.app_admin')
 @section('content')
-    <form class="form-horizontal form-material" id="loginform" action="{{ route('register') }}" method="post">
+    <form class="form-horizontal form-material" id="RegisterForm" action="{{ route('register') }}" method="post">
         {{ csrf_field() }}
         <div class="text-center">
-            <a href="javascript:void(0)" class="db"><img src="{{url('assets/images/logo-light-icon_old.png')}}" alt="Home" /></a>
+            <a href="https://global-gst-demo.webplanex.com/" class="db"><img src="{{url('assets/images/logo_2.png')}}" alt="Home" /></a>
         </div>
         <h3 class="box-title m-t-20 m-b-0">Register Now</h3><small>Create your account and enjoy</small>
         <div class="form-group m-t-20">
             <div class="col-xs-12">
-                <input class="form-control" type="text" name="name" required="" placeholder="Name">
+                <input class="form-control" type="text" name="name"  placeholder="Name">
                 @error('name')
                 <span class="text-danger" role="alert" style="color: #a94442!important;">
                     <strong>{{ $message }}</strong>
@@ -18,7 +18,7 @@
         </div>
         <div class="form-group ">
             <div class="col-xs-12">
-                <input class="form-control" type="text" name="email" required="" placeholder="Email">
+                <input class="form-control" type="text" name="email"  placeholder="Email">
                 @error('email')
                 <span class="text-danger" role="alert" style="color: #a94442!important;">
                     <strong>{{ $message }}</strong>
@@ -28,7 +28,7 @@
         </div>
         <div class="form-group ">
             <div class="col-xs-12">
-                <input class="form-control" type="text" name="company_name" required="" placeholder="Company Name">
+                <input class="form-control" type="text" name="company_name"  placeholder="Company Name">
                 @error('company_name')
                 <span class="text-danger" role="alert" style="color: #a94442!important;">
                     <strong>{{ $message }}</strong>
@@ -38,7 +38,7 @@
         </div>
         <div class="form-group ">
             <div class="col-xs-12">
-                <input class="form-control" type="number" name="phone_number" placeholder="Phone Number" required="">
+                <input class="form-control" type="number" name="phone_number" placeholder="Phone Number" >
                 @error('phone_number')
                 <span class="text-danger" role="alert" style="color: #a94442!important;">
                     <strong>{{ $message }}</strong>
@@ -48,7 +48,7 @@
         </div>
 {{--        <div class="form-group ">--}}
 {{--            <div class="col-xs-12">--}}
-{{--                <input class="form-control" type="text" name="company_email" required="" placeholder="Company Email">--}}
+{{--                <input class="form-control" type="text" name="company_email"  placeholder="Company Email">--}}
 {{--                @error('company_email')--}}
 {{--                <span class="text-danger" role="alert" style="color: #a94442!important;">--}}
 {{--                    <strong>{{ $message }}</strong>--}}
@@ -58,7 +58,7 @@
 {{--        </div>--}}
         <div class="form-group ">
             <div class="col-xs-12">
-                <input class="form-control" type="password" name="password" required="" placeholder="Password">
+                <input class="form-control" type="password" name="password" id="password"  placeholder="Password">
                 @error('password')
                 <span class="text-danger" role="alert" style="color: #a94442!important;">
                     <strong>{{ $message }}</strong>
@@ -68,7 +68,7 @@
         </div>
         <div class="form-group">
             <div class="col-xs-12">
-                <input class="form-control" type="password" name="password_confirmation" required="" placeholder="Confirm Password">
+                <input class="form-control" type="password" name="password_confirmation"  placeholder="Confirm Password">
             </div>
         </div>
         <div class="form-group text-center m-t-20">

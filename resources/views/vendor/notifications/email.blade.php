@@ -1,19 +1,24 @@
 @component('mail::message')
 {{-- Greeting --}}
+
+<?php
+$get_user_id = explode('verify/',$actionUrl);
+$get_id = explode('/',$get_user_id[1]);
+$user = \App\User::where('id',$get_id[0])->first();
+?>
 @if (! empty($greeting))
 # {{ $greeting }}
 @else
 @if ($level === 'error')
 # @lang('Whoops!')
 @else
-# @lang('Hello!')
+# @lang('Hello ') {{$user['name'].'!'}}
 @endif
 @endif
 
 {{-- Intro Lines --}}
 @foreach ($introLines as $line)
 {{ $line }}
-
 @endforeach
 
 {{-- Action Button --}}
@@ -33,30 +38,33 @@
 @endcomponent
 @endisset
 
+
+
+<span class="break-all"><strong>Or verify using link  :</strong> [{{ $displayableActionUrl }}]({{ $actionUrl }})</span>
+
 {{-- Outro Lines --}}
 @foreach ($outroLines as $line)
 {{ $line }}
-
 @endforeach
 
 {{-- Salutation --}}
-@if (! empty($salutation))
-{{ $salutation }}
-@else
-@lang('Regards'),<br>
-{{ config('app.name') }}
-@endif
+{{--@if (! empty($salutation))--}}
+{{--{{ $salutation }}--}}
+{{--@else--}}
+{{--@lang('Regards'),<br>--}}
+{{--{{ config('app.name') }}--}}
+{{--@endif--}}
 
 {{-- Subcopy --}}
-@isset($actionText)
-@slot('subcopy')
-@lang(
-    "If you’re having trouble clicking the \":actionText\" button, copy and paste the URL below\n".
-    'into your web browser:',
-    [
-        'actionText' => $actionText,
-    ]
-) <span class="break-all">[{{ $displayableActionUrl }}]({{ $actionUrl }})</span>
-@endslot
-@endisset
+{{--@isset($actionText)--}}
+{{--@slot('subcopy')--}}
+{{--@lang(--}}
+{{--    "If you’re having trouble clicking the \":actionText\" button, copy and paste the URL below\n".--}}
+{{--    'into your web browser:',--}}
+{{--    [--}}
+{{--        'actionText' => $actionText,--}}
+{{--    ]--}}
+{{--) <span class="break-all">[{{ $displayableActionUrl }}]({{ $actionUrl }})</span>--}}
+{{--@endslot--}}
+{{--@endisset--}}
 @endcomponent

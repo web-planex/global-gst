@@ -182,11 +182,11 @@ class InvoiceController extends Controller
         $invoice->discount_level = $request['discount_level'];
 
         $company = CompanySettings::where('id',$this->Company())->first();
-        $total_invoice = Invoice::count();
+        $total_invoice = Invoice::where('user_id',$user->id)->where('company_id',$this->Company())->count();
 
         if(empty($company['invoice_prefix']) && empty($company['invoice_number'])){
             $invoice->invoice_number = $total_invoice + 1;
-            $input['invoice_number'] = $invoice->invoice_number;
+            $input['invoice_number'] = $invoice->invoice_number + 1;
             $company->update($input);
         }elseif(!empty($company['invoice_prefix']) && !empty($company['invoice_number'])){
             $invoice->invoice_number = $company['invoice_prefix'].'/'.$company['invoice_number'];
@@ -206,7 +206,7 @@ class InvoiceController extends Controller
         if(in_array($request['status'],[3,4])){
             if(empty($company['credit_note_prefix']) && empty($company['credit_note_number'])){
                 $invoice->credit_note_number = $total_invoice + 1;
-                $input['credit_note_number'] = $invoice->credit_note_number;
+                $input['credit_note_number'] = $invoice->credit_note_number + 1;
                 $company->update($input);
             }elseif(!empty($company['credit_note_prefix']) && !empty($company['credit_note_number'])){
                 $invoice->credit_note_number = $company['credit_note_prefix'].'/'.$company['credit_note_number'];
@@ -351,11 +351,11 @@ class InvoiceController extends Controller
         $invoice->discount_level = $request['discount_level'];
 
         $company = CompanySettings::where('id',$this->Company())->first();
-        $total_invoice = Invoice::count();
+        $total_invoice = Invoice::where('user_id',$user->id)->where('company_id',$this->Company())->count();
         if(in_array($request['status'],[3,4]) && empty($invoice['credit_note_number'])){
             if(empty($company['credit_note_prefix']) && empty($company['credit_note_number'])){
                 $invoice->credit_note_number = $total_invoice + 1;
-                $input['credit_note_number'] = $invoice->credit_note_number;
+                $input['credit_note_number'] = $invoice->credit_note_number + 1;
                 $company->update($input);
             }elseif(!empty($company['credit_note_prefix']) && !empty($company['credit_note_number'])){
                 $invoice->credit_note_number = $company['credit_note_prefix'].'/'.$company['credit_note_number'];
