@@ -189,7 +189,7 @@
                                                     @if(!empty($list['files']) && file_exists($list['files']))
                                                         <a class="dropdown-item" href="{{url($list['files'])}}" download>Download Receipt</a>
                                                     @endif
-                                                    <a class="dropdown-item" href="{{route('send-invoice-mail', ['id' => $list['id']])}}">Send Debit Note Email</a>
+                                                    <!--<a class="dropdown-item" href="{{route('send-invoice-mail', ['id' => $list['id']])}}">Send Debit Note Email</a>-->
                                                 </div>
                                             </div>
                                         </td>
