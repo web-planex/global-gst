@@ -131,7 +131,7 @@
 
                         <li>
                             <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="ti-clipboard"></i>
-                                <span class="hide-menu">Report Builders</span>
+                                <span class="hide-menu">Reports</span>
                             </a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="{{url('expense-report')}}">Expense Report</a></li>
@@ -259,14 +259,13 @@
 <script src="{{ asset('assets/sweetalert2/sweet-alert.init.js') }}"></script>
 <script src="{{ asset('assets/select2/dist/select2.js')}}"></script>
 
-<script type="text/javascript">
-//    var gst_user_email = '{{Auth::user()->email}}';
-//    var gst_name_chat = '{{Auth::user()->name}}';
-var gst_user_email = 'test@gmail.com';
-var gst_name_chat = 'Test';
-</script>
-
-<script id="sbinit" src="{{ asset('supportboard/js/main.js') }}"></script>
+@if(\Illuminate\Support\Facades\Auth::user()->role == 'user')
+    <script type="text/javascript">
+        var gst_user_email = '{{Auth::user()->email}}';
+        var gst_name_chat = '{{Auth::user()->name}}';
+    </script>
+    <script id="sbinit" src="{{ asset('supportboard/js/main.js') }}"></script>
+@endif
 
 @yield('page_confirmation_script')
 @yield('tax_calculations_discount')

@@ -6,7 +6,7 @@
         </div>
         <div class="col-sm-6 text-right">
             <a href="{{route('payment-account-add')}}" class="float-right">
-                <button type="button" class="btn btn-info d-none d-lg-block"><i class="fa fa-plus-circle"></i> Create New</button>
+                <button type="button" class="btn btn-info  d-lg-block"><i class="fa fa-plus-circle"></i> Create New</button>
             </a>
         </div>
     </div>
