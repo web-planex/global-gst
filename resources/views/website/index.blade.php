@@ -225,13 +225,11 @@
                     <div class="s_pricing-item">
                         <img class="shape_img" src="{{url('website/img/saas/price_line1.png')}}" alt="">
                         <h5 class="f_p f_600 f_size_20 t_color mb-0 mt_40">STARTUP</h5>
-                        <div class="price f_size_40 f_p f_700">Free For 90 <sub class="f_400 f_size_16"> days.</sub></div>
+                        <div class="price f_size_40 f_p f_700">Free <br><sub class="f_400 f_size_16"> &nbsp;</sub></div>
                         <ul class="list-unstyled mt_30">
-                            <li>Product Recommendations</li>
-                            <li>Abandoned Cart</li>
-                            <li>Facebook & Instagram Ads</li>
-                            <li>Order Notifications</li>
-                            <li>Landing Pages</li>
+                            <li>100 GST Invoices Per Month</li>
+                            <li>Number Of GSTIN-1</li>
+                            <li>Email Support</li>
                         </ul>
                         <a href="#" class="price_btn btn_hover mt_30">Choose This Plan</a>
                     </div>
@@ -243,11 +241,9 @@
                         <h5 class="f_p f_600 f_size_20 t_color mb-0 mt_40">MEDIUM</h5>
                         <div class="price f_size_40 f_p f_700">Free For 90 <sub class="f_400 f_size_16"> days.</sub></div>
                         <ul class="list-unstyled mt_30">
-                            <li>Product Recommendations</li>
-                            <li>Abandoned Cart</li>
-                            <li>Facebook & Instagram Ads</li>
-                            <li>Order Notifications</li>
-                            <li>Landing Pages</li>
+                            <li>600 GST Invoices Per Month</li>
+                            <li>Number Of GSTIN-2</li>
+                            <li>Call Support</li>
                         </ul>
                         <a href="#" class="price_btn btn_hover mt_30">Choose This Plan</a>
                     </div>
@@ -258,11 +254,9 @@
                         <h5 class="f_p f_600 f_size_20 t_color mb-0 mt_40">ADVANCED</h5>
                         <div class="price f_size_40 f_p f_700">Free For 90 <sub class="f_400 f_size_16"> days.</sub></div>
                         <ul class="list-unstyled mt_30">
-                            <li>Product Recommendations</li>
-                            <li>Abandoned Cart</li>
-                            <li>Facebook & Instagram Ads</li>
-                            <li>Order Notifications</li>
-                            <li>Landing Pages</li>
+                            <li>2400 GST Invoices Per Month</li>
+                            <li>Number Of GSTIN-5</li>
+                            <li>Call Support</li>
                         </ul>
                         <a href="#" class="price_btn btn_hover mt_30">Choose This Plan</a>
                     </div>
@@ -399,8 +393,8 @@
                 <div class="col-lg-12">
                     <div class="action_content text-center">
                         <h2 class="f_600 f_size_30 l_height45 mb_40">Ready to enjoy GST Invoices and expenses?</h2>
-                        <a href="#" class="about_btn mr-2 wow fadeInLeft" data-wow-delay="0.3s">Just GST Invoices</a>
-                        <a href="#" class="about_btn wow fadeInRight" data-wow-delay="0.4s">Request a Demo</a>
+{{--                        <a href="#" class="about_btn mr-2 wow fadeInLeft" data-wow-delay="0.3s">Just GST Invoices</a>--}}
+                        <a href="{{url('/register')}}" class="about_btn wow fadeInRight" data-wow-delay="0.4s">Create your FREE account!</a>
                     </div>
                 </div>
             </div>

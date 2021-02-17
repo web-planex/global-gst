@@ -40,7 +40,7 @@ $user = \App\User::where('id',$get_id[0])->first();
 
 
 
-<span class="break-all"><strong>Or verify using link  :</strong> [{{ $displayableActionUrl }}]({{ $actionUrl }})</span>
+<span class="break-all" style="color: #1575bf;"><strong style="color: #000000;">Or verify using link  :</strong> [{{ $displayableActionUrl }}]({{ $actionUrl }})</span>
 
 {{-- Outro Lines --}}
 @foreach ($outroLines as $line)

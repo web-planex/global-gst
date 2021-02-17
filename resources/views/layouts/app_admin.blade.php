@@ -35,7 +35,6 @@
     </div>
 </section>
 
-
 <script src="{{ asset('assets/popper/popper.min.js') }}"></script>
 <script src="{{ asset('assets/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <script type="text/javascript">
@@ -167,7 +166,8 @@
                     company_name: "required",
                     phone_number: {
                         required: true,
-                        minlength: 10
+                        minlength: 10,
+                        maxlength: 10
                     },
                     password: {
                         required: true,
@@ -188,7 +188,8 @@
                     company_name: "The company name field is required",
                     phone_number: {
                         required: "The phone number field is required",
-                        minlength: "Your phone number must be 10 digits only"
+                        minlength: "Your phone number must be at least 10 digits long",
+                        maxlength: "Your phone number maximum 10 digits only"
                     },
                     password: {
                         required: "The password field is required",

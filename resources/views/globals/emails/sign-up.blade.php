@@ -66,14 +66,15 @@
                                         </p>
                                         <p style="font-size: 13px;">
                                             311- C, Iscon mall, 150 feet ring road, Rajkot – 360005 , Gujarat India
-                                        </p></p>
-
+                                        </p>
                                     </td>
                                 </tr>
-                                </tbody></table>
+                                </tbody>
+                            </table>
                         </td>
                     </tr>
-                    </tbody></table>
+                    </tbody>
+                </table>
             </td>
         </tr>
         </tbody></table><div class="yj6qo"></div><div class="adL">

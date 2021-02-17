@@ -142,7 +142,7 @@
                                 <a target="_blank" href="https://twitter.com/webplanex" class="ti-twitter-alt" title="Twitter"></a>
                                 <a target="_blank" href="https://www.linkedin.com/company/webplanex" class="ti-linkedin" title="LinkedIn"></a>
                             </div>
-                            <p>© <script>document.write(new Date().getFullYear());</script> <a href="https://www.webplanex.com/" target="_blank" title="AWARD WINNING WEB AND MOBILE APPS. DESIGN &amp; DEVELOPMENT">WebPlanex</a>, All Rights Reserved.</p>
+                            <p>© <script>document.write(new Date().getFullYear());</script> <a href="https://www.webplanex.com/" target="_blank" title="AWARD WINNING WEB AND MOBILE APPS. DESIGN &amp; DEVELOPMENT">Webplanex Infotech PVT LTD</a>, All Rights Reserved.</p>
                         </div>
                     </div>
                 </div>
