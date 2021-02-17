@@ -258,6 +258,14 @@
 <script src="{{ asset('assets/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
 <script src="{{ asset('assets/sweetalert2/sweet-alert.init.js') }}"></script>
 <script src="{{ asset('assets/select2/dist/select2.js')}}"></script>
+
+<script type="text/javascript">
+//    var gst_user_email = '{{Auth::user()->email}}';
+//    var gst_name_chat = '{{Auth::user()->name}}';
+var gst_user_email = 'test@gmail.com';
+var gst_name_chat = 'Test';
+</script>
+
 <script id="sbinit" src="{{ asset('supportboard/js/main.js') }}"></script>
 
 @yield('page_confirmation_script')
