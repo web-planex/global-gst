@@ -29,7 +29,7 @@ class SignUpMail extends Mailable
      */
     public function build()
     {
-        $subject =   'Welcome to GST WebPlanex';
+        $subject =   'Welcome to GST Invoices by WebPlanex';
         $from_email = 'noreply@webplanex.biz';
         $from_name  = 'GST WebPlanex';
 

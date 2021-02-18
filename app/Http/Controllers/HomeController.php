@@ -44,7 +44,7 @@ class HomeController extends Controller
             'subject' => $subject,
             'message' => $message,
         ];
-        Mail::to('test@webplanex.com')->send(new ContactMail($data));
+        Mail::to('info@webplanex.com')->send(new ContactMail($data));
 
         if (Mail::failures()) {
             return 0;

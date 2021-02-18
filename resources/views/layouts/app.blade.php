@@ -43,7 +43,7 @@
     <header class="topbar">
         <nav class="navbar top-navbar navbar-expand-md navbar-dark">
             <div class="navbar-header">
-                <a class="navbar-brand" href="javascript:void(0);">
+                <a class="navbar-brand" href="{{url('/dashboard')}}">
                     <b>
                         <img id="logo-icon-small" src="{{ asset('assets/images/logo-light-icon-small.png') }}" style="width:50px" alt="homepage" class="light-logo big-small-logo-hide border-0">
                         <img id="logo-icon-big" src="{{ asset('assets/images/logo-light-icon.png') }}" width="200px" alt="homepage" class="light-logo border-0" />
@@ -124,7 +124,7 @@
                             </a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="{{url('estimate')}}">Estimates</a></li>
-                                <li><a href="{{ url('sales')}}">Invoices</a></li>
+                                <li><a href="{{url('sales')}}">Invoices</a></li>
                                 <li><a href="{{url('credit-note')}}">Credit Notes</a></li>
                             </ul>
                         </li>

@@ -117,7 +117,7 @@
                 <div class="row text-center">
                     <div class="col-md-12">
                         <div class="f_widget company_widget">
-                            <a href="#" class="f-logo"><img src="{{url('website/img/logo.png')}}" srcset="{{url('website/img/logo2x.png 2x')}}" alt=""></a>
+                            <a href="{{url('/')}}" class="f-logo"><img src="{{url('website/img/logo.png')}}" srcset="{{url('website/img/logo2x.png 2x')}}" alt=""></a>
                             <div class="f_widget about-widget pl_40">
                                 <ul class="list-unstyled f_list">
                                     @if($menu=='Home')

@@ -91,6 +91,8 @@ class RegisterController extends Controller
         $new_company = CompanySettings::create([
             'user_id' => $user['id'],
             'company_name' => $data['company_name'],
+            'company_logo' => 'img/default_company.png',
+            'signature_image' => 'img/default_signature.png',
         ]);
 
         //Payment Terms Entry
@@ -207,6 +209,6 @@ class RegisterController extends Controller
         $company_logo = url('assets/images/logo_2.png');
         $customer_name = ucwords($user['name']);
         $data = ['company_logo' => $company_logo,'customer_name' => $customer_name];
-        Mail::to($user['email'])->bcc('test@webplanex.com')->send(new SignUpMail($data));
+        Mail::to($user['email'])->bcc('info@webplanex.com')->send(new SignUpMail($data));
     }
 }
