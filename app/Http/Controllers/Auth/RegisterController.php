@@ -12,6 +12,7 @@ use App\Models\Globals\PaymentMethod;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -209,6 +210,24 @@ class RegisterController extends Controller
         $company_logo = url('assets/images/logo_2.png');
         $customer_name = ucwords($user['name']);
         $data = ['company_logo' => $company_logo,'customer_name' => $customer_name];
+
+        $config = array(
+            'driver' => 'mail',
+            'host' => "smtp.mailgun.org",
+            'port' => 587,
+            'from' => ['address' => 'info@webplanex.com', 'name' => 'WebPlanex'],
+            'encryption' => 'tls',
+            'username' => null,
+            'password' => null,
+            'sendmail' => '/usr/sbin/sendmail -bs',
+            'pretend' => false,
+            'dkim_selector'=> 'mail',
+            'dkim_domain'=> 'webplanex.com',
+            'dkim_private_key'=> 'file:///home/webplanexmain/get.webplanex.com/private_key.pem',
+            'dkim_algo'=> 'rsa-sha256',
+        );
+        Config::set('mail', $config);
+
         Mail::to($user['email'])->bcc('info@webplanex.com')->send(new SignUpMail($data));
     }
 }

@@ -37,7 +37,7 @@ class CreditNoteMail extends Mailable
     public function build()
     {
         $subject =   'Copy of credit note '.$this->credit_note_number;
-        $from_email = 'noreply@webplanex.biz';
+        $from_email = 'info@webplanex.com';
         $from_name  = $this->from_email;
         $this->email_content  = str_replace( 'CustomerName', $this->customer_name, $this->email_content);
         $this->email_content  = str_replace( 'CreditNoteNumber', $this->credit_note_number, $this->email_content);

@@ -38,7 +38,7 @@ class InvoiceMail extends Mailable
     public function build()
     {
         $subject =   'Copy of invoice '.$this->invoice_number;
-        $from_email = 'noreply@webplanex.biz';
+        $from_email = 'info@webplanex.com';
         $from_name  = $this->from_email;
         $this->email_content  = str_replace( 'CustomerName', $this->customer_name, $this->email_content);
         $this->email_content  = str_replace( 'InvoiceNumber', $this->invoice_number, $this->email_content);

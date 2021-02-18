@@ -37,7 +37,7 @@ class EstimateMail extends Mailable
     public function build()
     {
         $subject =   'Copy of estimate '.$this->estimate_number;
-        $from_email = 'noreply@webplanex.biz';
+        $from_email = 'info@webplanex.com';
         $from_name  = $this->from_email;
         $this->email_content  = str_replace( 'CustomerName', $this->customer_name, $this->email_content);
         $this->email_content  = str_replace( 'EstimateNumber', $this->estimate_number, $this->email_content);

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 {{--    <meta name="csrf-token" content="{{ csrf_token() }}">--}}
     <title>Gst App</title>
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{url('website/img/favicon.png')}}" type="image/x-icon">
     <link href="{{ asset('assets/dist/css/pages/login-register-lock.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/dist/css/style.min.css') }}" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

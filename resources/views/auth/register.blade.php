@@ -3,7 +3,7 @@
     <form class="form-horizontal form-material" id="RegisterForm" action="{{ route('register') }}" method="post">
         {{ csrf_field() }}
         <div class="text-center">
-            <a href="https://global-gst-demo.webplanex.com/" class="db"><img src="{{url('assets/images/logo_2.png')}}" alt="Home" /></a>
+            <a href="{{url('/')}}" class="db"><img src="{{url('assets/images/logo_2.png')}}" alt="Home" /></a>
         </div>
         <h3 class="box-title m-t-20 m-b-0">Register Now</h3><small>Create your account and enjoy</small>
         <div class="form-group m-t-20">

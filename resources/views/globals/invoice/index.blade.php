@@ -167,8 +167,9 @@
                                         <td class="col_due_date">{{date('d F Y', strtotime($list['due_date']))}}</td>
                                         <td class="col_total">{{$list['total']}}</td>
                                         <td class="col_notes">
+                                            <input type="hidden" id="Invoice_Notes" value="{{$list['notes']}}">
                                             @if(!empty($list['notes']) && strlen($list['notes']) > 25)
-                                                <span class="text-dark" onclick="ShowNotes('{{$list['notes']}}')" style="cursor: pointer;">
+                                                <span class="text-dark" onclick="show_note()" style="cursor: pointer;">
                                                     {{ substr($list['notes'], 0 ,25) }}...
                                                 </span>
                                             @else
@@ -447,8 +448,11 @@
     })
     }
 
-    function ShowNotes(notes) {
-        Swal.fire('Note', notes);
+    function show_note() {
+        Swal.fire({
+            title: 'Note',
+            text: $('#Invoice_Notes').val()
+        });
     }
 </script>
 @endsection

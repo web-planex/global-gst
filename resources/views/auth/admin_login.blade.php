@@ -5,7 +5,7 @@
         {{ csrf_field() }}
         <input type="hidden" name="type" value="admin">
         <div class="text-center">
-            <a href="https://global-gst-demo.webplanex.com" class="db"><img src="{{url('assets/images/logo_2.png')}}" alt="Home" /></a>
+            <a href="{{url('/')}}" class="db"><img src="{{url('assets/images/logo_2.png')}}" alt="Home" /></a>
         </div>
         <h3 class="box-title m-t-40 m-b-0">Login Now</h3><small>Create your session and enjoy</small>
         <div class="form-group m-t-20">
