@@ -102,8 +102,12 @@
                             </div>
                         </li>
                     </ul>
+                    @auth
+                    <a href="{{url('/dashboard')}}" class="about_btn sign_in_btn wow fadeInLeft" data-wow-delay="0.3s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;">Dashboard</a>
+                    @else
                     <a href="{{url('/login')}}" class="about_btn white_btn wow fadeInLeft" data-wow-delay="0.3s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;">Login</a>
                     <a href="{{url('/register')}}" class="about_btn sign_in_btn wow fadeInRight" data-wow-delay="0.4s" style="visibility: visible; animation-delay: 0.4s; animation-name: fadeInRight;">Register</a>
+                    @endauth
                 </div>
             </div>
         </nav>

@@ -134,3 +134,18 @@ td.discount-line-section {
 .fullscreen-icon svg {
     cursor: pointer;
 }
+
+/** Begin 18-02-2021 **/
+.top-heading-form-box span.select2-container {
+    width: 100% !important;
+}
+.dropdownMenu-box {
+    padding:0; 
+}
+.dropdownMenu-box .dropdown-item:focus,
+.dropdownMenu-box .dropdown-item:hover {
+    border-radius:.25rem;
+}
+.dropdownMenu-box .dropdown-divider {
+    margin:0; 
+}

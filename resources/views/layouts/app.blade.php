@@ -77,7 +77,7 @@
 
                 <div class="dropdown u-pro mr-3">
                     <span class="dropdown-toggle text-white" style="cursor: pointer" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{\App\Http\Controllers\Controller::AuthUser()->name}} &nbsp;<i class="fa fa-angle-down"></i>
+                        <span class="disable-name">{{\App\Http\Controllers\Controller::AuthUser()->name}}</span> &nbsp;<i class="fa fa-angle-down"></i>
                     </span>
                     <div class="dropdown-menu dropdown-menu-header animated flipInY" aria-labelledby="dropdownMenuButton">
                         @if(\Illuminate\Support\Facades\Auth::user()->role == 'user')
