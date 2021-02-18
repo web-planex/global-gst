@@ -15,25 +15,23 @@
         <div class="col-12 page-min-height">
             @include('inc.message')
             <div class="alert alert-info hide" id="import_msg"></div>
-            {!! Form::open(['url' => url('products'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
+            {!! Form::open(['url' => url('products'),'method'=>'get', 'class' => 'form-horizontal top-heading-form-box','files'=>true,'id'=>'SearchForm']) !!}
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
                             {!! Form::text('search', isset($search)&&!empty($search)?$search:null, ['class' => 'form-control','id'=>'sf_name', 'placeholder'=>'Search']) !!}
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-9">
                         <button type="submit" class="btn btn-primary mr-2"><i class="ti-search"></i></button>
                         <a href="{{url('products')}}"><button type="button" class="btn btn-danger mr-2">Clear</button></a>
                         <a href="{{url('products/export_product')}}"><button type="button" class="btn btn-info mr-2">Export Product</button></a>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ImportProduct">Import Product</button>
-                    </div>
-                    <div class="col-md-3">
                         <div class="pull-right dropleft custom-column-display">
-                            <a href="javascript:;" class="btn" data-toggle="dropdown" title="Settings" aria-expanded="false">
+                            <a href="javascript:;" class="text-dark" data-toggle="dropdown" title="Settings" aria-expanded="false">
                                 <i class="fas fa-cog" style="font-size:20px;margin-top: 8px;"></i>
                             </a>
-                            <div class="dropdown-menu chk-column-container">
+                            <div class="dropdown-menu chk-column-container dropdownMenu-box">
                                 @if(!empty($custom_column))
                                 <div class="dropdown-item">Columns</div>
                                 <div class="dropdown-divider"></div>
@@ -49,6 +47,7 @@
                             </div>
                         </div>
                     </div>
+                    
                 </div>
             {!! Form::close() !!}
             <div class="card">

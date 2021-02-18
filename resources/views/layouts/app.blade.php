@@ -77,7 +77,7 @@
 
                 <div class="dropdown u-pro mr-3">
                     <span class="dropdown-toggle text-white" style="cursor: pointer" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{\App\Http\Controllers\Controller::AuthUser()->name}} &nbsp;<i class="fa fa-angle-down"></i>
+                        <span class="disable-name">{{\App\Http\Controllers\Controller::AuthUser()->name}}</span> &nbsp;<i class="fa fa-angle-down"></i>
                     </span>
                     <div class="dropdown-menu dropdown-menu-header animated flipInY" aria-labelledby="dropdownMenuButton">
                         @if(\Illuminate\Support\Facades\Auth::user()->role == 'user')
@@ -260,10 +260,8 @@
 <script src="{{ asset('assets/select2/dist/select2.js')}}"></script>
 
 <script type="text/javascript">
-//    var gst_user_email = '{{Auth::user()->email}}';
-//    var gst_name_chat = '{{Auth::user()->name}}';
-var gst_user_email = 'test@gmail.com';
-var gst_name_chat = 'Test';
+    var gst_user_email = '{{Auth::user()->email}}';
+    var gst_name_chat = '{{Auth::user()->name}}';
 </script>
 
 <script id="sbinit" src="{{ asset('supportboard/js/main.js') }}"></script>

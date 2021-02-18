@@ -30,7 +30,7 @@
         <div class="col-12 page-min-height">
             @include('inc.message')
             <div class="alert alert-info hide" id="payment_msg"></div>
-            {!! Form::open(['url' => route('bills.index'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
+            {!! Form::open(['url' => route('bills.index'),'method'=>'get', 'class' => 'form-horizontal top-heading-form-box','files'=>true,'id'=>'SearchForm']) !!}
                 <div class="row">
                     <div class="col-md-2">
                         <div class="form-group">
@@ -63,7 +63,7 @@
                 </div>
             {!! Form::close() !!}
 
-            {!! Form::open(['url' => route('bill-multiple-pdf'),'class' => 'form-horizontal','files'=>true,'id'=>'MultiplePdfForm']) !!}
+            {!! Form::open(['url' => route('bill-multiple-pdf'),'class' => 'form-horizontal top-heading-form-box','files'=>true,'id'=>'MultiplePdfForm']) !!}
             <div class="card">
                 <div class="row results-top" style="margin: 0 5px;">
                     <div class="col-md-2 action">

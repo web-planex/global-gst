@@ -29,39 +29,39 @@
     <div class="row">
         <div class="col-12 page-min-height">
             @include('inc.message')
-            {!! Form::open(['url' => url('expense'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
+            {!! Form::open(['url' => url('expense'),'method'=>'get', 'class' => 'form-horizontal top-heading-form-box','files'=>true,'id'=>'SearchForm']) !!}
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-sm-3 col-lg-2">
                         <div class="form-group">
                             {!! Form::text('search', isset($search)&&!empty($search)?$search:null, ['class' => 'form-control','id'=>'search', 'placeholder'=>'Search']) !!}
                         </div>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-sm-3 col-lg-2">
                         <div class="form-group">
                             {!! Form::text('start_date', $start_date, ['class' => 'form-control','id'=>'start_date', 'placeholder'=>'Start date']) !!}
                         </div>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-sm-3 col-lg-2">
                         <div class="form-group">
                             {!! Form::text('end_date', $end_date, ['class' => 'form-control','id'=>'end_date', 'placeholder'=>'End date']) !!}
                         </div>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-sm-3 col-lg-2">
                         <div class="form-group">
                             {!! Form::select('payee', $payees, isset($selected_payee)&&!empty($selected_payee)?$selected_payee:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payee']) !!}
                         </div>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-sm-3 col-lg-2">
                         <div class="form-group">
                             {!! Form::select('status', [null => 'Select Status'] + \App\Models\Globals\Expense::$expense_status, isset($status)&&!empty($status)?$status:null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
                         </div>
                     </div>
 
-                   <div class="col-md-2">
+                   <div class="col-sm-3 col-lg-2">
                        <button type="submit" class="btn btn-primary waves-effect waves-light pt-2"><i class="ti-search"></i></button>
                        <a href="{{url('expense')}}"><button type="button" class="btn sync-orders-btn waves-effect waves-light btn-success">Clear</button></a>
                     </div>
@@ -69,16 +69,13 @@
             {!! Form::close() !!}
             {!! Form::open(['url' => route('generate-multiple-expenses'),'class' => 'form-horizontal','files'=>true,'id'=>'MultiplePdfForm']) !!}
             <div class="card">
-                <div class="row results-top" style="margin: 0 5px;">
-                    <div class="col-md-2 action">
-                        <div class="action-invoice">
+                <div class="results-top" style="margin: 0 5px;">
+                        <div class="float-left">
                             <div class="action-on mt-1">
                                 <div>Action on </div>
                                 <div><span id="selected_unfulfilled_count">0</span> Selected</div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-3 btn-group">
                         <div class="col-left">
                             <div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
@@ -102,10 +99,8 @@
                             </div>
                             <a href="javascript:;" id="download_multi_expense" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Expenses Zip"><i class="fas fa-cloud-download-alt"></i></a>
                         </div>
-                    </div>
-                    <div class="col-md-7">
                         <div class="pull-right dropleft custom-column-display">
-                            <a href="javascript:;" class="btn" data-toggle="dropdown" title="Settings" aria-expanded="false">
+                            <a href="javascript:;" class="text-dark" data-toggle="dropdown" title="Settings" aria-expanded="false">
                                 <i class="fas fa-cog" style="font-size:20px;margin-top: 8px;"></i>
                             </a>
                             <div class="dropdown-menu chk-column-container">
@@ -123,7 +118,9 @@
                                 @endif
                             </div>
                         </div>
-                    </div>
+                    
+                    
+                    
                 </div>
                 <div class="gstinvoice-table-data">
                     <div class="table-responsive data-table-gst-box pb-3">

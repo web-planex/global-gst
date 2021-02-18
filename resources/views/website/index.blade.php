@@ -10,7 +10,11 @@
                         <h2 class="f_700 t_color3 mb_40 wow fadeInLeft" data-wow-delay="0.3s">GST Invoicing Solutions for Small and Medium businesses.</h2>
                         <p class="f_400 l_height28 wow fadeInLeft" data-wow-delay="0.4s">Create GST Invoices, Credit Notes, Estimates, Purchase Bills and useful Reports for GSTR-1, GSTR-2 and GSTR-3B returns.</p>
                         <div class="action_btn d-flex align-items-center mt_60">
+                            @auth
+                            <a href="{{url('/dashboard')}}" class="btn_hover agency_banner_btn wow fadeInLeft" data-wow-delay="0.5s">Dashboard</a>
+                            @else
                             <a href="{{url('/register')}}" class="btn_hover agency_banner_btn wow fadeInLeft" data-wow-delay="0.5s">Join Now</a>
+                            @endauth
                         </div>
                     </div>
                 </div>
@@ -394,7 +398,11 @@
                     <div class="action_content text-center">
                         <h2 class="f_600 f_size_30 l_height45 mb_40">Ready to enjoy GST Invoices and expenses?</h2>
 {{--                        <a href="#" class="about_btn mr-2 wow fadeInLeft" data-wow-delay="0.3s">Just GST Invoices</a>--}}
+                        @auth
+                        <a href="{{url('/dashboard')}}" class="about_btn wow fadeInRight" data-wow-delay="0.4s">Dashboard</a>
+                        @else
                         <a href="{{url('/register')}}" class="about_btn wow fadeInRight" data-wow-delay="0.4s">Create your FREE account!</a>
+                        @endauth
                     </div>
                 </div>
             </div>
