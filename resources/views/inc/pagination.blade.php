@@ -7,7 +7,7 @@ if(isset($paginator) && $paginator != NULL){
 ?>
 
 @if (isset($paginator) && $paginator->lastPage() > 1)
-    <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+    <div class="dataTables_paginate paging_simple_numbers pull-right" id="example2_paginate">
         <ul class="pagination">
             <li class="paginate_button page-item previous {{ ($paginator->currentPage() == 1) ? ' disabled' : '' }}" id="example2_previous">
                 <a href="{{ $paginator->url(1) }}" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">First</a>

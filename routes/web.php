@@ -186,7 +186,7 @@ Route::group(['prefix' => 'admin','admin/home', 'guard' => 'admin'], function() 
 });
 
 //--------------------FOR FRONT SIDE--------------------
-Route::get('/', 'HomeController@index');
+Route::get('/', 'HomeController@index')->name('home-page');
 Route::get('/terms-and-conditions', 'HomeController@terms_condition');
 Route::get('/privacy-policy', 'HomeController@privacy_policy');
 Route::post('/send_contact_mail', 'HomeController@send_contact_mail');

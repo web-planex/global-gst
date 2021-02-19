@@ -68,11 +68,14 @@
                                 </tfoot>
                             @endif
                         </table>
-                        <div class="fixed-table-pagination">
-                            <div class="float-right pagination mr-3">
-                                @include('inc.pagination', ['paginator' => $companies])
-                            </div>
-                        </div>
+                    </div>
+                </div>
+                <div class="row pb-3">
+                    <div class="col-md-6 pl-4">
+                        Showing {{$companies->firstItem()}} to {{$companies->lastItem()}} of {{$companies->total()}} entries
+                    </div>
+                    <div class="col-md-6 pr-4">
+                        @include('inc.pagination', ['paginator' => $companies])
                     </div>
                 </div>
             </div>

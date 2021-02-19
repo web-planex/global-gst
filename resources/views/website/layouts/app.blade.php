@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="{{url('website/img/favicon.png')}}" type="image/x-icon">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>GST Invoices</title>
+    <title>Webplanex: Free GST Invoice Software</title>
+    @if(Route::current()->getName() == 'home-page')
+    <meta name="description" content="GST Invoicing Software: Create and Send GST Ready invoices to your customers. Generate useful reports for GSTR returns.">
+    <meta name="keywords" content="GST Invoice Software, GST Billing Software, Software for GST, GST Invoice India, GST Accounting Software, GST Billing Software Free, GST Return, Government Compliance GST Invoice Software">
+    <meta name="classification" content="GST Invoice Software, Sales, Purchase and Bills management Software">
+    @endif
     <link rel="stylesheet" href="{{ asset('website/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('website/vendors/bootstrap-selector/css/bootstrap-select.min.css') }}">
     <link rel="stylesheet" href="{{ asset('website/vendors/themify-icon/themify-icons.css') }}">
@@ -23,6 +28,49 @@
     <style>
         .err-msg{color: #dc3545!important}
     </style>
+    @if(Route::current()->getName() == 'home-page')
+    <!-- Facebook Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '433834297851282');
+        fbq('track', 'PageView');
+    </script>
+    <noscript>
+        <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=433834297851282&ev=PageView&noscript=1" />
+    </noscript>
+    <!-- End Facebook Pixel Code -->
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M9R6B6FV83"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-M9R6B6FV83');
+    </script>
+    <!-- End Global site tag (gtag.js) - Google Analytics -->
+    
+    <!-- Google Search Rating Code -->
+    <script type=application/ld+json>
+        {"@context": "http://www.schema.org" , "@type" : "product" , "brand"
+        : "Webplanex Infotech PVT LTD." , "name" : "GST Invoice by Webplanex" , "image"
+        : "https://gst.webplanex.com/website/img/logo.png" , "url"
+        : "https://gst.webplanex.com/" , "offers" : {"@type": "Offer" , "availability"
+        : "http://schema.org/InStock" , "price" : "0.00" , "priceCurrency" : "INR" }, "aggregateRating" : { "@type"
+        : "AggregateRating" , "ratingValue" : "5.0" , "reviewCount" : "154" }, "description"
+        : " GST Invoicing Software: Create and Send GST Ready invoices to your customers. Generate useful reports for GSTR returns "
+        }
+    </script>
+    <!-- End Google Search Rating Code -->
+    @endif
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="104">
 <div id="preloader">
@@ -238,34 +286,6 @@
                 }
             });
         }
-    </script>
-
-    <!-- Facebook Pixel Code -->
-    <script>
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '433834297851282');
-        fbq('track', 'PageView');
-    </script>
-    <noscript>
-        <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=433834297851282&ev=PageView&noscript=1" />
-    </noscript>
-    <!-- End Facebook Pixel Code -->
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M9R6B6FV83"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-M9R6B6FV83');
     </script>
 @endif
 </body>

@@ -184,11 +184,14 @@
                                 </tfoot>
                             @endif
                         </table>
-                        <div class="fixed-table-pagination">
-                            <div class="float-right pagination mr-3">
-                                @include('inc.pagination', ['paginator' => $estimate])
-                            </div>
-                        </div>
+                    </div>
+                </div>
+                <div class="row pb-3">
+                    <div class="col-md-6 pl-4">
+                        Showing {{$estimate->firstItem()}} to {{$estimate->lastItem()}} of {{$estimate->total()}} entries
+                    </div>
+                    <div class="col-md-6 pr-4">
+                        @include('inc.pagination', ['paginator' => $estimate])
                     </div>
                 </div>
             </div>

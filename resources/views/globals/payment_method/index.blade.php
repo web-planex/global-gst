@@ -61,11 +61,14 @@
                                 </tfoot>
                             @endif
                         </table>
-                        <div class="fixed-table-pagination">
-                            <div class="float-right pagination mr-3">
-                                @include('inc.pagination', ['paginator' => $payment_method])
-                            </div>
-                        </div>
+                    </div>
+                </div>
+                <div class="row pb-3">
+                    <div class="col-md-6 pl-4">
+                        Showing {{$payment_method->firstItem()}} to {{$payment_method->lastItem()}} of {{$payment_method->total()}} entries
+                    </div>
+                    <div class="col-md-6 pr-4">
+                        @include('inc.pagination', ['paginator' => $payment_method])
                     </div>
                 </div>
             </div>

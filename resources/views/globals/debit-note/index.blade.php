@@ -206,11 +206,14 @@
                                 </tfoot>
                             @endif
                         </table>
-                        <div class="fixed-table-pagination">
-                            <div class="float-right pagination mr-3">
-                                @include('inc.pagination', ['paginator' => $debit_note])
-                            </div>
-                        </div>
+                    </div>
+                </div>
+                <div class="row pb-3">
+                    <div class="col-md-6 pl-4">
+                        Showing {{$debit_note->firstItem()}} to {{$debit_note->lastItem()}} of {{$debit_note->total()}} entries
+                    </div>
+                    <div class="col-md-6 pr-4">
+                        @include('inc.pagination', ['paginator' => $debit_note])
                     </div>
                 </div>
             </div>

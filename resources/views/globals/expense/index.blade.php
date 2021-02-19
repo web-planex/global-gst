@@ -118,9 +118,6 @@
                                 @endif
                             </div>
                         </div>
-                    
-                    
-                    
                 </div>
                 <div class="gstinvoice-table-data">
                     <div class="table-responsive data-table-gst-box pb-3">
@@ -206,11 +203,14 @@
                                 </tfoot>
                             @endif
                         </table>
-                        <div class="fixed-table-pagination">
-                            <div class="float-right pagination mr-3">
-                                @include('inc.pagination', ['paginator' => $expense])
-                            </div>
-                        </div>
+                    </div>
+                </div>
+                <div class="row pb-3">
+                    <div class="col-md-6 pl-4">
+                        Showing {{$expense->firstItem()}} to {{$expense->lastItem()}} of {{$expense->total()}} entries
+                    </div>
+                    <div class="col-md-6 pr-4">
+                        @include('inc.pagination', ['paginator' => $expense])
                     </div>
                 </div>
             </div>
