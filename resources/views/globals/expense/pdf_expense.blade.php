@@ -292,18 +292,18 @@
                             $tax_name = $arr[1];
                             @endphp
                             @if($tax_name == 'GST')
-                            <tr class="{{$rate.'_'.$tax_name}} hide">
-                                <td align="left" height="35" style="padding-left:10px;border-right:solid 1px #444444;border-bottom:solid 1px #444444;">{{$rate / 2}}% CGST on Rs. <span id="label_1_{{$rate.'_'.$tax_name}}">0.00</span></td>
-                                <td align="right" style="padding-right:10px;border-right:0px;border-bottom:solid 1px #444444;"><span id="input_1_{{$rate.'_'.$tax_name}}" class="tax-input-row"></span></td>
+                            <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide">
+                                <td align="left" height="35" style="padding-left:10px;border-right:solid 1px #444444;border-bottom:solid 1px #444444;">{{$rate / 2}}% CGST on Rs. <span id="label_1_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></td>
+                                <td align="right" style="padding-right:10px;border-right:0px;border-bottom:solid 1px #444444;"><span id="input_1_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="tax-input-row"></span></td>
                             </tr>
-                            <tr class="{{$rate.'_'.$tax_name}} hide">
-                                <td align="left" height="35" style="padding-left:10px;border-right:solid 1px #444444;border-bottom:solid 1px #444444;">{{$rate / 2}}% SGST on Rs. <span id="label_2_{{$rate.'_'.$tax_name}}">0.00</span></td>
-                                <td align="right" style="padding-right:10px;border-right:0px;border-bottom:solid 1px #444444;"><span id="input_2_{{$rate.'_'.$tax_name}}" class="tax-input-row"></span></td>
+                            <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide">
+                                <td align="left" height="35" style="padding-left:10px;border-right:solid 1px #444444;border-bottom:solid 1px #444444;">{{$rate / 2}}% SGST on Rs. <span id="label_2_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></td>
+                                <td align="right" style="padding-right:10px;border-right:0px;border-bottom:solid 1px #444444;"><span id="input_2_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="tax-input-row"></span></td>
                             </tr>
                             @else
-                            <tr class="{{$rate.'_'.$tax_name}} hide">
-                                <td align="left" height="35" style="padding-left:10px;border-right:solid 1px #444444;border-bottom:solid 1px #444444;">{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{$rate.'_'.$tax_name}}">0.00</span></td>
-                                <td align="right" style="padding-right:10px;border-right:0px;border-bottom:solid 1px #444444;"><span id="input_{{$rate.'_'.$tax_name}}" class="tax-input-row"></span></td>
+                            <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide">
+                                <td align="left" height="35" style="padding-left:10px;border-right:solid 1px #444444;border-bottom:solid 1px #444444;">{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></td>
+                                <td align="right" style="padding-right:10px;border-right:0px;border-bottom:solid 1px #444444;"><span id="input_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="tax-input-row"></span></td>
                             </tr>
                             @endif
                         @endforeach
@@ -425,8 +425,8 @@
             $('.tax-input').find('option').each(function() {
                 var str = $(this).filter(":selected").text();
                 var opt = $(this).text();
-                var opt_str = opt.replace("% ", "_").replace(" + ","+").replace(" ", "_").replace("%", "");
-                var tax_str = str.replace("% ", "_").replace(" + ","+").replace(" ", "_").replace("%", "");
+                var opt_str = opt.replace("% ", "_").replace(" + ","+").replace(" ", "_").replace("%", "").replace(".", "-");
+                var tax_str = str.replace("% ", "_").replace(" + ","+").replace(" ", "_").replace("%", "").replace(".", "-");
                 var is_cess = false;
                 var cess_arr = [];
                 if (tax_str.indexOf('CESS') > -1) {
@@ -512,7 +512,7 @@
 
                 var value = parseFloat(tax_total_arr[key]);
                 var tax = key.split('_')[1];
-                var tax_rate = key.substr(0, key.indexOf('_'));
+                var tax_rate = parseFloat(key.substr(0, key.indexOf('_')).replace("-", "."));
                 var tax_amount = 0;
 
                 if(tax == 'GST') {

@@ -82,7 +82,6 @@ $(document).ready(function() {
         var final_amount = amount;
 
         if(dis_type == 1 && discount_val != '' && discount_val != 0) {
-            console.log(amount +" * "+ discount_val);
             var discount_amount = (amount * discount_val)  / 100;
             final_amount = amount - discount_amount;
         } else if(dis_type == 2 && discount_val != '' && discount_val != 0) {
@@ -162,8 +161,8 @@ function taxCalculation() {
     $('.tax-input').find('option').each(function() {
         var str = $(this).filter(":selected").text();
         var opt = $(this).text();
-        var opt_str = opt.replace("% ", "_").replace(" + ","+").replace(" ", "_").replace("%", "");
-        var tax_str = str.replace("% ", "_").replace(" + ","+").replace(" ", "_").replace("%", "");
+        var opt_str = opt.replace("% ", "_").replace(" + ","+").replace(" ", "_").replace("%", "").replace(".", "-");
+        var tax_str = str.replace("% ", "_").replace(" + ","+").replace(" ", "_").replace("%", "").replace(".", "-");
         var is_cess = false;
         var cess_arr = [];
         if (tax_str.indexOf('CESS') > -1) {
@@ -248,7 +247,7 @@ function taxCalculation() {
 
         var value = parseFloat(tax_total_arr[key]);
         var tax = key.split('_')[1];
-        var tax_rate = key.substr(0, key.indexOf('_'));
+        var tax_rate = parseFloat(key.substr(0, key.indexOf('_')).replace("-", "."));
         var tax_amount = 0;
 
         if(tax == 'GST') {
@@ -331,7 +330,7 @@ function taxCalculation() {
     }
 
     var shipping_charge_val = $('#shipping_charge_amount').inputmask('unmaskedvalue');
-    console.log(shipping_charge_val);
+
     if(shipping_charge_val != '') {
         if(shipping_charge_val != undefined) {
             total = total + parseFloat(shipping_charge_val);

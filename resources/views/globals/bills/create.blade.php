@@ -291,18 +291,18 @@
                                                         $tax_name = $arr[1];
                                                     @endphp
                                                     @if($tax_name == 'GST')
-                                                        <tr class="{{$rate.'_'.$tax_name}} hide">
-                                                            <th width='50%'>{{$rate / 2}}% CGST on Rs. <span id="label_1_{{$rate.'_'.$tax_name}}">0.00</span></th>
-                                                            <td width='50%'><input type="text" id="input_1_{{$rate.'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide">
+                                                            <th width='50%'>{{$rate / 2}}% CGST on Rs. <span id="label_1_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                            <td width='50%'><input type="text" id="input_1_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
                                                         </tr>
-                                                        <tr class="{{$rate.'_'.$tax_name}} hide">
-                                                            <th width='50%'>{{$rate / 2}}% SGST on Rs. <span id="label_2_{{$rate.'_'.$tax_name}}">0.00</span></th>
-                                                            <td width='50%'><input type="text" id="input_2_{{$rate.'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide">
+                                                            <th width='50%'>{{$rate / 2}}% SGST on Rs. <span id="label_2_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                            <td width='50%'><input type="text" id="input_2_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
                                                         </tr>
                                                     @else
-                                                        <tr class="{{$rate.'_'.$tax_name}} hide">
-                                                            <th width='50%'>{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{$rate.'_'.$tax_name}}">0.00</span></th>
-                                                            <td width='50%'><input type="text" id="input_{{$rate.'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide">
+                                                            <th width='50%'>{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                            <td width='50%'><input type="text" id="input_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
                                                         </tr>
                                                     @endif
                                                 @endforeach

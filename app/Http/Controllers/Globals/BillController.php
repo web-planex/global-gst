@@ -454,7 +454,7 @@ class BillController extends Controller
         }elseif($data['bill']['status'] == 3) {
             $data['bill']['status_image'] = asset('images/voided_imag.png');
         }
-
+        $data['payment_method'] = PaymentMethod::select('method_name')->where('id',$data['bill']['payment_method'])->first();
         $data['name'] = 'Bill';
         $pdf = new WKPDF($this->common_controller->globalPdfOption());
         //return $data;
