@@ -74,10 +74,14 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'noreply@webplanex.biz'),
-        'name' => env('MAIL_FROM_NAME', 'Webplanex'),
+        'address' => env('MAIL_FROM_ADDRESS', 'gst@webplanex.com'),
+        'name' => env('MAIL_FROM_NAME', 'WebPlanex'),
     ],
-
+    'dkim_selector'=> 'mail',
+    'dkim_domain'=> 'webplanex.com',
+    'dkim_private_key'=> 'file:///home/webplanexmain/get.webplanex.com/private_key.pem',
+    'dkim_algo'=> 'rsa-sha256',
+    'pretend' => false,
     /*
     |--------------------------------------------------------------------------
     | Markdown Mail Settings

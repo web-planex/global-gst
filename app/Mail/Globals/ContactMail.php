@@ -28,7 +28,7 @@ class ContactMail extends Mailable
     public function build()
     {
         $subject =   'Contact us form submission';
-        $from_email = $this->from_mail;
+        $from_email = env('MAIL_FROM_ADDRESS');
         $from_name  = $this->customer_name;
         return $this->view('globals.emails.contact-mail')->with([
             'company_logo' =>  $this->company_logo,

@@ -28,7 +28,7 @@
                     <tbody>
                     <tr>
                         <td style="padding:25px 0;text-align:center">
-                            <a href="https://global-gst-demo.webplanex.com" target="_blank">
+                            <a href="{{route('home-page')}}" target="_blank">
                                 <img src="{{$company_logo}}" alt="" width="auto" height="50" style="max-height:50px;"/>
                             </a>
                         </td>
@@ -39,14 +39,14 @@
 
                                 <tbody><tr>
                                     <td style="max-width:100vw;padding:32px">
-                                        <h1 style="color:#3d4852;font-size:18px;font-weight:bold;margin-top:0;text-align:left">Hello {{$customer_name}}!</h1>
+                                        <h1 style="color:#3d4852;font-size:18px;font-weight:bold;margin-top:0;text-align:left">Welcome, {{$customer_name}}!</h1>
 
                                         <p style="font-size:16px;line-height:1.5em;margin-top:0;text-align:left">
-                                            Thanks for registering with us, we’re excited to have you on board. You can start building your GST Invoices, using demo app in real devices. Download our demo app.
+                                            Thanks for registering with us, we’re excited to have you on board. You can start building your GST Invoices, using our software features you can generate Estimates, Credit notes, Debit notes, Purchase entries and useful reports.
                                         </p>
 
                                         <p style="font-size:16px;line-height:1.5em;margin-top:0;text-align:left">
-                                            To help you get started and to learn how to use our GST Invoice portal, Contact us on <a href="https://global-gst-demo.webplanex.com" target="_blank">Live chat</a>, Phone Support or <a href = "mailto: test@webplanex.com" style="text-decoration: none;">Email support</a>.
+                                            To help you get started and to learn how to use our GST Invoice portal, Contact us on <a href="{{url('/#contacts')}}" target="_blank">Live chat</a>, Phone Support or <a href = "mailto:info@webplanex.com" style="text-decoration: none;">Email support</a>.
                                         </p>
 
 
@@ -62,19 +62,18 @@
                                 <tbody><tr>
                                     <td align="center" style="max-width:100vw;padding:32px">
                                         <p style="font-size: 13px;">
-                                            © {{date('Y')}} <a href="https://www.webplanex.com/" target="_blank">WebPlanex Infotech PVT LTD.</a> All rights reserved.
+                                            © {{date('Y')}} <a href="https://www.webplanex.com/">WebPlanex Infotech PVT LTD.</a> All rights reserved.
                                         </p>
                                         <p style="font-size: 13px;">
                                             311- C, Iscon mall, 150 feet ring road, Rajkot – 360005 , Gujarat India
-                                        </p>
+                                        </p></p>
+
                                     </td>
                                 </tr>
-                                </tbody>
-                            </table>
+                                </tbody></table>
                         </td>
                     </tr>
-                    </tbody>
-                </table>
+                    </tbody></table>
             </td>
         </tr>
         </tbody></table><div class="yj6qo"></div><div class="adL">

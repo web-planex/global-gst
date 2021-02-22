@@ -167,7 +167,7 @@ class RegisterController extends Controller
         }
 
         // Send welcome email
-        $this->send_welcome_mail($user['id'], false);
+        $this->send_welcome_mail($user['id']);
 
         return $user;
     }
@@ -205,29 +205,31 @@ class RegisterController extends Controller
         ]);
     }
 
-    public function send_welcome_mail($uid, $redirect = true){
+    public function send_welcome_mail($uid){
         $user = User::findOrFail($uid);
         $company_logo = url('assets/images/logo_2.png');
         $customer_name = ucwords($user['name']);
         $data = ['company_logo' => $company_logo,'customer_name' => $customer_name];
 
-        $config = array(
-            'driver' => 'mail',
-            'host' => "smtp.mailgun.org",
-            'port' => 587,
-            'from' => ['address' => 'info@webplanex.com', 'name' => 'WebPlanex'],
-            'encryption' => 'tls',
-            'username' => null,
-            'password' => null,
-            'sendmail' => '/usr/sbin/sendmail -bs',
-            'pretend' => false,
-            'dkim_selector'=> 'mail',
-            'dkim_domain'=> 'webplanex.com',
-            'dkim_private_key'=> 'file:///home/webplanexmain/get.webplanex.com/private_key.pem',
-            'dkim_algo'=> 'rsa-sha256',
-        );
-        Config::set('mail', $config);
+//        $config = array(
+//            'driver' => 'mail',
+//            'host' => "smtp.mailgun.org",
+//            'port' => 587,
+//            'from' => ['address' => 'gst@webplanex.com', 'name' => 'WebPlanex'],
+//            'encryption' => 'tls',
+//            'username' => 'gst@webplanex.com',
+//            'password' => 'd2K7=%Bq',
+//            'sendmail' => '/usr/sbin/sendmail -bs',
+//            'pretend' => false,
+//            'dkim_selector'=> 'mail',
+//            'dkim_domain'=> 'webplanex.com',
+//            'dkim_private_key'=> 'file:///home/webplanexmain/get.webplanex.com/private_key.pem',
+//            'dkim_algo'=> 'rsa-sha256',
+//        );
+//        Config::set('mail', $config);
 
-        Mail::to($user['email'])->bcc('info@webplanex.com')->send(new SignUpMail($data));
+        if(Mail::to($user['email'])->bcc('gst@webplanex.com')->send(new SignUpMail($data))){
+            return true;
+        }
     }
 }

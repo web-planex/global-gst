@@ -30,8 +30,8 @@ class SignUpMail extends Mailable
     public function build()
     {
         $subject =   'Welcome to GST Invoices by WebPlanex';
-        $from_email = 'info@webplanex.com';
-        $from_name  = 'GST WebPlanex';
+        $from_email = env('MAIL_FROM_ADDRESS');
+        $from_name  = env('MAIL_FROM_NAME');
 
         return $this->view('globals.emails.sign-up')->with([
             'company_logo' =>  $this->company_logo,

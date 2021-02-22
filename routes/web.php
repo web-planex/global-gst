@@ -191,3 +191,11 @@ Route::get('/terms-and-conditions', 'HomeController@terms_condition');
 Route::get('/privacy-policy', 'HomeController@privacy_policy');
 Route::post('/send_contact_mail', 'HomeController@send_contact_mail');
 
+Route::get('mailable', function () {
+    $user = App\User::findOrFail(2);
+    $company_logo = url('assets/images/logo_2.png');
+    $customer_name = ucwords($user['name']);
+    $data = ['company_logo' => $company_logo,'customer_name' => $customer_name];
+
+    return new App\Mail\Globals\SignUpMail($data);
+});

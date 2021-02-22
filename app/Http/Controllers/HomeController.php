@@ -33,7 +33,7 @@ class HomeController extends Controller
 
         $company_logo = url('assets/images/logo-light-icon_old.png');
         $customer_name = ucwords($request['name']);
-        $from_mail = $request['email'];
+        $from_mail = env('MAIL_FROM_ADDRESS');
         $subject = $request['subject'];
         $message = $request['message'];
 
