@@ -123,9 +123,14 @@ class User extends Authenticatable implements MustVerifyEmail
             $data->Expense()->delete();
             $data->ExpenseType()->delete();
             $data->GeneratedInvoiceList()->delete();
-            $data->InvoiceItems()->delete();
-            $data->InvoiceItems()->delete();
-            $data->InvoiceItems()->delete();
+            $data->Invoice()->delete();
+            $data->InvoiceSetting()->delete();
+            $data->Payees()->delete();
+            $data->PaymentMethod()->delete();
+            $data->PaymentTerms()->delete();
+            $data->PdfZips()->delete();
+            $data->Product()->delete();
+            $data->Suppliers()->delete();
         });
     }
 }

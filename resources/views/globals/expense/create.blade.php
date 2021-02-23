@@ -26,32 +26,36 @@
         <div class="col-lg-12">
             <div class="box card">
                 @if(isset($expense) && !empty($expense))
-                    {!! Form::model($expense,['url' => url('expense/update/'.$expense->id),'method'=>'patch' ,'class' => 'form-horizontal','files'=>true,'id'=>'formExpense']) !!}
+                    {!! Form::model($expense,['url' => url('expense/update/'.$expense->id),'method'=>'patch' ,'class' => 'form','files'=>true,'id'=>'formExpense']) !!}
                 @else
-                    {!! Form::open(['url' => url('expense/insert'), 'class' => 'form-horizontal','files'=>true,'id'=>'formExpense']) !!}
+                    {!! Form::open(['url' => url('expense/insert'), 'class' => 'form','files'=>true,'id'=>'formExpense']) !!}
                 @endif
                     @csrf
-                    <div class="form-row">
-                        <div class="from-group mb-3 col-md-6">
-                            <label for='status'>Status <span class="text-danger">*</span></label>
-                            {!! Form::select('status', [null => 'Select Status'] + \App\Models\Globals\Expense::$expense_status, null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
-                            @error('status')
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="from-group mb-3">
+                                <label for='status'>Status <span class="text-danger">*</span></label>
+                                {!! Form::select('status', [null => 'Select Status'] + \App\Models\Globals\Expense::$expense_status, null, ['class' => 'form-control amounts-are-select2 custom-select', 'id' => 'status']) !!}
+                                @error('status')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                            @enderror
-                        </div>
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="payee">Payee / Vendors <span class="text-danger">*</span></label>
-                            {!! Form::select('payee', $payees, isset($expense)&&!empty($expense)?$expense['payee_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payee']) !!}
-                            <div class="wrapper" id="wrp" style="display: none;">
-                                <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
+                                @enderror
                             </div>
-                            @error('payee')
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="payee">Payee / Vendors <span class="text-danger">*</span></label>
+                                {!! Form::select('payee', $payees, isset($expense)&&!empty($expense)?$expense['payee_id']:null, ['class' => 'form-control amounts-are-select2 custom-select', 'id' => 'payee']) !!}
+                                <div class="wrapper" id="wrp" style="display: none;">
+                                    <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
+                                </div>
+                                @error('payee')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                            @enderror
+                                @enderror
+                            </div>
                         </div>
                     </div>
                     <div class="form-row">
