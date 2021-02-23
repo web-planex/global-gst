@@ -49,20 +49,21 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th>Email Verified</th>
                                 <th>Mobile</th>
                                 <th>Total Company</th>
                                 <th>Status</th>
-{{--                                <th>Action</th>--}}
+                                <th>Action</th>
                             </tr>
                             </thead>
                             @if($users->count()>0)
                                 <tbody>
-                                @php $i=1; @endphp
-                                @foreach($users as $list)
+                                @foreach($users as $key => $list)
                                     <tr>
-                                        <td>{{$i}}</td>
+                                        <td>{{ $users->firstItem() + $key }}</td>
                                         <td>{{$list['name']}}</td>
                                         <td>{{$list['email']}}</td>
+                                        <td>@if(empty($list['email_verified_at'])) <i class="fa fa-times" aria-hidden="true"></i> @else <i class="fa fa-check" aria-hidden="true"></i> @endif</td>
                                         <td>{{$list['mobile']}}</td>
                                         <td>
                                             @php $total_company = \App\Models\Globals\CompanySettings::where('user_id',$list['id'])->count(); @endphp
@@ -75,13 +76,12 @@
                                                 <label class="label label-danger">Inactive</label>
                                             @endif
                                         </td>
-{{--                                        <td>--}}
-{{--                                            <span data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete User">--}}
-{{--                                                <a class="dropdown-item" href="javascript:void(0)" onclick="delete_users({{$list['id']}})"><i class="fa fa-trash text-danger"></i></a>--}}
-{{--                                            </span>--}}
-{{--                                        </td>--}}
+                                        <td>
+                                            <span data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete User">
+                                                <a class="dropdown-item" href="javascript:void(0)" onclick="delete_users({{$list['id']}})"><i class="fa fa-trash text-danger"></i></a>
+                                            </span>
+                                        </td>
                                     </tr>
-                                    @php $i++; @endphp
                                 @endforeach
                                 </tbody>
                             @else
