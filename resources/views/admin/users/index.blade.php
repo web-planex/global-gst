@@ -51,7 +51,7 @@
                                 <th>Email</th>
                                 <th>Email Verified</th>
                                 <th>Mobile</th>
-                                <th>Total Company</th>
+                                <th width="5%">Total Company</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
