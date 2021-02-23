@@ -211,23 +211,6 @@ class RegisterController extends Controller
         $customer_name = ucwords($user['name']);
         $data = ['company_logo' => $company_logo,'customer_name' => $customer_name];
 
-//        $config = array(
-//            'driver' => 'mail',
-//            'host' => "smtp.mailgun.org",
-//            'port' => 587,
-//            'from' => ['address' => 'gst@webplanex.com', 'name' => 'WebPlanex'],
-//            'encryption' => 'tls',
-//            'username' => 'gst@webplanex.com',
-//            'password' => 'd2K7=%Bq',
-//            'sendmail' => '/usr/sbin/sendmail -bs',
-//            'pretend' => false,
-//            'dkim_selector'=> 'mail',
-//            'dkim_domain'=> 'webplanex.com',
-//            'dkim_private_key'=> 'file:///home/webplanexmain/get.webplanex.com/private_key.pem',
-//            'dkim_algo'=> 'rsa-sha256',
-//        );
-//        Config::set('mail', $config);
-
         if(Mail::to($user['email'])->bcc('gst@webplanex.com')->send(new SignUpMail($data))){
             return true;
         }

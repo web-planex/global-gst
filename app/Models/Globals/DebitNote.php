@@ -10,6 +10,7 @@ class DebitNote extends Model
         'user_id',
         'company_id',
         'debit_note_number',
+        'order_number',
         'ref_invoice_no',
         'ref_invoice_date',
         'tax_type',

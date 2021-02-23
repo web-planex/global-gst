@@ -18,6 +18,7 @@ class CreateDebitNotesTable extends Migration
             $table->integer('user_id');
             $table->integer('company_id');
             $table->string('debit_note_number',15)->nullable();
+            $table->string('order_number',15)->nullable();
             $table->integer('ref_invoice_id');
             $table->date('ref_invoice_date');
             $table->integer('tax_type')->comment('(1 => Exclusive, 2 => Inclusive, 3 => Out of scope)');
