@@ -210,9 +210,7 @@ class RegisterController extends Controller
         $company_logo = url('assets/images/logo_2.png');
         $customer_name = ucwords($user['name']);
         $data = ['company_logo' => $company_logo,'customer_name' => $customer_name];
-
-        if(Mail::to($user['email'])->bcc('gst@webplanex.com')->send(new SignUpMail($data))){
-            return true;
-        }
+        $when = now()->addMinutes(10);
+        Mail::to($user['email'])->later($when, new SignUpMail($data));
     }
 }
