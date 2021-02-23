@@ -29,7 +29,7 @@
                     <tr>
                         <td style="padding:25px 0;text-align:center">
                             <a href="{{route('home-page')}}" target="_blank">
-                                <img src="{{$company_logo}}" alt="" width="auto" height="50" style="max-height:50px;"/>
+                                <img src="{{$company_logo}}" alt="Company Logo" width="auto" height="50" style="max-height:50px;"/>
                             </a>
                         </td>
                     </tr>
@@ -66,8 +66,8 @@
                                         </p>
                                         <p style="font-size: 13px;">
                                             311- C, Iscon mall, 150 feet ring road, Rajkot – 360005 , Gujarat India
-                                        </p></p>
-
+                                        </p>
+                                        <p>Phone : +91-281-2331006, +91-9724382401</p>
                                     </td>
                                 </tr>
                                 </tbody></table>
