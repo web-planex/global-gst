@@ -432,7 +432,7 @@
                                  <div class="form-group mb-3 row">
                                      <label for="state" class="col-md-12 col-form-label">State <span class="text-danger">*</span></label>
                                      <div class="col-md-9">
-                                         {!! Form::select('state', $states, null, ['class' => 'form-control amounts-are-select2', 'id'=>'state']) !!}
+                                         {!! Form::select('state', $states, null, ['class' => 'form-control amounts-are-select2', 'id'=>'state','style'=>'width:100%;']) !!}
                                          @if ($errors->has('state'))
                                              <span class="text-danger">
                                                 <strong>{{ $errors->first('state') }}</strong>
@@ -676,7 +676,7 @@
                                  <div class="form-group mb-3 row">
                                      <label for="gst_registration_type_id" class="col-md-12 col-form-label">Gst Registration Type</label>
                                      <div class="col-md-9">
-                                         {!! Form::select('gst_registration_type_id', \App\Models\Globals\Payees::$get_type, null, ['class' => 'form-control amounts-are-select2']) !!}
+                                         {!! Form::select('gst_registration_type_id', \App\Models\Globals\Payees::$get_type, null, ['class' => 'form-control amounts-are-select2','style'=>'width:100%;']) !!}
                                          @if ($errors->has('gst_registration_type_id'))
                                              <span class="text-danger">
                                                 <strong>{{ $errors->first('gst_registration_type_id') }}</strong>
@@ -775,7 +775,7 @@
                                                 <div class="form-group mb-3 row">
                                                     <label for="billing_state" class="col-md-12 col-form-label">Billing State <span class="text-danger">*</span></label>
                                                     <div class="col-md-9">
-                                                        {!! Form::select('billing_state', $states, null, ['class' => 'form-control amounts-are-select2', 'id'=>'billing_state']) !!}
+                                                        {!! Form::select('billing_state', $states, null, ['class' => 'form-control amounts-are-select2', 'id'=>'billing_state','style'=>'width:100%;']) !!}
                                                         @if ($errors->has('billing_state'))
                                                             <span class="text-danger">
                                                                 <strong>{{ $errors->first('billing_state') }}</strong>
@@ -887,7 +887,7 @@
                                                 <div class="form-group mb-3 row">
                                                     <label for="shipping_state" class="col-md-12 col-form-label">Shipping State <span class="text-danger">*</span></label>
                                                     <div class="col-md-9">
-                                                        {!! Form::select('shipping_state', $states, null, ['class' => 'form-control amounts-are-select2', 'id'=>'shipping_state']) !!}
+                                                        {!! Form::select('shipping_state', $states, null, ['class' => 'form-control amounts-are-select2', 'id'=>'shipping_state','style'=>'width:100%;']) !!}
                                                         @if ($errors->has('shipping_state'))
                                                             <span class="text-danger">
                                                                 <strong>{{ $errors->first('shipping_state') }}</strong>
