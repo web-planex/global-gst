@@ -51,7 +51,7 @@ class GenerateExpenseZip extends Command
     
     function ExpensePdfQueue() {
         mail('lalitv@webplanex.com', 'Global GST DEMO multiple_expense_pdf Queue Start', "Successfully");
-        $command = '/usr/bin/php /home/webplanexmain/global-gst-demo.webplanex.com/artisan queue:work --queue=multiple_expense_pdf --timeout=0 --tries=1 >> /dev/null 2>&1';
+        $command = '/usr/bin/php7.3 /home/webplanexmain/gst.webplanex.com/artisan queue:work --queue=multiple_expense_pdf --timeout=0 --tries=1 >> /dev/null 2>&1';
         //$command = 'php artisan queue:work --queue=multiple_expense_pdf';
         $number = exec($command);
         file_put_contents(__DIR__ . '/multiple_expense_pdf.pid', $number);

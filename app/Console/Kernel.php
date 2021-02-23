@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\GenerateExpenseZip::class
+        Commands\GenerateExpenseZip::class,
+        Commands\SendWelcomeEmail::class
     ];
 
     /**
@@ -25,7 +26,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('GenerateExpenseZip')->everyMinute();
+        //$schedule->command('GenerateExpenseZip')->everyMinute();
     }
 
     /**
