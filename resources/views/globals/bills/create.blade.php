@@ -52,81 +52,93 @@
                     {!! Form::open(['url' => route('bills.store'),'method'=>'post' , 'class' => 'form-horizontal','files'=>true,'id'=>'Billsform']) !!}
                 @endif
                     @csrf
-                    <div class="form-row">
-                        <div class="form-group mb-3 col-md-4">
-                            <label for="bill_no">Bill # <span class="text-danger">*</span></label>
-                            {!! Form::text('bill_no', isset($bill)&&!empty($bill)?$bill['bill_no']:null, ['class' => 'form-control','id'=>'bill_no']) !!}
-                            @error('bill_no')
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="bill_no">Bill # <span class="text-danger">*</span></label>
+                                {!! Form::text('bill_no', isset($bill)&&!empty($bill)?$bill['bill_no']:null, ['class' => 'form-control','id'=>'bill_no']) !!}
+                                @error('bill_no')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                            @enderror
-                        </div>
-                        <div class="form-group mb-3 col-md-4">
-                            <label for="customer">Payee / Vendor <span class="text-danger">*</span></label>
-                            {!! Form::select('customer', $payees, isset($bill)&&!empty($bill)?$bill['payee_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'customer']) !!}
-                            <div class="wrapper" id="wrp" style="display: none;">
-                                <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
+                                @enderror
                             </div>
-                            @error('customer')
-                                <span class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
                         </div>
-                        <div class="form-group mb-3 col-md-4">
-                            <label for="bill_date">Bill Date <span class="text-danger">*</span></label>
-                            {!! Form::text('bill_date', isset($bill)&&!empty($bill)?date('d-m-Y',strtotime($bill['bill_date'])):null, ['class' => 'form-control','id'=>'bill_date']) !!}
-                            @error('bill_date')
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="customer">Payee / Vendor <span class="text-danger">*</span></label>
+                                {!! Form::select('customer', $payees, isset($bill)&&!empty($bill)?$bill['payee_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'customer']) !!}
+                                <div class="wrapper" id="wrp" style="display: none;">
+                                    <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
+                                </div>
+                                @error('customer')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                            @enderror
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="bill_date">Bill Date <span class="text-danger">*</span></label>
+                                {!! Form::text('bill_date', isset($bill)&&!empty($bill)?date('d-m-Y',strtotime($bill['bill_date'])):null, ['class' => 'form-control','id'=>'bill_date']) !!}
+                                @error('bill_date')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group mb-3 col-md-4">
-                            <label for="due_date">Due Date <span class="text-danger">*</span></label>
-                            <input type="hidden" id="due_date_hidden" value="{{isset($bill)&&!empty($bill)?date('Y-m-d',strtotime($bill['due_date'])):date('Y-m-d')}}" />
-                            {!! Form::text('due_date', isset($bill)&&!empty($bill)?date('d-m-Y',strtotime($bill['due_date'])):date('d-m-Y'), ['class' => 'form-control','id'=>'due_date']) !!}
-                            @error('due_date')
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="due_date">Due Date <span class="text-danger">*</span></label>
+                                <input type="hidden" id="due_date_hidden" value="{{isset($bill)&&!empty($bill)?date('Y-m-d',strtotime($bill['due_date'])):date('Y-m-d')}}" />
+                                {!! Form::text('due_date', isset($bill)&&!empty($bill)?date('d-m-Y',strtotime($bill['due_date'])):date('d-m-Y'), ['class' => 'form-control','id'=>'due_date']) !!}
+                                @error('due_date')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                            @enderror
-                        </div>
-                        <div class="form-group mb-3 col-md-4">
-                            <label for="payment_method">Payment Method <span class="text-danger">*</span></label>
-                            {!! Form::select('payment_method', $payment_method, isset($bill)&&!empty($bill)?$bill['payment_method']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method']) !!}
-                            @error('payment_method')
-                                <span class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="form-group mb-3 col-md-4">
-                            <label for="payment_terms">Payment Terms</label>
-                            <select name="payment_terms" class="form-control ex-payment-terms amounts-are-select2" id="payment_terms">
-                                <option data-days="0" value="">Due on Receipt</option>
-                                @foreach ($payment_terms as $payment_term)
-                                <option @if(isset($bill)&&$bill['payment_term_id']==$payment_term['id']) selected @endif data-days="{{$payment_term['terms_days']}}" value="{{$payment_term['id']}}">{{$payment_term['terms_name']}}</option>
-                                @endforeach
-                            </select>
-                            <div class="wrapper" id="wrp_terms" style="display: none;">
-                                <a href="javascript:;" class="font-weight-300" onclick="OpenPaymentTermsModal()"><i class="fa fa-plus-circle"></i> Add New</a>
+                                @enderror
                             </div>
-                            @error('payment_terms')
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="payment_method">Payment Method <span class="text-danger">*</span></label>
+                                {!! Form::select('payment_method', $payment_method, isset($bill)&&!empty($bill)?$bill['payment_method']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method']) !!}
+                                @error('payment_method')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                            @enderror
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label for="payment_terms">Payment Terms</label>
+                                <select name="payment_terms" class="form-control ex-payment-terms amounts-are-select2" id="payment_terms">
+                                    <option data-days="0" value="">Due on Receipt</option>
+                                    @foreach ($payment_terms as $payment_term)
+                                        <option @if(isset($bill)&&$bill['payment_term_id']==$payment_term['id']) selected @endif data-days="{{$payment_term['terms_days']}}" value="{{$payment_term['id']}}">{{$payment_term['terms_name']}}</option>
+                                    @endforeach
+                                </select>
+                                <div class="wrapper" id="wrp_terms" style="display: none;">
+                                    <a href="javascript:;" class="font-weight-300" onclick="OpenPaymentTermsModal()"><i class="fa fa-plus-circle"></i> Add New</a>
+                                </div>
+                                @error('payment_terms')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-12">
-                            <div class="card">
+                            <div class="card mb-0">
                                 <div class="card-header bg-primary">
                                     <div class="row">
                                         <div class="col-md-2">
@@ -277,7 +289,85 @@
                                                 @endif
                                                 </tbody>
                                             </table>
-                                            <table class="table table-hover" style="width: 40%;float: right;">
+
+                                            <input type="hidden" name="amount_before_tax" id="amount_before_tax" />
+                                            <input type="hidden" name="tax_amount" id="tax_amount" />
+                                            <input type="hidden" name="total" id="total_amount" />
+                                            <button type="button" id="addItem" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>&nbsp;Add Lines</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12 col-lg-6 col-xl-8">
+                                            <div class="form-group mb-0">
+                                                <label for="memo">Memo</label>
+                                                {!! Form::textarea('memo', null, ['class' => 'form-control','id'=>'memo','rows' => '3']) !!}
+                                                @error('memo')
+                                                    <span class="text-danger">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>
+
+                                            <i class="fa fa-paperclip"></i>&nbsp;<label for="files">Receipt</label>
+                                            <div class="form-group mb-0 border p-2">
+                                                {!! Form::file('files', ['class' => 'mb-2 border-0', 'id'=> 'files']) !!}
+                                                @if(isset($bill) && !empty($bill['files']) && file_exists($bill['files']))
+                                                    @if(in_array($bill['file_ext'],['jpg','jpeg','png','bmp']) )
+                                                        <br><img src="{{url($bill['files'])}}" class="img-thumbnail" style=" width: 150px;" id="attachment_file">
+                                                        <div class="button-group mt-2" id="attachment_div">
+                                                            <button type="button" class="btn btn-sm btn-circle btn-primary" data-magnify="gallery" data-src="{{url($bill['files'])}}" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                                            <a href="{{url($bill['files'])}}" download>
+                                                                <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
+                                                            </a>
+                                                            <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$bill['id']}})"><i class="fa fa-trash"></i></button>
+                                                        </div>
+                                                    @else
+                                                        <br><button class="btn btn-link" type="button" id="attachment_file"><i class="fas fa-file-alt fa-5x"></i></button>
+                                                        <div class="button-group mt-2" id="attachment_div">
+                                                            @if(!in_array($bill['file_ext'],['xlsx','xls','csv']))
+                                                                <button type="button" class="btn btn-sm btn-circle btn-primary" data-toggle="modal" data-target="#attachmentModal" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                                            @endif
+                                                            <a href="{{url($bill['files'])}}" download>
+                                                                <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
+                                                            </a>
+                                                            <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$bill['id']}})"><i class="fa fa-trash"></i></button>
+                                                        </div>
+                                                        <div id="attachmentModal" class="modal fade bs-example-modal-lg" role="dialog">
+                                                            <div class="modal-dialog modal-xl">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title">{{$bill['file_name']}}</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        @if(!in_array($bill['file_ext'],['xlsx','xls','csv']))
+                                                                            <iframe src="{{url($bill['files'])}}" height="400px" width="100%"></iframe>
+                                                                        @endif
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                    <div id="att_del_msg" class="text-danger text-bold"></div>
+                                                @endif
+                                                @error('files')
+                                                    <br>
+                                                    <span class="text-danger">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 col-lg-6 col-xl-8">
+                                            <table class="table table-hover">
                                                 <tr id="subtotal_row">
                                                     <th width="50%">Subtotal</th>
                                                     <td width="50%">
@@ -325,79 +415,6 @@
                                                     <td width="50%"><input type="text" class="form-control text-right" id="total" readonly="" /></td>
                                                 </tr>
                                             </table>
-                                            <input type="hidden" name="amount_before_tax" id="amount_before_tax" />
-                                            <input type="hidden" name="tax_amount" id="tax_amount" />
-                                            <input type="hidden" name="total" id="total_amount" />
-                                            <button type="button" id="addItem" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>&nbsp;Add Lines</button>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="form-group mb-0">
-                                                    <label for="memo">Memo</label>
-                                                    {!! Form::textarea('memo', null, ['class' => 'form-control','id'=>'memo','rows' => '3']) !!}
-                                                    @error('memo')
-                                                        <span class="text-danger">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                    @enderror
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <i class="fa fa-paperclip"></i>&nbsp;<label for="files">Receipt</label>
-                                                    <div class="form-group mb-0 border p-2">
-                                                        {!! Form::file('files', ['class' => 'mb-2 border-0', 'id'=> 'files']) !!}
-                                                        @if(isset($bill) && !empty($bill['files']) && file_exists($bill['files']))
-                                                            @if(in_array($bill['file_ext'],['jpg','jpeg','png','bmp']) )
-                                                                <br><img src="{{url($bill['files'])}}" class="img-thumbnail" style=" width: 150px;" id="attachment_file">
-                                                                <div class="button-group mt-2" id="attachment_div">
-                                                                    <button type="button" class="btn btn-sm btn-circle btn-primary" data-magnify="gallery" data-src="{{url($bill['files'])}}" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
-                                                                    <a href="{{url($bill['files'])}}" download>
-                                                                        <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
-                                                                    </a>
-                                                                    <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$bill['id']}})"><i class="fa fa-trash"></i></button>
-                                                                </div>
-                                                            @else
-                                                                <br><button class="btn btn-link" type="button" id="attachment_file"><i class="fas fa-file-alt fa-5x"></i></button>
-                                                                <div class="button-group mt-2" id="attachment_div">
-                                                                    @if(!in_array($bill['file_ext'],['xlsx','xls','csv']))
-                                                                        <button type="button" class="btn btn-sm btn-circle btn-primary" data-toggle="modal" data-target="#attachmentModal" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
-                                                                    @endif
-                                                                    <a href="{{url($bill['files'])}}" download>
-                                                                        <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
-                                                                    </a>
-                                                                    <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$bill['id']}})"><i class="fa fa-trash"></i></button>
-                                                                </div>
-                                                                <div id="attachmentModal" class="modal fade bs-example-modal-lg" role="dialog">
-                                                                    <div class="modal-dialog modal-xl">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header">
-                                                                                <h4 class="modal-title">{{$bill['file_name']}}</h4>
-                                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                            </div>
-                                                                            <div class="modal-body">
-                                                                                @if(!in_array($bill['file_ext'],['xlsx','xls','csv']))
-                                                                                    <iframe src="{{url($bill['files'])}}" height="400px" width="100%"></iframe>
-                                                                                @endif
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                            <div id="att_del_msg" class="text-danger text-bold"></div>
-                                                        @endif
-                                                        @error('files')
-                                                            <br>
-                                                            <span class="text-danger">
-                                                                <strong>{{ $message }}</strong>
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

@@ -16,63 +16,65 @@
                     {!! Form::open(['url' => url('sales'), 'class' => 'form-horizontal','files'=>true,'id'=>'Salesform']) !!}
                 @endif
                     @csrf
-                    <div class="form-row">
-                        <div class="form-group mb-3 col-md-12">
-                            <label for="customer">Customer <span class="text-danger">*</span></label>
-                            {!! Form::select('customer', $payees, isset($invoice)&&!empty($invoice)?$invoice['customer_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'customer', 'onchange'=>'getAddress(this.value)']) !!}
-                            <div class="wrapper" id="wrp" style="display: none;">
-                                <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
-                            </div>
-                            @if ($errors->has('customer'))
-                                <span class="text-danger">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group mb-3 col-md-12">
+                                <label for="customer">Customer <span class="text-danger">*</span></label>
+                                {!! Form::select('customer', $payees, isset($invoice)&&!empty($invoice)?$invoice['customer_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'customer', 'onchange'=>'getAddress(this.value)']) !!}
+                                <div class="wrapper" id="wrp" style="display: none;">
+                                    <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
+                                </div>
+                                @if ($errors->has('customer'))
+                                    <span class="text-danger">
                                     <strong>{{ $errors->first('customer') }}</strong>
                                 </span>
-                            @endif
+                                @endif
 
-                            <div class="row mt-3 @if(isset($invoice) && empty($invoice)) hide @elseif(!isset($invoice)) hide @endif" id="cust_address">
-                                <div class="col-md-6">
-                                    <div class="card border-info mb-0" style="background-color: #ECF0F4;">
-                                        <div class="card-header bg-primary">
-                                            <h4 class="m-b-0 text-white pull-left">Billing Address</h4>
-                                            <a href="javascript:;" data-toggle="modal" data-target="#BillingAddressModal">
-                                                <h4 class="m-b-0 text-white text-right">Change</h4>
-                                            </a>
-                                        </div>
-                                        <div class="card-body pt-2 pb-2">
-                                            <div id="BillingDiv">
-                                                @if(isset($invoice) && !empty($invoice))
-                                                    <p class="card-text mb-0">{{$invoice['customer']['billing_name']}}</p>
-                                                    <p class="card-text mb-0">{{$invoice['customer']['billing_phone']}}</p>
-                                                    <p class="card-text mb-0">{{$invoice['customer']['billing_street']}}</p>
-                                                    <p class="card-text mb-0">{{$invoice['customer']['billing_city']}} - {{$invoice['customer']['billing_pincode']}}</p>
-                                                    <p class="card-text mb-0">{{$invoice['customer']['billing_state_name']}}</p>
-                                                    <p class="card-text mb-0">{{$invoice['customer']['billing_country']}}</p>
-                                                @endif
+                                <div class="row mt-3 @if(isset($invoice) && empty($invoice)) hide @elseif(!isset($invoice)) hide @endif" id="cust_address">
+                                    <div class="col-md-6">
+                                        <div class="card border-info mb-0" style="background-color: #ECF0F4;">
+                                            <div class="card-header bg-primary">
+                                                <h4 class="m-b-0 text-white pull-left">Billing Address</h4>
+                                                <a href="javascript:;" data-toggle="modal" data-target="#BillingAddressModal">
+                                                    <h4 class="m-b-0 text-white text-right">Change</h4>
+                                                </a>
                                             </div>
-                                            <div id="billing_msg" class="text-info font-weight-bolder"></div>
+                                            <div class="card-body pt-2 pb-2">
+                                                <div id="BillingDiv">
+                                                    @if(isset($invoice) && !empty($invoice))
+                                                        <p class="card-text mb-0">{{$invoice['customer']['billing_name']}}</p>
+                                                        <p class="card-text mb-0">{{$invoice['customer']['billing_phone']}}</p>
+                                                        <p class="card-text mb-0">{{$invoice['customer']['billing_street']}}</p>
+                                                        <p class="card-text mb-0">{{$invoice['customer']['billing_city']}} - {{$invoice['customer']['billing_pincode']}}</p>
+                                                        <p class="card-text mb-0">{{$invoice['customer']['billing_state_name']}}</p>
+                                                        <p class="card-text mb-0">{{$invoice['customer']['billing_country']}}</p>
+                                                    @endif
+                                                </div>
+                                                <div id="billing_msg" class="text-info font-weight-bolder"></div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="card border-info mb-0" style="background-color: #ECF0F4;">
-                                        <div class="card-header bg-primary">
-                                            <h4 class="m-b-0 text-white pull-left">Shipping Address</h4>
-                                            <a href="javascript:;" data-toggle="modal" data-target="#ShippingAddressModal">
-                                                <h4 class="m-b-0 text-white text-right">Change</h4>
-                                            </a>
-                                        </div>
-                                        <div class="card-body pt-2 pb-2">
-                                            <div id="ShippingDiv">
-                                                @if(isset($invoice) && !empty($invoice))
-                                                    <p class="card-text mb-0">{{$invoice['customer']['shipping_name']}}</p>
-                                                    <p class="card-text mb-0">{{$invoice['customer']['shipping_phone']}}</p>
-                                                    <p class="card-text mb-0">{{$invoice['customer']['shipping_street']}}</p>
-                                                    <p class="card-text mb-0">{{$invoice['customer']['shipping_city']}} - {{$invoice['customer']['shipping_pincode']}}</p>
-                                                    <p class="card-text mb-0">{{$invoice['customer']['shipping_state_name']}}</p>
-                                                    <p class="card-text mb-0">{{$invoice['customer']['shipping_country']}}</p>
-                                                @endif
+                                    <div class="col-md-6">
+                                        <div class="card border-info mb-0" style="background-color: #ECF0F4;">
+                                            <div class="card-header bg-primary">
+                                                <h4 class="m-b-0 text-white pull-left">Shipping Address</h4>
+                                                <a href="javascript:;" data-toggle="modal" data-target="#ShippingAddressModal">
+                                                    <h4 class="m-b-0 text-white text-right">Change</h4>
+                                                </a>
                                             </div>
-                                            <div id="shipping_msg" class="text-info font-weight-bolder"></div>
+                                            <div class="card-body pt-2 pb-2">
+                                                <div id="ShippingDiv">
+                                                    @if(isset($invoice) && !empty($invoice))
+                                                        <p class="card-text mb-0">{{$invoice['customer']['shipping_name']}}</p>
+                                                        <p class="card-text mb-0">{{$invoice['customer']['shipping_phone']}}</p>
+                                                        <p class="card-text mb-0">{{$invoice['customer']['shipping_street']}}</p>
+                                                        <p class="card-text mb-0">{{$invoice['customer']['shipping_city']}} - {{$invoice['customer']['shipping_pincode']}}</p>
+                                                        <p class="card-text mb-0">{{$invoice['customer']['shipping_state_name']}}</p>
+                                                        <p class="card-text mb-0">{{$invoice['customer']['shipping_country']}}</p>
+                                                    @endif
+                                                </div>
+                                                <div id="shipping_msg" class="text-info font-weight-bolder"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -80,92 +82,108 @@
                         </div>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group mb-3 col-md-6" id="order_div">
-                            <label for="order_number">Order Number <span class="text-danger"></span></label>
-                            {!! Form::text('order_number', null, ['class' => 'form-control','id'=>'order_number']) !!}
-                            @if ($errors->has('order_number'))
-                                <span class="text-danger">
+                    <div class="row">
+                        <div class="col-md-6" id="order_div">
+                            <div class="form-group mb-3">
+                                <label for="order_number">Order Number <span class="text-danger"></span></label>
+                                {!! Form::text('order_number', null, ['class' => 'form-control','id'=>'order_number']) !!}
+                                @if ($errors->has('order_number'))
+                                    <span class="text-danger">
                                     <strong>{{ $errors->first('order_number') }}</strong>
                                 </span>
-                            @endif
+                                @endif
+                            </div>
                         </div>
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="invoice_date">Invoice Date <span class="text-danger">*</span></label>
-                            {!! Form::text('invoice_date', isset($invoice)&&!empty($invoice)?date('d-m-Y',strtotime($invoice['invoice_date'])):date('d-m-Y'), ['class' => 'form-control','id'=>'invoice_date']) !!}
-                            @if ($errors->has('invoice_date'))
-                                <span class="text-danger">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="invoice_date">Invoice Date <span class="text-danger">*</span></label>
+                                {!! Form::text('invoice_date', isset($invoice)&&!empty($invoice)?date('d-m-Y',strtotime($invoice['invoice_date'])):date('d-m-Y'), ['class' => 'form-control','id'=>'invoice_date']) !!}
+                                @if ($errors->has('invoice_date'))
+                                    <span class="text-danger">
                                     <strong>{{ $errors->first('invoice_date') }}</strong>
                                 </span>
-                            @endif
+                                @endif
+                            </div>
                         </div>
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="due_date">Due Date <span class="text-danger">*</span></label>
-                            {!! Form::text('due_date', isset($invoice)&&!empty($invoice)?date('d-m-Y',strtotime($invoice['due_date'])):null, ['class' => 'form-control','id'=>'due_date']) !!}
-                            @if ($errors->has('due_date'))
-                                <span class="text-danger">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="due_date">Due Date <span class="text-danger">*</span></label>
+                                {!! Form::text('due_date', isset($invoice)&&!empty($invoice)?date('d-m-Y',strtotime($invoice['due_date'])):null, ['class' => 'form-control','id'=>'due_date']) !!}
+                                @if ($errors->has('due_date'))
+                                    <span class="text-danger">
                                     <strong>{{ $errors->first('due_date') }}</strong>
                                 </span>
-                            @endif
+                                @endif
+                            </div>
                         </div>
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="status">Status <span class="text-danger">*</span></label>
-                            {!! Form::select('status', \App\Models\Globals\Invoice::$invoice_status, null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
-                            @if ($errors->has('status'))
-                                <span class="text-danger">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="status">Status <span class="text-danger">*</span></label>
+                                {!! Form::select('status', \App\Models\Globals\Invoice::$invoice_status, null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
+                                @if ($errors->has('status'))
+                                    <span class="text-danger">
                                     <strong>{{ $errors->first('status') }}</strong>
                                 </span>
-                            @endif
+                                @endif
+                            </div>
                         </div>
-                        <div class="form-group mb-3 col-md-6 @if(isset($invoice) && $invoice['status']==2) hide @endif " id="pay_terms_div">
-                            <label for="payment_terms">Payment Terms <span class="text-danger"></span></label>
-                            <select name="payment_terms" class="form-control ex-payment-terms amounts-are-select2" id="payment_terms" style="width: 100%;">
-                                <option data-days="0" value="">Due on Receipt</option>
-                                @foreach ($payment_terms as $payment_term)
-                                    <option @if(isset($invoice)&&$invoice['payment_terms']==$payment_term['id']) selected @endif data-days="{{$payment_term['terms_days']}}" value="{{$payment_term['id']}}">{{$payment_term['terms_name']}}</option>
-                                @endforeach
-                            </select>
-                            @if ($errors->has('payment_terms'))
-                                <span class="text-danger">
+                        <div class="col-md-6 @if(isset($invoice) && $invoice['status']==2) hide @endif" id="pay_terms_div">
+                            <div class="form-group mb-3">
+                                <label for="payment_terms">Payment Terms <span class="text-danger"></span></label>
+                                <select name="payment_terms" class="form-control ex-payment-terms amounts-are-select2" id="payment_terms" style="width: 100%;">
+                                    <option data-days="0" value="">Due on Receipt</option>
+                                    @foreach ($payment_terms as $payment_term)
+                                        <option @if(isset($invoice)&&$invoice['payment_terms']==$payment_term['id']) selected @endif data-days="{{$payment_term['terms_days']}}" value="{{$payment_term['id']}}">{{$payment_term['terms_name']}}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('payment_terms'))
+                                    <span class="text-danger">
                                     <strong>{{ $errors->first('payment_terms') }}</strong>
                                 </span>
-                            @endif
+                                @endif
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group mb-3 col-md-4 @if(isset($invoice) && $invoice['status']==1) hide @elseif(!isset($invoice)) hide @endif " id="payment_date_div">
-                            <label for="payment_date">Payment Date <span class="text-danger"></span></label>
-                            {!! Form::text('payment_date', isset($invoice)&&!empty($invoice)?date('d-m-Y',strtotime($invoice['payment_date'])):null, ['class' => 'form-control payment_date','id'=>'payment_date']) !!}
-                            @if ($errors->has('payment_date'))
-                                <span class="text-danger">
+                    <div class="row">
+                        <div class="col-md-4 @if(isset($invoice) && $invoice['status']==1) hide @elseif(!isset($invoice)) hide @endif" id="payment_date_div">
+                            <div class="form-group mb-3">
+                                <label for="payment_date">Payment Date <span class="text-danger"></span></label>
+                                {!! Form::text('payment_date', isset($invoice)&&!empty($invoice)?date('d-m-Y',strtotime($invoice['payment_date'])):null, ['class' => 'form-control payment_date','id'=>'payment_date']) !!}
+                                @if ($errors->has('payment_date'))
+                                    <span class="text-danger">
                                     <strong>{{ $errors->first('payment_date') }}</strong>
                                 </span>
-                            @endif
+                                @endif
+                            </div>
                         </div>
-                        <div class="form-group mb-3 col-md-4 @if(isset($invoice) && $invoice['status']==1) hide @elseif(!isset($invoice)) hide @endif" id="reference_div">
-                            <label for="reference_number">Reference Number <span class="text-danger"></span></label>
-                            {!! Form::text('reference_number', null, ['class' => 'form-control','id'=>'reference_number']) !!}
-                            @if ($errors->has('reference_number'))
-                                <span class="text-danger">
+                        <div class="col-md-4 @if(isset($invoice) && $invoice['status']==1) hide @elseif(!isset($invoice)) hide @endif" id="reference_div">
+                            <div class="form-group mb-3">
+                                <label for="reference_number">Reference Number <span class="text-danger"></span></label>
+                                {!! Form::text('reference_number', null, ['class' => 'form-control','id'=>'reference_number']) !!}
+                                @if ($errors->has('reference_number'))
+                                    <span class="text-danger">
                                     <strong>{{ $errors->first('reference_number') }}</strong>
                                 </span>
-                            @endif
+                                @endif
+                            </div>
                         </div>
-                        <div class="form-group mb-3 col-md-4 @if(isset($invoice) && $invoice['status']==1) hide @elseif(!isset($invoice)) hide @endif" id="pay_method_div">
-                            <label for="payment_method">Payment Method <span class="text-danger">*</span></label>
-                            {!! Form::select('payment_method', $payment_method, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method','style'=>'width:100%']) !!}
-                            @if ($errors->has('payment_method'))
-                                <span class="text-danger">
+                        <div class="col-md-4 @if(isset($invoice) && $invoice['status']==1) hide @elseif(!isset($invoice)) hide @endif" id="pay_method_div">
+                            <div class="form-group mb-3">
+                                <label for="payment_method">Payment Method <span class="text-danger">*</span></label>
+                                {!! Form::select('payment_method', $payment_method, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method','style'=>'width:100%']) !!}
+                                @if ($errors->has('payment_method'))
+                                    <span class="text-danger">
                                     <strong>{{ $errors->first('payment_method') }}</strong>
                                 </span>
-                            @endif
+                                @endif
+                            </div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-12">
-                            <div class="card">
+                            <div class="card mb-0">
                                 <div class="card-header bg-primary">
                                     <div class="row">
                                         <div class="col-md-2">
@@ -316,7 +334,84 @@
                                                 @endif
                                                 </tbody>
                                             </table>
-                                            <table class="table table-hover" style="width: 40%;float: right;">
+                                            <input type="hidden" name="amount_before_tax" id="amount_before_tax" />
+                                            <input type="hidden" name="tax_amount" id="tax_amount" />
+                                            <input type="hidden" name="total" id="total_amount" />
+                                            <button type="button" id="addItem" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>&nbsp;Add Lines</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12 col-lg-6 col-xl-8">
+                                            <div class="form-group mb-0">
+                                                <label for="notes">Notes</label>
+                                                {!! Form::textarea('notes', null, ['class' => 'form-control','id'=>'notes','rows' => '3']) !!}
+                                                @error('notes')
+                                                    <span class="text-danger">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>
+
+                                            <label for="memo">Receipt</label>
+                                            <div class="form-group mb-0 border p-2">
+                                                {!! Form::file('files', ['class' => 'mb-2 border-0', 'id'=> 'files']) !!}
+                                                @if(isset($invoice) && !empty($invoice['files']) && file_exists($invoice['files']))
+                                                    @if(in_array($invoice['file_ext'],['jpg','jpeg','png','bmp']) )
+                                                        <br><img src="{{url($invoice['files'])}}" class="img-thumbnail" style=" width: 150px;" id="attachment_file">
+                                                        <div class="button-group mt-2" id="attachment_div">
+                                                            <button type="button" class="btn btn-sm btn-circle btn-primary" data-magnify="gallery" data-src="{{url($invoice['files'])}}" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                                            <a href="{{url($invoice['files'])}}" download>
+                                                                <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
+                                                            </a>
+                                                            <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$invoice['id']}})"><i class="fa fa-trash"></i></button>
+                                                        </div>
+                                                    @else
+                                                        <br><button class="btn btn-link" type="button" id="attachment_file"><i class="fas fa-file-alt fa-5x"></i></button>
+                                                        <div class="button-group mt-2" id="attachment_div">
+                                                            @if(!in_array($invoice['file_ext'],['xlsx','xls','csv']))
+                                                                <button type="button" class="btn btn-sm btn-circle btn-primary" data-toggle="modal" data-target="#attachmentModal" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                                            @endif
+                                                            <a href="{{url($invoice['files'])}}" download>
+                                                                <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
+                                                            </a>
+                                                            <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$invoice['id']}})"><i class="fa fa-trash"></i></button>
+                                                        </div>
+                                                        <div id="attachmentModal" class="modal fade bs-example-modal-lg" role="dialog">
+                                                            <div class="modal-dialog modal-xl">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title">{{$invoice['file_name']}}</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        @if(!in_array($invoice['file_ext'],['xlsx','xls','csv']))
+                                                                            <iframe src="{{url($invoice['files'])}}" height="400px" width="100%"></iframe>
+                                                                        @endif
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                    <div id="att_del_msg" class="text-danger text-bold"></div>
+                                                @endif
+                                                @if ($errors->has('files'))
+                                                    <br>
+                                                    <span class="text-danger">
+                                                                <strong>{{ $errors->first('files') }}</strong>
+                                                            </span>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 col-lg-6 col-xl-8">
+                                            <table class="table table-hover">
                                                 <tr id="subtotal_row">
                                                     <th width="50%">Subtotal</th>
                                                     <td width="50%">
@@ -375,79 +470,6 @@
                                                     <td width="50%"><input type="text" class="form-control text-right" id="total" readonly="" /></td>
                                                 </tr>
                                             </table>
-                                            <input type="hidden" name="amount_before_tax" id="amount_before_tax" />
-                                            <input type="hidden" name="tax_amount" id="tax_amount" />
-                                            <input type="hidden" name="total" id="total_amount" />
-                                            <button type="button" id="addItem" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>&nbsp;Add Lines</button>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="form-group mb-0">
-                                                        <label for="notes">Notes</label>
-                                                        {!! Form::textarea('notes', null, ['class' => 'form-control','id'=>'notes','rows' => '3']) !!}
-                                                        @error('notes')
-                                                        <span class="text-danger">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <label for="memo">Receipt</label>
-                                                    <div class="form-group mb-0 border p-2">
-                                                        {!! Form::file('files', ['class' => 'mb-2 border-0', 'id'=> 'files']) !!}
-                                                        @if(isset($invoice) && !empty($invoice['files']) && file_exists($invoice['files']))
-                                                            @if(in_array($invoice['file_ext'],['jpg','jpeg','png','bmp']) )
-                                                                <br><img src="{{url($invoice['files'])}}" class="img-thumbnail" style=" width: 150px;" id="attachment_file">
-                                                                <div class="button-group mt-2" id="attachment_div">
-                                                                    <button type="button" class="btn btn-sm btn-circle btn-primary" data-magnify="gallery" data-src="{{url($invoice['files'])}}" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
-                                                                    <a href="{{url($invoice['files'])}}" download>
-                                                                        <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
-                                                                    </a>
-                                                                    <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$invoice['id']}})"><i class="fa fa-trash"></i></button>
-                                                                </div>
-                                                            @else
-                                                                <br><button class="btn btn-link" type="button" id="attachment_file"><i class="fas fa-file-alt fa-5x"></i></button>
-                                                                <div class="button-group mt-2" id="attachment_div">
-                                                                    @if(!in_array($invoice['file_ext'],['xlsx','xls','csv']))
-                                                                        <button type="button" class="btn btn-sm btn-circle btn-primary" data-toggle="modal" data-target="#attachmentModal" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
-                                                                    @endif
-                                                                    <a href="{{url($invoice['files'])}}" download>
-                                                                        <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
-                                                                    </a>
-                                                                    <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$invoice['id']}})"><i class="fa fa-trash"></i></button>
-                                                                </div>
-                                                                <div id="attachmentModal" class="modal fade bs-example-modal-lg" role="dialog">
-                                                                    <div class="modal-dialog modal-xl">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header">
-                                                                                <h4 class="modal-title">{{$invoice['file_name']}}</h4>
-                                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                            </div>
-                                                                            <div class="modal-body">
-                                                                                @if(!in_array($invoice['file_ext'],['xlsx','xls','csv']))
-                                                                                    <iframe src="{{url($invoice['files'])}}" height="400px" width="100%"></iframe>
-                                                                                @endif
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                            <div id="att_del_msg" class="text-danger text-bold"></div>
-                                                        @endif
-                                                        @if ($errors->has('files'))
-                                                            <br>
-                                                            <span class="text-danger">
-                                                                <strong>{{ $errors->first('files') }}</strong>
-                                                            </span>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

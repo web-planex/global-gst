@@ -16,132 +16,154 @@
                     {!! Form::open(['url' => route('debit-notes.store'), 'class' => 'form-horizontal','files'=>true,'id'=>'DebitNoteForm']) !!}
                 @endif
                     @csrf
-                    <div class="form-row">
-                        <div class="form-group mb-3 col-md-12">
-                            <label for="customer">Customer <span class="text-danger">*</span></label>
-                            {!! Form::select('customer', $payees, isset($debit_note)&&!empty($debit_note)?$debit_note['customer_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'customer', 'onchange'=>'getAddress(this.value)']) !!}
-                            <div class="wrapper" id="wrp" style="display: none;">
-                                <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
-                            </div>
-                            @error('customer')
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group mb-3">
+                                <label for="customer">Customer <span class="text-danger">*</span></label>
+                                {!! Form::select('customer', $payees, isset($debit_note)&&!empty($debit_note)?$debit_note['customer_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'customer', 'onchange'=>'getAddress(this.value)']) !!}
+                                <div class="wrapper" id="wrp" style="display: none;">
+                                    <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
+                                </div>
+                                @error('customer')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                            @enderror
+                                @enderror
 
-                            <div class="row mt-3 @if(isset($debit_note) && empty($debit_note)) hide @elseif(!isset($debit_note)) hide @endif" id="cust_address">
-                                <div class="col-md-6">
-                                    <div class="card border-info mb-0" style="background-color: #ECF0F4;">
-                                        <div class="card-header bg-primary">
-                                            <h4 class="m-b-0 text-white pull-left">Billing Address</h4>
-                                            <a href="javascript:;" data-toggle="modal" data-target="#BillingAddressModal">
-                                                <h4 class="m-b-0 text-white text-right">Change</h4>
-                                            </a>
-                                        </div>
-                                        <div class="card-body pt-2 pb-2">
-                                            <div id="BillingDiv">
-                                                @if(isset($debit_note) && !empty($debit_note))
-                                                    <p class="card-text mb-0">{{$debit_note['customer']['billing_name']}}</p>
-                                                    <p class="card-text mb-0">{{$debit_note['customer']['billing_phone']}}</p>
-                                                    <p class="card-text mb-0">{{$debit_note['customer']['billing_street']}}</p>
-                                                    <p class="card-text mb-0">{{$debit_note['customer']['billing_city']}} - {{$debit_note['customer']['billing_pincode']}}</p>
-                                                    <p class="card-text mb-0">{{$debit_note['customer']['billing_state_name']}}</p>
-                                                    <p class="card-text mb-0">{{$debit_note['customer']['billing_country']}}</p>
-                                                @endif
+                                <div class="row mt-3 @if(isset($debit_note) && empty($debit_note)) hide @elseif(!isset($debit_note)) hide @endif" id="cust_address">
+                                    <div class="col-md-6">
+                                        <div class="card border-info mb-0" style="background-color: #ECF0F4;">
+                                            <div class="card-header bg-primary">
+                                                <h4 class="m-b-0 text-white pull-left">Billing Address</h4>
+                                                <a href="javascript:;" data-toggle="modal" data-target="#BillingAddressModal">
+                                                    <h4 class="m-b-0 text-white text-right">Change</h4>
+                                                </a>
                                             </div>
-                                            <div id="billing_msg" class="text-info font-weight-bolder"></div>
+                                            <div class="card-body pt-2 pb-2">
+                                                <div id="BillingDiv">
+                                                    @if(isset($debit_note) && !empty($debit_note))
+                                                        <p class="card-text mb-0">{{$debit_note['customer']['billing_name']}}</p>
+                                                        <p class="card-text mb-0">{{$debit_note['customer']['billing_phone']}}</p>
+                                                        <p class="card-text mb-0">{{$debit_note['customer']['billing_street']}}</p>
+                                                        <p class="card-text mb-0">{{$debit_note['customer']['billing_city']}} - {{$debit_note['customer']['billing_pincode']}}</p>
+                                                        <p class="card-text mb-0">{{$debit_note['customer']['billing_state_name']}}</p>
+                                                        <p class="card-text mb-0">{{$debit_note['customer']['billing_country']}}</p>
+                                                    @endif
+                                                </div>
+                                                <div id="billing_msg" class="text-info font-weight-bolder"></div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="card border-info mb-0" style="background-color: #ECF0F4;">
-                                        <div class="card-header bg-primary">
-                                            <h4 class="m-b-0 text-white pull-left">Shipping Address</h4>
-                                            <a href="javascript:;" data-toggle="modal" data-target="#ShippingAddressModal">
-                                                <h4 class="m-b-0 text-white text-right">Change</h4>
-                                            </a>
-                                        </div>
-                                        <div class="card-body pt-2 pb-2">
-                                            <div id="ShippingDiv">
-                                                @if(isset($debit_note) && !empty($debit_note))
-                                                    <p class="card-text mb-0">{{$debit_note['customer']['shipping_name']}}</p>
-                                                    <p class="card-text mb-0">{{$debit_note['customer']['shipping_phone']}}</p>
-                                                    <p class="card-text mb-0">{{$debit_note['customer']['shipping_street']}}</p>
-                                                    <p class="card-text mb-0">{{$debit_note['customer']['shipping_city']}} - {{$debit_note['customer']['shipping_pincode']}}</p>
-                                                    <p class="card-text mb-0">{{$debit_note['customer']['shipping_state_name']}}</p>
-                                                    <p class="card-text mb-0">{{$debit_note['customer']['shipping_country']}}</p>
-                                                @endif
+                                    <div class="col-md-6">
+                                        <div class="card border-info mb-0" style="background-color: #ECF0F4;">
+                                            <div class="card-header bg-primary">
+                                                <h4 class="m-b-0 text-white pull-left">Shipping Address</h4>
+                                                <a href="javascript:;" data-toggle="modal" data-target="#ShippingAddressModal">
+                                                    <h4 class="m-b-0 text-white text-right">Change</h4>
+                                                </a>
                                             </div>
-                                            <div id="shipping_msg" class="text-info font-weight-bolder"></div>
+                                            <div class="card-body pt-2 pb-2">
+                                                <div id="ShippingDiv">
+                                                    @if(isset($debit_note) && !empty($debit_note))
+                                                        <p class="card-text mb-0">{{$debit_note['customer']['shipping_name']}}</p>
+                                                        <p class="card-text mb-0">{{$debit_note['customer']['shipping_phone']}}</p>
+                                                        <p class="card-text mb-0">{{$debit_note['customer']['shipping_street']}}</p>
+                                                        <p class="card-text mb-0">{{$debit_note['customer']['shipping_city']}} - {{$debit_note['customer']['shipping_pincode']}}</p>
+                                                        <p class="card-text mb-0">{{$debit_note['customer']['shipping_state_name']}}</p>
+                                                        <p class="card-text mb-0">{{$debit_note['customer']['shipping_country']}}</p>
+                                                    @endif
+                                                </div>
+                                                <div id="shipping_msg" class="text-info font-weight-bolder"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="invoice_date">Debit Note Date <span class="text-danger">*</span></label>
-                            {!! Form::text('debit_note_date', isset($debit_note)&&!empty($debit_note)?date('d-m-Y',strtotime($debit_note['debit_note_date'])):date('d-m-Y'), ['class' => 'form-control','id'=>'invoice_date']) !!}
-                            @error('debit_note_date')
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="invoice_date">Debit Note Date <span class="text-danger">*</span></label>
+                                {!! Form::text('debit_note_date', isset($debit_note)&&!empty($debit_note)?date('d-m-Y',strtotime($debit_note['debit_note_date'])):date('d-m-Y'), ['class' => 'form-control','id'=>'invoice_date']) !!}
+                                @error('debit_note_date')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                            @enderror
+                                @enderror
+                            </div>
                         </div>
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="debit_note_number">Debit Note Number <span class="text-danger">*</span></label>
-                            {!! Form::text('debit_note_number', isset($debit_note)&&!empty($debit_note)?$debit_note['debit_note_number']:null, ['class' => 'form-control','id'=>'debit_note_number']) !!}
-                            @error('debit_note_number')
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="debit_note_number">Debit Note Number <span class="text-danger">*</span></label>
+                                {!! Form::text('debit_note_number', isset($debit_note)&&!empty($debit_note)?$debit_note['debit_note_number']:null, ['class' => 'form-control','id'=>'debit_note_number']) !!}
+                                @error('debit_note_number')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                            @enderror
+                                @enderror
+                            </div>
                         </div>
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="ref_invoice_id">Invoice# <span class="text-danger">*</span></label>
-                            <select id="ref_invoice_id" name="ref_invoice_id" class="form-control" onchange="set_invoice_date()">
-                                @foreach($invoice_ids as $invoice_id)
-                                <option value="{{$invoice_id['id']}}" data-date="{{date('d-m-Y',strtotime($invoice_id['invoice_date']))}}" @if(isset($debit_note)&&$debit_note['ref_invoice_id']==$invoice_id['id']) selected="" @endif>{{$invoice_id['invoice_number']}}</option>
-                                @endforeach
-                            </select>
-                            @error('ref_invoice_id')
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="ref_invoice_id">Invoice# <span class="text-danger">*</span></label>
+                                <select id="ref_invoice_id" name="ref_invoice_id" class="form-control" onchange="set_invoice_date()">
+                                    @foreach($invoice_ids as $invoice_id)
+                                        <option value="{{$invoice_id['id']}}" data-date="{{date('d-m-Y',strtotime($invoice_id['invoice_date']))}}" @if(isset($debit_note)&&$debit_note['ref_invoice_id']==$invoice_id['id']) selected="" @endif>{{$invoice_id['invoice_number']}}</option>
+                                    @endforeach
+                                </select>
+                                @error('ref_invoice_id')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                            @enderror
+                                @enderror
+                            </div>
                         </div>
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="ref_invoice_date">Invoice Date</label>
-                            {!! Form::text('ref_invoice_date', null, ['class' => 'form-control','id'=>'ref_invoice_date', 'readonly'=>'']) !!}
-                        </div>
-                        <div class="form-group mb-3 col-md-6" id="order_div">
-                            <label for="order_number">Order Number</label>
-                            {!! Form::text('order_number', null, ['class' => 'form-control','id'=>'order_number']) !!}
-                            @error('order_number')
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="ref_invoice_date">Invoice Date</label>
+                                {!! Form::text('ref_invoice_date', null, ['class' => 'form-control','id'=>'ref_invoice_date', 'readonly'=>'']) !!}
+                                @error('ref_invoice_date')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                            @enderror
+                                @enderror
+                            </div>
                         </div>
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="due_date">Due Date <span class="text-danger">*</span></label>
-                            {!! Form::text('due_date', isset($debit_note)&&!empty($debit_note)?date('d-m-Y',strtotime($debit_note['due_date'])):null, ['class' => 'form-control','id'=>'due_date']) !!}
-                            @error('due_date')
+                        <div class="col-md-6" id="order_div">
+                            <div class="form-group mb-3">
+                                <label for="order_number">Order Number</label>
+                                {!! Form::text('order_number', null, ['class' => 'form-control','id'=>'order_number']) !!}
+                                @error('order_number')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                            @enderror
+                                @enderror
+                            </div>
                         </div>
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="payment_method">Payment Method <span class="text-danger">*</span></label>
-                            {!! Form::select('payment_method', $payment_method, isset($debit_note)&&!empty($debit_note)?$debit_note['payment_method']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method']) !!}
-                            @error('payment_method')
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="due_date">Due Date <span class="text-danger">*</span></label>
+                                {!! Form::text('due_date', isset($debit_note)&&!empty($debit_note)?date('d-m-Y',strtotime($debit_note['due_date'])):null, ['class' => 'form-control','id'=>'due_date']) !!}
+                                @error('due_date')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                            @enderror
+                                @enderror
+                            </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="payment_method">Payment Method <span class="text-danger">*</span></label>
+                                {!! Form::select('payment_method', $payment_method, isset($debit_note)&&!empty($debit_note)?$debit_note['payment_method']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method']) !!}
+                                @error('payment_method')
+                                <span class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+
                         {{--<div class="form-group mb-3 col-md-6">
                             <label for="status">Status <span class="text-danger">*</span></label>
                             {!! Form::select('status', \App\Models\Globals\Invoice::$invoice_status, null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
@@ -151,27 +173,29 @@
                                 </span>
                             @enderror
                         </div>--}}
-                        <div class="form-group mb-3 col-md-4">
-                            <label for="payment_terms">Payment Terms</label>
-                            <select name="payment_terms" class="form-control ex-payment-terms amounts-are-select2" id="payment_terms">
-                                <option data-days="0" value="">Due on Receipt</option>
-                                @foreach ($payment_terms as $payment_term)
-                                <option @if(isset($debit_note)&&$debit_note['payment_term_id']==$payment_term['id']) selected @endif data-days="{{$payment_term['terms_days']}}" value="{{$payment_term['id']}}">{{$payment_term['terms_name']}}</option>
-                                @endforeach
-                            </select>
-                            <div class="wrapper" id="wrp_terms" style="display: none;">
-                                <a href="javascript:;" class="font-weight-300" onclick="OpenPaymentTermsModal()"><i class="fa fa-plus-circle"></i> Add New</a>
-                            </div>
-                            @error('payment_terms')
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="payment_terms">Payment Terms</label>
+                                <select name="payment_terms" class="form-control ex-payment-terms amounts-are-select2" id="payment_terms">
+                                    <option data-days="0" value="">Due on Receipt</option>
+                                    @foreach ($payment_terms as $payment_term)
+                                        <option @if(isset($debit_note)&&$debit_note['payment_term_id']==$payment_term['id']) selected @endif data-days="{{$payment_term['terms_days']}}" value="{{$payment_term['id']}}">{{$payment_term['terms_name']}}</option>
+                                    @endforeach
+                                </select>
+                                <div class="wrapper" id="wrp_terms" style="display: none;">
+                                    <a href="javascript:;" class="font-weight-300" onclick="OpenPaymentTermsModal()"><i class="fa fa-plus-circle"></i> Add New</a>
+                                </div>
+                                @error('payment_terms')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                            @enderror
+                                @enderror
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <div class="card">
+                            <div class="card mb-0">
                                 <div class="card-header bg-primary">
                                     <div class="row">
                                         <div class="col-md-2">
@@ -322,7 +346,84 @@
                                                 @endif
                                                 </tbody>
                                             </table>
-                                            <table class="table table-hover" style="width: 40%;float: right;">
+                                            <input type="hidden" name="amount_before_tax" id="amount_before_tax" />
+                                            <input type="hidden" name="tax_amount" id="tax_amount" />
+                                            <input type="hidden" name="total" id="total_amount" />
+                                            <button type="button" id="addItem" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>&nbsp;Add Lines</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12 col-lg-6 col-xl-8">
+                                            <div class="form-group mb-0">
+                                                <label for="notes">Notes</label>
+                                                {!! Form::textarea('notes', null, ['class' => 'form-control','id'=>'notes','rows' => '3']) !!}
+                                                @error('notes')
+                                                    <span class="text-danger">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>
+
+                                            <label for="files"><i class="fa fa-paperclip"></i>&nbsp;Receipt</label>
+                                            <div class="form-group mb-0 border p-2">
+                                                {!! Form::file('files', ['class' => 'mb-2 border-0', 'id'=> 'files']) !!}
+                                                @if(isset($debit_note) && !empty($debit_note['files']) && file_exists($debit_note['files']))
+                                                    @if(in_array($debit_note['file_ext'],['jpg','jpeg','png','bmp']) )
+                                                        <br><img src="{{url($debit_note['files'])}}" class="img-thumbnail" style=" width: 150px;" id="attachment_file">
+                                                        <div class="button-group mt-2" id="attachment_div">
+                                                            <button type="button" class="btn btn-sm btn-circle btn-primary" data-magnify="gallery" data-src="{{url($debit_note['files'])}}" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                                            <a href="{{url($debit_note['files'])}}" download>
+                                                                <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
+                                                            </a>
+                                                            <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$debit_note['id']}})"><i class="fa fa-trash"></i></button>
+                                                        </div>
+                                                    @else
+                                                        <br><button class="btn btn-link" type="button" id="attachment_file"><i class="fas fa-file-alt fa-5x"></i></button>
+                                                        <div class="button-group mt-2" id="attachment_div">
+                                                            @if(!in_array($debit_note['file_ext'],['xlsx','xls','csv']))
+                                                                <button type="button" class="btn btn-sm btn-circle btn-primary" data-toggle="modal" data-target="#attachmentModal" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                                            @endif
+                                                            <a href="{{url($debit_note['files'])}}" download>
+                                                                <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
+                                                            </a>
+                                                            <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$debit_note['id']}})"><i class="fa fa-trash"></i></button>
+                                                        </div>
+                                                        <div id="attachmentModal" class="modal fade bs-example-modal-lg" role="dialog">
+                                                            <div class="modal-dialog modal-xl">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title">{{$debit_note['file_name']}}</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        @if(!in_array($debit_note['file_ext'],['xlsx','xls','csv']))
+                                                                            <iframe src="{{url($debit_note['files'])}}" height="400px" width="100%"></iframe>
+                                                                        @endif
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                    <div id="att_del_msg" class="text-danger text-bold"></div>
+                                                @endif
+                                                @error('files')
+                                                <br>
+                                                <span class="text-danger">
+                                                                        <strong>{{ $message }}</strong>
+                                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 col-lg-6 col-xl-8">
+                                            <table class="table table-hover">
                                                 <tr id="subtotal_row">
                                                     <th width="50%">Subtotal</th>
                                                     <td width="50%">
@@ -381,79 +482,6 @@
                                                     <td width="50%"><input type="text" class="form-control text-right" id="total" readonly="" /></td>
                                                 </tr>
                                             </table>
-                                            <input type="hidden" name="amount_before_tax" id="amount_before_tax" />
-                                            <input type="hidden" name="tax_amount" id="tax_amount" />
-                                            <input type="hidden" name="total" id="total_amount" />
-                                            <button type="button" id="addItem" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>&nbsp;Add Lines</button>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="form-group mb-0">
-                                                        <label for="notes">Notes</label>
-                                                        {!! Form::textarea('notes', null, ['class' => 'form-control','id'=>'notes','rows' => '3']) !!}
-                                                        @error('notes')
-                                                        <span class="text-danger">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <label for="files"><i class="fa fa-paperclip"></i>&nbsp;Receipt</label>
-                                                    <div class="form-group mb-0 border p-2">
-                                                        {!! Form::file('files', ['class' => 'mb-2 border-0', 'id'=> 'files']) !!}
-                                                        @if(isset($debit_note) && !empty($debit_note['files']) && file_exists($debit_note['files']))
-                                                            @if(in_array($debit_note['file_ext'],['jpg','jpeg','png','bmp']) )
-                                                                <br><img src="{{url($debit_note['files'])}}" class="img-thumbnail" style=" width: 150px;" id="attachment_file">
-                                                                <div class="button-group mt-2" id="attachment_div">
-                                                                    <button type="button" class="btn btn-sm btn-circle btn-primary" data-magnify="gallery" data-src="{{url($debit_note['files'])}}" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
-                                                                    <a href="{{url($debit_note['files'])}}" download>
-                                                                        <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
-                                                                    </a>
-                                                                    <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$debit_note['id']}})"><i class="fa fa-trash"></i></button>
-                                                                </div>
-                                                            @else
-                                                                <br><button class="btn btn-link" type="button" id="attachment_file"><i class="fas fa-file-alt fa-5x"></i></button>
-                                                                <div class="button-group mt-2" id="attachment_div">
-                                                                    @if(!in_array($debit_note['file_ext'],['xlsx','xls','csv']))
-                                                                        <button type="button" class="btn btn-sm btn-circle btn-primary" data-toggle="modal" data-target="#attachmentModal" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
-                                                                    @endif
-                                                                    <a href="{{url($debit_note['files'])}}" download>
-                                                                        <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
-                                                                    </a>
-                                                                    <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$debit_note['id']}})"><i class="fa fa-trash"></i></button>
-                                                                </div>
-                                                                <div id="attachmentModal" class="modal fade bs-example-modal-lg" role="dialog">
-                                                                    <div class="modal-dialog modal-xl">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header">
-                                                                                <h4 class="modal-title">{{$debit_note['file_name']}}</h4>
-                                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                            </div>
-                                                                            <div class="modal-body">
-                                                                                @if(!in_array($debit_note['file_ext'],['xlsx','xls','csv']))
-                                                                                    <iframe src="{{url($debit_note['files'])}}" height="400px" width="100%"></iframe>
-                                                                                @endif
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                            <div id="att_del_msg" class="text-danger text-bold"></div>
-                                                        @endif
-                                                        @error('files')
-                                                            <br>
-                                                            <span class="text-danger">
-                                                                <strong>{{ $message }}</strong>
-                                                            </span>
-                                                        @enderror
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

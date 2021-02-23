@@ -16,63 +16,65 @@
                         {!! Form::open(['url' => url('estimate'), 'class' => 'form-horizontal','files'=>true,'id'=>'Estimateform']) !!}
                     @endif
                     @csrf
-                    <div class="form-row">
-                        <div class="form-group mb-3 col-md-12">
-                            <label for="customer">Customer <span class="text-danger">*</span></label>
-                            {!! Form::select('customer', $payees, isset($estimate)&&!empty($estimate)?$estimate['customer_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'customer', 'onchange'=>'getAddress(this.value)']) !!}
-                            <div class="wrapper" id="wrp" style="display: none;">
-                                <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
-                            </div>
-                            @if ($errors->has('customer'))
-                                <span class="text-danger">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group mb-3">
+                                <label for="customer">Customer <span class="text-danger">*</span></label>
+                                {!! Form::select('customer', $payees, isset($estimate)&&!empty($estimate)?$estimate['customer_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'customer', 'onchange'=>'getAddress(this.value)']) !!}
+                                <div class="wrapper" id="wrp" style="display: none;">
+                                    <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
+                                </div>
+                                @if ($errors->has('customer'))
+                                    <span class="text-danger">
                                     <strong>{{ $errors->first('customer') }}</strong>
                                 </span>
-                            @endif
+                                @endif
 
-                            <div class="row mt-3 @if(isset($estimate) && empty($estimate)) hide @elseif(!isset($estimate)) hide @endif" id="cust_address">
-                                <div class="col-md-6">
-                                    <div class="card border-info mb-0" style="background-color: #ECF0F4;">
-                                        <div class="card-header bg-primary">
-                                            <h4 class="m-b-0 text-white pull-left">Billing Address</h4>
-                                            <a href="javascript:;" data-toggle="modal" data-target="#BillingAddressModal">
-                                                <h4 class="m-b-0 text-white text-right">Change</h4>
-                                            </a>
-                                        </div>
-                                        <div class="card-body pt-2 pb-2">
-                                            <div id="BillingDiv">
-                                                @if(isset($estimate) && !empty($estimate))
-                                                    <p class="card-text mb-0">{{$estimate['customer']['billing_name']}}</p>
-                                                    <p class="card-text mb-0">{{$estimate['customer']['billing_phone']}}</p>
-                                                    <p class="card-text mb-0">{{$estimate['customer']['billing_street']}}</p>
-                                                    <p class="card-text mb-0">{{$estimate['customer']['billing_city']}} - {{$estimate['customer']['billing_pincode']}}</p>
-                                                    <p class="card-text mb-0">{{$estimate['customer']['billing_state_name']}}</p>
-                                                    <p class="card-text mb-0">{{$estimate['customer']['billing_country']}}</p>
-                                                @endif
+                                <div class="row mt-3 @if(isset($estimate) && empty($estimate)) hide @elseif(!isset($estimate)) hide @endif" id="cust_address">
+                                    <div class="col-md-6">
+                                        <div class="card border-info mb-0" style="background-color: #ECF0F4;">
+                                            <div class="card-header bg-primary">
+                                                <h4 class="m-b-0 text-white pull-left">Billing Address</h4>
+                                                <a href="javascript:;" data-toggle="modal" data-target="#BillingAddressModal">
+                                                    <h4 class="m-b-0 text-white text-right">Change</h4>
+                                                </a>
                                             </div>
-                                            <div id="billing_msg" class="text-info font-weight-bolder"></div>
+                                            <div class="card-body pt-2 pb-2">
+                                                <div id="BillingDiv">
+                                                    @if(isset($estimate) && !empty($estimate))
+                                                        <p class="card-text mb-0">{{$estimate['customer']['billing_name']}}</p>
+                                                        <p class="card-text mb-0">{{$estimate['customer']['billing_phone']}}</p>
+                                                        <p class="card-text mb-0">{{$estimate['customer']['billing_street']}}</p>
+                                                        <p class="card-text mb-0">{{$estimate['customer']['billing_city']}} - {{$estimate['customer']['billing_pincode']}}</p>
+                                                        <p class="card-text mb-0">{{$estimate['customer']['billing_state_name']}}</p>
+                                                        <p class="card-text mb-0">{{$estimate['customer']['billing_country']}}</p>
+                                                    @endif
+                                                </div>
+                                                <div id="billing_msg" class="text-info font-weight-bolder"></div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="card border-info mb-0" style="background-color: #ECF0F4;">
-                                        <div class="card-header bg-primary">
-                                            <h4 class="m-b-0 text-white pull-left">Shipping Address</h4>
-                                            <a href="javascript:;" data-toggle="modal" data-target="#ShippingAddressModal">
-                                                <h4 class="m-b-0 text-white text-right">Change</h4>
-                                            </a>
-                                        </div>
-                                        <div class="card-body pt-2 pb-2">
-                                            <div id="ShippingDiv">
-                                                @if(isset($estimate) && !empty($estimate))
-                                                    <p class="card-text mb-0">{{$estimate['customer']['shipping_name']}}</p>
-                                                    <p class="card-text mb-0">{{$estimate['customer']['shipping_phone']}}</p>
-                                                    <p class="card-text mb-0">{{$estimate['customer']['shipping_street']}}</p>
-                                                    <p class="card-text mb-0">{{$estimate['customer']['shipping_city']}} - {{$estimate['customer']['shipping_pincode']}}</p>
-                                                    <p class="card-text mb-0">{{$estimate['customer']['shipping_state_name']}}</p>
-                                                    <p class="card-text mb-0">{{$estimate['customer']['shipping_country']}}</p>
-                                                @endif
+                                    <div class="col-md-6">
+                                        <div class="card border-info mb-0" style="background-color: #ECF0F4;">
+                                            <div class="card-header bg-primary">
+                                                <h4 class="m-b-0 text-white pull-left">Shipping Address</h4>
+                                                <a href="javascript:;" data-toggle="modal" data-target="#ShippingAddressModal">
+                                                    <h4 class="m-b-0 text-white text-right">Change</h4>
+                                                </a>
                                             </div>
-                                            <div id="shipping_msg" class="text-info font-weight-bolder"></div>
+                                            <div class="card-body pt-2 pb-2">
+                                                <div id="ShippingDiv">
+                                                    @if(isset($estimate) && !empty($estimate))
+                                                        <p class="card-text mb-0">{{$estimate['customer']['shipping_name']}}</p>
+                                                        <p class="card-text mb-0">{{$estimate['customer']['shipping_phone']}}</p>
+                                                        <p class="card-text mb-0">{{$estimate['customer']['shipping_street']}}</p>
+                                                        <p class="card-text mb-0">{{$estimate['customer']['shipping_city']}} - {{$estimate['customer']['shipping_pincode']}}</p>
+                                                        <p class="card-text mb-0">{{$estimate['customer']['shipping_state_name']}}</p>
+                                                        <p class="card-text mb-0">{{$estimate['customer']['shipping_country']}}</p>
+                                                    @endif
+                                                </div>
+                                                <div id="shipping_msg" class="text-info font-weight-bolder"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -80,30 +82,34 @@
                         </div>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="estimate_date">Estimate Date <span class="text-danger">*</span></label>
-                            {!! Form::text('estimate_date', isset($estimate)&&!empty($estimate)?date('d-m-Y',strtotime($estimate['estimate_date'])):date('d-m-Y'), ['class' => 'form-control','id'=>'estimate_date']) !!}
-                            @if ($errors->has('estimate_date'))
-                                <span class="text-danger">
-                                    <strong>{{ $errors->first('estimate_date') }}</strong>
-                                </span>
-                            @endif
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="estimate_date">Estimate Date <span class="text-danger">*</span></label>
+                                {!! Form::text('estimate_date', isset($estimate)&&!empty($estimate)?date('d-m-Y',strtotime($estimate['estimate_date'])):date('d-m-Y'), ['class' => 'form-control','id'=>'estimate_date']) !!}
+                                @if ($errors->has('estimate_date'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('estimate_date') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
                         </div>
-                        <div class="form-group mb-3 col-md-6">
-                            <label for="expiry_date">Expiry Date <span class="text-danger">*</span></label>
-                            {!! Form::text('expiry_date', isset($estimate)&&!empty($estimate)?date('d-m-Y',strtotime($estimate['expiry_date'])):null, ['class' => 'form-control','id'=>'expiry_date']) !!}
-                            @if ($errors->has('expiry_date'))
-                                <span class="text-danger">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="expiry_date">Expiry Date <span class="text-danger">*</span></label>
+                                {!! Form::text('expiry_date', isset($estimate)&&!empty($estimate)?date('d-m-Y',strtotime($estimate['expiry_date'])):null, ['class' => 'form-control','id'=>'expiry_date']) !!}
+                                @if ($errors->has('expiry_date'))
+                                    <span class="text-danger">
                                     <strong>{{ $errors->first('expiry_date') }}</strong>
                                 </span>
-                            @endif
+                                @endif
+                            </div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-12">
-                            <div class="card">
+                            <div class="card mb-0">
                                 <div class="card-header bg-primary">
                                     <div class="row">
                                         <div class="col-md-2">
@@ -254,7 +260,74 @@
                                                 @endif
                                                 </tbody>
                                             </table>
-                                            <table class="table table-hover" style="width: 40%;float: right;">
+                                            <input type="hidden" name="amount_before_tax" id="amount_before_tax" />
+                                            <input type="hidden" name="tax_amount" id="tax_amount" />
+                                            <input type="hidden" name="total" id="total_amount" />
+                                            <button type="button" id="addItem" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>&nbsp;Add Lines</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12 col-lg-6 col-xl-8">
+                                            <label for="memo">Receipt</label>
+                                            <div class="form-group mb-0 border p-2">
+                                                {!! Form::file('files', ['class' => 'mb-2 border-0', 'id'=> 'files']) !!}
+                                                @if(isset($estimate) && !empty($estimate['files']) && file_exists($estimate['files']))
+                                                    @if(in_array($estimate['file_ext'],['jpg','jpeg','png','bmp']) )
+                                                        <br><img src="{{url($estimate['files'])}}" class="img-thumbnail" style=" width: 150px;" id="attachment_file">
+                                                        <div class="button-group mt-2" id="attachment_div">
+                                                            <button type="button" class="btn btn-sm btn-circle btn-primary" data-magnify="gallery" data-src="{{url($estimate['files'])}}" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                                            <a href="{{url($estimate['files'])}}" download>
+                                                                <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
+                                                            </a>
+                                                            <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$estimate['id']}})"><i class="fa fa-trash"></i></button>
+                                                        </div>
+                                                    @else
+                                                        <br><button class="btn btn-link" type="button" id="attachment_file"><i class="fas fa-file-alt fa-5x"></i></button>
+                                                        <div class="button-group mt-2" id="attachment_div">
+                                                            @if(!in_array($estimate['file_ext'],['xlsx','xls','csv']))
+                                                                <button type="button" class="btn btn-sm btn-circle btn-primary" data-toggle="modal" data-target="#attachmentModal" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
+                                                            @endif
+                                                            <a href="{{url($estimate['files'])}}" download>
+                                                                <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
+                                                            </a>
+                                                            <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$estimate['id']}})"><i class="fa fa-trash"></i></button>
+                                                        </div>
+                                                        <div id="attachmentModal" class="modal fade bs-example-modal-lg" role="dialog">
+                                                            <div class="modal-dialog modal-xl">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title">{{$estimate['file_name']}}</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        @if(!in_array($estimate['file_ext'],['xlsx','xls','csv']))
+                                                                            <iframe src="{{url($estimate['files'])}}" height="400px" width="100%"></iframe>
+                                                                        @endif
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                    <div id="att_del_msg" class="text-danger text-bold"></div>
+                                                @endif
+                                                @if ($errors->has('files'))
+                                                    <br>
+                                                    <span class="text-danger">
+                                                                        <strong>{{ $errors->first('files') }}</strong>
+                                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 col-lg-6 col-xl-8">
+                                            <table class="table table-hover">
                                                 <tr id="subtotal_row">
                                                     <th width="50%">Subtotal</th>
                                                     <td width="50%">
@@ -313,66 +386,6 @@
                                                     <td width="50%"><input type="text" class="form-control text-right" id="total" readonly="" /></td>
                                                 </tr>
                                             </table>
-                                            <input type="hidden" name="amount_before_tax" id="amount_before_tax" />
-                                            <input type="hidden" name="tax_amount" id="tax_amount" />
-                                            <input type="hidden" name="total" id="total_amount" />
-                                            <button type="button" id="addItem" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>&nbsp;Add Lines</button>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <label for="memo">Receipt</label>
-                                                    <div class="form-group mb-0 border p-2">
-                                                        {!! Form::file('files', ['class' => 'mb-2 border-0', 'id'=> 'files']) !!}
-                                                        @if(isset($estimate) && !empty($estimate['files']) && file_exists($estimate['files']))
-                                                            @if(in_array($estimate['file_ext'],['jpg','jpeg','png','bmp']) )
-                                                                <br><img src="{{url($estimate['files'])}}" class="img-thumbnail" style=" width: 150px;" id="attachment_file">
-                                                                <div class="button-group mt-2" id="attachment_div">
-                                                                    <button type="button" class="btn btn-sm btn-circle btn-primary" data-magnify="gallery" data-src="{{url($estimate['files'])}}" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
-                                                                    <a href="{{url($estimate['files'])}}" download>
-                                                                        <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
-                                                                    </a>
-                                                                    <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$estimate['id']}})"><i class="fa fa-trash"></i></button>
-                                                                </div>
-                                                            @else
-                                                                <br><button class="btn btn-link" type="button" id="attachment_file"><i class="fas fa-file-alt fa-5x"></i></button>
-                                                                <div class="button-group mt-2" id="attachment_div">
-                                                                    @if(!in_array($estimate['file_ext'],['xlsx','xls','csv']))
-                                                                        <button type="button" class="btn btn-sm btn-circle btn-primary" data-toggle="modal" data-target="#attachmentModal" data-toggle="tooltip" data-placement="top" title="View"><i class="fa fa-eye"></i></button>
-                                                                    @endif
-                                                                    <a href="{{url($estimate['files'])}}" download>
-                                                                        <button type="button" class="btn btn-sm btn-circle btn-info" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></button>
-                                                                    </a>
-                                                                    <button type="button" class="btn btn-sm btn-circle btn-danger" data-toggle="tooltip" data-placement="top" title="Delete" id="delete_attachment" onclick="deleteAttachment({{$estimate['id']}})"><i class="fa fa-trash"></i></button>
-                                                                </div>
-                                                                <div id="attachmentModal" class="modal fade bs-example-modal-lg" role="dialog">
-                                                                    <div class="modal-dialog modal-xl">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header">
-                                                                                <h4 class="modal-title">{{$estimate['file_name']}}</h4>
-                                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                            </div>
-                                                                            <div class="modal-body">
-                                                                                @if(!in_array($estimate['file_ext'],['xlsx','xls','csv']))
-                                                                                    <iframe src="{{url($estimate['files'])}}" height="400px" width="100%"></iframe>
-                                                                                @endif
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            @endif
-                                                            <div id="att_del_msg" class="text-danger text-bold"></div>
-                                                        @endif
-                                                        @if ($errors->has('files'))
-                                                            <br>
-                                                            <span class="text-danger">
-                                                                <strong>{{ $errors->first('files') }}</strong>
-                                                            </span>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

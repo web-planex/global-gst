@@ -844,3 +844,43 @@ table.product-gst-table tbody td {
 }
 .card-header{padding: 10px 1.25rem!important;}
 .card-header.bg-primary h4{font-size: 16px;}
+
+/* 19/02/2021 */
+.subtotal-table table tbody tr th {
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.subtotal-table table tbody tr td {
+    min-width: 250px;
+}
+.item-details-box table tbody tr td textarea.textarea-height34 {
+    height: 34px;
+
+}
+.item-details-box table tbody tr td:nth-child(2),
+.item-details-box table tbody tr td:nth-child(5) {
+    min-width:250px;
+}
+.item-details-box table tbody tr td:nth-child(3),
+.item-details-box table tbody tr td:nth-child(4) {
+    min-width:200px;
+}
+.custom-file-box input.custom-file-input {
+    height: 41px;
+    padding: 9px 12px;
+}
+.custom-file-box label.custom-file-label:after {
+    height: 36px;
+    line-height: 26px;
+}
+@media (max-width: 991px) {
+    .item-details-box table tbody tr td {
+        min-width:250px;
+    }
+    .item-details-box table tbody tr td:first-child {
+        min-width:inherit;
+    }
+    .item-details-box table tbody tr td:last-child {
+        min-width:inherit;
+    }
+}
