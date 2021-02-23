@@ -34,8 +34,10 @@ class SignUpMail extends Mailable
         $from_name  = env('MAIL_FROM_NAME');
 
         return $this->view('globals.emails.sign-up')->with([
-            'company_logo' =>  $this->company_logo,
-            'customer_name' =>  $this->customer_name,
+//            'company_logo' =>  $this->company_logo,
+//            'customer_name' =>  $this->customer_name,
+            'company_logo' => 'upload/6/company/z0ejPwWaDkxPjea0u16f.png',
+            'customer_name' => 'Lalit'
         ])->from($from_email, $from_name)->subject($subject);
     }
 }

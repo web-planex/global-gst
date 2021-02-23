@@ -199,3 +199,8 @@ Route::get('mailable', function () {
 
     return new App\Mail\Globals\SignUpMail($data);
 });
+
+Route::get('run-command', function() {
+    Artisan::call('command:SendWelcomeEmail');
+    dd("Command Run!");
+});
