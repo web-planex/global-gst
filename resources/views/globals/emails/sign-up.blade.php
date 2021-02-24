@@ -62,7 +62,7 @@
                                 <tbody><tr>
                                     <td align="center" style="max-width:100vw;padding:32px">
                                         <p style="font-size: 13px;">
-                                            © {{date('Y')}} <a href="https://www.webplanex.com/">WebPlanex Infotech PVT LTD.</a> All rights reserved.
+                                            © {{date('Y')}} WebPlanex Infotech PVT LTD. All rights reserved.
                                         </p>
                                         <p style="font-size: 13px;">
                                             311- C, Iscon mall, 150 feet ring road, Rajkot – 360005 , Gujarat India

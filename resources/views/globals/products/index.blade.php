@@ -25,7 +25,7 @@
                     <div class="col-md-9">
                         <button type="submit" class="btn btn-primary mr-2"><i class="ti-search"></i></button>
                         <a href="{{url('products')}}"><button type="button" class="btn btn-danger mr-2">Clear</button></a>
-                        <a href="{{url('products/export_product')}}"><button type="button" class="btn btn-info mr-2">Export Product</button></a>
+                        <a href="{{url('products/export_product')}}" class="btn btn-info mr-2">Export Product</a>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ImportProduct">Import Product</button>
                         <div class="pull-right dropleft custom-column-display">
                             <a href="javascript:;" class="text-dark" data-toggle="dropdown" title="Settings" aria-expanded="false">
@@ -109,7 +109,7 @@
     <div id="ImportProduct" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form id="ImportForm" method="post" class="form-horizontal" enctype="multipart/form-data" style="margin-bottom: 12px">
+                <form id="ImportForm" method="post" class="form-horizontal" enctype="multipart/form-data">
                     <div class="modal-header">
                         <h4 class="modal-title font-bold-500 font-16 text-primary" id="tooltipmodel">Import Product</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -118,8 +118,8 @@
                         <input type="file" name="import_csv" class="mb-2 border-0" id="import">
                         <label id="import-error" class="error err-msg hide" for="import"></label>
                     </div>
-                    <div class="modal-footer" style="display: block">
-                        <a href="{{url('sample_import_product/sample.csv')}}" download><button type="button" class="btn btn-info float-left"><i class="fa fa-download" aria-hidden="true"></i> &nbsp;Download Sample CSV File</button></a>
+                    <div class="modal-footer" style="justify-content: space-between">
+                        <a href="{{url('sample_import_product/sample.csv')}}" download class="btn btn-info"><i class="fa fa-download" aria-hidden="true"></i> &nbsp;Download Sample CSV File</a>
                         <button type="submit" class="btn btn-primary float-right" id="import_btn"><i class="fa fa-upload" aria-hidden="true"></i> &nbsp;Import</button>
                     </div>
                 </form>

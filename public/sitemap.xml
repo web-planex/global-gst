@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <url>
+        <loc>http://localhost/global-gst/public</loc>
+        <lastmod>2021-02-24T12:51:54+05:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>http://localhost/global-gst/public/</loc>
+        <lastmod>2021-02-24T12:51:54+05:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>http://localhost/global-gst/public/auth/google</loc>
+        <lastmod>2021-02-24T12:51:55+05:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>http://localhost/global-gst/public/login</loc>
+        <lastmod>2021-02-24T12:51:54+05:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>http://localhost/global-gst/public/privacy-policy</loc>
+        <lastmod>2021-02-24T12:51:54+05:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>http://localhost/global-gst/public/register</loc>
+        <lastmod>2021-02-24T12:51:54+05:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>http://localhost/global-gst/public/terms-and-conditions</loc>
+        <lastmod>2021-02-24T12:51:54+05:30</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+</urlset>
