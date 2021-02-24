@@ -7,7 +7,7 @@
         </div>
     </div>
     <div class="row mb-1">
-        <div class="col-lg-3 col-md-6">
+        <div class="col-sm-6 col-lg-4 col-xl-3">
             <a href="{{url('products')}}" class="text-dark">
                 <div class="card mr-1">
                     <div class="card-body">
@@ -23,7 +23,7 @@
             </a>
         </div>
 
-        <div class="col-lg-3 col-md-6">
+        <div class="col-sm-6 col-lg-4 col-xl-3">
             <a href="{{url('expense')}}" class="text-dark">
                 <div class="card mr-1">
                     <div class="card-body">
@@ -39,7 +39,7 @@
             </a>
         </div>
 
-        <div class="col-lg-3 col-md-6">
+        <div class="col-sm-6 col-lg-4 col-xl-3">
             <a href="{{route('bills.index')}}" class="text-dark">
                 <div class="card mr-1">
                     <div class="card-body">
@@ -55,7 +55,7 @@
             </a>
         </div>
 
-        <div class="col-lg-3 col-md-6">
+        <div class="col-sm-6 col-lg-4 col-xl-3">
             <a href="{{route('estimate.index')}}" class="text-dark">
                 <div class="card mr-1">
                     <div class="card-body">
@@ -71,7 +71,7 @@
             </a>
         </div>
         
-        <div class="col-lg-3 col-md-6">
+        <div class="col-sm-6 col-lg-4 col-xl-3">
             <a href="{{url('sales')}}" class="text-dark">
                 <div class="card mr-1">
                     <div class="card-body">
@@ -87,7 +87,7 @@
             </a>
         </div>
 
-        <div class="col-lg-3 col-md-6">
+        <div class="col-sm-6 col-lg-4 col-xl-3">
             <a href="{{url('credit-note')}}" class="text-dark">
                 <div class="card mr-1">
                     <div class="card-body">
@@ -103,7 +103,7 @@
             </a>
         </div>
 
-        <div class="col-lg-3 col-md-6">
+        <div class="col-sm-6 col-lg-4 col-xl-3">
             <a href="{{url('payees')}}" class="text-dark">
                 <div class="card mr-1">
                     <div class="card-body">
@@ -119,7 +119,7 @@
             </a>
         </div>
 
-        <div class="col-lg-3 col-md-6">
+        <div class="col-sm-6 col-lg-4 col-xl-3">
             <a href="{{url('companies')}}" class="text-dark">
                 <div class="card mr-1">
                     <div class="card-body">
@@ -135,7 +135,7 @@
             </a>
         </div>
         
-        <div class="col-lg-3 col-md-6">
+        <div class="col-sm-6 col-lg-4 col-xl-3">
             <a href="{{route('debit-notes.index')}}" class="text-dark">
                 <div class="card mr-1">
                     <div class="card-body">

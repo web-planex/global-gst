@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="box card">
-                    {!! Form::open(['url' => url($url),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
+                    {!! Form::open(['url' => url($url),'method'=>'get', 'class' => 'form-horizontal top-heading-form-box','files'=>true,'id'=>'SearchForm']) !!}
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group">

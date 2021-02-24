@@ -27,7 +27,7 @@
         <div class="col-12 page-min-height">
             @include('inc.message')
             <div class="alert alert-info hide" id="convert_msg"></div>
-            {!! Form::open(['url' => url('estimate'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
+            {!! Form::open(['url' => url('estimate'),'method'=>'get', 'class' => 'form-horizontal top-heading-form-box','files'=>true,'id'=>'SearchForm']) !!}
                 <div class="row">
                     <div class="col-md-2">
                         <div class="form-group">
@@ -56,67 +56,58 @@
 
             {!! Form::open(['url' => url('estimate/multiple_pdf'),'class' => 'form-horizontal','files'=>true,'id'=>'MultiplePdfForm']) !!}
             <div class="card">
-                <div class="row results-top" style="margin: 0 5px;">
-                    <div class="col-md-6 action">
-                        <div class="action-invoice">
-                            <div class="action-on">
-                                <div>Action on </div>
-                                <div><span id="selected_unfulfilled_count">0</span> Selected</div>
-                            </div>
-                            <div class="invoice-type">
-                                <div class="form-group has-success mb-0">
-                                    <button type="button" id="estimate_btn" class="btn btn-primary waves-effect waves-light mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Estimate"><i class="fa fa-download"></i></button>
-                                    <a href="{{url('download-estimate-pdf-zip')}}" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Estimate Zip"><i class="fas fa-cloud-download-alt"></i></a>
-                                </div>
-                            </div>
+                <div class="results-top" style="margin: 0 5px;">
+                    <div class="float-left">
+                        <div class="action-on mt-1">
+                            <div>Action on </div>
+                            <div><span id="selected_unfulfilled_count">0</span> Selected</div>
                         </div>
                     </div>
-                    <div class="col-md-2 btn-group">
-                        <div class="col-left">
-                            <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <!-- Modal content-->
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title font-bold-500 font-16 text-primary" id="tooltipmodel">Bulk Estimate Download</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>
-                                                <label><input type="radio" name="download_type" value="1" checked="checked"> Download selected estimate as single PDF</label>
-                                                <label><input type="radio" name="download_type" value="2"> Download selected estimate as individual PDF</label>
-                                            </p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-download" aria-hidden="true" style="font-size:20px;" title="Generate Estimates Zip"></i></button>
-                                        </div>
+                    <div class="col-left">
+                        <div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title font-bold-500 font-16 text-primary" id="tooltipmodel">Bulk Estimate Download</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>
+                                            <label><input type="radio" name="download_type" value="1" checked="checked"> Download selected estimate as single PDF</label>
+                                            <label><input type="radio" name="download_type" value="2"> Download selected estimate as individual PDF</label>
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-download" aria-hidden="true" style="font-size:20px;" title="Generate Estimate Zip"></i></button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <button type="button" id="estimate_btn" class="btn btn-primary waves-effect waves-light mr-2" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Estimate"><i class="fa fa-download"></i></button>
+                        <a href="{{url('download-estimate-pdf-zip')}}" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Estimate Zip"><i class="fas fa-cloud-download-alt"></i></a>
                     </div>
-                    <div class="col-md-4">
-                        <div class="pull-right dropleft custom-column-display">
-                            <a href="javascript:;" class="btn" data-toggle="dropdown" title="Settings" aria-expanded="false">
-                                <i class="fas fa-cog" style="font-size:20px;margin-top: 8px;"></i>
-                            </a>
-                            <div class="dropdown-menu chk-column-container">
-                                @if(!empty($custom_column))
+                    <div class="pull-right dropleft custom-column-display">
+                        <a href="javascript:;" class="text-dark" data-toggle="dropdown" title="Settings" aria-expanded="false">
+                            <i class="fas fa-cog" style="font-size:20px;margin-top: 8px;"></i>
+                        </a>
+                        <div class="dropdown-menu chk-column-container dropdownMenu-box">
+                            @if(!empty($custom_column))
                                 <div class="dropdown-item">Columns</div>
                                 <div class="dropdown-divider"></div>
                                 @foreach($custom_column as $column)
-                                <div class="dropdown-item">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" value="col_{{strtolower(str_replace(' ','_',$column))}}" class="custom-control-input custom-column-checkbox" id="{{$column}}" checked>
-                                        <label class="custom-control-label" for="{{$column}}">{{$column}}</label>
+                                    <div class="dropdown-item">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" value="col_{{strtolower(str_replace(' ','_',$column))}}" class="custom-control-input custom-column-checkbox" id="{{$column}}" checked>
+                                            <label class="custom-control-label" for="{{$column}}">{{$column}}</label>
+                                        </div>
                                     </div>
-                                </div>
                                 @endforeach
-                                @endif
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
+
                 <div class="gstinvoice-table-data">
                     <div class="table-responsive data-table-gst-box pb-3" id="estimate_data">
                         <table id="myTable0" class="table table-hover">

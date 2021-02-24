@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-12 page-min-height">
             @include('inc.message')
-                {!! Form::open(['url' => url('payment-methods'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
+                {!! Form::open(['url' => url('payment-methods'),'method'=>'get', 'class' => 'form-horizontal top-heading-form-box','files'=>true,'id'=>'SearchForm']) !!}
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
