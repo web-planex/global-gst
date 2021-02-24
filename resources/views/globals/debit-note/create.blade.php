@@ -931,7 +931,7 @@
                         discount_field_style = "style=display:none;";
                     }
                     var html = "<tr class=\"itemNewCheckTr\">";
-                    html += "<td>" + product_select +
+                    html += "<td class='pro_list'>" + product_select +
                         "<div class=\"wrapper\" id=\"prowrp"+i+"\" style=\"display: none;\">"+
                         "<a href=\"javascript:;\" class=\"font-weight-300 add-new-prod-link\" data-id=\"product_select"+i+"\" onclick=\"OpenProductModel('product_select"+i+"')\"><i class=\"fa fa-plus-circle\"></i> Add New</a>"+
                         "</div>"+

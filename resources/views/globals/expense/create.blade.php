@@ -13,7 +13,7 @@
         height: 30px;
         padding: 4px 5px!important;
     }
-    #formExpense .select2 {width: 100%!important;}
+    /*#formExpense .select2 {width: 100%!important;}*/
 </style>
 <div class="row page-titles">
     <div class="col-sm-6 align-self-center">
@@ -849,7 +849,7 @@
 
                     var html = "<tr class=\"itemNewCheckTr\">";
                     html += "<td>" + i + "</td>";
-                    html += "<td>" + expense_type +
+                    html += "<td class='pro_list'>" + expense_type +
                         "<div class=\"wrapper\" id=\"prowrp"+i+"\" style=\"display: none;\">"+
                         "<a href=\"javascript:;\" class=\"font-weight-300 add-new-prod-link\" data-id=\"expense_type"+i+"\" onclick=\"OpenExpenseTypeModal('expense_type"+i+"')\"><i class=\"fa fa-plus-circle\"></i> Add New</a>"+
                         "</div>"+

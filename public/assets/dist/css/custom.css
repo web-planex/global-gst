@@ -895,3 +895,8 @@ table.product-gst-table tbody td {
 .item-details-box table tbody tr td.tax_column select {
     width: 100px !important;
 }
+
+.item-details-box table tbody tr td.pro_list select,
+.item-details-box table tbody tr td.pro_list .select2 {
+    width: 200px !important;
+}
