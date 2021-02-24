@@ -37,7 +37,6 @@ class GenerateExpenseZip extends Command
      * @return int
      */
     public function handle() {
-        Log::info('Cron run at:'.date('d-m-Y H:i:s'));
         if (file_exists(__DIR__ . '/multiple_expense_pdf.pid')) {
             $pid = file_get_contents(__DIR__ . '/multiple_expense_pdf.pid');
             $result = exec('ps | grep ' . $pid);
@@ -50,7 +49,7 @@ class GenerateExpenseZip extends Command
     }
     
     function ExpensePdfQueue() {
-        mail('lalitv@webplanex.com', 'Global GST DEMO multiple_expense_pdf Queue Start', "Successfully");
+        //mail('lalitv@webplanex.com', 'Global GST DEMO multiple_expense_pdf Queue Start', "Successfully");
         $command = '/usr/bin/php7.3 /home/webplanexmain/gst.webplanex.com/artisan queue:work --queue=multiple_expense_pdf --timeout=0 --tries=1 >> /dev/null 2>&1';
         //$command = 'php artisan queue:work --queue=multiple_expense_pdf';
         $number = exec($command);

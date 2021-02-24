@@ -38,7 +38,6 @@ class SendWelcomeEmail extends Command
      */
     public function handle()
     {
-        Log::info('Welcome email Cron run at:'.date('d-m-Y H:i:s'));
         if (file_exists(__DIR__ . '/send_welcome_email.pid')) {
             $pid = file_get_contents(__DIR__ . '/send_welcome_email.pid');
             $result = exec('ps | grep ' . $pid);
@@ -51,7 +50,7 @@ class SendWelcomeEmail extends Command
     }
     
     public function SendEmail() {
-        mail('lalitv@webplanex.com', 'GST Send Welcome Email Queue Start', "Successfully");
+        //mail('lalitv@webplanex.com', 'GST Send Welcome Email Queue Start', "Successfully");
         $command = '/usr/bin/php7.3 /home/webplanexmain/gst.webplanex.com/artisan queue:work --queue=send_welcome_email --timeout=0 --tries=1 >> /dev/null 2>&1';
         $number = exec($command);
         file_put_contents(__DIR__ . '/send_welcome_email.pid', $number);
