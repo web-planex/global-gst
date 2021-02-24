@@ -70,54 +70,54 @@
             {!! Form::open(['url' => route('generate-multiple-expenses'),'class' => 'form-horizontal','files'=>true,'id'=>'MultiplePdfForm']) !!}
             <div class="card">
                 <div class="results-top" style="margin: 0 5px;">
-                        <div class="float-left">
-                            <div class="action-on mt-1">
-                                <div>Action on </div>
-                                <div><span id="selected_unfulfilled_count">0</span> Selected</div>
-                            </div>
+                    <div class="float-left">
+                        <div class="action-on mt-1">
+                            <div>Action on </div>
+                            <div><span id="selected_unfulfilled_count">0</span> Selected</div>
                         </div>
-                        <div class="col-left">
-                            <div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <!-- Modal content-->
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title font-bold-500 font-16 text-primary" id="tooltipmodel">Bulk Expense Download</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>
-                                                <label><input type="radio" name="download_type" value="1" checked="checked"> Download selected expenses as single PDF</label>
-                                                <label><input type="radio" name="download_type" value="2"> Download selected expenses as individual PDF</label>
-                                            </p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-download" aria-hidden="true" style="font-size:20px;" title="Generate Expenses Zip"></i></button>
-                                        </div>
+                    </div>
+                    <div class="col-left">
+                        <div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title font-bold-500 font-16 text-primary" id="tooltipmodel">Bulk Expense Download</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>
+                                            <label><input type="radio" name="download_type" value="1" checked="checked"> Download selected expenses as single PDF</label>
+                                            <label><input type="radio" name="download_type" value="2"> Download selected expenses as individual PDF</label>
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-download" aria-hidden="true" style="font-size:20px;" title="Generate Expenses Zip"></i></button>
                                     </div>
                                 </div>
                             </div>
-                            <a href="javascript:;" id="download_multi_expense" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Expenses Zip"><i class="fas fa-cloud-download-alt"></i></a>
                         </div>
-                        <div class="pull-right dropleft custom-column-display">
-                            <a href="javascript:;" class="text-dark" data-toggle="dropdown" title="Settings" aria-expanded="false">
-                                <i class="fas fa-cog" style="font-size:20px;margin-top: 8px;"></i>
-                            </a>
-                            <div class="dropdown-menu chk-column-container">
-                                @if(!empty($custom_column))
-                                <div class="dropdown-item">Columns</div>
-                                <div class="dropdown-divider"></div>
-                                @foreach($custom_column as $column)
-                                <div class="dropdown-item">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" value="col_{{strtolower(str_replace(' ','_',$column))}}" class="custom-control-input custom-column-checkbox" id="{{$column}}" checked>
-                                        <label class="custom-control-label" for="{{$column}}">{{$column}}</label>
-                                    </div>
+                        <a href="javascript:;" id="download_multi_expense" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Expenses Zip"><i class="fas fa-cloud-download-alt"></i></a>
+                    </div>
+                    <div class="pull-right dropleft custom-column-display">
+                        <a href="javascript:;" class="text-dark" data-toggle="dropdown" title="Settings" aria-expanded="false">
+                            <i class="fas fa-cog" style="font-size:20px;margin-top: 8px;"></i>
+                        </a>
+                        <div class="dropdown-menu chk-column-container dropdownMenu-box">
+                            @if(!empty($custom_column))
+                            <div class="dropdown-item">Columns</div>
+                            <div class="dropdown-divider"></div>
+                            @foreach($custom_column as $column)
+                            <div class="dropdown-item">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" value="col_{{strtolower(str_replace(' ','_',$column))}}" class="custom-control-input custom-column-checkbox" id="{{$column}}" checked>
+                                    <label class="custom-control-label" for="{{$column}}">{{$column}}</label>
                                 </div>
-                                @endforeach
-                                @endif
                             </div>
+                            @endforeach
+                            @endif
                         </div>
+                    </div>
                 </div>
                 <div class="gstinvoice-table-data">
                     <div class="table-responsive data-table-gst-box pb-3">

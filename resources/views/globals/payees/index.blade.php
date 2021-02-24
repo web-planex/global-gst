@@ -14,24 +14,24 @@
     <div class="row">
         <div class="col-12 page-min-height">
             @include('inc.message')
-            {!! Form::open(['url' => url('payees'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
+            {!! Form::open(['url' => url('payees'),'method'=>'get', 'class' => 'form-horizontal top-heading-form-box','files'=>true,'id'=>'SearchForm']) !!}
                 <div class="row">
-                           <div class="col-md-3">
-                                <div class="form-group">
-                                        {!! Form::text('search', isset($search)&&!empty($search)?$search:null, ['class' => 'form-control','id'=>'sf_name', 'placeholder'=>'Search']) !!}
-                                </div>
-                            </div>
-                    
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                        {!! Form::select('type',[''=>'Select Type']+ \App\Models\Globals\Payees::$type, $select_user_type, ['class' => 'form-control', 'id'=>'type_selection']) !!}
-                                </div>
-                            </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {!! Form::text('search', isset($search)&&!empty($search)?$search:null, ['class' => 'form-control','id'=>'sf_name', 'placeholder'=>'Search']) !!}
+                        </div>
+                    </div>
 
-                           <div class="col-md-2">
-                                    <button type="submit" class="btn btn-primary mr-2"><i class="ti-search"></i></button>
-                                    <a href="{{url('payees')}}"><button type="button" class="btn btn-danger">Clear</button></a>
-                            </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {!! Form::select('type',[''=>'Select Type']+ \App\Models\Globals\Payees::$type, $select_user_type, ['class' => 'form-control', 'id'=>'type_selection']) !!}
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary mr-2"><i class="ti-search"></i></button>
+                        <a href="{{url('payees')}}"><button type="button" class="btn btn-danger">Clear</button></a>
+                    </div>
                 </div>                
              {!! Form::close() !!}
             <div class="card">

@@ -6,11 +6,6 @@
         overflow-x: auto;
     }
 }
-@media (min-width: 768px) {
-    .table-responsive {
-        overflow-x: visible;
-    }
-}
 </style>
     <div class="row page-titles">
         <div class="col-sm-6 align-self-center">
@@ -26,48 +21,52 @@
     <div class="row">
         <div class="col-12 page-min-height">
             @include('inc.message')
-            {!! Form::open(['url' => url('sales'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
+            {!! Form::open(['url' => url('sales'),'method'=>'get', 'class' => 'form-horizontal top-heading-form-box','files'=>true,'id'=>'SearchForm']) !!}
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-lg-2">
                         <div class="form-group">
                             {!! Form::text('search', isset($search)&&!empty($search)?$search:null, ['class' => 'form-control','id'=>'search', 'placeholder'=>'Search']) !!}
                         </div>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-lg-2">
                         <div class="form-group">
                             {!! Form::text('start_date', $start_date, ['class' => 'form-control','id'=>'start_date', 'placeholder'=>'Start date']) !!}
                         </div>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-lg-2">
                         <div class="form-group">
                             {!! Form::text('end_date', $end_date, ['class' => 'form-control','id'=>'end_date', 'placeholder'=>'End date']) !!}
                         </div>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-lg-2">
                         <div class="form-group">
                             {!! Form::select('status', [''=>'All Status']+\App\Models\Globals\Invoice::$invoice_status, isset($status)&&!empty($status)?$status:null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
                         </div>
                     </div>
 
-                    <div class="col-md-2">
-                       <button type="submit" class="btn btn-primary mr-2"><i class="ti-search"></i></button>
-                       <a href="{{url('sales')}}"><button type="button" class="btn btn-danger">Clear</button></a>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                       <button type="submit" class="btn btn-primary mr-2 mb-0"><i class="ti-search"></i></button>
+                       <a href="{{url('sales')}}"><button type="button" class="btn btn-danger mb-0">Clear</button></a>
+                        </div>
                     </div>
                 </div>
             {!! Form::close() !!}
 
             {!! Form::open(['url' => url('sales/multiple_pdf'),'class' => 'form-horizontal','files'=>true,'id'=>'MultiplePdfForm']) !!}
             <div class="card">
-                <div class="row results-top" style="margin: 0 5px;">
-                    <div class="col-md-6 action">
-                        <div class="action-invoice">
-                            <div class="action-on">
-                                <div>Action on </div>
-                                <div><span id="selected_unfulfilled_count">0</span> Selected</div>
-                            </div>
+                <div class="row my-3" style="margin: 0 5px;">
+                    <div class="col-lg-2">
+                        <div class="action-on mt-2">
+                            <div>Action on </div>
+                            <div><span id="selected_unfulfilled_count">0</span> Selected</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="invoice-type-btm">
                             <div class="invoice-type">
                                 <div class="form-group has-success mb-0">
                                     <select class="form-control custom-select" id="invoice_type" name="invoice_type" data-toggle="tooltip" data-placement="top" title="" data-original-title="Select &amp; Generate Invoices Zip">
@@ -80,52 +79,53 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2 btn-group">
+                    <div class="col-lg-6">
                         <div class="col-left">
-                            <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <!-- Modal content-->
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title font-bold-500 font-16 text-primary" id="tooltipmodel">Bulk Invoice Download</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>
-                                                <label><input type="radio" name="download_type" value="1" checked="checked"> Download selected invoices as single PDF</label>
-                                                <label><input type="radio" name="download_type" value="2"> Download selected invoices as individual PDF</label>
-                                            </p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-download" aria-hidden="true" style="font-size:20px;" title="Generate Invoices Zip"></i></button>
-                                        </div>
+                        <div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title font-bold-500 font-16 text-primary" id="tooltipmodel">Bulk Invoice Download</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>
+                                            <label><input type="radio" name="download_type" value="1" checked="checked"> Download selected invoices as single PDF</label>
+                                            <label><input type="radio" name="download_type" value="2"> Download selected invoices as individual PDF</label>
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-download" aria-hidden="true" style="font-size:20px;" title="Generate Invoice Zip"></i></button>
                                     </div>
                                 </div>
                             </div>
-                            <a href="{{url('download-invoice-pdf-zip')}}" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" ><i class="fas fa-cloud-download-alt"></i></a>
                         </div>
-                    </div>
-                    <div class="col-md-4">
+                        <a href="{{url('download-invoice-pdf-zip')}}" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" ><i class="fas fa-cloud-download-alt"></i></a>
+                        </div>
                         <div class="pull-right dropleft custom-column-display">
-                            <a href="javascript:;" class="btn" data-toggle="dropdown" title="Settings" aria-expanded="false">
+                            <a href="javascript:;" class="text-dark" data-toggle="dropdown" title="Settings" aria-expanded="false">
                                 <i class="fas fa-cog" style="font-size:20px;margin-top: 8px;"></i>
                             </a>
-                            <div class="dropdown-menu chk-column-container">
+                            <div class="dropdown-menu chk-column-container dropdownMenu-box">
                                 @if(!empty($custom_column))
-                                <div class="dropdown-item">Columns</div>
-                                <div class="dropdown-divider"></div>
-                                @foreach($custom_column as $column)
-                                <div class="dropdown-item">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" value="col_{{strtolower(str_replace(' ','_',$column))}}" class="custom-control-input custom-column-checkbox" id="{{$column}}" checked>
-                                        <label class="custom-control-label" for="{{$column}}">{{$column}}</label>
-                                    </div>
-                                </div>
-                                @endforeach
+                                    <div class="dropdown-item">Columns</div>
+                                    <div class="dropdown-divider"></div>
+                                    @foreach($custom_column as $column)
+                                        <div class="dropdown-item">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" value="col_{{strtolower(str_replace(' ','_',$column))}}" class="custom-control-input custom-column-checkbox" id="{{$column}}" checked>
+                                                <label class="custom-control-label" for="{{$column}}">{{$column}}</label>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 @endif
                             </div>
                         </div>
+
+
                     </div>
+
                 </div>
 
                 <div class="gstinvoice-table-data">

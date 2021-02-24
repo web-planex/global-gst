@@ -26,7 +26,7 @@
     <div class="row">
         <div class="col-12 page-min-height">
             @include('inc.message')
-            {!! Form::open(['url' => route('debit-notes.index'),'method'=>'get', 'class' => 'form-horizontal','files'=>true,'id'=>'SearchForm']) !!}
+            {!! Form::open(['url' => route('debit-notes.index'),'method'=>'get', 'class' => 'form-horizontal top-heading-form-box','files'=>true,'id'=>'SearchForm']) !!}
                 <div class="row">
                     <div class="col-md-2">
                         <div class="form-group">
@@ -61,60 +61,53 @@
 
             {!! Form::open(['url' => route('debit-note-multiple-pdf'),'class' => 'form-horizontal','files'=>true,'id'=>'MultiplePdfForm']) !!}
             <div class="card">
-                <div class="row results-top" style="margin: 0 5px;">
-                    <div class="col-md-2 action">
-                        <div class="action-invoice">
-                            <div class="action-on">
-                                <div>Action on </div>
-                                <div><span id="selected_unfulfilled_count">0</span> Selected</div>
-                            </div>
+                <div class="results-top" style="margin: 0 5px;">
+                    <div class="float-left">
+                        <div class="action-on mt-1">
+                            <div>Action on </div>
+                            <div><span id="selected_unfulfilled_count">0</span> Selected</div>
                         </div>
                     </div>
-                    <div class="col-md-2 btn-group">
-                        <div class="col-left">
-                            <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <!-- Modal content-->
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title font-bold-500 font-16 text-primary" id="tooltipmodel">Bulk Debit Note Download</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>
-                                                <label><input type="radio" name="download_type" value="1" checked="checked"> Download selected debit notes as single PDF</label>
-                                                <label><input type="radio" name="download_type" value="2"> Download selected debit notes as individual PDF</label>
-                                            </p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-download" aria-hidden="true" style="font-size:20px;" title="Generate Debit Note Zip"></i></button>
-                                        </div>
+                    <div class="col-left">
+                        <div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="tooltipmodel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title font-bold-500 font-16 text-primary" id="tooltipmodel">Bulk Debit Note Download</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>
+                                            <label><input type="radio" name="download_type" value="1" checked="checked"> Download selected debit notes as single PDF</label>
+                                            <label><input type="radio" name="download_type" value="2"> Download selected debit notes as individual PDF</label>
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary"><i class="fa fa-download" aria-hidden="true" style="font-size:20px;" title="Generate Debit Notes Zip"></i></button>
                                     </div>
                                 </div>
                             </div>
-                            <a href="javascript:;" id="download_multi_debit_note" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Debit Note Zip"><i class="fas fa-cloud-download-alt"></i></a>
-                            <!--<a href="{{route('download-debit-note-pdf-zip')}}" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" ><i class="fas fa-cloud-download-alt"></i></a>-->
                         </div>
+                        <a href="javascript:;" id="download_multi_debit_note" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Debit Notes Zip"><i class="fas fa-cloud-download-alt"></i></a>
                     </div>
-                    <div class="col-md-8">
-                        <div class="pull-right dropleft custom-column-display">
-                            <a href="javascript:;" class="btn" data-toggle="dropdown" title="Settings" aria-expanded="false">
-                                <i class="fas fa-cog" style="font-size:20px;margin-top: 8px;"></i>
-                            </a>
-                            <div class="dropdown-menu chk-column-container">
-                                @if(!empty($custom_column))
+                    <div class="pull-right dropleft custom-column-display">
+                        <a href="javascript:;" class="text-dark" data-toggle="dropdown" title="Settings" aria-expanded="false">
+                            <i class="fas fa-cog" style="font-size:20px;margin-top: 8px;"></i>
+                        </a>
+                        <div class="dropdown-menu chk-column-container dropdownMenu-box">
+                            @if(!empty($custom_column))
                                 <div class="dropdown-item">Columns</div>
                                 <div class="dropdown-divider"></div>
                                 @foreach($custom_column as $column)
-                                <div class="dropdown-item">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" value="col_{{strtolower(str_replace(' ','_',$column))}}" class="custom-control-input custom-column-checkbox" id="{{$column}}" checked>
-                                        <label class="custom-control-label" for="{{$column}}">{{$column}}</label>
+                                    <div class="dropdown-item">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" value="col_{{strtolower(str_replace(' ','_',$column))}}" class="custom-control-input custom-column-checkbox" id="{{$column}}" checked>
+                                            <label class="custom-control-label" for="{{$column}}">{{$column}}</label>
+                                        </div>
                                     </div>
-                                </div>
                                 @endforeach
-                                @endif
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>

@@ -142,129 +142,127 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-body">
-                                    <div class="gstinvoice-table-data">
-                                        <div class="table-responsive data-table-gst-box pb-3">
-                                            <table class="table table-hover">
-                                                <thead>
-                                                <th width="20%">Product <span class="text-danger">*</span></th>
-                                                <th width="13%">HSN Code <span class="text-danger">*</span></th>
-                                                <th width="10%">QTY <span class="text-danger">*</span></th>
-                                                <th width="12%">Rate <span class="text-danger">*</span></th>
-                                                <th width="16%" style="display: none;" class="discount-line-section">Discount</th>
-                                                <th width="15%">Amount <span class="text-danger">*</span></th>
-                                                <th width="18%" class="tax_column @if(isset($estimate)&&$estimate['tax_type']==3) hide @endif">Tax <span class="text-danger">*</span></th>
-                                                <th width="3%">&nbsp;</th>
-                                                </thead>
-                                                <tbody id="items_list_body">
-                                                @php $i=1; @endphp
-                                                @if(!empty($estimate_items))
-                                                    @foreach($estimate_items as $item)
-                                                        @if($i > 1)
-                                                            <tr class="itemTr"></tr>
-                                                        @endif
-                                                        <tr class="{{$i > 1 ? 'itemNewCheckTr' : 'itemTr'}}">
-                                                            <td id="pro_list">
-                                                                <select name="product[]" id="product_select_{{$i}}" class="form-control ex-product product_select_edit amounts-are-select2" data-id="{{$i}}" style="width: 100%;" required="">
-                                                                    @foreach($products as $pro)
-                                                                        <option value="{{$pro['id']}}" @if($pro['id'] == $item['product_id']) selected @endif>{{$pro['title']}}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                                <div class="wrapper" id="prowrp{{$i}}" style="display: none;">
-                                                                    <a href="javascript:;" class="font-weight-300 add-new-prod-link" data-id="product_select_{{$i}}" onclick="OpenProductModel('product_select_{{$i}}')"><i class="fa fa-plus-circle"></i> Add New</a>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" class="form-control hsn_code_input" name="hsn_code[]" value="{{$item['hsn_code']}}">
-                                                            </td>
-                                                            <td>
-                                                                <input type="number" min="1" class="form-control quantity-input floatTextBox" name="quantity[]" value="{{$item['quantity']}}">
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" min="0" class="form-control rate-input floatTextBox" name="rate[]" value="{{$item['rate']}}">
-                                                            </td>
-                                                            <td style="display: none;" class="discount-line-section">
-                                                                <input style="width: 65px" type="text" name="discount_items[]" value="{{$item['discount']}}" class="form-control discount-items">
-                                                                <select name="discount_type_items[]" class="discount-type-items">
-                                                                    <option value="1" @if($item['discount_type'] == 1)  selected @endif>%</option>
-                                                                    <option value="2" @if($item['discount_type'] == 2)  selected @endif>Rs.</option>
-                                                                </select>
-                                                            </td>
-                                                            <td>
-                                                                <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[]" value="{{$item['amount']}}" readonly>
-                                                            </td>
-                                                            <td id="taxes" class="tax_column @if(isset($estimate)&&$estimate['tax_type']==3) hide @endif">
-                                                                <select id="taxes" class="form-control tax-input" name="taxes[]">
-                                                                    @foreach($taxes as $tax)
-                                                                        @if($tax['is_cess'] == 0)
-                                                                            <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name']}}</option>
-                                                                        @else
-                                                                            <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option>
-                                                                        @endif
-                                                                    @endforeach
-                                                                </select>
-                                                            </td>
-                                                            <td>
-                                                                @if($i>1)
-                                                                    <button type="button" class="btn btn-danger btn-circle remove-line-item"><i class="fa fa-times"></i></button>
-                                                                @endif
-                                                            </td>
-                                                        </tr>
-                                                        @php $i++; @endphp
-                                                    @endforeach
-                                                @else
-                                                    <tr class="itemTr">
+                                <div class="card-body item-details-box">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                            <th>Product <span class="text-danger">*</span></th>
+                                            <th>HSN Code <span class="text-danger">*</span></th>
+                                            <th>QTY <span class="text-danger">*</span></th>
+                                            <th>Rate <span class="text-danger">*</span></th>
+                                            <th style="display: none;" class="discount-line-section">Discount</th>
+                                            <th>Amount <span class="text-danger">*</span></th>
+                                            <th class="tax_column @if(isset($estimate)&&$estimate['tax_type']==3) hide @endif">Tax <span class="text-danger">*</span></th>
+                                            <th>&nbsp;</th>
+                                            </thead>
+                                            <tbody id="items_list_body">
+                                            @php $i=1; @endphp
+                                            @if(!empty($estimate_items))
+                                                @foreach($estimate_items as $item)
+                                                    @if($i > 1)
+                                                        <tr class="itemTr"></tr>
+                                                    @endif
+                                                    <tr class="{{$i > 1 ? 'itemNewCheckTr' : 'itemTr'}}">
                                                         <td id="pro_list">
-                                                            <!--<input type="text" class="form-control" name="item_name[0]" required>-->
-                                                            <select name="product[0]" id="product_select" class="form-control ex-product amounts-are-select2" style="width: 100%;" required="">
+                                                            <select name="product[]" id="product_select_{{$i}}" class="form-control ex-product product_select_edit amounts-are-select2" data-id="{{$i}}" style="width: 100%;" required="">
                                                                 @foreach($products as $pro)
-                                                                    <option value="{{$pro['id']}}">{{$pro['title']}}</option>
+                                                                    <option value="{{$pro['id']}}" @if($pro['id'] == $item['product_id']) selected @endif>{{$pro['title']}}</option>
                                                                 @endforeach
                                                             </select>
-                                                            <div class="wrapper" id="prowrp" style="display: none;">
-                                                                <a href="javascript:;" id="type2" data-id="product_select" class="font-weight-300 add-new-prod-link" onclick="OpenProductModel('product_select')"><i class="fa fa-plus-circle"></i> Add New</a>
+                                                            <div class="wrapper" id="prowrp{{$i}}" style="display: none;">
+                                                                <a href="javascript:;" class="font-weight-300 add-new-prod-link" data-id="product_select_{{$i}}" onclick="OpenProductModel('product_select_{{$i}}')"><i class="fa fa-plus-circle"></i> Add New</a>
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="form-control hsn_code_input" name="hsn_code[0]" id="hsn_code_0" value="{{$first_product['hsn_code']}}" required>
+                                                            <input type="text" class="form-control hsn_code_input" name="hsn_code[]" value="{{$item['hsn_code']}}">
                                                         </td>
                                                         <td>
-                                                            <input type="number" min="1" value="1" class="form-control quantity-input floatTextBox" name="quantity[0]" required>
+                                                            <input type="number" min="1" class="form-control quantity-input floatTextBox" name="quantity[]" value="{{$item['quantity']}}">
                                                         </td>
                                                         <td>
-                                                            <input type="text" min="0" class="form-control rate-input floatTextBox" id="rate_0"  name="rate[0]" value="{{$first_product['price']}}" required>
+                                                            <input type="text" min="0" class="form-control rate-input floatTextBox" name="rate[]" value="{{$item['rate']}}">
                                                         </td>
                                                         <td style="display: none;" class="discount-line-section">
-                                                            <input style="width: 65px" type="text" name="discount_items[]" class="form-control discount-items">
+                                                            <input style="width: 65px" type="text" name="discount_items[]" value="{{$item['discount']}}" class="form-control discount-items">
                                                             <select name="discount_type_items[]" class="discount-type-items">
-                                                                <option value="1">%</option>
-                                                                <option value="2">Rs.</option>
+                                                                <option value="1" @if($item['discount_type'] == 1)  selected @endif>%</option>
+                                                                <option value="2" @if($item['discount_type'] == 2)  selected @endif>Rs.</option>
                                                             </select>
                                                         </td>
                                                         <td>
-                                                            <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[0]" readonly>
+                                                            <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[]" value="{{$item['amount']}}" readonly>
                                                         </td>
                                                         <td id="taxes" class="tax_column @if(isset($estimate)&&$estimate['tax_type']==3) hide @endif">
-                                                            <select class="form-control tax-input" name="taxes[]" required>
+                                                            <select id="taxes" class="form-control custom-select" name="taxes[]">
                                                                 @foreach($taxes as $tax)
                                                                     @if($tax['is_cess'] == 0)
-                                                                        <option value="{{$tax['id']}}">{{$tax['rate'].'% '.$tax['tax_name']}}</option>
+                                                                        <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name']}}</option>
                                                                     @else
-                                                                        <option value="{{$tax['id']}}">{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option>
+                                                                        <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option>
                                                                     @endif
                                                                 @endforeach
                                                             </select>
                                                         </td>
-                                                        <td></td>
+                                                        <td>
+                                                            @if($i>1)
+                                                                <button type="button" class="btn btn-danger btn-circle remove-line-item"><i class="fa fa-times"></i></button>
+                                                            @endif
+                                                        </td>
                                                     </tr>
-                                                @endif
-                                                </tbody>
-                                            </table>
-                                            <input type="hidden" name="amount_before_tax" id="amount_before_tax" />
-                                            <input type="hidden" name="tax_amount" id="tax_amount" />
-                                            <input type="hidden" name="total" id="total_amount" />
-                                            <button type="button" id="addItem" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>&nbsp;Add Lines</button>
-                                        </div>
+                                                    @php $i++; @endphp
+                                                @endforeach
+                                            @else
+                                                <tr class="itemTr">
+                                                    <td id="pro_list">
+                                                        <!--<input type="text" class="form-control" name="item_name[0]" required>-->
+                                                        <select name="product[0]" id="product_select" class="form-control ex-product amounts-are-select2" style="width: 100%;" required="">
+                                                            @foreach($products as $pro)
+                                                                <option value="{{$pro['id']}}">{{$pro['title']}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        <div class="wrapper" id="prowrp" style="display: none;">
+                                                            <a href="javascript:;" id="type2" data-id="product_select" class="font-weight-300 add-new-prod-link" onclick="OpenProductModel('product_select')"><i class="fa fa-plus-circle"></i> Add New</a>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control hsn_code_input" name="hsn_code[0]" id="hsn_code_0" value="{{$first_product['hsn_code']}}" required>
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" min="1" value="1" class="form-control quantity-input floatTextBox" name="quantity[0]" required>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" min="0" class="form-control rate-input floatTextBox" id="rate_0"  name="rate[0]" value="{{$first_product['price']}}" required>
+                                                    </td>
+                                                    <td style="display: none;" class="discount-line-section">
+                                                        <input style="width: 65px" type="text" name="discount_items[]" class="form-control discount-items">
+                                                        <select name="discount_type_items[]" class="discount-type-items">
+                                                            <option value="1">%</option>
+                                                            <option value="2">Rs.</option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[0]" readonly>
+                                                    </td>
+                                                    <td id="taxes" class="tax_column @if(isset($estimate)&&$estimate['tax_type']==3) hide @endif">
+                                                        <select class="form-control custom-select" name="taxes[]" required>
+                                                            @foreach($taxes as $tax)
+                                                                @if($tax['is_cess'] == 0)
+                                                                    <option value="{{$tax['id']}}">{{$tax['rate'].'% '.$tax['tax_name']}}</option>
+                                                                @else
+                                                                    <option value="{{$tax['id']}}">{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option>
+                                                                @endif
+                                                            @endforeach
+                                                        </select>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                            @endif
+                                            </tbody>
+                                        </table>
+                                        <input type="hidden" name="amount_before_tax" id="amount_before_tax" />
+                                        <input type="hidden" name="tax_amount" id="tax_amount" />
+                                        <input type="hidden" name="total" id="total_amount" />
+                                        <button type="button" id="addItem" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>&nbsp;Add Lines</button>
                                     </div>
                                 </div>
                             </div>
@@ -320,14 +318,16 @@
                                                 @if ($errors->has('files'))
                                                     <br>
                                                     <span class="text-danger">
-                                                                        <strong>{{ $errors->first('files') }}</strong>
-                                                                    </span>
+                                                        <strong>{{ $errors->first('files') }}</strong>
+                                                    </span>
                                                 @endif
                                             </div>
                                         </div>
 
                                         <div class="col-md-12 col-lg-6 col-xl-8">
-                                            <table class="table table-hover">
+                                            <div class="subtotal-table">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
                                                 <tr id="subtotal_row">
                                                     <th width="50%">Subtotal</th>
                                                     <td width="50%">
@@ -386,6 +386,8 @@
                                                     <td width="50%"><input type="text" class="form-control text-right" id="total" readonly="" /></td>
                                                 </tr>
                                             </table>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
