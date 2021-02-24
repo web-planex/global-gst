@@ -156,9 +156,9 @@
                                         <td class="col_payment_method">{{App\Models\Globals\Expense::$payment_method[$list['payment_method']]}}</td>
                                         <td class="col_ref_no">{{$list['ref_no']}}</td>
                                         <td class="col_note">
-                                            <input type="hidden" id="Notes" value="{{$list['memo']}}">
+                                            <input type="hidden" id="Notes_{{$list['id']}}" value="{{$list['memo']}}">
                                             @if($list['memo'] != '' && strlen($list['memo']) > 30)
-                                                <a href="javascript:void(0)" class="text-themecolor text-left" onclick="show_note()">{{substr($list['memo'],0,25)}}...</a>
+                                                <a href="javascript:void(0)" class="text-themecolor text-left" onclick="show_note({{$list['id']}})">{{substr($list['memo'],0,25)}}...</a>
                                             @elseif(strlen($list['memo']) > 0 && strlen($list['memo']) <= 30)
                                                 {{$list['memo']}}
                                             @endif
@@ -308,10 +308,10 @@
             }
         })
     }
-    function show_note(note) {
+    function show_note(ex_id) {
         Swal.fire({
             title: 'Note',
-            text: $('#Notes').val()
+            text: $('#Notes_'+ex_id).val()
         });
     }
 </script>

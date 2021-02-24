@@ -18,7 +18,7 @@
                     @csrf
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="form-group mb-3 col-md-12">
+                            <div class="form-group mb-3">
                                 <label for="customer">Customer <span class="text-danger">*</span></label>
                                 {!! Form::select('customer', $payees, isset($invoice)&&!empty($invoice)?$invoice['customer_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'customer', 'onchange'=>'getAddress(this.value)']) !!}
                                 <div class="wrapper" id="wrp" style="display: none;">

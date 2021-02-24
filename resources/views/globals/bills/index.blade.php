@@ -159,9 +159,9 @@
                                         <td class="col_bill_date">{{date('d M Y', strtotime($list['bill_date']))}}</td>
                                         <td class="col_due_date">{{date('d M Y', strtotime($list['due_date']))}}</td>
                                         <td class="col_memo">
-                                            <input type="hidden" id="Notes" value="{{$list['memo']}}">
+                                            <input type="hidden" id="Notes_{{$list['id']}}" value="{{$list['memo']}}">
                                             @if($list['memo'] != '' && strlen($list['memo']) > 30)
-                                                <a href="javascript:void(0)" class="text-themecolor text-left" onclick="show_note()">{{substr($list['memo'],0,25)}}...</a>
+                                                <a href="javascript:void(0)" class="text-themecolor text-left" onclick="show_note({{$list['id']}})">{{substr($list['memo'],0,25)}}...</a>
                                             @elseif(strlen($list['memo']) > 0 && strlen($list['memo']) <= 30)
                                                 {{$list['memo']}}
                                             @endif
@@ -412,10 +412,10 @@
             }
         })
     }
-    function show_note() {
+    function show_note(bill_id) {
         Swal.fire({
             title: 'Note',
-            text: $('#Notes').val()
+            text: $('#Notes_'+bill_id).val()
         });
     }
 </script>
