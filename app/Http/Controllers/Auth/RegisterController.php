@@ -207,13 +207,13 @@ class RegisterController extends Controller
     }
 
     public function send_welcome_mail($uid){
-        /*$user = User::findOrFail($uid);
+        $user = User::findOrFail($uid);
         $company_logo = url('assets/images/logo_2.png');
         $customer_name = ucwords($user['name']);
         $data = ['company_logo' => $company_logo,'customer_name' => $customer_name];
         $when = now()->addMinutes(10);
-        Mail::to($user['email'])->later($when, new SignUpMail($data));*/
-        $job = (new SendWelcomeEmail($uid))->onQueue('send_welcome_email');
-        dispatch($job);
+        Mail::to($user['email'])->later($when, new SignUpMail($data));
+        /*$job = (new SendWelcomeEmail($uid))->onQueue('send_welcome_email');
+        dispatch($job);*/
     }
 }
