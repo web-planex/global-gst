@@ -428,6 +428,14 @@
            });
        }
     });
+
+    $('#is_shipping').change(function(){
+        if($("#is_shipping").is(':checked')){
+            $('#shipping_address_div').removeClass('hide');
+        }else{
+            $("#shipping_address_div").addClass('hide');
+        }
+    });
 </script>
 </body>
 </html>

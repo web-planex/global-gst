@@ -106,6 +106,18 @@ class PayeeController extends Controller
             $payee['type'] = 2;
             $payee['type_id'] = $employee['id'];
         }else{
+            $input['is_shipping'] = isset($request['is_shipping'])&&!empty($request['is_shipping'])?1:0;
+
+            if($input['is_shipping'] == 0){
+                $input['shipping_name'] = "";
+                $input['shipping_phone'] = "";
+                $input['shipping_street'] = "";
+                $input['shipping_city'] = "";
+                $input['shipping_state'] = "";
+                $input['shipping_pincode'] = "";
+                $input['shipping_country'] = "";
+            }
+
             $customer = Customers::create($input);
 
             $payee['name'] = $customer['first_name'].' '.$customer['last_name'];
@@ -154,6 +166,18 @@ class PayeeController extends Controller
             $payee['name'] = $employees['first_name'].' '.$employees['last_name'];
         }else{
             $customer = Customers::where('id',$payees['type_id'])->first();
+            $input['is_shipping'] = isset($request['is_shipping'])&&!empty($request['is_shipping'])?1:0;
+            if($input['is_shipping'] == 0){
+                $input['shipping_name'] = "";
+                $input['shipping_phone'] = "";
+                $input['shipping_street'] = "";
+                $input['shipping_city'] = "";
+                $input['shipping_state'] = "";
+                $input['shipping_pincode'] = "";
+                $input['shipping_country'] = "";
+            }else{
+                $input['shipping_country'] = "india";
+            }
             $customer->update($input);
 
             $payee['name'] = $customer['first_name'].' '.$customer['last_name'];

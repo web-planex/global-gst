@@ -172,7 +172,7 @@ class RegisterController extends Controller
 
         // Email Template Entry
         $this->emailTemplateEntries($user['id']);
-        
+
         $root = base_path() . '/public/upload/'.$user['id'];
         if (!file_exists($root)) {
             mkdir($root, 0777, true);
@@ -201,9 +201,10 @@ class RegisterController extends Controller
 
         // Send welcome email
         \mail($to, $subject2, $message2, $headers);
+
         return $user;
     }
-    
+
     public function emailTemplateEntries($user_id) {
         EmailTemplates::create([
             'user_id' => $user_id,
@@ -243,7 +244,7 @@ class RegisterController extends Controller
         $customer_name = ucwords($user['name']);
         $data = ['company_logo' => $company_logo,'customer_name' => $customer_name];
         $when = now()->addMinutes(10);
-        Mail::to($user['email'])->send(new SignUpMail($data));
+        Mail::to($user['email'])->later($when, new SignUpMail($data));
         /*$job = (new SendWelcomeEmail($uid))->onQueue('send_welcome_email');
         dispatch($job);*/
     }

@@ -407,7 +407,7 @@
     </div>
 
     <!--CUSTOMERS MODAL-->
-    @include('globals.estimate.customer_modal')
+    @include('globals.invoice.customer_modal')
 
     <!--PRODUCT MODAL-->
     @include('globals.estimate.product_model')
@@ -500,7 +500,7 @@
             $("#CustomersForm").validate({
                 rules: {
                     first_name: "required",
-                    last_name: "required",
+                    // last_name: "required",
                     display_name: {
                         required: true,
                     },
@@ -533,7 +533,7 @@
                 },
                 messages: {
                     first_name: "The firstname field is required",
-                    last_name: "The lastname field is required",
+                    // last_name: "The lastname field is required",
                     display_name: {
                         required: "The displayname field is required",
                     },

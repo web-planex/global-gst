@@ -31,6 +31,7 @@ class CreateUsersTable extends Migration
             $table->string('plan_charge_amount',10)->nullable();
             $table->date('plan_trial_end_date')->nullable();
             $table->text('token')->nullable();
+            $table->integer('first_login')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

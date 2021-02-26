@@ -324,6 +324,20 @@ class ExpenseController extends Controller
 
             $payee['type'] = 2;
         }else{
+            $input['is_shipping'] = isset($input['is_shipping'])&&!empty($input['is_shipping'])?1:0;
+
+            if($input['is_shipping'] == 0){
+                $input['shipping_name'] = "";
+                $input['shipping_phone'] = "";
+                $input['shipping_street'] = "";
+                $input['shipping_city'] = "";
+                $input['shipping_state'] = "";
+                $input['shipping_pincode'] = "";
+                $input['shipping_country'] = "";
+            }else{
+                $input['shipping_country'] = "india";
+            }
+
             $user_type = Customers::create($input);
 
             $payee['type'] = 3;
@@ -342,7 +356,8 @@ class ExpenseController extends Controller
         if($payeeValue['user_type']==3 && isset($request['section']) && !empty($request['section']) && $request['section'] == 'estimate'){
             $billing_state = States::where('id',$user_type['billing_state'])->first();
             $shipping_state = States::where('id',$user_type['shipping_state'])->first();
-            $address .= '<div class="col-md-6">
+            $coloum = $user_type['is_shipping'] == 0 ? 'col-md-12' : 'col-md-6';
+            $address .= '<div class="'.$coloum.'">
                                 <div class="card border-info mb-0" style="background-color: #f5f5f5;">
                                     <div class="card-header bg-primary">
                                         <h4 class="m-b-0 text-white">Billing Address</h4></div>
@@ -355,8 +370,10 @@ class ExpenseController extends Controller
                                         <p class="card-text mb-0">India</p>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
+                            </div>';
+
+            if($user_type['is_shipping'] == 1){
+                $address.= '<div class="col-md-6">
                                 <div class="card border-info mb-0" style="background-color: #f5f5f5;">
                                     <div class="card-header bg-primary">
                                         <h4 class="m-b-0 text-white">Shipping Address</h4></div>
@@ -370,6 +387,8 @@ class ExpenseController extends Controller
                                     </div>
                                 </div>
                             </div>';
+            }
+
         }
 
         $data['address'] = $address;

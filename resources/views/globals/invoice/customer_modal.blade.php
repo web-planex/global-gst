@@ -25,13 +25,13 @@
 
                         <div class="col-md-6">
                             <div class="form-group mb-3 row">
-                                <label for="last_name" class="col-md-12 col-form-label">Last Name <span class="text-danger">*</span></label>
+                                <label for="last_name" class="col-md-12 col-form-label">Last Name <span class="text-danger"></span></label>
                                 <div class="col-md-12">
                                     {!! Form::text('last_name', null, ['class' => 'form-control','id'=>'lname']) !!}
                                     @if ($errors->has('last_name'))
                                         <span class="text-danger">
-                                                <strong>{{ $errors->first('last_name') }}</strong>
-                                            </span>
+                                            <strong>{{ $errors->first('last_name') }}</strong>
+                                        </span>
                                     @endif
                                 </div>
                             </div>
@@ -150,21 +150,12 @@
                         </div>
 
                         <div class="col-md-12">
-                            <h3 class="pt-4">Address</h3>
+                            <h3 class="pt-4">Billing Address</h3>
                             <hr>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group mb-3 row">
-                                                <label for="billing_street" class="col-md-12 col-form-label"></label>
-                                                <div class="col-md-9">
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group mb-3 row">
                                                 <label for="billing_name" class="col-md-12 col-form-label">Billing Name <span class="text-danger">*</span></label>
                                                 <div class="col-md-9">
@@ -178,7 +169,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group mb-3 row">
                                                 <label for="billing_phone" class="col-md-12 col-form-label">Billing Phone <span class="text-danger">*</span></label>
                                                 <div class="col-md-9">
@@ -192,7 +183,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group mb-3 row">
                                                 <label for="billing_street" class="col-md-12 col-form-label">Billing Street <span class="text-danger">*</span></label>
                                                 <div class="col-md-9">
@@ -206,7 +197,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group mb-3 row">
                                                 <label for="billing_city" class="col-md-12 col-form-label">Billing City <span class="text-danger">*</span></label>
                                                 <div class="col-md-9">
@@ -220,7 +211,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group mb-3 row">
                                                 <label for="billing_state" class="col-md-12 col-form-label">Billing State <span class="text-danger">*</span></label>
                                                 <div class="col-md-9">
@@ -234,7 +225,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group mb-3 row">
                                                 <label for="billing_pincode" class="col-md-12 col-form-label">Billing Pincode <span class="text-danger">*</span></label>
                                                 <div class="col-md-9">
@@ -243,6 +234,20 @@
                                                         <span class="text-danger">
                                                                 <strong>{{ $errors->first('billing_pincode') }}</strong>
                                                             </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3 row">
+                                                <label for="is_shipping" class="col-md-12 col-form-label">Add Shipping Address<span class="text-danger"></span></label>
+                                                <div class="col-md-9">
+                                                    {!! Form::checkbox('is_shipping', null, false, ['class' => 'js-switch', 'id'=>'is_shipping', 'data-color'=>'#01c0c8', 'data-size'=>'small', 'data-switchery'=>'true','style'=>'display:none;']) !!}
+                                                    @if ($errors->has('is_shipping'))
+                                                        <span class="text-danger">
+                                                            <strong>{{ $errors->first('is_shipping') }}</strong>
+                                                        </span>
                                                     @endif
                                                 </div>
                                             </div>
@@ -263,7 +268,14 @@
 {{--                                        </div>--}}
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 hide" id="shipping_address_div">
+                            <h3 class="pt-4">Shipping Address</h3>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group mb-3 row">
@@ -276,7 +288,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group mb-3 row">
                                                 <label for="shipping_name" class="col-md-12 col-form-label">Shipping Name <span class="text-danger">*</span></label>
                                                 <div class="col-md-9">
@@ -290,7 +302,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group mb-3 row">
                                                 <label for="shipping_phone" class="col-md-12 col-form-label">Shipping Phone <span class="text-danger">*</span></label>
                                                 <div class="col-md-9">
@@ -304,7 +316,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group mb-3 row">
                                                 <label for="shipping_street" class="col-md-12 col-form-label">Shipping Street <span class="text-danger">*</span></label>
                                                 <div class="col-md-9">
@@ -318,7 +330,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group mb-3 row">
                                                 <label for="shipping_city" class="col-md-12 col-form-label">Shipping City <span class="text-danger">*</span></label>
                                                 <div class="col-md-9">
@@ -332,7 +344,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group mb-3 row">
                                                 <label for="shipping_state" class="col-md-12 col-form-label">Shipping State <span class="text-danger">*</span></label>
                                                 <div class="col-md-9">
@@ -346,7 +358,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group mb-3 row">
                                                 <label for="shipping_pincode" class="col-md-12 col-form-label">Shipping Pincode <span class="text-danger">*</span></label>
                                                 <div class="col-md-9">

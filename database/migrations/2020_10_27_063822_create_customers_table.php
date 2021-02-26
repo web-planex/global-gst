@@ -34,6 +34,7 @@ class CreateCustomersTable extends Migration
             $table->string('billing_state',45);
             $table->string('billing_pincode',45);
             $table->string('billing_country',45)->default('india');
+            $table->integer('is_shipping')->default(0);
             $table->string('shipping_name',45);
             $table->string('shipping_phone',15);
             $table->string('shipping_street',255);

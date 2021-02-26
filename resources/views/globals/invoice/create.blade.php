@@ -581,7 +581,7 @@
         $("#CustomersForm").validate({
             rules: {
                 first_name: "required",
-                last_name: "required",
+                // last_name: "required",
                 display_name: {
                     required: true,
                 },
@@ -614,7 +614,7 @@
             },
             messages: {
                 first_name: "The firstname field is required",
-                last_name: "The lastname field is required",
+                // last_name: "The lastname field is required",
                 display_name: {
                     required: "The displayname field is required",
                 },

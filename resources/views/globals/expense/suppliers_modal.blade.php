@@ -26,7 +26,7 @@
 
                         <div class="col-md-6">
                             <div class="form-group mb-3 row">
-                                <label for="last_name" class="col-md-12 col-form-label">Last Name <span class="text-danger">*</span></label>
+                                <label for="last_name" class="col-md-12 col-form-label">Last Name <span class="text-danger"></span></label>
                                 <div class="col-md-12">
                                     {!! Form::text('last_name', null, ['class' => 'form-control']) !!}
                                     @if ($errors->has('last_name'))

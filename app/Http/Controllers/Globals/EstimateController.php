@@ -494,7 +494,8 @@ class EstimateController extends Controller
         $shipping_state = States::where('id',$customer['shipping_state'])->first();
         $billing_address = [$customer['billing_name'],$customer['billing_phone'],$customer['billing_street'],$customer['billing_city'],$customer['billing_state'],$customer['billing_pincode']];
         $shipping_address = [$customer['shipping_name'],$customer['shipping_phone'],$customer['shipping_street'],$customer['shipping_city'],$customer['shipping_state'],$customer['shipping_pincode']];
-        $address .= '<div class="col-md-6">
+        $coloum = $customer['is_shipping'] == 0 ? 'col-md-12' : 'col-md-6';
+        $address .= '<div class="'.$coloum.'">
                         <div class="card border-info mb-0" style="background-color: #f5f5f5;">
                             <div class="card-header bg-primary">
                                 <h4 class="m-b-0 text-white pull-left">Billing Address</h4>
@@ -514,8 +515,9 @@ class EstimateController extends Controller
                                 <div id="billing_msg" class="text-info font-weight-bolder"></div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
+                    </div>';
+        if($customer['is_shipping'] == 1){
+            $address.='<div class="col-md-6">
                         <div class="card border-info mb-0" style="background-color: #f5f5f5;">
                             <div class="card-header bg-primary">
                                 <h4 class="m-b-0 text-white pull-left">Shipping Address</h4>
@@ -536,6 +538,7 @@ class EstimateController extends Controller
                             </div>
                         </div>
                     </div>';
+        }
 
 
         $data['address'] = $address;
