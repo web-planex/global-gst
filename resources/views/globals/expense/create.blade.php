@@ -163,7 +163,7 @@
                                                             <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[]" value="{{$item['amount']}}">
                                                         </td>
                                                         <td class="tax-column" id="taxes" @if($expense['tax_type']==3) style='display: none;' @endif>
-                                                            <select id="taxes" class="form-control custom-select" name="taxes[]">
+                                                            <select id="taxes" class="form-control custom-select tax-input" name="taxes[]">
                                                                 <option value="">Select Tax</option>
                                                                 @foreach($taxes as $tax)
                                                                     @if($tax['is_cess'] == 0)
@@ -212,7 +212,7 @@
                                                         <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[0]" required>
                                                     </td>
                                                     <td class="tax-column" id="taxes">
-                                                        <select class="form-control custom-select" name="taxes[]">
+                                                        <select class="form-control custom-select tax-input" name="taxes[]">
                                                             <option value="">Select Tax</option>
                                                             @foreach($taxes as $tax)
                                                                 @if($tax['is_cess'] == 0)

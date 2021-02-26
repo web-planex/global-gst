@@ -222,7 +222,7 @@
                                                             <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[]" value="{{$item['amount']}}" readonly>
                                                         </td>
                                                         <td id="taxes" class="tax_column @if(isset($bill)&&$bill['tax_type']==3) hide @endif">
-                                                            <select id="taxes" class="form-control custom-select" name="taxes[]">
+                                                            <select id="taxes" class="form-control custom-select tax-input" name="taxes[]">
                                                                 @foreach($taxes as $tax)
                                                                     @if($tax['is_cess'] == 0)
                                                                         <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name']}}</option>
@@ -273,7 +273,7 @@
                                                         <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[0]" readonly>
                                                     </td>
                                                     <td id="taxes" class="tax_column @if(isset($bill)&&$bill['tax_type']==3) hide @endif">
-                                                        <select class="form-control custom-select" name="taxes[]" required>
+                                                        <select class="form-control custom-select tax-input" name="taxes[]" required>
                                                             @foreach($taxes as $tax)
                                                                 @if($tax['is_cess'] == 0)
                                                                     <option value="{{$tax['id']}}">{{$tax['rate'].'% '.$tax['tax_name']}}</option>

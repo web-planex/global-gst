@@ -360,7 +360,7 @@ class GenerateBulkExpense implements ShouldQueue
             $products = Product::where('user_id',$this->user->id)->where('company_id',$this->company_id)->where('status',1)->get();
             $company_obj = CompanySettings::select('company_name')->where('id',$this->company_id)->first();
             $company_name = $company_obj['company_name'];
-
+            $expense_types = ExpenseType::where('user_id',$this->user->id)->where('company_id',$this->company_id)->get();
             $expense['status_image'] = '';
 
             if($expense['status'] == 1) {
@@ -381,6 +381,7 @@ class GenerateBulkExpense implements ShouldQueue
                 'all_tax_labels' => $all_tax_labels,
                 'products' => $products,
                 'company_name' => $company_name,
+                'expense_types' => $expense_types,
                 'name' => $name,
                 'content' => $content,
                 'company' => $company
