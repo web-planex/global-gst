@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class CompanyController extends Controller
 {
     public function __construct(){
-        $this->middleware(['auth','verified']);
+
         $this->middleware('UserAccessRight');
     }
 

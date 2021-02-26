@@ -6,6 +6,7 @@ use App\Models\Globals\CompanySettings;
 use App\Http\Controllers\Controller;
 use App\Models\Globals\States;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -16,7 +17,6 @@ class UserController extends Controller
 {
     
     public function __construct(){
-        $this->middleware(['auth','verified']);
         $this->middleware('UserAccessRight');
     }
 
@@ -32,7 +32,7 @@ class UserController extends Controller
     public function update(Request $request, $id){
         $this->validate($request, [
             'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$id.',id',
+//            'email' => 'required|email|unique:users,email,'.$id.',id',
             'company_email' => 'nullable|email|unique:company_settings,company_email,'.$this->Company().',id',
             'company_phone' => 'nullable|numeric',
         ]);

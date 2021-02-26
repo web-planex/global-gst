@@ -5,6 +5,9 @@
         <h4 class="text-themecolor">@if(isset($debit_note)) Edit @else Add @endif {{$menu}}</h4>
     </div>
 </div>
+
+<x-emailverification/>
+
 <div class="content">
     @include('inc.message2')
     <div class="row">
@@ -931,7 +934,7 @@
                         discount_field_style = "style=display:none;";
                     }
                     var html = "<tr class=\"itemNewCheckTr\">";
-                    html += "<td class='pro_list'>" + product_select +
+                    html += "<td>" + product_select +
                         "<div class=\"wrapper\" id=\"prowrp"+i+"\" style=\"display: none;\">"+
                         "<a href=\"javascript:;\" class=\"font-weight-300 add-new-prod-link\" data-id=\"product_select"+i+"\" onclick=\"OpenProductModel('product_select"+i+"')\"><i class=\"fa fa-plus-circle\"></i> Add New</a>"+
                         "</div>"+

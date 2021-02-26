@@ -29,7 +29,6 @@ use NunoMaduro\Collision\Adapters\Phpunit\State;
 class ReportController extends Controller
 {
     public function __construct(){
-        $this->middleware(['auth','verified']);
         $this->middleware('UserAccessRight');
         $this->common_controller = new CommonController();
     }

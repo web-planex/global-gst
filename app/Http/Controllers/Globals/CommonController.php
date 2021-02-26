@@ -13,12 +13,56 @@ use App\Models\Globals\Payees;
 use App\Models\Globals\States;
 use App\Models\Globals\Suppliers;
 use App\Models\Globals\Taxes;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommonController extends Controller
 {
-    public function CommonMiddleware(){
-        $this->middleware('UserAccessRight');
+    public function verified_email(Request $request){
+        $user = User::where('token',$request['token'])->first();
+        if(!empty($user)){
+            if(!empty($user['email_verified_at'])){
+                Auth::login($user);
+                return redirect('/dashboard')->with('message', 'Your email is already verified.');
+            }else{
+                $input['email_verified_at'] = Carbon::now()->format('Y-m-d H:i:s');
+                $user->update($input);
+                Auth::login($user);
+                return redirect('/dashboard')->with('message', 'Your email is verified successfully.');
+            }
+        }else{
+            return redirect('/register')->with('error-message', 'User not found. Please register again!');
+        }
+    }
+
+    public function resend_verified_email(Request $request){
+        $user = Auth::user();
+
+        $input['token'] = sha1(time());
+        $user->update($input);
+
+        $company_logo = url('assets/images/logo_2.png');
+        $customer_name = ucwords($user['name']);
+        $data = ['company_logo' => $company_logo,'customer_name' => $customer_name,'token'=>$user['token']];
+
+        $to = $user['email'];
+        $from = env('MAIL_FROM_ADDRESS');
+        $subject = "Verify Email Address";
+        $message = view('globals.emails.verify-email',$data);
+
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=iso-8859-1" . "\r\n";
+        $headers .= 'From: ' . $from . "\r\n";
+        $headers .= 'Reply-To: ' .$from . "\r\n";
+        $headers .= 'X-Mailer: PHP/' . phpversion();
+
+        // Send verification email
+        \mail($to, $subject, $message, $headers);
+
+        \Session::flash('message', 'Verification email link resend successfully on your email.');
+        return redirect()->back();
     }
 
     public function AllTaxes($type, $type_id, $tax_id, $amount){
@@ -183,5 +227,28 @@ class CommonController extends Controller
             'footer-html' => view('globals.pdf-footer')->render()
         ]; 
         return $global_options ;
+    }
+
+    public function sendMail($type, $subject){
+        $user = Auth::user();
+        $company_logo = url('assets/images/logo_2.png');
+        $customer_name = ucwords($user['name']);
+        $data = ['company_logo' => $company_logo,'customer_name' => $customer_name];
+
+        $to = $user['email'];
+        $from = env('MAIL_FROM_ADDRESS');
+        $message = '';
+
+        if($type=='welcome'){
+            $message = view('globals.emails.sign-up',$data);
+        }
+
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=iso-8859-1" . "\r\n";
+        $headers .= 'From: ' . $from . "\r\n";
+        $headers .= 'Reply-To: ' .$from . "\r\n";
+        $headers .= 'X-Mailer: PHP/' . phpversion();
+
+        return \mail($to, $subject, $message, $headers);
     }
 }

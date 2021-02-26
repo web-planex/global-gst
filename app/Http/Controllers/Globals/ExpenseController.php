@@ -30,9 +30,8 @@ class ExpenseController extends Controller
 {
     protected $common_controller;
     public function __construct(){
-        $this->middleware(['auth','verified']);
         $this->middleware('UserAccessRight');
-        $this->middleware(['auth','verified'], ['except' => 'download_pdf']);
+//        //$this->middleware(['auth','verified'], ['except' => 'download_pdf']);
         $this->common_controller = new CommonController();
     }
 

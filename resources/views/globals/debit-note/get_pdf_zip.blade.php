@@ -5,6 +5,9 @@
         <h4 class="text-themecolor">Download Debit Note Zip files</h4>
     </div>
 </div>
+
+<x-emailverification/>
+
 <div class="row">
     <div class="col-12">
         <div class="card">

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Globals\CommonController;
+use App\Mail\Globals\EmailVerification;
 use App\Mail\Globals\SignUpMail;
 use App\Models\Globals\CompanySettings;
 use App\Http\Controllers\Controller;
@@ -11,10 +13,15 @@ use App\Models\Globals\EmailTemplates;
 use App\Models\Globals\PaymentMethod;
 use App\Providers\RouteServiceProvider;
 use App\User;
+use Carbon\Carbon;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Jobs\SendWelcomeEmail;
 
@@ -48,6 +55,7 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+        $this->common_controller = new CommonController();
     }
 
     /**
@@ -87,6 +95,7 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'mobile' => $data['phone_number'],
             'role' => 'user',
+            'token' => sha1(time()),
         ]);
 
         //Company Entry
@@ -96,6 +105,8 @@ class RegisterController extends Controller
             'company_logo' => 'img/default_company.png',
             'signature_image' => 'img/default_signature.png',
         ]);
+
+        session(['company'=>$new_company['id']]);
 
         //Payment Terms Entry
         $days_arr = [15,30,45,60];
@@ -167,9 +178,29 @@ class RegisterController extends Controller
             mkdir($root, 0777, true);
         }
 
-        // Send welcome email
-        $this->send_welcome_mail($user['id']);
+        $company_logo = url('assets/images/logo_2.png');
+        $customer_name = ucwords($user['name']);
+        $data = ['company_logo' => $company_logo,'customer_name' => $customer_name,'token'=>$user['token']];
+        $data2 = ['company_logo' => $company_logo,'customer_name' => $customer_name];
 
+        $to = $user['email'];
+        $from = env('MAIL_FROM_ADDRESS');
+        $subject = "Verify Email Address";
+        $subject2 = "Welcome to GST Invoices by WebPlanex";
+        $message = view('globals.emails.verify-email',$data);
+        $message2 = view('globals.emails.sign-up',$data2);
+
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=iso-8859-1" . "\r\n";
+        $headers .= 'From: ' . $from . "\r\n";
+        $headers .= 'Reply-To: ' .$from . "\r\n";
+        $headers .= 'X-Mailer: PHP/' . phpversion();
+
+        // Send verification email
+        \mail($to, $subject, $message, $headers);
+
+        // Send welcome email
+        \mail($to, $subject2, $message2, $headers);
         return $user;
     }
     

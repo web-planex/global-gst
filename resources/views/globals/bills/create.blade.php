@@ -41,6 +41,9 @@
         <h4 class="text-themecolor">@if(isset($bill)) Edit @else New @endif {{$menu}}</h4>
     </div>
 </div>
+
+<x-emailverification/>
+
 <div class="content">
     @include('inc.message2')
     <div class="row">

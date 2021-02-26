@@ -1,5 +1,6 @@
 <?php
 
+use App\User;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 /*
@@ -18,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', 'Auth\LoginController@showLoginForm');
 Route::get('/dashboard', 'Globals\DashboardController@index');
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
+Route::get('verified-email', 'Globals\CommonController@verified_email');
+Route::get('resend-verification-email', 'Globals\CommonController@resend_verified_email');
 
 Auth::routes(['verify' => true]);
 
@@ -165,6 +169,9 @@ Route::get('debit-notes/download_pdf/{id}', 'Globals\DebitNoteController@downloa
 Route::post('generate-multiple-debit-notes', 'Globals\DebitNoteController@multiple_pdf')->name('debit-note-multiple-pdf');
 Route::get('download-debit-notes-pdf-zip', 'Globals\DebitNoteController@downloadPdfZip')->name('download-debit-note-pdf-zip');
 
+Route::get('send_mail', 'Globals\DashboardController@send_mail')->name('send-mail');
+
+
 //--------------------FOR ADMIN SIDE--------------------
 Route::group(['prefix' => 'admin','admin/home', 'guard' => 'admin'], function() {
     Route::get('locale/{locale}', function ($locale){
@@ -197,10 +204,16 @@ Route::get('mailable', function () {
     $customer_name = ucwords($user['name']);
     $data = ['company_logo' => $company_logo,'customer_name' => $customer_name];
 
-    return new App\Mail\Globals\SignUpMail($data);
+    return new App\Mail\Globals\EmailVerification($data);
 });
 
 Route::get('run-command', function() {
     Artisan::call('command:SendWelcomeEmail');
     dd("Command Run!");
+});
+
+Route::get('new_mail', function () {
+    $url = 'google.com';
+    $user = App\User::findOrFail(98);
+    return view('globals.emails.verify-email');
 });

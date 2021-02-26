@@ -31,8 +31,9 @@ use App\Http\Controllers\Globals\CommonController;
 class EstimateController extends Controller
 {
     protected $common_controller;
+
     public function __construct(){
-        $this->middleware(['auth','verified'], ['except' => 'download_pdf']);
+        //$this->middleware(['auth','verified'], ['except' => 'download_pdf']);
         $this->middleware('UserAccessRight');
         $this->common_controller = new CommonController();
     }
@@ -209,7 +210,10 @@ class EstimateController extends Controller
                 EstimateItems::create($data);
             }
             // Send estimate email to customer
-            $this->send_estimate_mail($estimate_id, false);
+            if(!empty($user['email_verified_at'])){
+                $this->send_estimate_mail($estimate_id, false);
+            }
+
             return redirect('estimate')->with('message','Estimate has been created successfully!');
         }
     }

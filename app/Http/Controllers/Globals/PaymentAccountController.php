@@ -13,7 +13,7 @@ use Request;
 class PaymentAccountController extends Controller
 {
     public function __construct(){
-        $this->middleware(['auth','verified']);
+
         $this->middleware('UserAccessRight');
     }
 
