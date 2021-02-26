@@ -212,7 +212,7 @@ class RegisterController extends Controller
         $customer_name = ucwords($user['name']);
         $data = ['company_logo' => $company_logo,'customer_name' => $customer_name];
         $when = now()->addMinutes(10);
-        Mail::to($user['email'])->later($when, new SignUpMail($data));
+        Mail::to($user['email'])->send(new SignUpMail($data));
         /*$job = (new SendWelcomeEmail($uid))->onQueue('send_welcome_email');
         dispatch($job);*/
     }
