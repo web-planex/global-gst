@@ -11,6 +11,8 @@
         </div>
     </div>
 
+    <x-emailverification/>
+
     <div class="row">
         <div class="col-12 page-min-height">
             @include('inc.message')

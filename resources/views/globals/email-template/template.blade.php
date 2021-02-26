@@ -5,6 +5,9 @@
         <h4 class="text-themecolor"><i class="fa fa-envelope"></i>&nbsp;Email Template</h4>
     </div>
 </div>
+
+<x-emailverification/>
+
 <div class="content">
     @include('inc.message2')
     <div class="row">

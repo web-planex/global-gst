@@ -30,6 +30,7 @@ class CreateUsersTable extends Migration
             $table->string('plan_invoice_count',15)->nullable();
             $table->string('plan_charge_amount',10)->nullable();
             $table->date('plan_trial_end_date')->nullable();
+            $table->text('token')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

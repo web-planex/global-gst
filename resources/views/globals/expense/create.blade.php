@@ -20,6 +20,9 @@
         <h4 class="text-themecolor">@if(isset($expense)) Edit @else Add @endif Expense</h4>
     </div>
 </div>
+
+<x-emailverification/>
+
 <div class="content">
     @include('inc.message2')
     <div class="row">

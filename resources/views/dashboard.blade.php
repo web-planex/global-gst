@@ -6,6 +6,11 @@
             <h4 class="text-themecolor">Dashboard</h4>
         </div>
     </div>
+
+    <x-emailverification/>
+
+    @include('inc.message')
+
     <div class="row mb-1">
         <div class="col-sm-6 col-lg-4 col-xl-3">
             <a href="{{url('products')}}" class="text-dark">

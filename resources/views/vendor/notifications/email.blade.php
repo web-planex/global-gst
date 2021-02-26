@@ -2,10 +2,11 @@
 {{-- Greeting --}}
 
 <?php
-$get_user_id = explode('verify/',$actionUrl);
-$get_id = explode('/',$get_user_id[1]);
-$user = \App\User::where('id',$get_id[0])->first();
+    $get_user_id = explode('verify/',$actionUrl);
+    $get_id = explode('/',$get_user_id[1]);
+    $user = \App\User::where('id',$get_id[0])->first();
 ?>
+
 @if (! empty($greeting))
 # {{ $greeting }}
 @else

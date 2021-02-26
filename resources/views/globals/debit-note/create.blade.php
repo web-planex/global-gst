@@ -5,6 +5,9 @@
         <h4 class="text-themecolor">@if(isset($debit_note)) Edit @else Add @endif {{$menu}}</h4>
     </div>
 </div>
+
+<x-emailverification/>
+
 <div class="content">
     @include('inc.message2')
     <div class="row">
@@ -279,7 +282,7 @@
                                                             <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[]" value="{{$item['amount']}}">
                                                         </td>
                                                         <td id="taxes" class="tax_column @if(isset($debit_note)&&$debit_note['tax_type']==3) hide @endif">
-                                                            <select id="taxes" class="form-control custom-select" name="taxes[]">
+                                                            <select id="taxes" class="form-control custom-select tax-input" name="taxes[]">
                                                                 @foreach($taxes as $tax)
                                                                     @if($tax['is_cess'] == 0)
                                                                         <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name']}}</option>
@@ -330,7 +333,7 @@
                                                         <input type="text" min="0" class="form-control amount-input floatTextBox" name="amount[0]" required>
                                                     </td>
                                                     <td id="taxes" class="tax_column @if(isset($debit_note)&&$debit_note['tax_type']==3) hide @endif">
-                                                        <select class="form-control custom-select" name="taxes[]" required>
+                                                        <select class="form-control custom-select tax-input" name="taxes[]" required>
                                                             @foreach($taxes as $tax)
                                                                 @if($tax['is_cess'] == 0)
                                                                     <option value="{{$tax['id']}}">{{$tax['rate'].'% '.$tax['tax_name']}}</option>
@@ -931,7 +934,7 @@
                         discount_field_style = "style=display:none;";
                     }
                     var html = "<tr class=\"itemNewCheckTr\">";
-                    html += "<td class='pro_list'>" + product_select +
+                    html += "<td>" + product_select +
                         "<div class=\"wrapper\" id=\"prowrp"+i+"\" style=\"display: none;\">"+
                         "<a href=\"javascript:;\" class=\"font-weight-300 add-new-prod-link\" data-id=\"product_select"+i+"\" onclick=\"OpenProductModel('product_select"+i+"')\"><i class=\"fa fa-plus-circle\"></i> Add New</a>"+
                         "</div>"+

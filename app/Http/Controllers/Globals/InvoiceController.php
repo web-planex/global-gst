@@ -41,7 +41,7 @@ class InvoiceController extends Controller
 {
     protected $common_controller;
     public function __construct(){
-        $this->middleware(['auth','verified'], ['except' => 'download_pdf']);
+        //$this->middleware(['auth','verified'], ['except' => 'download_pdf']);
         $this->middleware('UserAccessRight');
         $this->common_controller = new CommonController();
     }
@@ -261,7 +261,9 @@ class InvoiceController extends Controller
                 InvoiceItems::create($data);
             }
             // Send invoice email to customer
-            $this->send_invoice_mail($invoice_id, false);
+            if(!empty($user['email_verified_at'])){
+                $this->send_invoice_mail($invoice_id, false);
+            }
             return redirect('sales')->with('message','Invoice has been created successfully!');
         }
     }

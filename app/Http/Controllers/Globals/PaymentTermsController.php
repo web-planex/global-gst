@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class PaymentTermsController extends Controller
 {
     public function __construct(){
-        $this->middleware(['auth','verified']);
+
         $this->middleware('UserAccessRight');
     }
 

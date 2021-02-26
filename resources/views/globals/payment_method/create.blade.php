@@ -5,6 +5,9 @@
         <h4 class="text-themecolor">@if(isset($payment_method)) Edit @else Add @endif Payment Method</h4>
     </div>
 </div>
+
+<x-emailverification/>
+
 <div class="content">
     @include('inc.message')
     <div class="row">
