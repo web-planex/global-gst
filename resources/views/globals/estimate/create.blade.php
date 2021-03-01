@@ -397,8 +397,13 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" name="submit" id="submit" class="btn btn-default btn-primary">
-                    @if(isset($estimate)) Submit @else Save and Send @endif
+                    @if(!isset($estimate))
+                        <button type="submit" name="submit" id="submit" value="Submit" class="btn btn-default btn-primary">
+                            Submit
+                        </button>
+                    @endif
+                    <button type="submit" name="submit" id="submit" value=" @if(isset($estimate)) Submit @else Save and Send @endif" class="btn btn-default btn-primary">
+                        @if(isset($estimate)) Submit @else Save and Send @endif
                     </button>
                     {!! Form::close() !!}
                 </div>

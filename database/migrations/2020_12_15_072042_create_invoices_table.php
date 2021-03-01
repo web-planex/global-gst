@@ -22,6 +22,7 @@ class CreateInvoicesTable extends Migration
             $table->string('order_number',15)->nullable();
             $table->string('reference_number',15)->nullable();
             $table->integer('tax_type')->comment('(1 => Exclusive, 2 => Inclusive, 3 => Out of scope)');
+            $table->integer('is_cess')->default(0);
             $table->integer('customer_id');
             $table->date('invoice_date');
             $table->date('due_date');

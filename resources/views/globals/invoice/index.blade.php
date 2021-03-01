@@ -209,7 +209,7 @@
                                                 <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
-                                                <div class="dropdown-menu">
+                                                <div class="dropdown-menu dropdownMenu-box">
                                                     <a class="dropdown-item" href="{{url('sales/'.$list['id'].'/edit')}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="delete_invoice_records({{$list['id']}})">Delete</a>
                                                     @if(!in_array($list['status'],[2,3]))
@@ -220,7 +220,9 @@
                                                     @if(!empty($list['files']) && file_exists($list['files']))
                                                         <a class="dropdown-item" href="{{url($list['files'])}}" download>Download Receipt</a>
                                                     @endif
-                                                    <a class="dropdown-item" href="{{route('send-invoice-mail', ['id' => $list['id']])}}">Send Invoice Email</a>
+                                                    @if(!empty($user['email_verified_at']))
+                                                        <a class="dropdown-item" href="{{route('send-invoice-mail', ['id' => $list['id']])}}">Send Invoice Email</a>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <form name="frm_delete_{{$list['id']}}" id="frm_delete_{{$list['id']}}" action="{{route('sales-delete',$list['id'])}}" method="get"></form>

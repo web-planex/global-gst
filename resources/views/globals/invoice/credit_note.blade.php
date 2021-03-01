@@ -153,7 +153,9 @@
                                         <td class="col_total">Rs. {{$list['total']}}</td>
                                         <td>
                                             <a class="dropdown-item" target="_blank" href="{{route('invoice-download_pdf',['id'=>$list['id'],'output'=>'print','type'=>'credit_note'])}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="Print Credit note"><i class="fas fa-print"></i></a>
-                                            <a class="dropdown-item" href="{{route('send-credit-note-mail',['id'=>$list['id']])}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email Credit note"><i class="fas fa-envelope"></i></a>
+                                            @if(!empty($user['email_verified_at']))
+                                                <a class="dropdown-item" href="{{route('send-credit-note-mail',['id'=>$list['id']])}}" data-toggle="tooltip" data-placement="top" title="" data-original-title="Email Credit note"><i class="fas fa-envelope"></i></a>
+                                            @endif
                                         </td>
                                     </tr>
                                     @php $i++; @endphp

@@ -10,7 +10,11 @@ $(document).ready(function() {
         } else {
             $(".discount-section").show();
             $(".discount-line-section").hide();
+            $('.discount-items').each(function(){
+                $(this).val('');
+            });
         }
+        $('.rate-input').trigger('change');
         discountLevelChange();
     });
 

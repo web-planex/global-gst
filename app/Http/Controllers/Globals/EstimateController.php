@@ -85,6 +85,7 @@ class EstimateController extends Controller
             'Estimate Date',
             'Due Date'
         ];
+        $data['user'] = Auth::user();
         return view('globals.estimate.index',$data);
     }
 
@@ -209,8 +210,8 @@ class EstimateController extends Controller
                 }
                 EstimateItems::create($data);
             }
-            // Send estimate email to customer
-            if(!empty($user['email_verified_at'])){
+            if($request['submit'] != 'Submit' && !empty($user['email_verified_at'])){
+                // Send estimate email to customer
                 $this->send_estimate_mail($estimate_id, false);
             }
 

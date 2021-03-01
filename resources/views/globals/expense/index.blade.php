@@ -64,8 +64,8 @@
                     </div>
 
                    <div class="col-sm-3 col-lg-2">
-                       <button type="submit" class="btn btn-primary waves-effect waves-light pt-2"><i class="ti-search"></i></button>
-                       <a href="{{url('expense')}}"><button type="button" class="btn sync-orders-btn waves-effect waves-light btn-success">Clear</button></a>
+                       <button type="submit" class="btn btn-primary waves-effect waves-light pt-2 mr-2"><i class="ti-search"></i></button>
+                       <a href="{{url('expense')}}"><button type="button" class="btn sync-orders-btn waves-effect waves-light btn-danger">Clear</button></a>
                     </div>
                 </div>
             {!! Form::close() !!}

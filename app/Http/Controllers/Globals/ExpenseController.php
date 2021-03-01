@@ -277,6 +277,7 @@ class ExpenseController extends Controller
 
         if($request->has('submit')) {
             $expense->save();
+
             ExpenseItems::where('expense_id',$expense['id'])->delete();
 
             $expense_id = $expense->id;

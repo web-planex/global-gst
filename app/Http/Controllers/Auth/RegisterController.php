@@ -45,7 +45,8 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/dashboard';
+//    protected $redirectTo = '/dashboard';
+    protected $redirectTo = '/company-setting';
 
     /**
      * Create a new controller instance.
@@ -201,7 +202,6 @@ class RegisterController extends Controller
 
         // Send welcome email
         \mail($to, $subject2, $message2, $headers);
-
         return $user;
     }
 

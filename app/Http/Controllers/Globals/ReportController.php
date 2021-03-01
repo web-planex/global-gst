@@ -29,6 +29,7 @@ use NunoMaduro\Collision\Adapters\Phpunit\State;
 class ReportController extends Controller
 {
     public function __construct(){
+        $this->middleware(['auth','verified']);
         $this->middleware('UserAccessRight');
         $this->common_controller = new CommonController();
     }
@@ -317,7 +318,7 @@ class ReportController extends Controller
                         if($subarray['discount_type']==1){
                             $dis = !empty($subarray['discount']) ? $subarray['rate'] * $subarray['discount'] / 100 :0;
                         }else{
-                            $dis = $subarray['discount'];
+                            $dis = !empty($subarray['discount']) ? $subarray['discount'] : 0;
                         }
                         $total_discount = $total_discount + $dis;
 
@@ -630,7 +631,7 @@ class ReportController extends Controller
                         if($subarray['discount_type']==1){
                             $dis = !empty($subarray['discount']) ? $subarray['rate'] * $subarray['discount'] / 100 :0;
                         }else{
-                            $dis = $subarray['discount'];
+                            $dis = !empty($subarray['discount']) ? $subarray['discount'] : 0;
                         }
                         $total_discount = $total_discount + $dis;
 
@@ -892,7 +893,7 @@ class ReportController extends Controller
                         if($subarray['discount_type']==1){
                             $dis = !empty($subarray['discount']) ? $subarray['rate'] * $subarray['discount'] / 100 :0;
                         }else{
-                            $dis = $subarray['discount'];
+                            $dis = !empty($subarray['discount']) ? $subarray['discount'] : 0;
                         }
                         $total_discount = $total_discount + $dis;
 
@@ -1172,7 +1173,7 @@ class ReportController extends Controller
                         if($subarray['discount_type']==1){
                             $dis = !empty($subarray['discount']) ? $subarray['rate'] * $subarray['discount'] / 100 :0;
                         }else{
-                            $dis = $subarray['discount'];
+                            $dis = !empty($subarray['discount']) ? $subarray['discount'] : 0;
                         }
                         $total_discount = $total_discount + $dis;
 

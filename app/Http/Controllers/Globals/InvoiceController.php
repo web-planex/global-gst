@@ -108,6 +108,7 @@ class InvoiceController extends Controller
             'Notes',
             'Status'
         ];
+        $data['user'] = Auth::user();
         return view('globals.invoice.index',$data);
     }
 
@@ -258,10 +259,18 @@ class InvoiceController extends Controller
                 } else {
                     $data['discount'] = '';
                 }
+
+                $main_tax = Taxes::where('id',$request['taxes'][$i])->first();
+                if($main_tax['is_cess']==1){
+                    $invoice_input['is_cess'] = 1;
+                    $new_invoice = Invoice::where('id',$invoice_id)->first();
+                    $new_invoice->update($invoice_input);
+                }
+
                 InvoiceItems::create($data);
             }
             // Send invoice email to customer
-            if(!empty($user['email_verified_at'])){
+            if($request['submit'] != 'Submit' && !empty($user['email_verified_at'])){
                 $this->send_invoice_mail($invoice_id, false);
             }
             return redirect('sales')->with('message','Invoice has been created successfully!');
@@ -406,10 +415,16 @@ class InvoiceController extends Controller
                     'amount' => $request['amount'][$i],
                     'discount_type' => $request['discount_type_items'][$i]
                 ];
-                if($request['discount_type_items'][$i] != '') {
+                if($invoice['discount_level']==1 && $request['discount_type_items'][$i] != '') {
                     $data['discount'] = $request['discount_type_items'][$i]==2?str_replace( ',', '', $request['discount_items'][$i]):str_replace( ' %', '', $request['discount_items'][$i]);
                 } else {
                     $data['discount'] = '';
+                }
+                $main_tax = Taxes::where('id',$request['taxes'][$i])->first();
+                if($main_tax['is_cess']==1){
+                    $invoice_input['is_cess'] = 1;
+                    $new_invoice = Invoice::where('id',$invoice_id)->first();
+                    $new_invoice->update($invoice_input);
                 }
                 InvoiceItems::create($data);
             }
@@ -477,8 +492,10 @@ class InvoiceController extends Controller
                 $tax = Taxes::where('id',$item['tax_id'])->first();
                 if($tax['is_cess'] == 0) {
                     $item['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'];
+                    $item['tax_rate'] = $tax['rate'];
                 } else {
                     $item['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS';
+                    $item['tax_rate'] = $tax['rate'];
                 }
             }
         }
@@ -631,6 +648,7 @@ class InvoiceController extends Controller
             'Status',
             'Total'
         ];
+        $data['user'] = Auth::user();
         return view('globals.invoice.credit_note',$data);
     }
 
