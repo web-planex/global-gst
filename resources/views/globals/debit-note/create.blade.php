@@ -34,7 +34,7 @@
                                 @enderror
 
                                 <div class="row mt-3 @if(isset($debit_note) && empty($debit_note)) hide @elseif(!isset($debit_note)) hide @endif" id="cust_address">
-                                    <div class="@if($debit_note['customer']['is_shipping']==0) col-md-12 @else col-md-6 @endif">
+                                    <div class="@if(isset($debit_note) && $debit_note['customer']['is_shipping']==0) col-md-12 @else col-md-6 @endif">
                                         <div class="card border-info mb-0" style="background-color: #ECF0F4;">
                                             <div class="card-header bg-primary">
                                                 <h4 class="m-b-0 text-white pull-left">Billing Address</h4>
@@ -57,7 +57,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if($debit_note['customer']['is_shipping']==1)
+                                    @if(isset($debit_note) && $debit_note['customer']['is_shipping']==1)
                                         <div class="col-md-6">
                                             <div class="card border-info mb-0" style="background-color: #ECF0F4;">
                                                 <div class="card-header bg-primary">

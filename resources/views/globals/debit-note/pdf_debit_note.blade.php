@@ -427,7 +427,7 @@
                     </tr>
                     <tr>
                         <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Total Amount After Tax <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></td>
-                        <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">{{$debit_note['shipping_charge']==1 ? $debit_note['total'] - str_replace(',','',$debit_note['shipping_charge_amount']) : $debit_note['total']}}&nbsp;&nbsp;</td>
+                        <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">{{number_format($debit_note['total'],2)}}&nbsp;&nbsp;</td>
                     </tr>
                     <tr>
                         <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Round Off</td>
