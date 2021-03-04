@@ -146,7 +146,7 @@
         <table width="1182" border="1" cellspacing="0" cellpadding="0" class="td-gray" style="margin-top: -1px;">
             <tr>
                 <td width="30px" valign="top" align="center" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px;"><strong>#</strong></td>
-                <td width="280px" valign="top" align="center" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>Expense Type</strong></td>
+                <td width="220px" valign="top" align="center" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>Expense Type</strong></td>
                 <td width="120px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height: 30px;text-transform:uppercase;"><strong>Note</strong></td>
                 <td width="100px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>RATE PER ITEM <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></strong></td>
                 <td width="100px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>TAXABLE ITEM <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></strong></td>
@@ -164,7 +164,7 @@
                         <td width="100px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>CESS <br> <span style="font-family: DejaVu Sans; sans-serif;">(%) (&#8377;)</span></strong></td>
                     @endif
                 @endif
-                <td width="100px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;">&nbsp;&nbsp;<strong>Total <br> <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></strong></td>
+                <td width="80px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;">&nbsp;&nbsp;<strong>Total <br> <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></strong></td>
             </tr>
             @php $i=1; $maintotal = 0; @endphp
             @foreach($expense['ExpenseItems'] as $item)
@@ -183,7 +183,7 @@
                 @endphp
                 <tr>
                     <td width="30px" style="line-height:30px;" align="center" valign="top">{{$i}}</td>
-                    <td width="280px" style="padding:0 5px;line-height:30px;" align="left" valign="top">
+                    <td width="220px" style="padding:0 5px;line-height:30px;" align="left" valign="top">
                         @foreach($expense_types as $pro)
                             @if($pro['id'] == $item['expense_type_id']){{$pro['name']}}@endif
                         @endforeach
@@ -227,7 +227,6 @@
                                 {{number_format($item['amount'], 2)}} &nbsp;
                                 @php $maintotal = $maintotal + $item['amount'] @endphp
                             @endif
-
                         </span>
                     </td>
                     <td style="display:none;">
@@ -247,7 +246,7 @@
             @for($i=1; $i<=($expense['ExpenseItems']->count()>0?10-$expense['ExpenseItems']->count():10); $i++)
                 <tr>
                     <td width="30px" style="line-height:30px;" align="center" valign="top">&nbsp;</td>
-                    <td width="280px" style="padding:0 5px;line-height:30px;" align="left" valign="top">&nbsp;</td>
+                    <td width="220px" style="padding:0 5px;line-height:30px;" align="left" valign="top">&nbsp;</td>
                     <td width="120px" style="line-height:30px;" align="center" valign="top">&nbsp;</td>
                     <td style="line-height:30px;" align="center" valign="top">&nbsp;</td>
                     <td style="line-height:30px;" align="center" valign="top">&nbsp;</td>
