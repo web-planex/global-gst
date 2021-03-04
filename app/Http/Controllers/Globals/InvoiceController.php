@@ -499,7 +499,7 @@ class InvoiceController extends Controller
                 }
             }
         }
-        $data['invoice']['total_in_word'] = $this->common_controller->convert_digit_to_words($data['invoice']['total']);
+        $data['invoice']['total_in_word'] = $this->common_controller->convert_digit_to_words(round($data['invoice']['total']));
 
         $payee = Payees::where('id',$data['invoice']['customer_id'])->first();
         if(!empty($payee)){

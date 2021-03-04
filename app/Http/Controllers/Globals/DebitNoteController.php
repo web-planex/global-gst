@@ -204,6 +204,14 @@ class DebitNoteController extends Controller
                 } else {
                     $data['discount'] = '';
                 }
+
+                $main_tax = Taxes::where('id',$request['taxes'][$i])->first();
+                if($main_tax['is_cess']==1){
+                    $debit_input['is_cess'] = 1;
+                    $new_debit = DebitNote::where('id',$debit_note_id)->first();
+                    $new_debit->update($debit_input);
+                }
+
                 DebitNoteItems::create($data);
             }
             return redirect('debit-notes')->with('message','Debit note has been created successfully!');
@@ -332,6 +340,12 @@ class DebitNoteController extends Controller
                 } else {
                     $data['discount'] = '';
                 }
+                $main_tax = Taxes::where('id',$request['taxes'][$i])->first();
+                if($main_tax['is_cess']==1){
+                    $debit_input['is_cess'] = 1;
+                    $new_debit = DebitNote::where('id',$debit_note_id)->first();
+                    $new_debit->update($debit_input);
+                }
                 DebitNoteItems::create($data);
             }
             return redirect('debit-notes')->with('message','Debit note has been updated successfully!');
@@ -383,8 +397,10 @@ class DebitNoteController extends Controller
                 $tax = Taxes::where('id',$exp['tax_id'])->first();
                 if($tax['is_cess'] == 0) {
                     $data['debit_note']['DebitNoteItems'][$b]['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'];
+                    $data['debit_note']['DebitNoteItems'][$b]['tax_rate'] = $tax['rate'];
                 } else {
                     $data['debit_note']['DebitNoteItems'][$b]['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS';
+                    $data['debit_note']['DebitNoteItems'][$b]['tax_rate'] = $tax['rate'];
                 }
                 $b++;
             }
@@ -401,7 +417,7 @@ class DebitNoteController extends Controller
         $data['user']['shipping_state'] = $shipping_state['state_name'];
         $data['user']['billing_state_code'] = $state['state_number'];
         $data['user']['shipping_state_code'] = $shipping_state['state_number'];
-        $data['user']['is_shipping'] = true;
+//        $data['user']['is_shipping'] = true;
         $billing_address_arr = [
             $data['user']['billing_street'],
             $data['user']['billing_city'],

@@ -10,6 +10,7 @@ class Bills extends Model
         'user_id',
         'company_id',
         'tax_type',
+        'is_cess',
         'payee_id',
         'bill_date',
         'payment_method',

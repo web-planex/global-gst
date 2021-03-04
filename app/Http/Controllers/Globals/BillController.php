@@ -191,6 +191,14 @@ class BillController extends Controller
                 } else {
                     $data['discount'] = '';
                 }
+
+                $main_tax = Taxes::where('id',$request['taxes'][$i])->first();
+                if($main_tax['is_cess']==1){
+                    $bill_input['is_cess'] = 1;
+                    $new_bill = Bills::where('id',$bill_id)->first();
+                    $new_bill->update($bill_input);
+                }
+
                 BillItems::create($data);
             }
             return redirect('bills')->with('message','Bill has been created successfully!');
@@ -301,6 +309,13 @@ class BillController extends Controller
                 } else {
                     $data['discount'] = '';
                 }
+                $main_tax = Taxes::where('id',$request['taxes'][$i])->first();
+                if($main_tax['is_cess']==1){
+                    $bill_input['is_cess'] = 1;
+                    $new_bill = Bills::where('id',$bill_id)->first();
+                    $new_bill->update($bill_input);
+                }
+
                 BillItems::create($data);
             }
             return redirect('bills')->with('message','Bill has been updated successfully!');
@@ -388,14 +403,16 @@ class BillController extends Controller
                 $tax = Taxes::where('id',$exp['tax_id'])->first();
                 if($tax['is_cess'] == 0) {
                     $data['bill']['BillItems'][$b]['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'];
+                    $data['bill']['BillItems'][$b]['tax_rate'] = $tax['rate'];
                 } else {
                     $data['bill']['BillItems'][$b]['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS';
+                    $data['bill']['BillItems'][$b]['tax_rate'] = $tax['rate'];
                 }
                 $b++;
             }
         }
 
-        $data['bill']['total_in_word'] = $this->common_controller->convert_digit_to_words($data['bill']['total']);
+        $data['bill']['total_in_word'] = $this->common_controller->convert_digit_to_words(round($data['bill']['total']));
 
         $payee = Payees::where('id',$data['bill']['payee_id'])->first();
         $data['user'] = Customers::where('id',$payee['type_id'])->first();
@@ -406,7 +423,7 @@ class BillController extends Controller
         $data['user']['shipping_state'] = $shipping_state['state_name'];
         $data['user']['billing_state_code'] = $state['state_number'];
         $data['user']['shipping_state_code'] = $shipping_state['state_number'];
-        $data['user']['is_shipping'] = true;
+//        $data['user']['is_shipping'] = true;
         $billing_address_arr = [
             $data['user']['billing_street'],
             $data['user']['billing_city'],
@@ -455,6 +472,7 @@ class BillController extends Controller
         }
         $data['payment_method'] = PaymentMethod::select('method_name')->where('id',$data['bill']['payment_method'])->first();
         $data['name'] = 'Bill';
+
         $pdf = new WKPDF($this->common_controller->globalPdfOption());
         //return $data;
         $pdf->addPage(view('globals.bills.pdf_bill',$data));

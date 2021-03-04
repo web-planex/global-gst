@@ -19,6 +19,7 @@ class CreateEstimatesTable extends Migration
             $table->integer('company_id');
             $table->string('estimate_number',15);
             $table->integer('tax_type')->comment('(1 => Exclusive, 2 => Inclusive, 3 => Out of scope)');
+            $table->integer('is_cess')->default(0);
             $table->integer('customer_id');
             $table->date('estimate_date');
             $table->date('expiry_date');

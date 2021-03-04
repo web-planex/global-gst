@@ -190,6 +190,14 @@ class ExpenseController extends Controller
                     'note' => $request['note'][$i],
                     'amount' => $request['amount'][$i],
                 ];
+
+                $main_tax = Taxes::where('id',$request['taxes'][$i])->first();
+                if($main_tax['is_cess']==1){
+                    $expense_input['is_cess'] = 1;
+                    $new_expense = Expense::where('id',$expense_id)->first();
+                    $new_expense->update($expense_input);
+                }
+
                 ExpenseItems::create($data);
             }
             return redirect('expense')->with('message','Expense has been created successfully!');
@@ -290,6 +298,12 @@ class ExpenseController extends Controller
                     'note' => $request['note'][$i],
                     'amount' => $request['amount'][$i],
                 ];
+                $main_tax = Taxes::where('id',$request['taxes'][$i])->first();
+                if($main_tax['is_cess']==1){
+                    $expense_input['is_cess'] = 1;
+                    $new_expense = Expense::where('id',$expense_id)->first();
+                    $new_expense->update($expense_input);
+                }
                 ExpenseItems::create($data);
             }
             return redirect('expense')->with('message','Expense has been updated successfully!');
@@ -437,23 +451,26 @@ class ExpenseController extends Controller
                 $tax = Taxes::where('id',$exp['tax_id'])->first();
                 if($tax['is_cess'] == 0) {
                     $exp['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'];
+                    $exp['tax_rate'] = $tax['rate'];
                 } else {
                     $exp['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS';
+                    $exp['tax_rate'] = $tax['rate'];
                 }
             }
         }
-        $data['expense']['total_in_word'] = $this->common_controller->convert_digit_to_words($data['expense']['total']);
+        $data['expense']['total_in_word'] = $this->common_controller->convert_digit_to_words(round($data['expense']['total']));
 
         $payee = Payees::where('id',$data['expense']['payee_id'])->first();
         if(!empty($payee)){
             if($payee['type']==1){
                 $data['user'] = Suppliers::where('id',$payee['type_id'])->first();
                 $state = States::where('id',$data['user']['state'])->first();
+                $data['user']['billing_name'] = $data['user']['first_name'].' '.$data['user']['last_name'];
                 $data['user']['state'] = $state['state_name'];
                 $data['user']['state_code'] = $state['state_number'];
                 $data['user']['billing_state'] = $state['state_name'];
                 $data['user']['billing_state_code'] = $state['state_number'];
-                $data['user']['is_shipping'] = false;
+                $data['user']['is_shipping'] = 0;
                 $address_arr = [
                     $data['user']['street'],
                     $data['user']['city'],
@@ -461,15 +478,16 @@ class ExpenseController extends Controller
                     $data['user']['pincode'],
                     $data['user']['country']
                 ];
-                $data['user']['address'] = implode(', ', $address_arr);
+                $data['user']['billing_address'] = implode(', ', $address_arr);
             }elseif($payee['type']==2){
                 $data['user'] = Employees::where('id',$payee['type_id'])->first();
                 $state = States::where('id',$data['user']['state'])->first();
+                $data['user']['billing_name'] = $data['user']['first_name'].' '.$data['user']['last_name'];
                 $data['user']['state'] = $state['state_name'];
                 $data['user']['billing_state'] = $state['state_name'];
                 $data['user']['billing_state_code'] = $state['state_number'];
                 $data['user']['state_code'] = $state['state_number'];
-                $data['user']['is_shipping'] = false;
+                $data['user']['is_shipping'] = 0;
                 $address_arr = [
                     $data['user']['street'],
                     $data['user']['city'],
@@ -477,7 +495,7 @@ class ExpenseController extends Controller
                     $data['user']['pincode'],
                     $data['user']['country']
                 ];
-                $data['user']['address'] = implode(', ', $address_arr);
+                $data['user']['billing_address'] = implode(', ', $address_arr);
             }else{
                 $data['user'] = Customers::where('id',$payee['type_id'])->first();
                 $state = States::where('id',$data['user']['billing_state'])->first();
@@ -487,7 +505,6 @@ class ExpenseController extends Controller
                 $data['user']['shipping_state'] = $shipping_state['state_name'];
                 $data['user']['billing_state_code'] = $state['state_number'];
                 $data['user']['shipping_state_code'] = $shipping_state['state_number'];
-                $data['user']['is_shipping'] = true;
                 $billing_address_arr = [
                     $data['user']['billing_street'],
                     $data['user']['billing_city'],
@@ -524,7 +541,6 @@ class ExpenseController extends Controller
             $i = $i+2;
         }
         $data['all_tax_labels'] = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
-        $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $company = CompanySettings::select('company_name')->where('id',$this->Company())->first();
         $data['company_name'] = $company['company_name'];
         $data['expense_types'] = ExpenseType::where('user_id',$user->id)->where('company_id',$this->Company())->get();
@@ -537,11 +553,9 @@ class ExpenseController extends Controller
         }elseif($data['expense']['status'] == 3) {
             $data['expense']['status_image'] = asset('images/voided_imag.png');
         }
-
         $data['name'] = 'Expense Voucher';
         $data['content'] = 'This is test pdf.';
         $pdf = new WKPDF($this->common_controller->globalPdfOption());
-        //return $data;
         $pdf->addPage(view('globals.expense.pdf_expense',$data));
 //        return View('globals.expense.pdf_expense',$data);
         if($request->output == 'download') {

@@ -208,6 +208,13 @@ class EstimateController extends Controller
                 } else {
                     $data['discount'] = '';
                 }
+                $main_tax = Taxes::where('id',$request['taxes'][$i])->first();
+                if($main_tax['is_cess']==1){
+                    $estimate_input['is_cess'] = 1;
+                    $new_estimate = Estimate::where('id',$estimate_id)->first();
+                    $new_estimate->update($estimate_input);
+                }
+
                 EstimateItems::create($data);
             }
             if($request['submit'] != 'Submit' && !empty($user['email_verified_at'])){
@@ -331,6 +338,14 @@ class EstimateController extends Controller
                 } else {
                     $data['discount'] = '';
                 }
+
+                $main_tax = Taxes::where('id',$request['taxes'][$i])->first();
+                if($main_tax['is_cess']==1){
+                    $estimate_input['is_cess'] = 1;
+                    $new_estimate = Estimate::where('id',$estimate_id)->first();
+                    $new_estimate->update($estimate_input);
+                }
+
                 EstimateItems::create($data);
             }
             return redirect('estimate')->with('message','Estimate has been updated successfully!');
@@ -368,7 +383,6 @@ class EstimateController extends Controller
         $state = States::where('id',$data['company']['state'])->first();
         $data['company']['state'] = $state['state_name'];
         $data['company']['state_code'] = $state['state_number'];
-        
 
         /*Count Discount Price*/
         if($data['estimate']['discount_type']==1){
@@ -390,12 +404,14 @@ class EstimateController extends Controller
                 $tax = Taxes::where('id',$item['tax_id'])->first();
                 if($tax['is_cess'] == 0) {
                     $item['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'];
+                    $item['tax_rate'] = $tax['rate'];
                 } else {
                     $item['tax_name'] = $tax['rate'].'%'.' '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS';
+                    $item['tax_rate'] = $tax['rate'];
                 }
             }
         }
-        $data['estimate']['total_in_word'] = $this->common_controller->convert_digit_to_words($data['estimate']['total']);
+        $data['estimate']['total_in_word'] = $this->common_controller->convert_digit_to_words(round($data['estimate']['total']));
 
         $payee = Payees::where('id',$data['estimate']['customer_id'])->first();
         if(!empty($payee)){

@@ -10,6 +10,7 @@ class Expense extends Model
         'user_id',
         'company_id',
         'tax_type',
+        'is_cess',
         'payee_id',
         'expense_date',
         'payment_method',

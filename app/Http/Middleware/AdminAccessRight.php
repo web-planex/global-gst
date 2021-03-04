@@ -16,11 +16,15 @@ class AdminAccessRight
      */
     public function handle($request, Closure $next)
     {
-        $user = Auth::user();
-        if($user->role == 'admin'){
-            return $next($request);
+        if(Auth::check()){
+            $user = Auth::user();
+            if($user->role == 'admin'){
+                return $next($request);
+            }else{
+                return redirect('/dashboard');
+            }
         }else{
-            return redirect('/dashboard');
+            return redirect('admin/login');
         }
     }
 }

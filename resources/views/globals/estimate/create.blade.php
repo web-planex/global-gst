@@ -34,7 +34,7 @@
                                 @endif
 
                                 <div class="row mt-3 @if(isset($estimate) && empty($estimate)) hide @elseif(!isset($estimate)) hide @endif" id="cust_address">
-                                    <div class="col-md-6">
+                                    <div class="@if(isset($estimate) && $estimate['customer']['is_shipping'] == 1) col-md-6 @else col-md-12 @endif">
                                         <div class="card border-info mb-0" style="background-color: #ECF0F4;">
                                             <div class="card-header bg-primary">
                                                 <h4 class="m-b-0 text-white pull-left">Billing Address</h4>
@@ -57,29 +57,31 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="card border-info mb-0" style="background-color: #ECF0F4;">
-                                            <div class="card-header bg-primary">
-                                                <h4 class="m-b-0 text-white pull-left">Shipping Address</h4>
-                                                <a href="javascript:;" data-toggle="modal" data-target="#ShippingAddressModal">
-                                                    <h4 class="m-b-0 text-white text-right">Change</h4>
-                                                </a>
-                                            </div>
-                                            <div class="card-body pt-2 pb-2">
-                                                <div id="ShippingDiv">
-                                                    @if(isset($estimate) && !empty($estimate))
-                                                        <p class="card-text mb-0">{{$estimate['customer']['shipping_name']}}</p>
-                                                        <p class="card-text mb-0">{{$estimate['customer']['shipping_phone']}}</p>
-                                                        <p class="card-text mb-0">{{$estimate['customer']['shipping_street']}}</p>
-                                                        <p class="card-text mb-0">{{$estimate['customer']['shipping_city']}} - {{$estimate['customer']['shipping_pincode']}}</p>
-                                                        <p class="card-text mb-0">{{$estimate['customer']['shipping_state_name']}}</p>
-                                                        <p class="card-text mb-0">{{$estimate['customer']['shipping_country']}}</p>
-                                                    @endif
+                                    @if(isset($estimate) && $estimate['customer']['is_shipping'] == 1)
+                                        <div class="col-md-6">
+                                            <div class="card border-info mb-0" style="background-color: #ECF0F4;">
+                                                <div class="card-header bg-primary">
+                                                    <h4 class="m-b-0 text-white pull-left">Shipping Address</h4>
+                                                    <a href="javascript:;" data-toggle="modal" data-target="#ShippingAddressModal">
+                                                        <h4 class="m-b-0 text-white text-right">Change</h4>
+                                                    </a>
                                                 </div>
-                                                <div id="shipping_msg" class="text-info font-weight-bolder"></div>
+                                                <div class="card-body pt-2 pb-2">
+                                                    <div id="ShippingDiv">
+                                                        @if(isset($estimate) && !empty($estimate))
+                                                            <p class="card-text mb-0">{{$estimate['customer']['shipping_name']}}</p>
+                                                            <p class="card-text mb-0">{{$estimate['customer']['shipping_phone']}}</p>
+                                                            <p class="card-text mb-0">{{$estimate['customer']['shipping_street']}}</p>
+                                                            <p class="card-text mb-0">{{$estimate['customer']['shipping_city']}} - {{$estimate['customer']['shipping_pincode']}}</p>
+                                                            <p class="card-text mb-0">{{$estimate['customer']['shipping_state_name']}}</p>
+                                                            <p class="card-text mb-0">{{$estimate['customer']['shipping_country']}}</p>
+                                                        @endif
+                                                    </div>
+                                                    <div id="shipping_msg" class="text-info font-weight-bolder"></div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

@@ -22,6 +22,7 @@ class CreateDebitNotesTable extends Migration
             $table->integer('ref_invoice_id');
             $table->date('ref_invoice_date');
             $table->integer('tax_type')->comment('(1 => Exclusive, 2 => Inclusive, 3 => Out of scope)');
+            $table->integer('is_cess')->default(0);
             $table->integer('customer_id');
             $table->string('payment_method',50);
             $table->date('debit_note_date');

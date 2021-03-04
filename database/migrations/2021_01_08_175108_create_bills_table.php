@@ -18,6 +18,7 @@ class CreateBillsTable extends Migration
             $table->integer('user_id');
             $table->integer('company_id');
             $table->integer('tax_type')->comment('1 => Exclusive, 2 => Inclusive, 3 => Out of scope');
+            $table->integer('is_cess')->default(0);
             $table->integer('payee_id');
             $table->date('bill_date');
             $table->date('payment_date')->nullable();

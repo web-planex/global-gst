@@ -149,3 +149,7 @@ td.discount-line-section {
 .dropdownMenu-box .dropdown-divider {
     margin:0; 
 }
+
+.edit-main-box {
+    left: -35px !important;
+}

@@ -14,6 +14,7 @@ class DebitNote extends Model
         'ref_invoice_no',
         'ref_invoice_date',
         'tax_type',
+        'is_cess',
         'customer_id',
         'debite_note_date',
         'due_date',

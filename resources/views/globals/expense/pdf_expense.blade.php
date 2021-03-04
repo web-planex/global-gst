@@ -87,39 +87,35 @@
                 <td colspan="2" style="padding: 20px 10px;">&nbsp;</td>
             </tr>
             <tr>
-                <td @if(!$user['is_shipping']) colspan="2" @endif align="center" bgcolor="#eeeeee" align="center" style="padding:0 5px;line-height:30px;" ><strong>BILL TO PARTY</strong></td>
-                @if($user['is_shipping'])
+                <td @if($user['is_shipping'] == 0) colspan="2" @endif align="center" bgcolor="#eeeeee" align="center" style="padding:0 5px;line-height:30px;" ><strong>BILL TO PARTY</strong></td>
+                @if($user['is_shipping'] == 1)
                 <td align="center" bgcolor="#eeeeee" align="center" style="padding:0 5px;line-height:30px;"><strong>SHIP TO PARTY / DELIVERY ADDRESS</strong></td>
                 @endif
             </tr>
             <tr>
-                <td @if(!$user['is_shipping']) colspan="2" @endif align="left" width="50%" style="padding:0 5px;line-height:30px;" >&nbsp;&nbsp;<strong>{{$user['first_name'].' '.$user['last_name']}}</strong></td>
-                @if($user['is_shipping'])
-                <td align="left" width="50%" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>{{$user['first_name'].' '.$user['last_name']}}</strong></td>
+                <td @if($user['is_shipping'] == 0) colspan="2" @endif align="left" width="50%" style="padding:0 5px;line-height:30px;" >&nbsp;&nbsp;<strong>{{$user['billing_name']}}</strong></td>
+                @if($user['is_shipping'] == 1)
+                <td align="left" width="50%" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>{{$user['shipping_name']}}</strong></td>
                 @endif
             </tr>
             <tr>
-                <td @if(!$user['is_shipping']) colspan="2" @endif align="left" valign="top" style="padding:0 14px;line-height:30px;">
-                @if($user['is_shipping'])
-                {{$user['billing_address']}}
-                @else
-                {{$user['address']}}
-                @endif
+                <td @if($user['is_shipping'] == 0) colspan="2" @endif align="left" valign="top" style="padding:0 14px;line-height:30px;">
+                    {{$user['billing_address']}}
                 </td>
-                @if($user['is_shipping'])
+                @if($user['is_shipping'] == 1)
                 <td align="left" valign="top" style="padding:0 14px;line-height:30px;">
-                {{$user['shipping_address']}}
+                    {{$user['shipping_address']}}
                 </td>
                 @endif
             </tr>
             <tr>
-                <td @if(!$user['is_shipping']) colspan="2" @endif align="left" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>Phone No:</strong> {{$user['billing_phone']}}</td>
-                @if($user['is_shipping'])
+                <td @if($user['is_shipping'] == 0) colspan="2" @endif align="left" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>Phone No:</strong> {{$user['billing_phone']}}</td>
+                @if($user['is_shipping'] == 1)
                 <td align="left" style="padding:0 5px;line-height:30px;">&nbsp;&nbsp;<strong>Phone No:</strong> {{$user['shipping_phone']}}</td>
                 @endif
             </tr>
             <tr>
-                <td @if(!$user['is_shipping']) colspan="2" @endif align="left">
+                <td @if($user['is_shipping'] == 0) colspan="2" @endif align="left">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                         <td align="left" width="40%" style="padding:0 5px;line-height:30px; border: 0px;">&nbsp;&nbsp;<strong>State:</strong> {{$user['billing_state']}}</td>
@@ -129,7 +125,7 @@
                     </tr>
                     </table>
                 </td>
-                @if($user['is_shipping'])
+                @if($user['is_shipping'] == 1)
                 <td align="left">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
@@ -151,87 +147,150 @@
             <tr>
                 <td width="30px" valign="top" align="center" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px;"><strong>#</strong></td>
                 <td width="280px" valign="top" align="center" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>Expense Type</strong></td>
-                <!--<td width="80px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>HSN</strong></td>-->
                 <td width="120px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height: 30px;text-transform:uppercase;"><strong>Note</strong></td>
+                <td width="100px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>RATE PER ITEM <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></strong></td>
+                <td width="100px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>TAXABLE ITEM <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></strong></td>
                 @if($expense['tax_type'] != 3)
-                <td width="120px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>Tax <br/>%</strong></td>
+                    <td width="40px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>GST <br> (%)</strong></td>
                 @endif
-<!--                <td width="44px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;">
-                    <strong>Qty</strong>
-                </td>-->
-<!--                <td width="120px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;">
-                    <strong>Rate Per Item</strong>
-                </td>-->
-                <td width="120px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;">&nbsp;&nbsp;<strong>Total <br/> Rs.</strong></td>
+                @if($expense['tax_type'] != 3)
+                    @if($user['billing_state_code']==24)
+                        <td width="80px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>CGST <br> <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></strong></td>
+                        <td width="80px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>SGST <br> <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></strong></td>
+                    @else
+                        <td width="80px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>IGST <br> <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></strong></td>
+                    @endif
+                    @if($expense['is_cess'] == 1)
+                        <td width="100px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>CESS <br> <span style="font-family: DejaVu Sans; sans-serif;">(%) (&#8377;)</span></strong></td>
+                    @endif
+                @endif
+                <td width="100px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;">&nbsp;&nbsp;<strong>Total <br> <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></strong></td>
             </tr>
-            @php $i=1; @endphp
+            @php $i=1; $maintotal = 0; @endphp
             @foreach($expense['ExpenseItems'] as $item)
-            <tr>
-                <td width="30px" style="line-height:30px;" align="center" valign="top">{{$i}}</td>
-                <td width="280px" style="padding:0 5px;line-height:30px;" align="left" valign="top">
-                    @foreach($expense_types as $pro)
-                        @if($pro['id'] == $item['expense_type_id']){{$pro['name']}}@endif
-                    @endforeach
-                </td>
-                <!--<td width="80px" style="line-height:30px;" align="center" valign="top">{{$item['hsn_code']}}</td>-->
-                <td width="120px" style="line-height:30px;" align="center" valign="top">{{$item['note']}}</td>
-                @if($expense['tax_type'] != 3)
-                <td width="120px" style="line-height:30px;" align="center" valign="top">{{$item['tax_name']}}</td>
-                @endif
-                <!--<td width="44px" style="line-height:30px;" align="center" valign="top"><span class="quantity-input">{{$item['quantity']}}</span></td>
-                <td width="120px" style="line-height:30px;" align="center" valign="top"><span class="rate-input">{{$item['rate']}}</span></td>-->
-                <td width="120px" style="line-height:30px;" align="center" valign="top"><span class="amount-input">{{$item['amount']}}</span></td>
-                <td style="display:none;">
-                <select id="taxes" class="tax-input">
-                    @foreach($taxes as $tax)
-                        @if($tax['is_cess'] == 0)
-                        <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name']}}</option>
+                @php
+                    $main_tax = \App\Models\Globals\Taxes::where('id',$item['tax_id'])->first();
+                    if($expense['tax_type']==1){
+                         $total_tax = $item['amount'] * $item['tax_rate'] / 100;
+                         $cess_tax = $main_tax['is_cess'] == 1 ? $item['amount'] * $main_tax['cess'] / 100 : 0.00;
+                    }elseif ($expense['tax_type']==2){
+                         $total_tax = $item['amount'] * $item['tax_rate'] / (100 + $item['tax_rate']);
+                         $cess_tax = $main_tax['is_cess'] == 1 ? $item['amount'] * $main_tax['cess'] / (100 + $main_tax['cess']) : 0.00;
+                    }else{
+                         $total_tax = 0;
+                         $cess_tax = 0.00;
+                    }
+                @endphp
+                <tr>
+                    <td width="30px" style="line-height:30px;" align="center" valign="top">{{$i}}</td>
+                    <td width="280px" style="padding:0 5px;line-height:30px;" align="left" valign="top">
+                        @foreach($expense_types as $pro)
+                            @if($pro['id'] == $item['expense_type_id']){{$pro['name']}}@endif
+                        @endforeach
+                    </td>
+                    <td width="120px" style="line-height:30px;" align="center" valign="top">{{$item['note']}}</td>
+                    <td style="line-height:30px;" align="center" valign="top"><span class="rate-input">{{number_format($item['amount'], 2)}}</span></td>
+                    <td style="line-height:30px;" align="center" valign="top">
+                        <span class="taxable-input">
+                            @if($expense['tax_type'] == 1)
+                                {{number_format($item['amount'], 2)}}
+                            @elseif($expense['tax_type'] == 2)
+                                {{number_format($item['amount'], 2)}}
+                            @else
+                                {{number_format($item['amount'], 2)}}
+                            @endif
+                        </span>
+                    </td>
+                    @if($expense['tax_type'] != 3)
+                        <td style="line-height:30px;" align="center" valign="top">{{$item['tax_rate']}}</td>
+                    @endif
+                    @if($expense['tax_type'] != 3)
+                        @if($user['state_code']==24)
+                            <td width="40px" align="center" valign="top" style="padding:0 5px;line-height:30px; text-transform: uppercase;">{{number_format($total_tax/2,2)}}</td>
+                            <td width="40px" align="center" valign="top" style="padding:0 5px;line-height:30px; text-transform: uppercase;">{{number_format($total_tax/2,2)}}</td>
                         @else
-                        <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option>
+                            <td width="40px" align="center" valign="top" style="padding:0 5px;line-height:30px; text-transform: uppercase;">{{number_format($total_tax ,2)}}</td>
                         @endif
-                    @endforeach
-                </select>
-                </td>
-            </tr>
+                        @if($expense['is_cess'] == 1)
+                            <td width="40px" align="center" valign="top" style="padding:0 5px;line-height:30px; text-transform: uppercase;">@if($cess_tax != 0.00) ({{ $main_tax['cess']}}) @endif {{number_format($cess_tax ,2)}} </td>
+                        @endif
+                    @endif
+                    <td style="line-height:30px;" align="right" valign="top">
+                        <span class="amount-input">
+                            @if($expense['tax_type'] == 1)
+                                {{number_format($item['amount'] + $total_tax + $cess_tax, 2)}} &nbsp;
+                                @php $maintotal = $maintotal + $item['amount'] + $total_tax + $cess_tax @endphp
+                            @elseif($expense['tax_type'] == 2)
+                                {{number_format($item['amount'], 2)}} &nbsp;
+                                @php $maintotal = $maintotal + $item['amount'] @endphp
+                            @else
+                                {{number_format($item['amount'], 2)}} &nbsp;
+                                @php $maintotal = $maintotal + $item['amount'] @endphp
+                            @endif
+
+                        </span>
+                    </td>
+                    <td style="display:none;">
+                    <select id="taxes" class="tax-input">
+                        @foreach($taxes as $tax)
+                            @if($tax['is_cess'] == 0)
+                            <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name']}}</option>
+                            @else
+                            <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                    </td>
+                </tr>
             @php $i++; @endphp
             @endforeach
+            @for($i=1; $i<=($expense['ExpenseItems']->count()>0?10-$expense['ExpenseItems']->count():10); $i++)
+                <tr>
+                    <td width="30px" style="line-height:30px;" align="center" valign="top">&nbsp;</td>
+                    <td width="280px" style="padding:0 5px;line-height:30px;" align="left" valign="top">&nbsp;</td>
+                    <td width="120px" style="line-height:30px;" align="center" valign="top">&nbsp;</td>
+                    <td style="line-height:30px;" align="center" valign="top">&nbsp;</td>
+                    <td style="line-height:30px;" align="center" valign="top">&nbsp;</td>
+                    @if($expense['tax_type'] != 3)
+                        <td style="line-height:30px;" align="right" valign="top">&nbsp;</td>
+                    @endif
+                    @if($expense['tax_type'] != 3)
+                        @if($user['state_code']==24)
+                            <td style="line-height:30px;" align="right" valign="top">&nbsp;</td>
+                            <td style="line-height:30px;" align="right" valign="top">&nbsp;</td>
+                        @else
+                            <td style="line-height:30px;" align="right" valign="top">&nbsp;</td>
+                        @endif
+                        @if($expense['is_cess'] == 1)
+                            <td style="line-height:30px;" align="right" valign="top">&nbsp;</td>
+                        @endif
+                    @endif
+                    <td style="line-height:30px;" align="right" valign="top">&nbsp;</td>
+                </tr>
+            @endfor
             <tr>
-                <td width="30px" style="line-height:30px;">&nbsp;</td>
-                <td width="280px" style="padding:0 5px;line-height:30px;">&nbsp;</td>
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
+                <td width="30px" colspan="2" style="line-height:30px;" align="center" valign="top"><strong>Total</strong></td>
+                <td width="120px" style="line-height:30px;" align="center" valign="top">&nbsp;</td>
+                <td style="line-height:30px;" align="center" valign="top">&nbsp;</td>
+                <td style="line-height:30px;" align="center" valign="top">&nbsp;</td>
                 @if($expense['tax_type'] != 3)
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
+                    <td style="line-height:30px;" align="right" valign="top">&nbsp;</td>
                 @endif
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
-            </tr>
-            <tr>
-                <td width="30px" style="line-height:30px;">&nbsp;</td>
-                <td width="280px" style="padding:0 5px;line-height:30px;">&nbsp;</td>
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
                 @if($expense['tax_type'] != 3)
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
+                    @if($user['state_code']==24)
+                        <td style="line-height:30px;" align="right" valign="top">&nbsp;</td>
+                        <td style="line-height:30px;" align="right" valign="top">&nbsp;</td>
+                    @else
+                        <td style="line-height:30px;" align="right" valign="top">&nbsp;</td>
+                    @endif
+                    @if($expense['is_cess'] == 1)
+                        <td style="line-height:30px;" align="right" valign="top">&nbsp;</td>
+                    @endif
                 @endif
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
-            </tr>
-            <tr>
-                <td width="30px" style="line-height:30px;">&nbsp;</td>
-                <td width="280px" style="padding:0 5px;line-height:30px;">&nbsp;</td>
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
-                @if($expense['tax_type'] != 3)
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
-                @endif
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
-            </tr>
-            <tr>
-                <td width="30px" style="line-height:30px;">&nbsp;</td>
-                <td width="280px" style="padding:0 5px;line-height:30px;">&nbsp;</td>
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
-                @if($expense['tax_type'] != 3)
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
-                @endif
-                <td width="120px" style="line-height:30px;">&nbsp;</td>
+                <td style="line-height:30px;" align="right" valign="top"><strong>{{number_format($maintotal, 2)}} &nbsp;</strong></td>
             </tr>
         </table>
+
         <table width="1182" border="0" cellspacing="0" cellpadding="0" style="margin-top: -1px;">
             <tr>
                 <td align="left" valign="top" style="border-top: solid 1px #444444; border-left:solid 1px #444444; border-right:solid 1px #444444;">
@@ -278,79 +337,39 @@
                 <td width="50%" align="left" valign="top" style="border-right: solid 1px #444444;border-top: solid 1px #444444; line-height: 35px;">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                         <tr>
-                            <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Total Amount before Tax</td>
+                            <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Total Amount before Tax <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></td>
                             <td align="right" height="35" style="border-right:0px;border-bottom:solid 1px #444444;">{{number_format($expense['amount_before_tax'],2)}}&nbsp;&nbsp;</td>
                         </tr>
                         <tr>
-                            <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Total Tax Amount</td>
+                            <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Total Tax Amount <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></td>
                             <td align="right" height="35" style="border-right:0px;border-bottom:solid 1px #444444;">{{number_format($expense['tax_amount'],2)}}&nbsp;&nbsp;</td>
                         </tr>
-                        @foreach($all_tax_labels as $tax)
-                            @php
-                            $arr = explode("_", $tax, 2);
-                            $rate = $arr[0];
-                            $tax_name = $arr[1];
-                            @endphp
-                            @if($tax_name == 'GST')
-                            <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide">
-                                <td align="left" height="35" style="padding-left:10px;border-right:solid 1px #444444;border-bottom:solid 1px #444444;">{{$rate / 2}}% CGST on Rs. <span id="label_1_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></td>
-                                <td align="right" style="padding-right:10px;border-right:0px;border-bottom:solid 1px #444444;"><span id="input_1_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="tax-input-row"></span></td>
-                            </tr>
-                            <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide">
-                                <td align="left" height="35" style="padding-left:10px;border-right:solid 1px #444444;border-bottom:solid 1px #444444;">{{$rate / 2}}% SGST on Rs. <span id="label_2_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></td>
-                                <td align="right" style="padding-right:10px;border-right:0px;border-bottom:solid 1px #444444;"><span id="input_2_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="tax-input-row"></span></td>
-                            </tr>
-                            @else
-                            <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide">
-                                <td align="left" height="35" style="padding-left:10px;border-right:solid 1px #444444;border-bottom:solid 1px #444444;">{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></td>
-                                <td align="right" style="padding-right:10px;border-right:0px;border-bottom:solid 1px #444444;"><span id="input_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="tax-input-row"></span></td>
-                            </tr>
-                            @endif
-                        @endforeach
-                        {{--<tr>
-                            <td style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">
-                                <table width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse: collapse;">
-                                    <tr>
-                                        <td height="35" align="left" width="60%">&nbsp;&nbsp;Discount %</td>
-                                        <td align="center" style="border-left:solid 1px #444444;">
-                                        @if(isset($expense['discount_type']) && $expense['discount_type'] == '1')
-                                            {{$expense['discount']}}
-                                        @endif
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td style="border-bottom:solid 1px #444444;">
-                                <table width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse: collapse;">
-                                    <tr>
-                                        <td height="35" align="left" width="50%">
-                                            &nbsp;&nbsp;Discount
-                                        </td>
-                                        <td align="right" style="width:100px;padding-right: 10px;border-left:solid 1px #444444;">
-                                        @if(isset($expense['discount_type']) && $expense['discount_type'] == '1')
-                                            @php
-                                            $total_before_discount = $expense['amount_before_tax'] + $expense['tax_amount'];
-                                            @endphp
-                                            {{number_format(($total_before_discount * $expense['discount']) / 100,2)}}
-                                        @elseif(isset($expense['discount_type']) && $expense['discount_type'] == '2')
-                                            {{$expense['discount']}}
-                                        @endif
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>--}}
                         <tr>
-                            <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Total Amount After Tax</td>
-                            <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">{{number_format($expense['total'],2)}}/-&nbsp;&nbsp;</td>
+                            <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Total Amount After Tax <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></td>
+                            <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">{{number_format($expense['total'],2)}}&nbsp;&nbsp;</td>
                         </tr>
                         <tr>
                             <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Round Off</td>
-                            <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">-&nbsp;&nbsp;</td>
+                            <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">
+                                @php
+                                    $total_arr = explode('.',$expense['total']);
+                                    $j = '0.'.$total_arr[1];
+                                    $round = round($j);
+                                @endphp
+
+                                @if($round==1)
+                                    (+) {{1 - $j}}
+                                @elseif($total_arr[1] == 00)
+                                    -
+                                @else
+                                    (-) {{$j}}
+                                @endif
+                                &nbsp;
+                            </td>
                         </tr>
                         <tr>
-                            <td align="left" height="35" style="border-right:solid 1px #444444; border-bottom:solid 1px #444444; text-transform: uppercase;"><strong>&nbsp;&nbsp;Total</strong></td>
-                            <td align="right" style="border-right:0px; border-bottom:solid 1px #444444;"><strong>{{number_format($expense['total'],2)}}/-&nbsp;&nbsp;</strong></td>
+                            <td align="left" height="35" style="border-right:solid 1px #444444; border-bottom:solid 1px #444444; text-transform: uppercase;"><strong>&nbsp;&nbsp;Total <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></strong></td>
+                            <td align="right" style="border-right:0px; border-bottom:solid 1px #444444;"><strong>{{number_format(round($expense['total']),2)}}&nbsp;&nbsp;</strong></td>
                         </tr>
                     </table>
                 </td>

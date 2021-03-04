@@ -712,7 +712,7 @@ table.product-gst-table tbody td {
     }
     .dropdownMenu-box {
         overflow-y: scroll;
-        height: 243px;
+        max-height: 243px;
     }
 }
 @media (min-width: 576px) and (max-width: 767px) {

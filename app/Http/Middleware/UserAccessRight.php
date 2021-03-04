@@ -16,11 +16,15 @@ class UserAccessRight
      */
     public function handle($request, Closure $next)
     {
-        $user = Auth::user();
-        if($user->role == 'user'){
-            return $next($request);
+        if(Auth::check()){
+            $user = Auth::user();
+            if($user->role == 'user'){
+                return $next($request);
+            }else{
+                return redirect('admin');
+            }
         }else{
-            return redirect('admin');
+            return redirect('/login');
         }
     }
 }

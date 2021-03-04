@@ -206,10 +206,10 @@
                                         <td>
                                             <div class="btn-group">
                                                 <button type="button" onclick="javascript:window.location.href='{{url('sales/'.$list['id'].'/edit')}}'" class="btn btn-secondary">Edit</button>
-                                                <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-boundary="viewport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
-                                                <div class="dropdown-menu dropdownMenu-box">
+                                                <div class="dropdown-menu edit-main-box dropdownMenu-box">
                                                     <a class="dropdown-item" href="{{url('sales/'.$list['id'].'/edit')}}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:void(0)" onclick="delete_invoice_records({{$list['id']}})">Delete</a>
                                                     @if(!in_array($list['status'],[2,3]))
