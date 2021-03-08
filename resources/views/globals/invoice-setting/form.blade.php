@@ -15,75 +15,178 @@
                 {!! Form::model($invoice_setting,['url' => url('company-setting/addedit'),'method'=>'patch' ,'class' => 'form-horizontal','files'=>true,'id'=>'signupSuppliersForm']) !!}
                     @csrf
                     <div class="row mb-0">
-                        <!--LOGO IMAGE-->
-                        <div class="col-lg-6">
+                        <!--COMPANY DETAILS SETTING-->
+                        <div class="col-lg-12">
                             <div class="card signature-image-bg">
                                 <div class="card-header bg-primary">
-                                    <h4 class="m-b-0 text-white">Company Logo</h4>
+                                    <h4 class="m-b-0 text-white">Company Details</h4>
                                 </div>
                                 <div class="card-body">
-                                    <div class="form-group mb-0">
-                                        <label class="col-form-label">Company Logo</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="icon-picture"></i></span>
+                                    <div class="row">
+                                        <div class="form-group mb-3 col-lg-6">
+                                            <label class="col-form-label">Company Logo</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="icon-picture"></i></span>
+                                                </div>
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" name="company_logo" id="company_logo" onchange="AjaxUploadImage(this,1)">
+                                                    <label class="custom-file-label" for="company_logo">Upload Logo Image</label>
+                                                </div>
                                             </div>
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" name="company_logo" id="company_logo" onchange="AjaxUploadImage(this,1)">
-                                                <label class="custom-file-label" for="company_logo">Upload Logo Image</label>
+                                            @if ($errors->has('company_logo'))
+                                                <span class="text-danger">
+                                                    <strong>{{ $errors->first('company_logo') }}</strong>
+                                                </span>
+                                            @endif
+                                            <p class="mt-2">Note: Image dimension should be less than 100 X 100 pixels.</p>
+                                            <div class="form-group mb-0">
+                                                @if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['company_logo']) && file_exists($invoice_setting['company_logo']))
+                                                    <img src="{{url($invoice_setting['company_logo'])}}" id="DisplayImage1" height="60px" width="60px">
+                                                @endif
                                             </div>
                                         </div>
-                                        @if ($errors->has('company_logo'))
-                                            <span class="text-danger">
-                                                <strong>{{ $errors->first('company_logo') }}</strong>
-                                            </span>
-                                        @endif
-                                        <p class="mt-2">Note: Image dimension should be less than 100 X 100 pixels.</p>
-                                    </div>
 
-                                    <div class="form-group mb-0">
-                                        @if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['company_logo']) && file_exists($invoice_setting['company_logo']))
-                                            <img src="{{url($invoice_setting['company_logo'])}}" id="DisplayImage1" height="60px" width="60px">
-                                        @endif
+                                        <div class="form-group mb-3 col-lg-6">
+                                            <label class="col-form-label">Signature Image</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="icon-picture"></i></span>
+                                                </div>
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" name="signature_image" id="signature_image" onchange="AjaxUploadImage(this,2)">
+                                                    <label class="custom-file-label" for="signature_image">Upload Signature Image</label>
+                                                </div>
+                                            </div>
+                                            @if ($errors->has('signature_image'))
+                                                <span class="text-danger">
+                                                    <strong>{{ $errors->first('signature_image') }}</strong>
+                                                </span>
+                                            @endif
+                                            <p class="mt-2">Note: Image dimension should be less than 150 X 80 pixels and Image type png only.</p>
+                                            <div class="form-group mb-0">
+                                                @if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['signature_image']) && file_exists($invoice_setting['signature_image']))
+                                                    <img src="{{url($invoice_setting['signature_image'])}}" id="DisplayImage2" height="30px" width="120px">
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group mb-3 col-md-6">
+                                            <label for="company_name">Company Name</label>
+                                            {!! Form::text('company_name', isset($invoice_setting)&&!empty($invoice_setting)?$invoice_setting['company_name']:null, ['class' => 'form-control','id'=>'company_name']) !!}
+                                            @if ($errors->has('company_name'))
+                                                <span class="text-danger">
+                                                    <strong>{{ $errors->first('company_name') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        <div class="form-group mb-3 col-md-6">
+                                            <label for="pan_no">Pan No</label>
+                                            {!! Form::text('pan_no', isset($invoice_setting)&&!empty($invoice_setting)?$invoice_setting['pan_no']:null, ['class' => 'form-control','id'=>'pan_no']) !!}
+                                            @if ($errors->has('pan_no'))
+                                                <span class="text-danger">
+                                                    <strong>{{ $errors->first('pan_no') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        <div class="form-group mb-3 col-md-6">
+                                            <label for="gstin">GSTIN</label>
+                                            {!! Form::text('gstin', isset($invoice_setting)&&!empty($invoice_setting)?$invoice_setting['gstin']:null, ['class' => 'form-control','id'=>'gstin']) !!}
+                                            @if ($errors->has('gstin'))
+                                                <span class="text-danger">
+                                                    <strong>{{ $errors->first('gstin') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        <div class="form-group mb-3 col-md-6">
+                                            <label for="company_email">Company Email</label>
+                                            {!! Form::text('company_email', isset($invoice_setting)&&!empty($invoice_setting)?$invoice_setting['company_email']:null, ['class' => 'form-control','id'=>'company_email']) !!}
+                                            @if ($errors->has('company_email'))
+                                                <span class="text-danger">
+                                                    <strong>{{ $errors->first('company_email') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        <div class="form-group mb-3 col-md-6">
+                                            <label for="company_phone">Company Phone</label>
+                                            {!! Form::text('company_phone', isset($invoice_setting)&&!empty($invoice_setting)?$invoice_setting['company_phone']:null, ['class' => 'form-control','id'=>'company_phone']) !!}
+                                            @if ($errors->has('company_phone'))
+                                                <span class="text-danger">
+                                                    <strong>{{ $errors->first('company_phone') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        <div class="form-group mb-3 col-md-6">
+                                            <label for="website">Website</label>
+                                            {!! Form::text('website', isset($invoice_setting)&&!empty($invoice_setting)?$invoice_setting['website']:null, ['class' => 'form-control','id'=>'website']) !!}
+                                            @if ($errors->has('website'))
+                                                <span class="text-danger">
+                                                    <strong>{{ $errors->first('website') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        <div class="form-group mb-3 col-md-6">
+                                            <label for="street">Street</label>
+                                            {!! Form::text('street', isset($invoice_setting)&&!empty($invoice_setting)?$invoice_setting['street']:null, ['class' => 'form-control','id'=>'street']) !!}
+                                            @if ($errors->has('street'))
+                                                <span class="text-danger">
+                                                    <strong>{{ $errors->first('street') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        <div class="form-group mb-3 col-md-6">
+                                            <label for="city">City</label>
+                                            {!! Form::text('city', isset($invoice_setting)&&!empty($invoice_setting)?$invoice_setting['city']:null, ['class' => 'form-control','id'=>'city']) !!}
+                                            @if ($errors->has('city'))
+                                                <span class="text-danger">
+                                                    <strong>{{ $errors->first('city') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        <div class="form-group mb-3 col-md-6">
+                                            <label for="state">State</label>
+                                            {!! Form::select('state', $states, isset($invoice_setting)&&!empty($invoice_setting)?$invoice_setting['state']:null, ['class' => 'form-control amounts-are-select2', 'id'=>'state', 'style'=>'width:100%!important']) !!}
+                                            @if ($errors->has('state'))
+                                                <span class="text-danger">
+                                                    <strong>{{ $errors->first('state') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        <div class="form-group mb-3 col-md-6">
+                                            <label for="pincode">Pincode</label>
+                                            {!! Form::text('pincode', isset($invoice_setting)&&!empty($invoice_setting)?$invoice_setting['pincode']:null, ['class' => 'form-control','id'=>'pincode']) !!}
+                                            @if ($errors->has('pincode'))
+                                                <span class="text-danger">
+                                                    <strong>{{ $errors->first('pincode') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+
+{{--                                        <div class="form-group mb-3 col-md-6">--}}
+{{--                                            <label for="country">Country</label>--}}
+{{--                                            {!! Form::text('country', isset($invoice_setting)&&!empty($invoice_setting)?$invoice_setting['country']:null, ['class' => 'form-control','id'=>'country']) !!}--}}
+{{--                                            @if ($errors->has('country'))--}}
+{{--                                                <span class="text-danger">--}}
+{{--                                                    <strong>{{ $errors->first('country') }}</strong>--}}
+{{--                                                </span>--}}
+{{--                                            @endif--}}
+{{--                                        </div>--}}
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!--SIGNATURE IMAGE-->
-                        <div class="col-lg-6">
-                            <div class="card signature-image-bg">
-                                <div class="card-header bg-primary">
-                                    <h4 class="m-b-0 text-white">Signature Image</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="form-group mb-0">
-                                        <label class="col-form-label">Signature Image</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="icon-picture"></i></span>
-                                            </div>
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" name="signature_image" id="signature_image" onchange="AjaxUploadImage(this,2)">
-                                                <label class="custom-file-label" for="signature_image">Upload Signature Image</label>
-                                            </div>
-                                        </div>
-                                        @if ($errors->has('signature_image'))
-                                            <span class="text-danger">
-                                                <strong>{{ $errors->first('signature_image') }}</strong>
-                                            </span>
-                                        @endif
-                                        <p class="mt-2">Note: Image dimension should be less than 150 X 80 pixels and Image type png only.</p>
-                                    </div>
 
-                                    <div class="form-group mb-0">
-                                        @if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['signature_image']) && file_exists($invoice_setting['signature_image']))
-                                            <img src="{{url($invoice_setting['signature_image'])}}" id="DisplayImage2" height="30px" width="120px">
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
 
                         <!--GST STORE SETTING-->
                         <div class="col-lg-12">

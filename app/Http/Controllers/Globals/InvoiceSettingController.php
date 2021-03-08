@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Globals;
 use App\Http\Controllers\Controller;
 use App\Models\Globals\CompanySettings;
 use App\Models\Globals\InvoiceSetting;
+use App\Models\Globals\States;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -20,6 +21,7 @@ class InvoiceSettingController extends Controller
     public function index(){
         $data['menu'] = 'Company Setting';
         $data['invoice_setting'] = CompanySettings::where('user_id',Auth::user()->id)->where('id',$this->Company())->first();
+        $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         return view('globals.invoice-setting.form',$data);
     }
 

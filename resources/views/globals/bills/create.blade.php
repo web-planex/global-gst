@@ -75,9 +75,9 @@
                                     <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
                                 </div>
                                 @error('customer')
-                                <span class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </span>
+                                    <span class="text-danger">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
                                 @enderror
                             </div>
                         </div>
