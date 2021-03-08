@@ -28,6 +28,11 @@
     <script src="{{ asset('assets/dist/js/jquery.magnify.js') }}"></script>
     <script src="{{ asset('assets/dist/js/jquery.validate.js') }}"></script>
     <script src="{{ asset('js/jquery.inputmask.min.js') }}"></script>
+
+    <!-- CSS FOR ROBOCROP IMAGES -->
+    <link rel="stylesheet" href="{{ asset('assets/dist/robocrop/css/style.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/dist/robocrop/css/demo.css')}}">
+
     <style>
         .error{color: #ff0000;}
     </style>
@@ -234,6 +239,10 @@
 <script src="{{ asset('assets/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
 <script src="{{ asset('assets/sweetalert2/sweet-alert.init.js') }}"></script>
 <script src="{{ asset('assets/select2/dist/select2.js')}}"></script>
+
+<!--******************JS FOR ROBOCROP IMAGES******************-->
+<script src="{{ asset('assets/dist/robocrop/js/robocrop.demo.js')}}"></script>
+<script src="{{ asset('assets/dist/robocrop/js/demo.js')}}"></script>
 
 @if(\Illuminate\Support\Facades\Auth::user()->role == 'user')
     <script type="text/javascript">

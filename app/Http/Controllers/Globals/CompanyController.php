@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Auth;
 class CompanyController extends Controller
 {
     public function __construct(){
-
         $this->middleware('UserAccessRight');
+        $this->common_controller = new CommonController();
     }
 
     public function index(Request $request){
@@ -57,9 +57,19 @@ class CompanyController extends Controller
         $input = $request->all();
         $user = Auth::user();
         $input['user_id'] = $user->id;
-        if($photo = $request->file('company_logo')){
-            $input['company_logo'] = $this->image($photo,$user->id.'/company');
+
+//        if($photo = $request->file('company_logo')){
+//            $input['company_logo'] = $this->image($photo,$user->id.'/company');
+//        }
+
+        //Company Logo
+        $ext = 'png';
+        if(!empty($request['original_file'])){
+            $info = explode('.',$request['original_file']);
+            $ext = $info[1];
+            $input['company_logo'] = $this->common_controller->crop_image($request['selected_file'],$user->id.'/company', $ext);
         }
+
         CompanySettings::create($input);
         \Session::flash('message', 'Company has been inserted successfully!');
         return redirect('companies/'.$user->id);
@@ -101,9 +111,18 @@ class CompanyController extends Controller
         $input = $request->all();
         $user = Auth::user();
         $input['user_id'] = $user->id;
-        if($photo = $request->file('company_logo')){
-            $input['company_logo'] = $this->image($photo,$user->id.'/company');
+//        if($photo = $request->file('company_logo')){
+//            $input['company_logo'] = $this->image($photo,$user->id.'/company');
+//        }
+
+        //Company Logo
+        $ext = 'png';
+        if(!empty($request['original_file'])){
+            $info = explode('.',$request['original_file']);
+            $ext = $info[1];
+            $input['company_logo'] = $this->common_controller->crop_image($request['selected_file'],$user->id.'/company', $ext);
         }
+
         $companies->update($input);
         \Session::flash('message', 'Company has been updated successfully!');
         return redirect('companies/'.$user->id);

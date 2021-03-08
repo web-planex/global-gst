@@ -20,12 +20,20 @@
                     <div class="row" id="Suppliers">
                         <div class="form-group mb-3 col-md-12">
                             <label for="company_logo">Company Logo</label><br>
-                            @if(isset($companies)&&!empty($companies) && !empty($companies['company_logo']))
-                                <div id="imagePreview" style="background-image: url({{url($companies['company_logo'])}});" class="form-control mt-2"></div>
-                            @else
-                                <div id="imagePreview" src="" class="form-control mt-2"></div>
-                            @endif
-                            <input id="uploadFile" type="file" name="company_logo" class="img" />
+                            <div class="demo mb-3">
+                                <div class="crop-element" data-name="crop_open" data-crop-open="true" data-crop=">=100,>=100">
+                                    <img class="mt-1" id="crop_pro_image" src="@if(isset($companies) && !empty($companies) && !empty($companies['company_logo']) && file_exists($companies['company_logo'])) {{ url($companies['company_logo']) }} @endif"/>
+                                    <input type="file" id="logo_img" name="company_logo"/>
+                                </div>
+                            </div>
+                            <input type="hidden" name="selected_file" id="selected_file">
+                            <input type="hidden" name="original_file" id="original_file">
+{{--                            @if(isset($companies)&&!empty($companies) && !empty($companies['company_logo']))--}}
+{{--                                <div id="imagePreview" style="background-image: url({{url($companies['company_logo'])}});" class="form-control mt-2"></div>--}}
+{{--                            @else--}}
+{{--                                <div id="imagePreview" src="" class="form-control mt-2"></div>--}}
+{{--                            @endif--}}
+{{--                            <input id="uploadFile" type="file" name="company_logo" class="img" />--}}
                             <br><span class="text-danger hide" id="img_msg"></span>
                             @if ($errors->has('company_logo'))
                                 <span class="text-danger">
@@ -213,5 +221,24 @@
                 }
             });
         });
+
+        //For Company Logo
+        $('#logo_img').on('change',function(){
+            $('#original_file').val($(this).val());
+        });
+
+        var divimg1 = document.getElementById("crop_pro_image"),
+            prevSrc1;
+        setInterval(function() {
+            if (divimg1.src != prevSrc1) {
+                prevSrc1 = divimg1.src;
+                onSrcChange1();
+            }
+        }, 1000); // 1000ms = 1s
+
+        function onSrcChange1() {
+            var img = document.getElementById("crop_pro_image").src;
+            $('#selected_file').val(img) ;
+        }
     </script>
 @endsection

@@ -24,51 +24,72 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="form-group mb-3 col-lg-6">
-                                            <label class="col-form-label">Company Logo</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="icon-picture"></i></span>
-                                                </div>
-                                                <div class="custom-file">
-                                                    <input type="file" class="custom-file-input" name="company_logo" id="company_logo" onchange="AjaxUploadImage(this,1)">
-                                                    <label class="custom-file-label" for="company_logo">Upload Logo Image</label>
+                                            <label for="company_logo" class="float-left">Company Logo</label>
+                                            <div class="demo mb-3">
+                                                <div class="crop-element" data-name="crop_open" data-crop-open="true" data-crop=">=100,>=100">
+                                                    <img class="mt-1" id="crop_pro_image" src="@if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['company_logo']) && file_exists($invoice_setting['company_logo'])) {{ url($invoice_setting['company_logo']) }} @endif"/>
+                                                    <input type="file" id="logo_img" name="company_logo"/>
                                                 </div>
                                             </div>
+                                            <input type="hidden" name="selected_file" id="selected_file">
+                                            <input type="hidden" name="original_file" id="original_file">
+
+{{--                                            <label class="col-form-label">Company Logo</label>--}}
+{{--                                            <div class="input-group">--}}
+{{--                                                <div class="input-group-prepend">--}}
+{{--                                                    <span class="input-group-text"><i class="icon-picture"></i></span>--}}
+{{--                                                </div>--}}
+{{--                                                <div class="custom-file">--}}
+{{--                                                    <input type="file" class="custom-file-input" name="company_logo" id="company_logo" onchange="AjaxUploadImage(this,1)">--}}
+{{--                                                    <label class="custom-file-label" for="company_logo">Upload Logo Image</label>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
                                             @if ($errors->has('company_logo'))
                                                 <span class="text-danger">
                                                     <strong>{{ $errors->first('company_logo') }}</strong>
                                                 </span>
                                             @endif
-                                            <p class="mt-2">Note: Image dimension should be less than 100 X 100 pixels.</p>
-                                            <div class="form-group mb-0">
-                                                @if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['company_logo']) && file_exists($invoice_setting['company_logo']))
-                                                    <img src="{{url($invoice_setting['company_logo'])}}" id="DisplayImage1" height="60px" width="60px">
-                                                @endif
-                                            </div>
+{{--                                            <p class="mt-2">Note: Image dimension should be less than 100 X 100 pixels.</p>--}}
+{{--                                            <div class="form-group mb-0">--}}
+{{--                                                @if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['company_logo']) && file_exists($invoice_setting['company_logo']))--}}
+{{--                                                    <img src="{{url($invoice_setting['company_logo'])}}" id="DisplayImage1" height="60px" width="60px" class="mt-2">--}}
+{{--                                                @endif--}}
+{{--                                            </div>--}}
                                         </div>
 
                                         <div class="form-group mb-3 col-lg-6">
-                                            <label class="col-form-label">Signature Image</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="icon-picture"></i></span>
-                                                </div>
-                                                <div class="custom-file">
-                                                    <input type="file" class="custom-file-input" name="signature_image" id="signature_image" onchange="AjaxUploadImage(this,2)">
-                                                    <label class="custom-file-label" for="signature_image">Upload Signature Image</label>
+                                            <label for="company_logo" class="float-left">Signature Image</label>
+                                            <div class="demo mb-3">
+                                                <div class="crop-element" data-name="crop_open" data-crop-open="true" data-crop=">=150,>=80">
+                                                    <img class="mt-1" id="crop_pro_sig_image" src="@if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['signature_image']) && file_exists($invoice_setting['signature_image'])) {{ url($invoice_setting['signature_image']) }} @endif"/>
+                                                    <input type="file" id="signature_img"/>
                                                 </div>
                                             </div>
+                                            <input type="hidden" name="selected_signature_file" id="selected_signature_file">
+                                            <input type="hidden" name="original_signature_file" id="original_signature_file">
+
+{{--                                            <label class="col-form-label">Signature Image</label>--}}
+{{--                                            <div class="input-group">--}}
+{{--                                                <div class="input-group-prepend">--}}
+{{--                                                    <span class="input-group-text"><i class="icon-picture"></i></span>--}}
+{{--                                                </div>--}}
+{{--                                                <div class="custom-file">--}}
+{{--                                                    <input type="file" class="custom-file-input" name="signature_image" id="signature_image" onchange="AjaxUploadImage(this,2)">--}}
+{{--                                                    <label class="custom-file-label" for="signature_image">Upload Signature Image</label>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+
                                             @if ($errors->has('signature_image'))
                                                 <span class="text-danger">
                                                     <strong>{{ $errors->first('signature_image') }}</strong>
                                                 </span>
                                             @endif
-                                            <p class="mt-2">Note: Image dimension should be less than 150 X 80 pixels and Image type png only.</p>
-                                            <div class="form-group mb-0">
-                                                @if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['signature_image']) && file_exists($invoice_setting['signature_image']))
-                                                    <img src="{{url($invoice_setting['signature_image'])}}" id="DisplayImage2" height="30px" width="120px">
-                                                @endif
-                                            </div>
+{{--                                            <p class="mt-2">Note: Image dimension should be less than 150 X 80 pixels and Image type png only.</p>--}}
+{{--                                            <div class="form-group mb-0">--}}
+{{--                                                @if(isset($invoice_setting) && !empty($invoice_setting) && !empty($invoice_setting['signature_image']) && file_exists($invoice_setting['signature_image']))--}}
+{{--                                                    <img src="{{url($invoice_setting['signature_image'])}}" id="DisplayImage2" height="30px" width="120px" class="mt-2">--}}
+{{--                                                @endif--}}
+{{--                                            </div>--}}
                                         </div>
 
                                         <div class="form-group mb-3 col-md-6">
@@ -184,9 +205,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
 
                         <!--GST STORE SETTING-->
                         <div class="col-lg-12">
@@ -495,5 +513,44 @@
                 }
             }
         }
+
+        //For Company Logo
+        $('#logo_img').on('change',function(){
+            $('#original_file').val($(this).val());
+        });
+
+        var divimg1 = document.getElementById("crop_pro_image"),
+            prevSrc1;
+        setInterval(function() {
+            if (divimg1.src != prevSrc1) {
+                prevSrc1 = divimg1.src;
+                onSrcChange1();
+            }
+        }, 1000); // 1000ms = 1s
+
+        function onSrcChange1() {
+            var img = document.getElementById("crop_pro_image").src;
+            $('#selected_file').val(img) ;
+        }
+
+        //For Signature Image
+        $('#signature_img').on('change',function(){
+            $('#original_signature_file').val($(this).val());
+        });
+
+        var divimg = document.getElementById("crop_pro_sig_image"),
+            prevSrc;
+        setInterval(function() {
+            if (divimg.src != prevSrc) {
+                prevSrc = divimg.src;
+                onSrcChange();
+            }
+        }, 1000); // 1000ms = 1s
+
+        function onSrcChange() {
+            var img1 = document.getElementById("crop_pro_sig_image").src;
+            $('#selected_signature_file').val(img1);
+        }
+
     </script>
 @endsection

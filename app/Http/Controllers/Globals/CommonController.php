@@ -251,4 +251,22 @@ class CommonController extends Controller
 
         return \mail($to, $subject, $message, $headers);
     }
+
+    public function crop_image($upload_img, $folder, $ext)
+    {
+        /*Make Directory*/
+        $make_path = public_path() . "/upload/" . $folder . "/";
+        if (!file_exists($make_path)) {
+            mkdir($make_path, 0777, true);
+        }
+
+        $png_url = str_random(20) . "." . $ext;
+        $path = base_path() . "/public/upload/" . $folder . "/" . $png_url;
+        $path2 = 'upload/' . $folder . '/' . $png_url;
+        $img = $upload_img;
+        $img = substr($img, strpos($img, ",") + 1);
+        $data = base64_decode($img);
+        $success = file_put_contents($path, $data);
+        return $path2;
+    }
 }

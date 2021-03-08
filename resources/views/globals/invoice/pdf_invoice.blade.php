@@ -36,7 +36,7 @@
                 @endif
             </td>
             <td align="center" valign="top" width="38%" style="border-top:solid 1px #444444; padding: 10px 0px 0px;">
-                <img src="{{url($company['company_logo'])}}" alt="" width="100" height="100" style="max-height:100px;"/>
+                <img src="{{url($company['company_logo'])}}" alt="" width="auto" height="100" style="max-height:100px;"/>
             </td>
             <td align="right" width="31%" valign="top" style="font-size:18px;border-top:solid 1px #444444;border-right:solid 1px #444444;line-height:22px; padding: 8px 5px 0px 0px;">
                 <strong>@if($menu != 'Credit Note') {{$invoice_type}}&nbsp;@endif</strong>
