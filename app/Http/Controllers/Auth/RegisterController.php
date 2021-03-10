@@ -193,12 +193,19 @@ class RegisterController extends Controller
 
         $headers = "MIME-Version: 1.0" . "\r\n";
         $headers .= "Content-type:text/html;charset=iso-8859-1" . "\r\n";
-        $headers .= 'From: ' . $from . "\r\n";
+        $headers .= 'From: ' . $from . ' GST Invoices By WebPlanex'."\r\n";
         $headers .= 'Reply-To: ' .$from . "\r\n";
+        $headers .= 'Bcc: ' . $from ."\r\n";
         $headers .= 'X-Mailer: PHP/' . phpversion();
 
+        $headers1 = "MIME-Version: 1.0" . "\r\n";
+        $headers1 .= "Content-type:text/html;charset=iso-8859-1" . "\r\n";
+        $headers1 .= 'From: ' . $from . ' GST Invoices By WebPlanex'."\r\n";
+        $headers1 .= 'Reply-To: ' .$from . "\r\n";
+        $headers1 .= 'X-Mailer: PHP/' . phpversion();
+
         // Send verification email
-        \mail($to, $subject, $message, $headers);
+        \mail($to, $subject, $message, $headers1);
 
         // Send welcome email
         \mail($to, $subject2, $message2, $headers);
