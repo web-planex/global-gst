@@ -328,7 +328,7 @@ class ExpenseController extends Controller
             $input['billing_rate'] = isset($input['billing_rate'])&&!empty($input['billing_rate'])?$input['billing_rate']:0;
             $input['apply_tds_for_supplier'] = isset($input['apply_tds_for_supplier'])&&!empty($input['apply_tds_for_supplier'])?1:0;
             $user_type = Suppliers::create($input);
-
+            $state_code = $user_type['state'];
             $payee['type'] = 1;
         }elseif ($payeeValue['user_type']==2){
             $input['hire_date'] = !empty($input['hire_date'])?date('y-m-d',strtotime($input['hire_date'])):"";
@@ -336,7 +336,7 @@ class ExpenseController extends Controller
             $input['date_of_birth'] =  !empty($input['date_of_birth'])?date('y-m-d',strtotime($input['date_of_birth'])):null;
 
             $user_type = Employees::create($input);
-
+            $state_code = $user_type['state'];
             $payee['type'] = 2;
         }else{
             $input['is_shipping'] = isset($input['is_shipping'])&&!empty($input['is_shipping'])?1:0;
@@ -354,7 +354,7 @@ class ExpenseController extends Controller
             }
 
             $user_type = Customers::create($input);
-
+            $state_code = $user_type['billing_state'];
             $payee['type'] = 3;
         }
 
@@ -375,7 +375,8 @@ class ExpenseController extends Controller
             $address .= '<div class="'.$coloum.'">
                                 <div class="card border-info mb-0" style="background-color: #f5f5f5;">
                                     <div class="card-header bg-primary">
-                                        <h4 class="m-b-0 text-white">Billing Address</h4></div>
+                                        <h4 class="m-b-0 text-white">Billing Address</h4>
+                                    </div>
                                     <div class="card-body pt-2 pb-2">
                                         <p class="card-text mb-0">'.$user_type['billing_name'].'</p>
                                         <p class="card-text mb-0">'.$user_type['billing_phone'].'</p>
@@ -391,7 +392,8 @@ class ExpenseController extends Controller
                 $address.= '<div class="col-md-6">
                                 <div class="card border-info mb-0" style="background-color: #f5f5f5;">
                                     <div class="card-header bg-primary">
-                                        <h4 class="m-b-0 text-white">Shipping Address</h4></div>
+                                        <h4 class="m-b-0 text-white">Shipping Address</h4>
+                                    </div>
                                     <div class="card-body pt-2 pb-2">
                                         <p class="card-text mb-0">'.$user_type['shipping_name'].'</p>
                                         <p class="card-text mb-0">'.$user_type['shipping_phone'].'</p>
@@ -403,10 +405,10 @@ class ExpenseController extends Controller
                                 </div>
                             </div>';
             }
-
         }
 
         $data['address'] = $address;
+        $data['state_code'] = $state_code;
         return $data;
     }
 

@@ -142,7 +142,7 @@ class InvoiceController extends Controller
         $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $data['first_product'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
-        $data['payment_terms'] = PaymentTerms::all();
+        $data['payment_terms'] = PaymentTerms::where('user_id',$user->id)->where('company_id',$this->Company())->get();
         $data['address_states'] = States::orderBy('state_name','ASC')->select('state_name','id')->get();
         return view('globals.invoice.create',$data);
     }
@@ -287,7 +287,9 @@ class InvoiceController extends Controller
 
         $data['invoice']['customer'] = $customer;
         $data['invoice']['customer']['billing_state_name'] = $billing_state['state_name'];
+        $data['invoice']['customer']['billing_state_code'] = $billing_state['state_number'];
         $data['invoice']['customer']['shipping_state_name'] = $shipping_state['state_name'];
+        $data['invoice']['customer']['shipping_state_code'] = $shipping_state['state_number'];
         $data['invoice']['file_name'] = '';
         if(!empty($data['invoice']['files']) && file_exists($data['invoice']['files'])){
             $ext = explode('/',$data['invoice']['files']);
@@ -321,7 +323,7 @@ class InvoiceController extends Controller
         $data['products'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $data['first_product'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
-        $data['payment_terms'] = PaymentTerms::all();
+        $data['payment_terms'] = PaymentTerms::where('user_id',$user->id)->where('company_id',$this->Company())->get();
         $data['address_states'] = States::orderBy('state_name','ASC')->select('state_name','id')->get();
         return view('globals.invoice.create',$data);
     }

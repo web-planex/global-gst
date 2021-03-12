@@ -29,7 +29,7 @@
                     <tr>
                         <td style="padding:25px 0;text-align:center">
                             <a href="https://gst.webplanex.com" target="_blank">
-                                <img src="https://gst.webplanex.com/assets/images/logo_2.png" alt="Company Logo" width="auto" height="50" style="max-height:50px;"/>
+                                <img src="https://gst.webplanex.com/assets/images/logo_2.png" alt="WebPlanex GST Invoices" width="auto" height="50" style="max-height:50px;"/>
                             </a>
                         </td>
                     </tr>

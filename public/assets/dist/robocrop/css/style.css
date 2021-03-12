@@ -203,6 +203,8 @@
     height: 120px;
     width: 120px;
     top: 50%;
+    border: 1px solid #d2d2d2;
+    border-radius: 5%;
     transform: translateY(-50%);
 }
 .crop-element > .edit{

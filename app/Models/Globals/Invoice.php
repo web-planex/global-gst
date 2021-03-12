@@ -41,7 +41,7 @@ class Invoice extends Model
     }
 
     public function InvoiceItems(){
-        return $this->hasMany('App\Models\Globals\InvoiceItems','invoice_id');
+        return $this->hasMany('App\Models\Globals\InvoiceItems','invoice_id','id');
     }
 
     protected static function boot() {

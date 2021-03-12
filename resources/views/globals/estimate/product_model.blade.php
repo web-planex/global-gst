@@ -29,7 +29,7 @@
                             @endif
                         </div>
 
-                        <div class="form-group mb-3 col-md-6">
+                        <div class="form-group mb-3 col-md-4">
                             <label for="sku">SKU <span class="text-danger"></span></label>
                             {!! Form::text('sku', null, ['class' => 'form-control','id'=>'sku']) !!}
                             @if ($errors->has('sku'))
@@ -39,12 +39,22 @@
                             @endif
                         </div>
 
-                        <div class="form-group mb-3 col-md-6">
+                        <div class="form-group mb-3 col-md-4">
                             <label for="price">Price<span class="text-danger">*</span></label>
                             {!! Form::number('price', null, ['class' => 'form-control','id'=>'price']) !!}
                             @if ($errors->has('price'))
                                 <span class="text-danger">
                                     <strong>{{ $errors->first('price') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+
+                        <div class="form-group mb-3 col-md-4">
+                            <label for="sale_price">Sale Price<span class="text-danger">*</span></label>
+                            {!! Form::number('sale_price', null, ['class' => 'form-control','id'=>'sale_price']) !!}
+                            @if ($errors->has('sale_price'))
+                                <span class="text-danger">
+                                    <strong>{{ $errors->first('sale_price') }}</strong>
                                 </span>
                             @endif
                         </div>

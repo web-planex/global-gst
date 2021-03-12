@@ -562,6 +562,7 @@ class EstimateController extends Controller
         $data['billing_address'] = $billing_address;
         $data['shipping_address'] = $shipping_address;
         $data['customer_id'] = $customer['id'];
+        $data['state_code'] = $billing_state['state_number'];
 
         return $data;
     }
@@ -571,7 +572,7 @@ class EstimateController extends Controller
         $customer = Customers::where('id',$payee['type_id'])->first();
         $input = $request->all();
         $customer->update($input);
-
+        $tr = '';
         $state = States::where('id',$customer['billing_state'])->first();
 
         $address ='<p class="card-text mb-0">'.$customer['billing_name'].'</p>
@@ -580,8 +581,50 @@ class EstimateController extends Controller
                     <p class="card-text mb-0">'.$customer['billing_city'].' - '.$customer['billing_pincode'].'</p>
                     <p class="card-text mb-0">'.$state['state_name'].'</p>
                     <p class="card-text mb-0">'.$customer['billing_country'].'</p>';
+        $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
+        $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
+        $taxes_without_cess_arr = [];
+        $taxes_with_cess_arr = [];
 
-        return $address;
+        $a=0;
+        foreach($taxes_without_cess as $tax) {
+            $taxes_without_cess_arr[$a] = $tax['rate'].'_'.$tax['tax_name'];
+            $a++;
+        }
+        $i=0;
+        foreach($taxes_with_cess as $tax) {
+            $taxes_with_cess_arr[$i] = $tax['rate'].'_'.$tax['tax_name'];
+            $taxes_with_cess_arr[$i+1] = $tax['cess'].'_CESS';
+            $i = $i+2;
+        }
+        $all_tax_labels = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
+
+        foreach ($all_tax_labels as $tax){
+            $arr = explode("_", $tax, 2);
+            $rate = $arr[0];
+            $tax_name = $arr[1];
+            if($customer['billing_state']==24){
+                $new_rate = $rate / 2;
+                $tr .= '<tr id="CGST-TAX" class="'.str_replace(".","-",$rate).'_'.$tax_name.' tax-tr">
+                            <th width="50%">'.$new_rate.'% CGST on Rs. <span id="label_1_'.str_replace(".","-",$rate).'_'.$tax_name.'">0.00</span></th>
+                            <td width="50%"><input type="text" id="input_1_'.str_replace(".","-",$rate).'_'.$tax_name.'" class="form-control tax-input-row text-right" readonly></td>
+                        </tr>
+                        <tr id="SGST-TAX" class="'.str_replace(".","-",$rate).'_'.$tax_name.' tax-tr">
+                            <th width="50%">'.$new_rate.'% SGST on Rs. <span id="label_2_'.str_replace(".","-",$rate).'_'.$tax_name.'">0.00</span></th>
+                            <td width="50%"><input type="text" id="input_2_'.str_replace(".","-",$rate).'_'.$tax_name.'" class="form-control tax-input-row text-right" readonly></td>
+                        </tr>';
+            }else{
+                $tr .= '<tr id="IGST-TAX" class="'.str_replace(".","-",$rate).'_'.$tax_name.' tax-tr">
+                            <th width="50%">'.$rate.'% IGST on Rs. <span id="label_'.str_replace(".","-",$rate).'_'.$tax_name.'">0.00</span></th>
+                            <td width="50%"><input type="text" id="input_'.str_replace(".","-",$rate).'_'.$tax_name.'" class="form-control tax-input-row text-right" readonly></td>
+                        </tr>';
+            }
+        }
+
+        $data['table_row'] = $tr;
+        $data['address'] = $address;
+        $data['state_code'] = $state['state_number'];
+        return $data;
     }
 
     public function update_shipping_address(Request $request){

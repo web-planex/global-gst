@@ -29,7 +29,7 @@
                                 <tr>
                                     <td style="padding:25px 0;text-align:center">
                                         <a href="{{route('home-page')}}" target="_blank">
-                                            <img src="{{$company_logo}}" alt="Company Logo" width="auto" height="50" style="max-height:50px;"/>
+                                            <img src="{{$company_logo}}" alt="WebPlanex GST Invoices" width="auto" height="50" style="max-height:50px;"/>
                                         </a>
                                     </td>
                                 </tr>

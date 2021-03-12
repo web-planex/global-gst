@@ -33,6 +33,8 @@
                                 </span>
                                 @endif
 
+                                <input type="text" name="state_code" id="state_code" value="@if(isset($invoice) && !empty($invoice)) {{$invoice['customer']['billing_state_code']}} @endif">
+
                                 <div class="row mt-3 @if(isset($invoice) && empty($invoice)) hide @elseif(!isset($invoice)) hide @endif" id="cust_address">
                                     <div class="@if(isset($invoice) && $invoice['customer']['is_shipping'] == 1) col-md-6 @else col-md-12 @endif">
                                         <div class="card border-info mb-0" style="background-color: #ECF0F4;">
@@ -275,9 +277,9 @@
                                                             <select id="taxes" class="form-control custom-select tax-input" name="taxes[]">
                                                                 @foreach($taxes as $tax)
                                                                     @if($tax['is_cess'] == 0)
-                                                                        <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name']}}</option>
+                                                                        <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id']) selected @endif>{{$tax['rate'].'% '.$tax['tax_name']}}</option>
                                                                     @else
-                                                                        <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id'])) selected @endif>{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option>
+                                                                        <option value="{{$tax['id']}}" @if(!empty($item['tax_id']) && $item['tax_id']==$tax['id']) selected @endif>{{$tax['rate'].'% '.$tax['tax_name'] . ' + '.$tax['cess'].'% CESS'}}</option>
                                                                     @endif
                                                                 @endforeach
                                                             </select>
@@ -407,8 +409,8 @@
                                                 @if ($errors->has('files'))
                                                     <br>
                                                     <span class="text-danger">
-                                                                <strong>{{ $errors->first('files') }}</strong>
-                                                            </span>
+                                                        <strong>{{ $errors->first('files') }}</strong>
+                                                    </span>
                                                 @endif
                                             </div>
                                         </div>
@@ -416,65 +418,65 @@
                                         <div class="col-md-12 col-lg-6 col-xl-8">
                                             <div class="subtotal-table">
                                                 <div class="table-responsive">
-                                                    <table class="table table-hover">
-                                                <tr id="subtotal_row">
-                                                    <th width="50%">Subtotal</th>
-                                                    <td width="50%">
-                                                        <input type="text" class="form-control text-right" id="subtotal" readonly="" />
-                                                    </td>
-                                                </tr>
-                                                @foreach($all_tax_labels as $tax)
-                                                    @php
-                                                        $arr = explode("_", $tax, 2);
-                                                        $rate = $arr[0];
-                                                        $tax_name = $arr[1];
-                                                    @endphp
-                                                    @if($tax_name == 'GST')
-                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide">
-                                                            <th width='50%'>{{$rate / 2}}% CGST on Rs. <span id="label_1_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
-                                                            <td width='50%'><input type="text" id="input_1_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                    <table class="table table-hover" id="Tax-Calculation">
+                                                        <tr id="subtotal_row">
+                                                            <th width="50%">Subtotal</th>
+                                                            <td width="50%">
+                                                                <input type="text" class="form-control text-right" id="subtotal" readonly="" />
+                                                            </td>
                                                         </tr>
-                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide">
-                                                            <th width='50%'>{{$rate / 2}}% SGST on Rs. <span id="label_2_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
-                                                            <td width='50%'><input type="text" id="input_2_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                        @foreach($all_tax_labels as $tax)
+                                                            @php
+                                                                $arr = explode("_", $tax, 2);
+                                                                $rate = $arr[0];
+                                                                $tax_name = $arr[1];
+                                                            @endphp
+                                                            @if($tax_name == 'GST')
+                                                                <tr id="CGST-TAX" class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                    <th width='50%'>{{$rate / 2}}% CGST on Rs. <span id="label_1_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                    <td width='50%'><input type="text" id="input_1_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                </tr>
+                                                                <tr id="SGST-TAX" class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                    <th width='50%'>{{$rate / 2}}% SGST on Rs. <span id="label_2_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                    <td width='50%'><input type="text" id="input_2_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                </tr>
+                                                            @else
+                                                                <tr id="IGST-TAX" class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                    <th width='50%'>{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                    <td width='50%'><input type="text" id="input_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                </tr>
+                                                            @endif
+                                                        @endforeach
+                                                        <tr class="discount-section">
+                                                            <th>Discount Type</th>
+                                                            <td>
+                                                                <select name="discount_type" id="discount_type" class="form-control">
+                                                                    <option value="">Select</option>
+                                                                    <option value="1" @if(isset($invoice['discount_type']) && $invoice['discount_type'] == '1') selected @endif>Percentage (%)</option>
+                                                                    <option value="2" @if(isset($invoice['discount_type']) && $invoice['discount_type'] == '2') selected @endif>Flat (Rs.)</option>
+                                                                </select>
+                                                            </td>
                                                         </tr>
-                                                    @else
-                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide">
-                                                            <th width='50%'>{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
-                                                            <td width='50%'><input type="text" id="input_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                        <tr class="discount-section">
+                                                            <th>Discount Amount</th>
+                                                            <td>{!! Form::text('discount', null, ['class' => 'form-control','id'=>'discount']) !!}</td>
                                                         </tr>
-                                                    @endif
-                                                @endforeach
-                                                <tr class="discount-section">
-                                                    <th>Discount Type</th>
-                                                    <td>
-                                                        <select name="discount_type" id="discount_type" class="form-control">
-                                                            <option value="">Select</option>
-                                                            <option value="1" @if(isset($invoice['discount_type']) && $invoice['discount_type'] == '1') selected @endif>Percentage (%)</option>
-                                                            <option value="2" @if(isset($invoice['discount_type']) && $invoice['discount_type'] == '2') selected @endif>Flat (Rs.)</option>
-                                                        </select>
-                                                    </td>
-                                                </tr>
-                                                <tr class="discount-section">
-                                                    <th>Discount Amount</th>
-                                                    <td>{!! Form::text('discount', null, ['class' => 'form-control','id'=>'discount']) !!}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>
-                                                        <label class="font-bold-500">Shipping Charge &nbsp;
-                                                            {!! Form::checkbox('shipping_charge', isset($invoice) && $invoice['shipping_charge']==1?1:null, isset($invoice)&&!empty($invoice['shipping_charge'])?true:false, ['class' => 'js-switch', 'id'=>'shipping_charge', 'data-color'=>'#01c0c8', 'data-size'=>'small', 'data-switchery'=>'true','style'=>'display:none;']) !!}
-                                                        </label>
-                                                    </th>
-                                                    @php
-                                                        $disabled = isset($invoice) && $invoice['shipping_charge']==1?'':'disabled';
-                                                    @endphp
-                                                    <td>{!! Form::text('shipping_charge_amount', null, [$disabled, 'class' => 'form-control','id'=>'shipping_charge_amount','style'=>'text-align:right']) !!}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th width="50%">Total</th>
-                                                    <td width="50%"><input type="text" class="form-control text-right" id="total" readonly="" /></td>
-                                                </tr>
-                                            </table>
+                                                        <tr>
+                                                            <th>
+                                                                <label class="font-bold-500">Shipping Charge &nbsp;
+                                                                    {!! Form::checkbox('shipping_charge', isset($invoice) && $invoice['shipping_charge']==1?1:null, isset($invoice)&&!empty($invoice['shipping_charge'])?true:false, ['class' => 'js-switch', 'id'=>'shipping_charge', 'data-color'=>'#01c0c8', 'data-size'=>'small', 'data-switchery'=>'true','style'=>'display:none;']) !!}
+                                                                </label>
+                                                            </th>
+                                                            @php
+                                                                $disabled = isset($invoice) && $invoice['shipping_charge']==1?'':'disabled';
+                                                            @endphp
+                                                            <td>{!! Form::text('shipping_charge_amount', null, [$disabled, 'class' => 'form-control','id'=>'shipping_charge_amount','style'=>'text-align:right']) !!}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th width="50%">Total</th>
+                                                            <td width="50%"><input type="text" class="form-control text-right" id="total" readonly="" /></td>
+                                                        </tr>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </div>
@@ -531,7 +533,7 @@
                 $('#discount').inputmask("currency");
                 $('#discount').parent('td').siblings('th').html('Discount Amount');
             }
-        setTimeout(function(){
+            setTimeout(function(){
             $('#discount_level').trigger('change');
         },500);
         });
@@ -665,6 +667,7 @@
                         $('#customer').val(optionValue).change();
                         $('#CustomersModal').modal('hide');
                         $('html, body').css('overflowY', 'auto');
+                        $('#state_code').val(result['state_code']);
                         $('#cust_address').html(result['address']);
                         $('#cust_address').removeClass('hide');
                         $("#CustomersForm")[0].reset();
@@ -753,6 +756,7 @@
                 if(cust_id != ""){
                     $('#cust_address').html(result['address']);
                     $('#cust_address').removeClass('hide');
+                    $('#state_code').val(result['state_code']);
 
                     /*Value Set In Both Address Modal */
 
@@ -776,6 +780,7 @@
                 }else{
                     $('#cust_address').addClass('hide');
                 }
+                taxCalculation();
             }
         });
     }
@@ -794,9 +799,26 @@
             contentType: false,
             processData: false,
             success: function (result) {
-                $("#BillingDiv").html(result);
+                $("#BillingDiv").html(result['address']);
+                $("#state_code").val(result['state_code']);
                 $('#BillingAddressModal').modal('hide');
                 $('#billing_msg').html('Billing address updated successfully.').fadeIn('slow').delay(5000).hide(1);
+                var state_code = $('#state_code').val();
+                $('.tax-input').find('option').each(function() {
+                    var text = $(this).text();
+                    var tax_name = text.split('%')[0].replace('.','-');
+
+                    if(state_code == 24) {
+                        $(this).text(text.replace('IGST', 'GST'));
+                        $('.'+tax_name+'_IGST').removeClass(tax_name+'_IGST').addClass(tax_name+'_GST');
+                    }else{
+                        $(this).text(text.replace('GST', 'IGST'));
+                        $('.'+tax_name+'_GST').removeClass(tax_name+'_GST').addClass(tax_name+'_IGST');
+                    }
+                });
+                $('.tax-tr').remove();
+                $(result['table_row']).insertAfter($('#Tax-Calculation tr#subtotal_row:last'));
+                taxCalculation();
             }
         });
     });
@@ -924,11 +946,11 @@
         $(document).on('click', '.remove-line-item', function(){
             $(this).parents('.itemNewCheckTr').prev('.itemTr').remove();
             $(this).parents('.itemNewCheckTr').remove();
-            var i = 2;
-            $('.itemNewCheckTr').each(function(){
-                $(this).children('td:first-child').html(i);
-                i++;
-            });
+            // var i = 2;
+            // $('.itemNewCheckTr').each(function(){
+            //     $(this).children('td:first-child').html(i);
+            //     i++;
+            // });
             taxCalculation();
         });
 

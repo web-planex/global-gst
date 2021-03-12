@@ -23,7 +23,7 @@
                 <!--Email header start-->
                 <tr>
                     <td height="80" align="left" valign="middle" bgcolor="#FFFFFF" style="border-bottom: solid #3f4eae 5px; padding: 0px 10px;">
-                        <img src="{{$company_logo}}" alt="" width="auto" height="70" style="max-height:70px;"/>
+                        <img src="{{$company_logo}}" alt="WebPlanex GST Invoices" width="auto" height="70" style="max-height:70px;"/>
                     </td>
                 </tr>
                 <!--Email header end-->

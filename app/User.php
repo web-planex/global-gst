@@ -2,6 +2,11 @@
 
 namespace App;
 
+use App\Models\Globals\BillItems;
+use App\Models\Globals\DebitNoteItems;
+use App\Models\Globals\EstimateItems;
+use App\Models\Globals\ExpenseItems;
+use App\Models\Globals\InvoiceItems;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -113,17 +118,37 @@ class User extends Authenticatable implements MustVerifyEmail
         parent::boot();
 
         static::deleting(function($data) {
-            $data->Bill()->delete();
+            foreach ($data->Expense as $exp){
+                ExpenseItems::where('expense_id',$exp)->delete();
+                $exp->delete();
+            }
+
+            foreach ($data->Bill as $bill){
+                BillItems::where('bill_id',$bill)->delete();
+                $bill->delete();
+            }
+
+            foreach ($data->Estimate as $est){
+                EstimateItems::where('estimate_id',$est)->delete();
+                $est->delete();
+            }
+
+            foreach ($data->DebitNote as $deb){
+                DebitNoteItems::where('debit_note_id',$deb)->delete();
+                $deb->delete();
+            }
+
+            foreach ($data->Invoice as $inv){
+                InvoiceItems::where('invoice_id',$inv)->delete();
+                $inv->delete();
+            }
+
             $data->CompanySettings()->delete();
             $data->Customers()->delete();
-            $data->DebitNote()->delete();
             $data->EmailTemplates()->delete();
             $data->Employees()->delete();
-            $data->Estimate()->delete();
-            $data->Expense()->delete();
             $data->ExpenseType()->delete();
             $data->GeneratedInvoiceList()->delete();
-            $data->Invoice()->delete();
             $data->InvoiceSetting()->delete();
             $data->Payees()->delete();
             $data->PaymentMethod()->delete();

@@ -829,11 +829,11 @@
             $(document).on('click', '.remove-line-item', function(){
                 $(this).parents('.itemNewCheckTr').prev('.itemTr').remove();
                 $(this).parents('.itemNewCheckTr').remove();
-                var i = 2;
-                $('.itemNewCheckTr').each(function(){
-                    $(this).children('td:first-child').html(i);
-                    i++;
-                });
+                // var i = 2;
+                // $('.itemNewCheckTr').each(function(){
+                //     $(this).children('td:first-child').html(i);
+                //     i++;
+                // });
                 taxCalculation();
             });
 

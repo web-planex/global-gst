@@ -254,7 +254,6 @@ function taxCalculation() {
         var tax = key.split('_')[1];
         var tax_rate = parseFloat(key.substr(0, key.indexOf('_')).replace("-", "."));
         var tax_amount = 0;
-
         if(tax == 'GST') {
             if(tax_type == 'exclusive') {
                 var tax_rate_gst = tax_rate / 2;
@@ -288,7 +287,6 @@ function taxCalculation() {
                 $("#input_2_"+key).val("Rs. "+new_tax_value.toFixed(2));
             }
         } else {
-
             if(tax_type == 'exclusive') {
                 tax_amount = value * tax_rate / 100;
                 amount_before_tax = parseFloat(subtotal).toFixed(2);
@@ -296,7 +294,6 @@ function taxCalculation() {
                     value=0;
                 }
                 $("#label_"+key).html(value.toFixed(2));
-                console.log(tax_amount);
             } else if(tax_type == 'inclusive') {
                 tax_amount = value * tax_rate / (parseInt(100) + parseInt(tax_rate));
                 var new_value = parseFloat(value) - parseFloat(tax_amount);
