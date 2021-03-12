@@ -8,6 +8,7 @@ use App\Jobs\GenerateBlukEstimate;
 use App\Jobs\GenerateBlukSalesInvoice;
 use App\Models\Globals\CompanySettings;
 use App\Models\Globals\Customers;
+use App\Models\Globals\Employees;
 use App\Models\Globals\Estimate;
 use App\Models\Globals\EstimateItems;
 use App\Models\Globals\Invoice;
@@ -18,6 +19,7 @@ use App\Models\Globals\PaymentAccount;
 use App\Models\Globals\PdfZips;
 use App\Models\Globals\Product;
 use App\Models\Globals\States;
+use App\Models\Globals\Suppliers;
 use App\Models\Globals\Taxes;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -117,6 +119,7 @@ class EstimateController extends Controller
         $data['first_product'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         $data['address_states'] = States::orderBy('state_name','ASC')->select('state_name','id')->get();
+        $data['company'] = CompanySettings::where('id',$this->Company())->first();
         return view('globals.estimate.create',$data);
     }
 
@@ -240,7 +243,9 @@ class EstimateController extends Controller
 
         $data['estimate']['customer'] = $customer;
         $data['estimate']['customer']['billing_state_name'] = $billing_state['state_name'];
+        $data['estimate']['customer']['billing_state_code'] = $billing_state['state_number'];
         $data['estimate']['customer']['shipping_state_name'] = $shipping_state['state_name'];
+        $data['estimate']['customer']['shipping_state_code'] = $shipping_state['state_number'];
         $data['estimate']['file_name'] = '';
         if(!empty($data['estimate']['files']) && file_exists($data['estimate']['files'])){
             $ext = explode('/',$data['estimate']['files']);
@@ -274,6 +279,7 @@ class EstimateController extends Controller
         $data['first_product'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         $data['address_states'] = States::orderBy('state_name','ASC')->select('state_name','id')->get();
+        $data['company'] = CompanySettings::where('id',$this->Company())->first();
         return view('globals.estimate.create',$data);
     }
 
@@ -419,7 +425,7 @@ class EstimateController extends Controller
             $state = States::where('id',$data['user']['billing_state'])->first();
             $shipping_state = States::where('id',$data['user']['shipping_state'])->first();
             $data['user']['state'] = $state['state_name'];
-            $data['user']['state_code'] = $state['state_number'];
+            $data['user']['billing_state_code'] = $state['state_number'];
 
             $data['user']['shipping_state'] = $shipping_state['state_name'];
             $data['user']['shipping_state_code'] = $shipping_state['state_number'];
@@ -448,6 +454,7 @@ class EstimateController extends Controller
         $data['name']  = 'Estimate';
         $data['content'] = 'This is test pdf.';
         $pdf = new WKPDF($this->common_controller->globalPdfOption());
+//        return $data;
         $pdf->addPage(view('globals.estimate.pdf_estimate',$data));
         if($request->output == 'download') {
             if (!$pdf->send('estimate.pdf')) {
@@ -557,13 +564,30 @@ class EstimateController extends Controller
                     </div>';
         }
 
-
+        $data['table_row'] = $this->common_controller->TaxCalculation($customer['billing_state']);
         $data['address'] = $address;
         $data['billing_address'] = $billing_address;
         $data['shipping_address'] = $shipping_address;
         $data['customer_id'] = $customer['id'];
         $data['state_code'] = $billing_state['state_number'];
 
+        return $data;
+    }
+
+    public function get_payee(Request $request){
+        $payee = Payees::where('id',$request['data'])->first();
+        if($payee['type'] == 1){
+            $user = Suppliers::where('id',$payee['type_id'])->first();
+            $state = $user['state'];
+        }elseif ($payee['type'] == 2){
+            $user = Employees::where('id',$payee['type_id'])->first();
+            $state = $user['state'];
+        }else{
+            $user = Customers::where('id',$payee['type_id'])->first();
+            $state = $user['billing_state'];
+        }
+        $data['table_row'] = $this->common_controller->TaxCalculation($state);
+        $data['state_code'] = $state;
         return $data;
     }
 
@@ -581,6 +605,7 @@ class EstimateController extends Controller
                     <p class="card-text mb-0">'.$customer['billing_city'].' - '.$customer['billing_pincode'].'</p>
                     <p class="card-text mb-0">'.$state['state_name'].'</p>
                     <p class="card-text mb-0">'.$customer['billing_country'].'</p>';
+
         $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
         $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
         $taxes_without_cess_arr = [];
@@ -599,25 +624,41 @@ class EstimateController extends Controller
         }
         $all_tax_labels = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
 
+        $company = CompanySettings::where('id',$this->Company())->first();
+
         foreach ($all_tax_labels as $tax){
             $arr = explode("_", $tax, 2);
             $rate = $arr[0];
             $tax_name = $arr[1];
-            if($customer['billing_state']==24){
-                $new_rate = $rate / 2;
-                $tr .= '<tr id="CGST-TAX" class="'.str_replace(".","-",$rate).'_'.$tax_name.' tax-tr">
-                            <th width="50%">'.$new_rate.'% CGST on Rs. <span id="label_1_'.str_replace(".","-",$rate).'_'.$tax_name.'">0.00</span></th>
-                            <td width="50%"><input type="text" id="input_1_'.str_replace(".","-",$rate).'_'.$tax_name.'" class="form-control tax-input-row text-right" readonly></td>
-                        </tr>
-                        <tr id="SGST-TAX" class="'.str_replace(".","-",$rate).'_'.$tax_name.' tax-tr">
-                            <th width="50%">'.$new_rate.'% SGST on Rs. <span id="label_2_'.str_replace(".","-",$rate).'_'.$tax_name.'">0.00</span></th>
-                            <td width="50%"><input type="text" id="input_2_'.str_replace(".","-",$rate).'_'.$tax_name.'" class="form-control tax-input-row text-right" readonly></td>
-                        </tr>';
+            if($customer['billing_state'] == $company['state']){
+                if($tax_name == 'GST'){
+                    $new_rate = $rate / 2;
+                    $tr .= '<tr class="'.str_replace(".","-",$rate).'_'.$tax_name.' hide tax-tr">
+                                <th width="50%">'.$new_rate.'% CGST on Rs. <span id="label_1_'.str_replace(".","-",$rate).'_'.$tax_name.'">0.00</span></th>
+                                <td width="50%"><input type="text" id="input_1_'.str_replace(".","-",$rate).'_'.$tax_name.'" class="form-control tax-input-row text-right" readonly></td>
+                            </tr>
+                            <tr class="'.str_replace(".","-",$rate).'_'.$tax_name.' hide tax-tr">
+                                <th width="50%">'.$new_rate.'% SGST on Rs. <span id="label_2_'.str_replace(".","-",$rate).'_'.$tax_name.'">0.00</span></th>
+                                <td width="50%"><input type="text" id="input_2_'.str_replace(".","-",$rate).'_'.$tax_name.'" class="form-control tax-input-row text-right" readonly></td>
+                            </tr>';
+                }else{
+                    $tr .= '<tr class="'.str_replace(".","-",$rate).'_'.$tax_name.' hide tax-tr">
+                                <th width="50%">'.$rate.'% '.$tax_name.' on Rs. <span id="label_'.str_replace(".","-",$rate).'_'.$tax_name.'">0.00</span></th>
+                                <td width="50%"><input type="text" id="input_'.str_replace(".","-",$rate).'_'.$tax_name.'" class="form-control tax-input-row text-right" readonly></td>
+                            </tr>';
+                }
             }else{
-                $tr .= '<tr id="IGST-TAX" class="'.str_replace(".","-",$rate).'_'.$tax_name.' tax-tr">
-                            <th width="50%">'.$rate.'% IGST on Rs. <span id="label_'.str_replace(".","-",$rate).'_'.$tax_name.'">0.00</span></th>
-                            <td width="50%"><input type="text" id="input_'.str_replace(".","-",$rate).'_'.$tax_name.'" class="form-control tax-input-row text-right" readonly></td>
-                        </tr>';
+                if($tax_name == 'GST'){
+                    $tr .= '<tr class="'.str_replace(".","-",$rate).'_'.$tax_name.' hide tax-tr">
+                                <th width="50%">'.$rate.'% IGST on Rs. <span id="label_1_'.str_replace(".","-",$rate).'_'.$tax_name.'">0.00</span></th>
+                                <td width="50%"><input type="text" id="input_1_'.str_replace(".","-",$rate).'_'.$tax_name.'" class="form-control tax-input-row text-right" readonly></td>
+                            </tr>';
+                }else{
+                    $tr .= '<tr class="'.str_replace(".","-",$rate).'_'.$tax_name.' hide tax-tr">
+                                <th width="50%">'.$rate.'% '.$tax_name.' on Rs. <span id="label_'.str_replace(".","-",$rate).'_'.$tax_name.'">0.00</span></th>
+                                <td width="50%"><input type="text" id="input_'.str_replace(".","-",$rate).'_'.$tax_name.'" class="form-control tax-input-row text-right" readonly></td>
+                            </tr>';
+                }
             }
         }
 

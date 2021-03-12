@@ -136,6 +136,7 @@ class ExpenseController extends Controller
         $data['first_product'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         $data['expense_types'] = ExpenseType::where('user_id',$user->id)->where('company_id',$this->Company())->get();
+        $data['company'] = CompanySettings::where('id',$this->Company())->first();
         return view('globals.expense.create',$data);
     }
 
@@ -240,6 +241,21 @@ class ExpenseController extends Controller
         $data['first_product'] =Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         $data['expense_types'] = ExpenseType::where('user_id',$user->id)->where('company_id',$this->Company())->get();
+        $data['company'] = CompanySettings::where('id',$this->Company())->first();
+
+        $payee = Payees::where('id',$data['expense']['payee_id'])->first();
+
+        if($payee['type'] == 1){
+            $exp_user = Suppliers::where('id',$payee['type_id'])->first();
+            $data['expense']['exp_user_state'] = $exp_user['state'];
+        }elseif ($payee['type'] == 2){
+            $exp_user = Employees::where('id',$payee['type_id'])->first();
+            $data['expense']['exp_user_state'] = $exp_user['state'];
+        }else{
+            $exp_user = Customers::where('id',$payee['type_id'])->first();
+            $data['expense']['exp_user_state'] = $exp_user['billing_state'];
+        }
+
         return view('globals.expense.create',$data);
     }
 
@@ -407,6 +423,7 @@ class ExpenseController extends Controller
             }
         }
 
+        $data['table_row'] = $this->common_controller->TaxCalculation($state_code);
         $data['address'] = $address;
         $data['state_code'] = $state_code;
         return $data;
@@ -558,6 +575,7 @@ class ExpenseController extends Controller
         $data['name'] = 'Expense Voucher';
         $data['content'] = 'This is test pdf.';
         $pdf = new WKPDF($this->common_controller->globalPdfOption());
+//        return $data;
         $pdf->addPage(view('globals.expense.pdf_expense',$data));
 //        return View('globals.expense.pdf_expense',$data);
         if($request->output == 'download') {

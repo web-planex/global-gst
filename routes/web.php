@@ -105,6 +105,7 @@ Route::post('/estimate/multiple_pdf', 'Globals\EstimateController@multiple_pdf')
 Route::get('download-estimate-pdf-zip', 'Globals\EstimateController@downloadPdfZip')->name('download-estimate-pdf-zip');
 Route::post('ajax/estimate_delete_attachment', 'Globals\EstimateController@delete_attachment');
 Route::get('ajax/get_address', 'Globals\EstimateController@get_address');
+Route::get('ajax/get_payee', 'Globals\EstimateController@get_payee');
 Route::get('/estimate/download_pdf/{id}', 'Globals\EstimateController@download_pdf')->name('estimate-download_pdf');
 Route::resource('/estimate', 'Globals\EstimateController');
 Route::get('/estimate/delete/{id}', 'Globals\EstimateController@destroy')->name('estimate-delete');

@@ -159,7 +159,7 @@
                 <td width="40px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>GST <br> (%)</strong></td>
             @endif
             @if($bill['tax_type'] != 3)
-                @if($user['state_code']==24)
+                @if($company['state_code'] == $user['billing_state_code'])
                     <td width="80px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>CGST <br> <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></strong></td>
                     <td width="80px" align="center" valign="top" bgcolor="#eeeeee" style="padding:0 5px;line-height:30px; text-transform: uppercase;"><strong>SGST <br> <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></strong></td>
                 @else
@@ -224,12 +224,12 @@
                             @endif
                         </span>
                     </td>
-                    <td style="line-height:30px;" align="center" valign="top">{{$item['Product']['hsn_code']}}</td>
+                    <td style="line-height:30px;" align="center" valign="top">{{$item['hsn_code']}}</td>
                     @if($bill['tax_type'] != 3)
                         <td style="line-height:30px;" align="center" valign="top">{{$item['tax_rate']}}</td>
                     @endif
                     @if($bill['tax_type'] != 3)
-                        @if($user['state_code']==24)
+                        @if($company['state_code'] == $user['billing_state_code'])
                             <td width="40px" align="center" valign="top" style="padding:0 5px;line-height:30px; text-transform: uppercase;">{{number_format($total_tax/2,2)}}</td>
                             <td width="40px" align="center" valign="top" style="padding:0 5px;line-height:30px; text-transform: uppercase;">{{number_format($total_tax/2,2)}}</td>
                         @else
@@ -284,7 +284,7 @@
                     @endif
                     <td style="line-height:30px;" align="center" valign="top"><span class="taxable-input"> &nbsp; </span></td>
                     @if($bill['tax_type'] != 3)
-                        @if($user['state_code']==24)
+                        @if($company['state_code'] == $user['billing_state_code'])
                             <td style="line-height:30px;" align="center" valign="top"><span class="taxable-input"> &nbsp; </span></td>
                             <td style="line-height:30px;" align="center" valign="top"><span class="taxable-input"> &nbsp; </span></td>
                         @else
@@ -310,7 +310,7 @@
                 @endif
                 <td style="line-height:30px;" align="center" valign="top"><span class="taxable-input"> &nbsp; </span></td>
                 @if($bill['tax_type'] != 3)
-                    @if($user['state_code']==24)
+                    @if($company['state_code'] == $user['billing_state_code'])
                         <td style="line-height:30px;" align="center" valign="top"><span class="taxable-input"> &nbsp; </span></td>
                         <td style="line-height:30px;" align="center" valign="top"><span class="taxable-input"> &nbsp; </span></td>
                     @else

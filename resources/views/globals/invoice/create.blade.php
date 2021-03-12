@@ -29,11 +29,12 @@
                                 </div>
                                 @if ($errors->has('customer'))
                                     <span class="text-danger">
-                                    <strong>{{ $errors->first('customer') }}</strong>
-                                </span>
+                                        <strong>{{ $errors->first('customer') }}</strong>
+                                    </span>
                                 @endif
 
-                                <input type="text" name="state_code" id="state_code" value="@if(isset($invoice) && !empty($invoice)) {{$invoice['customer']['billing_state_code']}} @endif">
+                                <input type="hidden" name="company_state_code" id="company_state_code" value="{{$company['state']}}">
+                                <input type="hidden" name="state_code" id="state_code" value="@if(isset($invoice) && !empty($invoice)) {{$invoice['customer']['billing_state_code']}} @endif">
 
                                 <div class="row mt-3 @if(isset($invoice) && empty($invoice)) hide @elseif(!isset($invoice)) hide @endif" id="cust_address">
                                     <div class="@if(isset($invoice) && $invoice['customer']['is_shipping'] == 1) col-md-6 @else col-md-12 @endif">
@@ -431,20 +432,53 @@
                                                                 $rate = $arr[0];
                                                                 $tax_name = $arr[1];
                                                             @endphp
-                                                            @if($tax_name == 'GST')
-                                                                <tr id="CGST-TAX" class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
-                                                                    <th width='50%'>{{$rate / 2}}% CGST on Rs. <span id="label_1_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
-                                                                    <td width='50%'><input type="text" id="input_1_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
-                                                                </tr>
-                                                                <tr id="SGST-TAX" class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
-                                                                    <th width='50%'>{{$rate / 2}}% SGST on Rs. <span id="label_2_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
-                                                                    <td width='50%'><input type="text" id="input_2_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
-                                                                </tr>
+
+                                                            @if(isset($invoice) && !empty($invoice))
+                                                                @if($invoice['customer']['billing_state_code'] == $company['state'])
+                                                                    @if($tax_name == 'GST')
+                                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                            <th width="50%">{{$rate / 2}}% CGST on Rs. <span id="label_1_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                            <td width="50%"><input type="text" id="input_1_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                        </tr>
+                                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                            <th width="50%">{{$rate / 2}}'% SGST on Rs. <span id="label_2_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                            <td width="50%"><input type="text" id="input_2_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                        </tr>
+                                                                    @else
+                                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                            <th width="50%">{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                            <td width="50%"><input type="text" id="input_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                        </tr>
+                                                                    @endif
+                                                                @else
+                                                                    @if($tax_name == 'GST')
+                                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                            <th width="50%">{{$rate}}% IGST on Rs. <span id="label_1_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                            <td width="50%"><input type="text" id="input_1_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                        </tr>
+                                                                    @else
+                                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                            <th width="50%">{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                            <td width="50%"><input type="text" id="input_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                        </tr>
+                                                                    @endif
+                                                                @endif
                                                             @else
-                                                                <tr id="IGST-TAX" class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
-                                                                    <th width='50%'>{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
-                                                                    <td width='50%'><input type="text" id="input_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
-                                                                </tr>
+                                                                @if($tax_name == 'GST')
+                                                                    <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                        <th width='50%'>{{$rate / 2}}% CGST on Rs. <span id="label_1_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                        <td width='50%'><input type="text" id="input_1_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                    </tr>
+                                                                    <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                        <th width='50%'>{{$rate / 2}}% SGST on Rs. <span id="label_2_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                        <td width='50%'><input type="text" id="input_2_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                    </tr>
+                                                                @else
+                                                                    <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                        <th width='50%'>{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                        <td width='50%'><input type="text" id="input_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                    </tr>
+                                                                @endif
                                                             @endif
                                                         @endforeach
                                                         <tr class="discount-section">
@@ -583,6 +617,10 @@
             taxCalculation();
         });
 
+        $('.discount-items').on('keyup change', function(){
+            taxCalculation();
+        });
+
         $('#shipping_charge_amount').on('keyup change', function(){
             taxCalculation();
         });
@@ -672,6 +710,9 @@
                         $('#cust_address').removeClass('hide');
                         $("#CustomersForm")[0].reset();
                         getEmail($('#customer').val());
+                        $('.tax-tr').remove();
+                        $(result['table_row']).insertAfter($('#Tax-Calculation tr#subtotal_row:last'));
+                        taxCalculation();
                     }
                 });
             }
@@ -780,6 +821,8 @@
                 }else{
                     $('#cust_address').addClass('hide');
                 }
+                $('.tax-tr').remove();
+                $(result['table_row']).insertAfter($('#Tax-Calculation tr#subtotal_row:last'));
                 taxCalculation();
             }
         });
@@ -803,19 +846,6 @@
                 $("#state_code").val(result['state_code']);
                 $('#BillingAddressModal').modal('hide');
                 $('#billing_msg').html('Billing address updated successfully.').fadeIn('slow').delay(5000).hide(1);
-                var state_code = $('#state_code').val();
-                $('.tax-input').find('option').each(function() {
-                    var text = $(this).text();
-                    var tax_name = text.split('%')[0].replace('.','-');
-
-                    if(state_code == 24) {
-                        $(this).text(text.replace('IGST', 'GST'));
-                        $('.'+tax_name+'_IGST').removeClass(tax_name+'_IGST').addClass(tax_name+'_GST');
-                    }else{
-                        $(this).text(text.replace('GST', 'IGST'));
-                        $('.'+tax_name+'_GST').removeClass(tax_name+'_GST').addClass(tax_name+'_IGST');
-                    }
-                });
                 $('.tax-tr').remove();
                 $(result['table_row']).insertAfter($('#Tax-Calculation tr#subtotal_row:last'));
                 taxCalculation();

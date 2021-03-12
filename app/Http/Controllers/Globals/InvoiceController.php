@@ -144,6 +144,7 @@ class InvoiceController extends Controller
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         $data['payment_terms'] = PaymentTerms::where('user_id',$user->id)->where('company_id',$this->Company())->get();
         $data['address_states'] = States::orderBy('state_name','ASC')->select('state_name','id')->get();
+        $data['company'] = CompanySettings::where('id',$this->Company())->first();
         return view('globals.invoice.create',$data);
     }
 
@@ -325,6 +326,7 @@ class InvoiceController extends Controller
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         $data['payment_terms'] = PaymentTerms::where('user_id',$user->id)->where('company_id',$this->Company())->get();
         $data['address_states'] = States::orderBy('state_name','ASC')->select('state_name','id')->get();
+        $data['company'] = CompanySettings::where('id',$this->Company())->first();
         return view('globals.invoice.create',$data);
     }
 

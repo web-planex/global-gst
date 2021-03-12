@@ -129,6 +129,7 @@ class DebitNoteController extends Controller
         $data['payment_terms'] = PaymentTerms::where('user_id',$user->id)->where('company_id',$this->Company())->get();
         $data['address_states'] = States::orderBy('state_name','ASC')->select('state_name','id')->get();
         $data['invoice_ids'] = Invoice::select('id','invoice_number','invoice_date')->where('user_id',$user->id)->where('company_id',$this->Company())->get()->toArray();
+        $data['company'] = CompanySettings::where('id',$this->Company())->first();
         return view('globals.debit-note.create',$data);
     }
 
@@ -227,7 +228,9 @@ class DebitNoteController extends Controller
         $shipping_state = States::where('id',$customer['shipping_state'])->first();
         $data['debit_note']['customer'] = $customer;
         $data['debit_note']['customer']['billing_state_name'] = $billing_state['state_name'];
+        $data['debit_note']['customer']['billing_state_code'] = $billing_state['state_number'];
         $data['debit_note']['customer']['shipping_state_name'] = $shipping_state['state_name'];
+        $data['debit_note']['customer']['shipping_state_code'] = $shipping_state['state_number'];
         $data['debit_note']['file_name'] = '';
         if(!empty($data['debit_note']['files']) && file_exists($data['debit_note']['files'])){
             $ext = explode('/',$data['debit_note']['files']);
@@ -263,7 +266,7 @@ class DebitNoteController extends Controller
         $data['payment_terms'] = PaymentTerms::where('user_id',$user->id)->where('company_id',$this->Company())->get();
         $data['address_states'] = States::orderBy('state_name','ASC')->select('state_name','id')->get();
         $data['invoice_ids'] = Invoice::select('id','invoice_number','invoice_date')->where('user_id',$user->id)->where('company_id',$this->Company())->get()->toArray();
-//        return $data;
+        $data['company'] = CompanySettings::where('id',$this->Company())->first();
         return view('globals.debit-note.create',$data);
     }
 

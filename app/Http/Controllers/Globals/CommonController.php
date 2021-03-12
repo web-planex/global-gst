@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Globals;
 
 use App\Http\Controllers\Controller;
 use App\Models\Globals\Bills;
+use App\Models\Globals\CompanySettings;
 use App\Models\Globals\Customers;
 use App\Models\Globals\Employees;
 use App\Models\Globals\Estimate;
@@ -268,5 +269,62 @@ class CommonController extends Controller
         $data = base64_decode($img);
         $success = file_put_contents($path, $data);
         return $path2;
+    }
+
+    public function TaxCalculation($user_state_code){
+        $tr = '';
+        $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
+        $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
+        $taxes_without_cess_arr = [];
+        $taxes_with_cess_arr = [];
+        $a=0;
+        foreach($taxes_without_cess as $tax) {
+            $taxes_without_cess_arr[$a] = $tax['rate'].'_'.$tax['tax_name'];
+            $a++;
+        }
+        $i=0;
+        foreach($taxes_with_cess as $tax) {
+            $taxes_with_cess_arr[$i] = $tax['rate'].'_'.$tax['tax_name'];
+            $taxes_with_cess_arr[$i+1] = $tax['cess'].'_CESS';
+            $i = $i+2;
+        }
+        $all_tax_labels = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
+        $company = CompanySettings::where('id',$this->Company())->first();
+        foreach ($all_tax_labels as $tax){
+            $arr = explode("_", $tax, 2);
+            $rate = $arr[0];
+            $tax_name = $arr[1];
+            if($user_state_code == $company['state']){
+                if($tax_name == 'GST'){
+                    $new_rate = $rate / 2;
+                    $tr .= '<tr class="'.str_replace(".","-",$rate).'_'.$tax_name.' hide tax-tr">
+                                <th width="50%">'.$new_rate.'% CGST on Rs. <span id="label_1_'.str_replace(".","-",$rate).'_'.$tax_name.'">0.00</span></th>
+                                <td width="50%"><input type="text" id="input_1_'.str_replace(".","-",$rate).'_'.$tax_name.'" class="form-control tax-input-row text-right" readonly></td>
+                            </tr>
+                            <tr class="'.str_replace(".","-",$rate).'_'.$tax_name.' hide tax-tr">
+                                <th width="50%">'.$new_rate.'% SGST on Rs. <span id="label_2_'.str_replace(".","-",$rate).'_'.$tax_name.'">0.00</span></th>
+                                <td width="50%"><input type="text" id="input_2_'.str_replace(".","-",$rate).'_'.$tax_name.'" class="form-control tax-input-row text-right" readonly></td>
+                            </tr>';
+                }else{
+                    $tr .= '<tr class="'.str_replace(".","-",$rate).'_'.$tax_name.' hide tax-tr">
+                                <th width="50%">'.$rate.'% '.$tax_name.' on Rs. <span id="label_'.str_replace(".","-",$rate).'_'.$tax_name.'">0.00</span></th>
+                                <td width="50%"><input type="text" id="input_'.str_replace(".","-",$rate).'_'.$tax_name.'" class="form-control tax-input-row text-right" readonly></td>
+                            </tr>';
+                }
+            }else{
+                if($tax_name == 'GST'){
+                    $tr .= '<tr class="'.str_replace(".","-",$rate).'_'.$tax_name.' hide tax-tr">
+                                <th width="50%">'.$rate.'% IGST on Rs. <span id="label_1_'.str_replace(".","-",$rate).'_'.$tax_name.'">0.00</span></th>
+                                <td width="50%"><input type="text" id="input_1_'.str_replace(".","-",$rate).'_'.$tax_name.'" class="form-control tax-input-row text-right" readonly></td>
+                            </tr>';
+                }else{
+                    $tr .= '<tr class="'.str_replace(".","-",$rate).'_'.$tax_name.' hide tax-tr">
+                                <th width="50%">'.$rate.'% '.$tax_name.' on Rs. <span id="label_'.str_replace(".","-",$rate).'_'.$tax_name.'">0.00</span></th>
+                                <td width="50%"><input type="text" id="input_'.str_replace(".","-",$rate).'_'.$tax_name.'" class="form-control tax-input-row text-right" readonly></td>
+                            </tr>';
+                }
+            }
+        }
+        return $tr;
     }
 }

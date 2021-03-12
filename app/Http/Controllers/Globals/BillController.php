@@ -124,6 +124,7 @@ class BillController extends Controller
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         $data['payment_method'] = PaymentMethod::where('user_id',$user->id)->pluck('method_name', 'id')->toArray();
         $data['payment_terms'] = PaymentTerms::where('user_id',$user->id)->where('company_id',$this->Company())->get();
+        $data['company'] = CompanySettings::where('id',$this->Company())->first();
         return view('globals.bills.create',$data);
     }
 
@@ -242,6 +243,10 @@ class BillController extends Controller
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         $data['payment_method'] = PaymentMethod::where('user_id',$user->id)->pluck('method_name', 'id')->toArray();
         $data['payment_terms'] = PaymentTerms::where('user_id',$user->id)->where('company_id',$this->Company())->get();
+        $data['company'] = CompanySettings::where('id',$this->Company())->first();
+        $payee = Payees::where('id',$data['bill']['payee_id'])->first();
+        $bill_user = Customers::where('id',$payee['type_id'])->first();
+        $data['bill']['bill_user_state'] = $bill_user['billing_state'];
         return view('globals.bills.create',$data);
     }
 
@@ -474,7 +479,7 @@ class BillController extends Controller
         $data['name'] = 'Bill';
 
         $pdf = new WKPDF($this->common_controller->globalPdfOption());
-        //return $data;
+//        return $data;
         $pdf->addPage(view('globals.bills.pdf_bill',$data));
         // return View('globals.bills.pdf_bill',$data);
         if($request->output == 'download') {

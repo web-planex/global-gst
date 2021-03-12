@@ -34,6 +34,7 @@ $(document).ready(function() {
         var amount = $(this).val() * qty;
         $(this).parent('td').next('td').next('td').find('.amount-input').val(amount);
         $('.discount-items').trigger('change');
+        $('.discount-type-items').trigger('change');
         taxCalculation();
     });
 
@@ -73,6 +74,30 @@ $(document).ready(function() {
 
     $(document).on('keyup change', '.discount-items', function(){
         var discount_val = $(this).inputmask('unmaskedvalue');
+        var dis_type = $(this).siblings('.discount-type-items').val(); // 1 => %, 2 => Rs.
+        var quantity = $(this).parent('td').prev('td').prev('td').find('.quantity-input').val();
+        var rate = $(this).parent('td').prev('td').find('.rate-input').val();
+        if(isNaN(quantity)) {
+            quantity = 0;
+        }
+        if(isNaN(rate)){
+            rate = 0;
+        }
+        var amount = quantity * rate;
+        var final_amount = amount;
+
+        if(dis_type == 1 && discount_val != '' && discount_val != 0) {
+            var discount_amount = (amount * discount_val)  / 100;
+            final_amount = amount - discount_amount;
+        } else if(dis_type == 2 && discount_val != '' && discount_val != 0) {
+            final_amount = amount - discount_val;
+        }
+        $(this).parent('td').next('td').find('.amount-input').val(final_amount.toFixed(2));
+        taxCalculation();
+    });
+
+    $(document).on('change', '.discount-type-items', function(){
+        var discount_val = $('.discount-items').inputmask('unmaskedvalue');
         var dis_type = $(this).siblings('.discount-type-items').val(); // 1 => %, 2 => Rs.
         var quantity = $(this).parent('td').prev('td').prev('td').find('.quantity-input').val();
         var rate = $(this).parent('td').prev('td').find('.rate-input').val();
@@ -160,7 +185,7 @@ function taxCalculation() {
     var tax_total_arr = [];
     var i = 0;
     var state_code = $('#state_code').val();
-
+    var company_state_code = $('#company_state_code').val();
     var discount_type = $('#discount_type').val();
 
     $('.tax-input').find('option').each(function() {
@@ -249,15 +274,20 @@ function taxCalculation() {
     }
 
     for (var key in tax_total_arr) {
-
         var value = parseFloat(tax_total_arr[key]);
         var tax = key.split('_')[1];
         var tax_rate = parseFloat(key.substr(0, key.indexOf('_')).replace("-", "."));
         var tax_amount = 0;
+        var tax_rate_gst = 0;
+
+        if(parseInt(company_state_code) == parseInt(state_code)){
+            tax_rate_gst = tax_rate / 2;
+        }else{
+            tax_rate_gst = tax_rate;
+        }
 
         if(tax == 'GST') {
             if(tax_type == 'exclusive') {
-                var tax_rate_gst = tax_rate / 2;
                 if(isNaN(value)) {
                     value=0;
                 }
@@ -271,7 +301,6 @@ function taxCalculation() {
                 $("#input_1_"+key).val("Rs. "+tax_amount.toFixed(2));
                 $("#input_2_"+key).val("Rs. "+tax_amount.toFixed(2));
             } else if(tax_type == 'inclusive') {
-                var tax_rate_gst = tax_rate / 2;
                 tax_amount = value * tax_rate / (parseInt(100) + parseInt(tax_rate));
                 var new_value = parseFloat(value) - parseFloat(tax_amount);
                 if(isNaN(new_value)) {
@@ -288,7 +317,6 @@ function taxCalculation() {
                 $("#input_2_"+key).val("Rs. "+new_tax_value.toFixed(2));
             }
         } else {
-
             if(tax_type == 'exclusive') {
                 tax_amount = value * tax_rate / 100;
                 amount_before_tax = parseFloat(subtotal).toFixed(2);
@@ -296,7 +324,6 @@ function taxCalculation() {
                     value=0;
                 }
                 $("#label_"+key).html(value.toFixed(2));
-                console.log(tax_amount);
             } else if(tax_type == 'inclusive') {
                 tax_amount = value * tax_rate / (parseInt(100) + parseInt(tax_rate));
                 var new_value = parseFloat(value) - parseFloat(tax_amount);

@@ -49,7 +49,7 @@
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label for="payee">Payee / Vendors <span class="text-danger">*</span></label>
-                                {!! Form::select('payee', $payees, isset($expense)&&!empty($expense)?$expense['payee_id']:null, ['class' => 'form-control amounts-are-select2 custom-select', 'id' => 'payee']) !!}
+                                {!! Form::select('payee', $payees, isset($expense)&&!empty($expense)?$expense['payee_id']:null, ['class' => 'form-control amounts-are-select2 custom-select', 'id' => 'payee','onchange'=>'getAddress(this.value)']) !!}
                                 <div class="wrapper" id="wrp" style="display: none;">
                                     <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
                                 </div>
@@ -60,6 +60,8 @@
                                 @enderror
                             </div>
                         </div>
+                        <input type="hidden" name="company_state_code" id="company_state_code" value="{{$company['state']}}">
+                        <input type="hidden" name="state_code" id="state_code" value="@if(isset($expense) && !empty($expense)) {{$expense['exp_user_state']}} @endif">
                     </div>
 
                     <div class="row">
@@ -310,35 +312,69 @@
                                         <div class="col-md-12 col-lg-6 col-xl-8">
                                             <div class="subtotal-table">
                                                 <div class="table-responsive">
-                                                    <table class="table table-hover">
-                                                <tr id="subtotal_row">
-                                                    <th width="50%">Subtotal</th>
-                                                    <td width="50%">
-                                                        <input type="text" class="form-control text-right" id="subtotal" readonly="" />
-                                                    </td>
-                                                </tr>
-                                                @foreach($all_tax_labels as $tax)
-                                                    @php
-                                                        $arr = explode("_", $tax, 2);
-                                                        $rate = $arr[0];
-                                                        $tax_name = $arr[1];
-                                                    @endphp
-                                                    @if($tax_name == 'GST')
-                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide">
-                                                            <th width='50%'>{{$rate / 2}}% CGST on Rs. <span id="label_1_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
-                                                            <td width='50%'><input type="text" id="input_1_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                    <table class="table table-hover" id="Tax-Calculation">
+                                                        <tr id="subtotal_row">
+                                                            <th width="50%">Subtotal</th>
+                                                            <td width="50%">
+                                                                <input type="text" class="form-control text-right" id="subtotal" readonly="" />
+                                                            </td>
                                                         </tr>
-                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide">
-                                                            <th width='50%'>{{$rate / 2}}% SGST on Rs. <span id="label_2_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
-                                                            <td width='50%'><input type="text" id="input_2_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
-                                                        </tr>
-                                                    @else
-                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide">
-                                                            <th width='50%'>{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
-                                                            <td width='50%'><input type="text" id="input_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
-                                                        </tr>
-                                                    @endif
-                                                @endforeach
+                                                        @foreach($all_tax_labels as $tax)
+                                                            @php
+                                                                $arr = explode("_", $tax, 2);
+                                                                $rate = $arr[0];
+                                                                $tax_name = $arr[1];
+                                                            @endphp
+
+                                                            @if(isset($expense) && !empty($expense))
+                                                                @if($expense['exp_user_state'] == $company['state'])
+                                                                    @if($tax_name == 'GST')
+                                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                            <th width="50%">{{$rate / 2}}% CGST on Rs. <span id="label_1_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                            <td width="50%"><input type="text" id="input_1_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                        </tr>
+                                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                            <th width="50%">{{$rate / 2}}'% SGST on Rs. <span id="label_2_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                            <td width="50%"><input type="text" id="input_2_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                        </tr>
+                                                                    @else
+                                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                            <th width="50%">{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                            <td width="50%"><input type="text" id="input_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                        </tr>
+                                                                    @endif
+                                                                @else
+                                                                    @if($tax_name == 'GST')
+                                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                            <th width="50%">{{$rate}}% IGST on Rs. <span id="label_1_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                            <td width="50%"><input type="text" id="input_1_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                        </tr>
+                                                                    @else
+                                                                        <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                            <th width="50%">{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                            <td width="50%"><input type="text" id="input_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                        </tr>
+                                                                    @endif
+                                                                @endif
+                                                            @else
+                                                                @if($tax_name == 'GST')
+                                                                    <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                        <th width='50%'>{{$rate / 2}}% CGST on Rs. <span id="label_1_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                        <td width='50%'><input type="text" id="input_1_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                    </tr>
+                                                                    <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                        <th width='50%'>{{$rate / 2}}% SGST on Rs. <span id="label_2_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                        <td width='50%'><input type="text" id="input_2_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                    </tr>
+                                                                @else
+                                                                    <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
+                                                                        <th width='50%'>{{$rate.'% '.$tax_name}} on Rs. <span id="label_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                        <td width='50%'><input type="text" id="input_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                    </tr>
+                                                                @endif
+                                                            @endif
+                                                        @endforeach
+
                                                 {{--<tr>
                                                     <th>Discount Type</th>
                                                     <td>
@@ -567,6 +603,10 @@
                         $('#SuppliersModal').modal('hide');
                         $('html, body').css('overflowY', 'auto');
                         $("#SuppliersForm")[0].reset();
+                        $('#state_code').val(result['state_code']);
+                        $('.tax-tr').remove();
+                        $(result['table_row']).insertAfter($('#Tax-Calculation tr#subtotal_row:last'));
+                        taxCalculation();
                     }
                 });
             }
@@ -646,6 +686,10 @@
                         $('#EmployeeModal').modal('hide');
                         $('html, body').css('overflowY', 'auto');
                         $("#EmployeesForm")[0].reset();
+                        $('#state_code').val(result['state_code']);
+                        $('.tax-tr').remove();
+                        $(result['table_row']).insertAfter($('#Tax-Calculation tr#subtotal_row:last'));
+                        taxCalculation();
                     }
                 });
             }
@@ -732,6 +776,10 @@
                         $('#CustomersModal').modal('hide');
                         $('html, body').css('overflowY', 'auto');
                         $("#CustomersForm")[0].reset();
+                        $('#state_code').val(result['state_code']);
+                        $('.tax-tr').remove();
+                        $(result['table_row']).insertAfter($('#Tax-Calculation tr#subtotal_row:last'));
+                        taxCalculation();
                     }
                 });
             }
@@ -951,6 +999,20 @@
         $('form.formExpense').validate();
     });
 
+    function getAddress(payee_id) {
+        $.ajax({
+            url: '{{url('ajax/get_payee')}}',
+            type: 'get',
+            data: {'data':payee_id},
+            success: function (result) {
+                $('#state_code').val(result['state_code']);
+                $('.tax-tr').remove();
+                $(result['table_row']).insertAfter($('#Tax-Calculation tr#subtotal_row:last'));
+                taxCalculation();
+            }
+        });
+    }
+
     function subTotal() {
         amount = 0;
         $('.amount-input').each(function(){
@@ -993,17 +1055,16 @@
     }
 
     function taxCalculation() {
-
         var subtotal = subTotal();
         var tax_type = $('#amounts_are').find(":selected").val();
         var tax = 0;
         var total = 0;
         var amount_before_tax = 0;
-
         var tax_arr = [];
         var tax_total_arr = [];
         var i = 0;
-
+        var state_code = $('#state_code').val();
+        var company_state_code = $('#company_state_code').val();
         var discount_type = $('#discount_type').val();
 
         $('.tax-input').find('option').each(function() {
@@ -1098,10 +1159,16 @@
             var tax = key.split('_')[1];
             var tax_rate = parseFloat(key.substr(0, key.indexOf('_')).replace("-", "."));
             var tax_amount = 0;
+            var tax_rate_gst = 0;
+
+            if(parseInt(company_state_code) == parseInt(state_code)){
+                tax_rate_gst = tax_rate / 2;
+            }else{
+                tax_rate_gst = tax_rate;
+            }
 
             if(tax == 'GST') {
                 if(tax_type == 'exclusive') {
-                    var tax_rate_gst = tax_rate / 2;
                     if(isNaN(value)) {
                         value=0;
                     }
