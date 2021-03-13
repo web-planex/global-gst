@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Globals;
 
 use App\Http\Controllers\Controller;
+use App\Models\Globals\Employees;
+use App\Models\Globals\Suppliers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -118,7 +120,18 @@ class BillController extends Controller
         }
         $data['all_tax_labels'] = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
         $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
-        $data['payees'] = Payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->pluck('name','id')->prepend('Select Payee / Vendor','')->toArray();
+//        $data['payees'] = Payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->pluck('name','id')->prepend('Select Payee / Vendor','')->toArray();
+
+        $payees = Payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->get();
+        $exp_user = array();
+        $exp_user[' '] = 'Select Payee / Vendor';
+        foreach ($payees as $pay){
+            $pay_user = Customers::where('id',$pay['type_id'])->first();
+            $exp_user[$pay->id] = $pay_user['display_name'];
+        }
+
+        $data['payees'] = $exp_user;
+
         $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $data['first_product'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
@@ -218,7 +231,16 @@ class BillController extends Controller
             $data['bill']['file_ext'] = $file_ext[1];
         }
         $data['bill_items'] = BillItems::where('bill_id',$id)->get()->toArray();
-        $data['payees'] = Payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->pluck('name','id')->prepend('Select Payee / Vendor','')->toArray();
+//        $data['payees'] = Payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->pluck('name','id')->prepend('Select Payee / Vendor','')->toArray();
+        $payees = Payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->get();
+        $exp_user = array();
+        $exp_user[' '] = 'Select Payee / Vendor';
+        foreach ($payees as $pay){
+            $pay_user = Customers::where('id',$pay['type_id'])->first();
+            $exp_user[$pay->id] = $pay_user['display_name'];
+        }
+
+        $data['payees'] = $exp_user;
         $data['taxes'] = Taxes::where('status', 1)->get();
         $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
         $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
@@ -424,6 +446,7 @@ class BillController extends Controller
         $state = States::where('id',$data['user']['billing_state'])->first();
         $shipping_state = States::where('id',$data['user']['shipping_state'])->first();
         $data['user']['state'] = $state['state_name'];
+        $data['user']['billing_name'] = $data['user']['display_name'];
         $data['user']['billing_state'] = $state['state_name'];
         $data['user']['shipping_state'] = $shipping_state['state_name'];
         $data['user']['billing_state_code'] = $state['state_number'];

@@ -136,7 +136,17 @@ class InvoiceController extends Controller
         $data['all_tax_labels'] = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
         $tax_without_cess = Taxes::where('is_cess',0)->where('status',1)->get();
         $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
-        $data['payees'] = payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->pluck('name','id')->prepend('Select Customer','')->toArray();
+//        $data['payees'] = payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->pluck('name','id')->prepend('Select Customer','')->toArray();
+        $payees = Payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->get();
+        $exp_user = array();
+        $exp_user[' '] = 'Select Customer';
+        foreach ($payees as $pay){
+            $pay_user = Customers::where('id',$pay['type_id'])->first();
+            $exp_user[$pay->id] = $pay_user['display_name'];
+        }
+
+        $data['payees'] = $exp_user;
+
 //        $data['payment_accounts'] = $payment_accounts;
         $data['payment_method'] = PaymentMethod::where('user_id',$user->id)->pluck('method_name', 'id')->toArray();
         $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
@@ -299,7 +309,16 @@ class InvoiceController extends Controller
             $data['invoice']['file_ext'] = $file_ext[1];
         }
         $data['invoice_items'] = InvoiceItems::where('invoice_id',$id)->get()->toArray();
-        $data['payees'] = payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->pluck('name','id')->prepend('Select Customer','')->toArray();
+//        $data['payees'] = payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->pluck('name','id')->prepend('Select Customer','')->toArray();
+        $payees = Payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->get();
+        $exp_user = array();
+        $exp_user[' '] = 'Select Customer';
+        foreach ($payees as $pay){
+            $pay_user = Customers::where('id',$pay['type_id'])->first();
+            $exp_user[$pay->id] = $pay_user['display_name'];
+        }
+
+        $data['payees'] = $exp_user;
 //        $data['payment_accounts'] = PaymentAccount::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
         $data['taxes'] = Taxes::where('status', 1)->get();
         $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
@@ -511,7 +530,8 @@ class InvoiceController extends Controller
             $state = States::where('id',$data['user']['billing_state'])->first();
             $shipping_state = States::where('id',$data['user']['shipping_state'])->first();
             $data['user']['state'] = $state['state_name'];
-            $data['user']['state_code'] = $state['state_number'];
+            $data['user']['billing_state_code'] = $state['state_number'];
+            $data['user']['billing_name'] = $data['user']['display_name'];
 
             $data['user']['shipping_state'] = $shipping_state['state_name'];
             $data['user']['shipping_state_code'] = $shipping_state['state_number'];

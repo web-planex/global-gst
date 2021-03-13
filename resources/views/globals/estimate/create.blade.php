@@ -672,6 +672,24 @@
                     });
                 }
             });
+
+            $("#Estimateform").validate({
+                errorPlacement: function (error, element) {
+                    if(element.hasClass('amounts-are-select2') && element.next('.select2-container').length) {
+                        error.insertAfter(element.next('.select2-container'));
+                    }else {
+                        error.insertAfter(element);
+                    }
+                },
+                rules: {
+                    customer: "required",
+                    expiry_date: "required"
+                },
+                messages: {
+                    customer: "The customer field is required",
+                    expiry_date: "The expiry date field is required"
+                }
+            });
         });
 
         $('#shipping_charge').click(function () {

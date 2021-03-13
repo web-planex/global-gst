@@ -40,29 +40,29 @@ class UserController extends Controller
         $user = User::where('id',$id)->first();
         $user->update($input);
 
-        $company = CompanySettings::where('user_id',$id)->where('id',$this->Company())->first();
-
-        $in['user_id'] = $id;
-        if($photo = $request->file('company_logo')){
-            $in['company_logo'] = $this->image($photo,$id.'/company');
-        }
-        $in['company_name'] = !empty($request['company_name'])?$request['company_name']:'';
-        $in['pan_no'] = !empty($request['pan_no'])?$request['pan_no']:'';
-        $in['gstin'] = !empty($request['gstin'])?$request['gstin']:'';
-        $in['company_email'] = !empty($request['company_email'])?$request['company_email']:'';
-        $in['company_phone'] = !empty($request['company_phone'])?$request['company_phone']:'';
-        $in['website'] = !empty($request['website'])?$request['website']:'';
-        $in['street'] = !empty($request['street'])?$request['street']:'';
-        $in['city'] = !empty($request['city'])?$request['city']:'';
-        $in['state'] = !empty($request['state'])?$request['state']:'';
-        $in['pincode'] = !empty($request['pincode'])?$request['pincode']:'';
-        $in['country'] = !empty($request['country'])?$request['country']:'';
-
-        if(empty($company)){
-            CompanySettings::create($in);
-        }else{
-            $company->update($in);
-        }
+//        $company = CompanySettings::where('user_id',$id)->where('id',$this->Company())->first();
+//
+//        $in['user_id'] = $id;
+//        if($photo = $request->file('company_logo')){
+//            $in['company_logo'] = $this->image($photo,$id.'/company');
+//        }
+//        $in['company_name'] = !empty($request['company_name'])?$request['company_name']:'';
+//        $in['pan_no'] = !empty($request['pan_no'])?$request['pan_no']:'';
+//        $in['gstin'] = !empty($request['gstin'])?$request['gstin']:'';
+//        $in['company_email'] = !empty($request['company_email'])?$request['company_email']:'';
+//        $in['company_phone'] = !empty($request['company_phone'])?$request['company_phone']:'';
+//        $in['website'] = !empty($request['website'])?$request['website']:'';
+//        $in['street'] = !empty($request['street'])?$request['street']:'';
+//        $in['city'] = !empty($request['city'])?$request['city']:'';
+//        $in['state'] = !empty($request['state'])?$request['state']:'';
+//        $in['pincode'] = !empty($request['pincode'])?$request['pincode']:'';
+//        $in['country'] = !empty($request['country'])?$request['country']:'';
+//
+//        if(empty($company)){
+//            CompanySettings::create($in);
+//        }else{
+//            $company->update($in);
+//        }
 
         \Session::flash('message', 'Profile has been updated successfully!');
         return redirect()->back();

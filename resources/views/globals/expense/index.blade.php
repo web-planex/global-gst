@@ -153,9 +153,21 @@
                                                 <label class="custom-control-label" for="check_{{$list['id']}}"></label>
                                             </div>
                                         </td>
-                                        <td class="col_payee">{{$list['Payee']['name']}}</td>
+                                        <td class="col_payee">
+                                            @php
+                                                $payee = \App\Models\Globals\Payees::where('id',$list['payee_id'])->first();
+                                                if($payee['type']==1){
+                                                    $pay_user = \App\Models\Globals\Suppliers::where('id',$payee['type_id'])->first();
+                                                }elseif ($payee['type'] == 2){
+                                                    $pay_user = \App\Models\Globals\Employees::where('id',$payee['type_id'])->first();
+                                                }else{
+                                                    $pay_user = \App\Models\Globals\Customers::where('id',$payee['type_id'])->first();
+                                                }
+                                            @endphp
+                                            {{$pay_user['display_name']}}
+                                        </td>
                                         <td class="col_expense_date">{{date('d F Y', strtotime($list['expense_date']))}}</td>
-                                        <td class="col_payment_method">{{App\Models\Globals\Expense::$payment_method[$list['payment_method']]}}</td>
+                                        <td class="col_payment_method">{{$list['PaymentMethod']['method_name']}}</td>
                                         <td class="col_ref_no">{{$list['ref_no']}}</td>
                                         <td class="col_note">
                                             <input type="hidden" id="Notes_{{$list['id']}}" value="{{$list['memo']}}">

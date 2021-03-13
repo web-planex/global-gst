@@ -147,7 +147,13 @@
                                             </div>
                                         </td>
                                         <td class="col_debit_note_no">{{$list['debit_note_number']}}</td>
-                                        <td class="col_customer">{{$list['Payee']['name']}}</td>
+                                        <td class="col_customer">
+                                            @php
+                                                $payee = \App\Models\Globals\Payees::where('id',$list['customer_id'])->first();
+                                                $pay_user = \App\Models\Globals\Customers::where('id',$payee['type_id'])->first();
+                                            @endphp
+                                            {{$pay_user['display_name']}}
+                                        </td>
                                         <td class="col_debit_note_date">{{date('d F Y', strtotime($list['debit_note_date']))}}</td>
                                         <td class="col_due_date">{{date('d F Y', strtotime($list['due_date']))}}</td>
                                         <td class="col_total">{{$list['total']}}</td>

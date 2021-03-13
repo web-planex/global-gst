@@ -22,7 +22,7 @@
                             <label for="company_logo">Company Logo</label><br>
                             <div class="demo mb-3">
                                 <div class="crop-element" data-name="crop_open" data-crop-open="true" data-crop=">=100,>=100">
-                                    <img class="mt-1" id="crop_pro_image" src="@if(isset($companies) && !empty($companies) && !empty($companies['company_logo']) && file_exists($companies['company_logo'])) {{ url($companies['company_logo']) }} @endif"/>
+                                    <img class="mt-1" id="crop_pro_image" src="@if(isset($companies) && !empty($companies) && !empty($companies['company_logo']) && file_exists($companies['company_logo'])) {{ url($companies['company_logo']) }} @else {{url('assets/dist/images/logo_default.png')}} @endif"/>
                                     <input type="file" id="logo_img" name="company_logo"/>
                                 </div>
                             </div>

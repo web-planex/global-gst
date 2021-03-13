@@ -69,7 +69,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group mb-3">
-                                <label for="customer">Payee / Vendor <span class="text-danger">*</span></label>
+                                <label for="customer123">Payee / Vendor <span class="text-danger">*</span></label>
                                 {!! Form::select('customer', $payees, isset($bill)&&!empty($bill)?$bill['payee_id']:null, ['class' => 'form-control amounts-are-select2', 'id' => 'customer', 'onchange'=>'getAddress(this.value)']) !!}
                                 <div class="wrapper" id="wrp" style="display: none;">
                                     <a href="javascript:;" id="type" class="font-weight-300" onclick="OpenUserTypeModal()"><i class="fa fa-plus-circle"></i> Add New</a>
@@ -711,6 +711,29 @@
                         $('.ex-payment-terms option:last').attr("selected", "selected");
                     }
                 });
+            }
+        });
+
+        $("#Billsform").validate({
+            errorPlacement: function (error, element) {
+                if(element.hasClass('amounts-are-select2') && element.next('.select2-container').length) {
+                    error.insertAfter(element.next('.select2-container'));
+                }else {
+                    error.insertAfter(element);
+                }
+            },
+
+            rules: {
+                bill_no: "required",
+                bill_date: "required",
+                customer: "required",
+                due_date: "required"
+            },
+            messages: {
+                bill_no: "The bill no field is required",
+                bill_date: "The bill date field is required",
+                customer: "The payee/vendor field is required",
+                due_date: "The due date field is required"
             }
         });
     });

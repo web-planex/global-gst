@@ -156,5 +156,21 @@
             $('#uploadFile').click();
         });
 
+        $(document).ready(function() {
+            $("#ProductsForm").validate({
+                rules: {
+                    title: "required",
+                    price: "required",
+                    sale_price: "required",
+                    status: "required"
+                },
+                messages: {
+                    title: "The title field is required",
+                    price: "The price field is required",
+                    sale_price: "The sale price field is required",
+                    status: "The status field is required"
+                }
+            });
+        });
     </script>
 @endsection

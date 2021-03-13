@@ -151,7 +151,13 @@
                                             </div>
                                         </td>
                                         <td class="col_bill_no">{{$list['bill_no']}}</td>
-                                        <td class="col_customer">{{$list['Payee']['name']}}</td>
+                                        <td class="col_customer">
+                                            @php
+                                                $payee = \App\Models\Globals\Payees::where('id',$list['payee_id'])->first();
+                                                $pay_user = \App\Models\Globals\Customers::where('id',$payee['type_id'])->first();
+                                            @endphp
+                                            {{$pay_user['display_name']}}
+                                        </td>
                                         <td class="col_bill_date">{{date('d M Y', strtotime($list['bill_date']))}}</td>
                                         <td class="col_due_date">{{date('d M Y', strtotime($list['due_date']))}}</td>
                                         <td class="col_memo">

@@ -979,7 +979,10 @@
                     display_name: {
                         required: "The displayname field is required",
                     },
-                    email: "Please enter a valid email address",
+                    email: {
+                        required: "The email field is required",
+                        email: "Please enter a valid email address"
+                    },
                     mobile: "The mobile field is required",
                     street: "The street field is required",
                     city: "The city field is required",
@@ -1038,7 +1041,10 @@
                     display_name: {
                         required: "The displayname field is required",
                     },
-                    email: "Please enter a valid email address",
+                    email: {
+                        required: "The email field is required",
+                        email: "Please enter a valid email address"
+                    },
                     mobile: "The mobile field is required",
                     street: "The street field is required",
                     city: "The city field is required",
@@ -1103,7 +1109,10 @@
                     display_name: {
                         required: "The displayname field is required",
                     },
-                    email: "Please enter a valid email address",
+                    email: {
+                        required: "The email field is required",
+                        email: "Please enter a valid email address"
+                    },
                     mobile: "The mobile field is required",
                     street: "The street field is required",
                     city: "The city field is required",

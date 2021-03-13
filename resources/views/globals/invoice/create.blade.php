@@ -771,6 +771,24 @@
                $('#pay_terms_div').addClass('hide');
            }
         });
+
+        $("#Salesform").validate({
+            errorPlacement: function (error, element) {
+                if(element.hasClass('amounts-are-select2') && element.next('.select2-container').length) {
+                    error.insertAfter(element.next('.select2-container'));
+                }else {
+                    error.insertAfter(element);
+                }
+            },
+            rules: {
+                customer: "required",
+                due_date: "required"
+            },
+            messages: {
+                customer: "The customer field is required",
+                due_date: "The due date field is required"
+            }
+        });
     });
 
     $('#shipping_charge').click(function () {

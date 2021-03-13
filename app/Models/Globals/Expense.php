@@ -69,4 +69,8 @@ class Expense extends Model
             $comment->ExpenseItems()->delete();
         });
     }
+
+    public function PaymentMethod(){
+        return $this->belongsTo('App\Models\Globals\PaymentMethod','payment_method');
+    }
 }

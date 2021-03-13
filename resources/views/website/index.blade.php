@@ -13,7 +13,7 @@
                             @auth
                             <a href="{{url('/dashboard')}}" class="btn_hover agency_banner_btn wow fadeInLeft" data-wow-delay="0.5s">Dashboard</a>
                             @else
-                            <a href="{{url('/register')}}" class="btn_hover agency_banner_btn wow fadeInLeft" data-wow-delay="0.5s">Join Now</a>
+                            <a href="{{url('/register')}}" class="btn_hover agency_banner_btn wow fadeInLeft" data-wow-delay="0.5s" onclick="gtag_report_conversion_signup({{url('/register')}})">Join Now</a>
                             @endauth
                         </div>
                     </div>
@@ -401,16 +401,11 @@
                         @auth
                         <a href="{{url('/dashboard')}}" class="about_btn wow fadeInRight" data-wow-delay="0.4s">Dashboard</a>
                         @else
-                        <a href="{{url('/register')}}" class="about_btn wow fadeInRight" data-wow-delay="0.4s">Create your FREE account!</a>
+                        <a href="{{url('/register')}}" class="about_btn wow fadeInRight" data-wow-delay="0.4s" onclick="gtag_report_conversion_signup({{url('/register')}})">Create your FREE account!</a>
                         @endauth
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-    <script>
-
-    </script>
-
-@endsection
+endsection

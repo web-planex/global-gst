@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="box card">
-                    {!! Form::model($user,['url' => url('profile_update/'.$user->id),'method'=>'patch' ,'class' => 'form-horizontal','files'=>true]) !!}
+                    {!! Form::model($user,['url' => url('profile_update/'.$user->id),'method'=>'patch' ,'class' => 'form-horizontal','files'=>true, 'id'=>'ProfileForm']) !!}
                         @csrf
                         <h3>Personal Detail</h3>
                         <hr>
@@ -75,6 +75,32 @@
                     reader.onloadend = function(){
                         $("#imagePreview").css("background-image", "url("+this.result+")");
                     }
+                }
+            });
+
+            $("#ProfileForm").validate({
+                errorPlacement: function (error, element) {
+                    if(element.hasClass('amounts-are-select2') && element.next('.select2-container').length) {
+                        error.insertAfter(element.next('.select2-container'));
+                    }else {
+                        error.insertAfter(element);
+                    }
+                },
+                rules: {
+                    name: "required",
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    mobile: "required"
+                },
+                messages: {
+                    name: "The customer field is required",
+                    email: {
+                        required: "The email field is required",
+                        email: "Please enter a valid email address"
+                    },
+                    mobile: "The mobile field is required",
                 }
             });
         });

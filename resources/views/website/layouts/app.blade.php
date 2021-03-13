@@ -71,6 +71,24 @@
     </script>
     <!-- End Google Search Rating Code -->
     @endif
+
+    <!-- Global site tag (gtag.js) - Google Ads: 1042132981 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1042132981"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'AW-1042132981');
+    </script>
+
+    <!--------------- Phone Snippet --------------->
+    <script>
+        gtag('config', 'AW-1042132981/Ntw5CIrtw_sBEPXf9vAD', {
+            'phone_conversion_number': '09724382401'
+        });
+    </script>
+
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="104">
 <div id="preloader">
@@ -145,7 +163,7 @@
                         <li class="nav-item">
                             <img src="{{url('website/img/flag.png')}}" alt="">
                             <div class="callUp-box">
-                                <b>Call Us</b>: +91-281-2331006, +91-9724382401
+                                <b>Call Us</b>: <a href="tel:+912812331006" style="color: #000000;"> +91-281-2331006</a>, <a href="tel:+919724382401" style="color: #000000;">+91-9724382401</a>
                                 <p>Mon - Fri 10:00 AM - 7:30 PM</p>
                             </div>
                         </li>
@@ -154,7 +172,7 @@
                     <a href="{{url('/dashboard')}}" class="about_btn sign_in_btn wow fadeInLeft" data-wow-delay="0.3s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;">Dashboard</a>
                     @else
                     <a href="{{url('/login')}}" class="about_btn white_btn wow fadeInLeft" data-wow-delay="0.3s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;">Login</a>
-                    <a href="{{url('/register')}}" class="about_btn sign_in_btn wow fadeInRight" data-wow-delay="0.4s" style="visibility: visible; animation-delay: 0.4s; animation-name: fadeInRight;">Register</a>
+                    <a href="{{url('/register')}}" class="about_btn sign_in_btn wow fadeInRight" data-wow-delay="0.4s" style="visibility: visible; animation-delay: 0.4s; animation-name: fadeInRight;" onclick="gtag_report_conversion_signup({{url('/register')}})">Register</a>
                     @endauth
                 </div>
             </div>
@@ -281,12 +299,65 @@
                         $('#error').hide().html('Opps! There is something wrong. Please try again').fadeIn('slow').delay(5000).hide(1);
                     }else{
                         $('#error').hide();
-                        $('#success').hide().html('Your message succesfully sent!').fadeIn('slow').delay(5000).hide(1);
+                        $('#success').hide().html('Your message successfully sent!').fadeIn('slow').delay(5000).hide(1);
                     }
+                    gtag_report_conversion({{url('/')}});
                 }
             });
         }
     </script>
+
+    <!---------------------FOR CONTACT--------------------->
+    <!-- Event snippet for Contact Form conversion page In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
+    <script>
+        function gtag_report_conversion(url) {
+            var callback = function () {
+                if (typeof(url) != 'undefined') {
+                    window.location = url;
+                }
+            };
+            gtag('event', 'conversion', {
+                'send_to': 'AW-1042132981/C-rLCJWSo_YBEPXf9vAD',
+                'event_callback': callback
+            });
+            return false;
+        }
+    </script>
 @endif
+
+<!---------------------FOR SIGNUP--------------------->
+<!-- Event snippet for Sign-up conversion page In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
+<script>
+    function gtag_report_conversion_signup(url) {
+        var callback = function () {
+            if (typeof(url) != 'undefined') {
+                window.location = url;
+            }
+        };
+        gtag('event', 'conversion', {
+            'send_to': 'AW-1042132981/WlZqCK_rw_sBEPXf9vAD',
+            'event_callback': callback
+        });
+        return false;
+    }
+</script>
+
+<!---------------------FOR CHAT--------------------->
+<!-- Event snippet for Contact on Chat conversion page In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
+<script>
+    function gtag_report_conversion_chat(url) {
+        url = "{{url('/')}}";
+        var callback = function () {
+            if (typeof(url) != 'undefined') {
+                window.location = url;
+            }
+        };
+        gtag('event', 'conversion', {
+            'send_to': 'AW-1042132981/sQJDCMrU1PsBEPXf9vAD',
+            'event_callback': callback
+        });
+        return false;
+    }
+</script>
 </body>
 </html>

@@ -140,7 +140,13 @@
                                             </div>
                                         </td>
                                         <td class="col_estimate_no">{{$list['estimate_number']}}</td>
-                                        <td class="col_customer">{{$list['Payee']['name']}}</td>
+                                        <td class="col_customer">
+                                            @php
+                                                $payee = \App\Models\Globals\Payees::where('id',$list['customer_id'])->first();
+                                                $pay_user = \App\Models\Globals\Customers::where('id',$payee['type_id'])->first();
+                                            @endphp
+                                            {{$pay_user['display_name']}}
+                                        </td>
                                         <td class="col_estimate_date">{{date('d F Y', strtotime($list['estimate_date']))}}</td>
                                         <td class="col_due_date">{{date('d F Y', strtotime($list['expiry_date']))}}</td>
                                         <td>

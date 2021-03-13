@@ -298,7 +298,7 @@
                             <td style="padding:8px 0px;border-bottom:solid 1px #444444;" valign="bottom">
                                 <table  width="100%" border="0" cellspacing="0" cellpadding="0" align="left">
                                     <tr>
-                                        <td style="padding-left:15px"><strong>Payment Mode : </strong>{{App\Models\Globals\Expense::$payment_method[$expense['payment_method']]}}</td>
+                                        <td style="padding-left:15px"><strong>Payment Mode : </strong>{{$expense['PaymentMethod']['method_name']}}</td>
                                     </tr>
                                 </table>
                             </td>

@@ -8,6 +8,7 @@ use App\Models\Globals\Employees;
 use App\Models\Globals\Expense;
 use App\Models\Globals\Payees;
 use App\Models\Globals\PaymentAccount;
+use App\Models\Globals\PaymentMethod;
 use App\Models\Globals\States;
 use App\Models\Globals\Suppliers;
 use App\Models\Globals\CompanySettings;
@@ -102,7 +103,23 @@ class ExpenseController extends Controller
     public function create(){
         $user = Auth::user();
         $data['menu'] = 'Expense';
-        $payees = payees::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
+//        $payees = payees::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
+        $payees = payees::where('user_id',$user->id)->where('company_id',$this->Company())->get();
+        $exp_user = array();
+        foreach ($payees as $pay){
+            if($pay['type']==1){
+                $pay_user = Suppliers::where('id',$pay['type_id'])->first();
+                $exp_user[$pay->id] = $pay_user['display_name'];
+
+            }elseif ($pay['type']==2){
+                $pay_user = Employees::where('id',$pay['type_id'])->first();
+                $exp_user[$pay->id] = $pay_user['display_name'];
+            }else{
+                $pay_user = Customers::where('id',$pay['type_id'])->first();
+                $exp_user[$pay->id] = $pay_user['display_name'];
+            }
+        }
+
         $data['taxes'] = Taxes::where('status', 1)->get();
         $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
         $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
@@ -131,12 +148,13 @@ class ExpenseController extends Controller
 //        return $final_tax_arr;
 
         $data['all_taxes'] = Taxes::where('status', 1)->pluck('tax_name', 'id')->toArray();
-        $data['payees'] = $payees;
+        $data['payees'] =  $exp_user;
         $data['products'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->get();
         $data['first_product'] = Product::where('user_id',$user->id)->where('company_id',$this->Company())->where('status',1)->first();
         $data['states'] = States::orderBy('state_name','ASC')->pluck('state_name','id');
         $data['expense_types'] = ExpenseType::where('user_id',$user->id)->where('company_id',$this->Company())->get();
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
+        $data['payment_method'] = PaymentMethod::where('user_id',$user->id)->pluck('method_name','id');
         return view('globals.expense.create',$data);
     }
 
@@ -217,7 +235,24 @@ class ExpenseController extends Controller
             $data['expense']['file_ext'] = $file_ext[1];
         }
         $data['expense_items'] = ExpenseItems::where('expense_id',$id)->get()->toArray();
-        $data['payees'] = payees::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
+//        $data['payees'] = payees::where('user_id',$user->id)->where('company_id',$this->Company())->pluck('name','id')->toArray();
+
+        $payees = payees::where('user_id',$user->id)->where('company_id',$this->Company())->get();
+        $exp_user = array();
+        foreach ($payees as $pay){
+            if($pay['type']==1){
+                $pay_user = Suppliers::where('id',$pay['type_id'])->first();
+                $exp_user[$pay->id] = $pay_user['display_name'];
+
+            }elseif ($pay['type']==2){
+                $pay_user = Employees::where('id',$pay['type_id'])->first();
+                $exp_user[$pay->id] = $pay_user['display_name'];
+            }else{
+                $pay_user = Customers::where('id',$pay['type_id'])->first();
+                $exp_user[$pay->id] = $pay_user['display_name'];
+            }
+        }
+        $data['payees'] = $exp_user;
         $data['taxes'] = Taxes::where('status', 1)->get();
         $taxes_without_cess = Taxes::where('is_cess', 0)->where('status', 1)->get();
         $taxes_with_cess = Taxes::where('is_cess', 1)->where('status', 1)->get();
@@ -255,7 +290,7 @@ class ExpenseController extends Controller
             $exp_user = Customers::where('id',$payee['type_id'])->first();
             $data['expense']['exp_user_state'] = $exp_user['billing_state'];
         }
-
+        $data['payment_method'] = PaymentMethod::where('user_id',$user->id)->pluck('method_name','id');
         return view('globals.expense.create',$data);
     }
 
@@ -381,7 +416,8 @@ class ExpenseController extends Controller
         $new_payee = Payees::create($payee);
 
         $data['id'] = $new_payee['id'];
-        $data['name'] = $new_payee['name'];
+//        $data['name'] = $new_payee['name'];
+        $data['name'] = $user_type['display_name'];
         $data['customer_id'] = $user_type['id'];
         $address = '';
         if($payeeValue['user_type']==3 && isset($request['section']) && !empty($request['section']) && $request['section'] == 'estimate'){
@@ -484,7 +520,8 @@ class ExpenseController extends Controller
             if($payee['type']==1){
                 $data['user'] = Suppliers::where('id',$payee['type_id'])->first();
                 $state = States::where('id',$data['user']['state'])->first();
-                $data['user']['billing_name'] = $data['user']['first_name'].' '.$data['user']['last_name'];
+//                $data['user']['billing_name'] = $data['user']['first_name'].' '.$data['user']['last_name'];
+                $data['user']['billing_name'] = $data['user']['display_name'];
                 $data['user']['state'] = $state['state_name'];
                 $data['user']['state_code'] = $state['state_number'];
                 $data['user']['billing_state'] = $state['state_name'];
@@ -501,7 +538,8 @@ class ExpenseController extends Controller
             }elseif($payee['type']==2){
                 $data['user'] = Employees::where('id',$payee['type_id'])->first();
                 $state = States::where('id',$data['user']['state'])->first();
-                $data['user']['billing_name'] = $data['user']['first_name'].' '.$data['user']['last_name'];
+//                $data['user']['billing_name'] = $data['user']['first_name'].' '.$data['user']['last_name'];
+                $data['user']['billing_name'] = $data['user']['display_name'];
                 $data['user']['state'] = $state['state_name'];
                 $data['user']['billing_state'] = $state['state_name'];
                 $data['user']['billing_state_code'] = $state['state_number'];
@@ -519,6 +557,7 @@ class ExpenseController extends Controller
                 $data['user'] = Customers::where('id',$payee['type_id'])->first();
                 $state = States::where('id',$data['user']['billing_state'])->first();
                 $shipping_state = States::where('id',$data['user']['shipping_state'])->first();
+                $data['user']['billing_name'] = $data['user']['display_name'];
                 $data['user']['state'] = $state['state_name'];
                 $data['user']['billing_state'] = $state['state_name'];
                 $data['user']['shipping_state'] = $shipping_state['state_name'];

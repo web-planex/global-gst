@@ -139,7 +139,13 @@
                                         </td>
                                         <td class="col_invoice_no">{{$list['invoice_number']}}</td>
                                         <td class="col_credit_note_no">{{$list['credit_note_number']}}</td>
-                                        <td class="col_customer">{{$list['Payee']['name']}}</td>
+                                        <td class="col_customer">
+                                            @php
+                                                $payee = \App\Models\Globals\Payees::where('id',$list['customer_id'])->first();
+                                                $pay_user = \App\Models\Globals\Customers::where('id',$payee['type_id'])->first();
+                                            @endphp
+                                            {{$pay_user['display_name']}}
+                                        </td>
                                         <td class="col_invoice_date">{{date('d F Y', strtotime($list['invoice_date']))}}</td>
                                         <td class="col_due_date">{{date('d F Y', strtotime($list['due_date']))}}</td>
                                         <td class="col_total_tax">Rs. {{$list['tax_amount']}}</td>

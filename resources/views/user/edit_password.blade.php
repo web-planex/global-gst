@@ -18,7 +18,7 @@
                     <div class="form-row">
                         <div class="form-group mb-3 col-md-6">
                             <label for="old_password">Old Password <span class="text-danger">*</span></label>
-                            <input type="password" id="password" name="old_password" class="form-control" >
+                            <input type="password" id="old_password" name="old_password" class="form-control" >
                             @error('old_password')
                             <span class="text-danger">
                                 <strong>{{ $message }}</strong>
@@ -56,5 +56,21 @@
     </div>
 @section('page_confirmation_script')
 <script src="{{asset('js/page_confirmation_script.js')}}"></script>
+    <script>
+        $().ready(function() {
+            $("#passwordForm").validate({
+                rules: {
+                    old_password: "required",
+                    password: "required",
+                    password_confirmation: "required",
+                },
+                messages: {
+                    old_password: "The old password field is required",
+                    password: "The new password field is required",
+                    password_confirmation: "The confirm password field is required",
+                }
+            });
+        });
+    </script>
 @endsection
 @endsection

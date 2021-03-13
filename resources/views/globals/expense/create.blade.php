@@ -38,7 +38,7 @@
                         <div class="col-md-6">
                             <div class="from-group mb-3">
                                 <label for='status'>Status <span class="text-danger">*</span></label>
-                                {!! Form::select('status', [null => 'Select Status'] + \App\Models\Globals\Expense::$expense_status, null, ['class' => 'form-control amounts-are-select2 custom-select', 'id' => 'status']) !!}
+                                {!! Form::select('status', [null => 'Select Status'] + \App\Models\Globals\Expense::$expense_status, null, ['class' => 'form-control amounts-are-select2', 'id' => 'status']) !!}
                                 @error('status')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
@@ -79,7 +79,7 @@
                         <div class="col-md-4">
                             <div class="form-group mb-3">
                                 <label for="payment_method">Payment method</label>
-                                {!! Form::select('payment_method', \App\Models\Globals\Expense::$payment_method, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method']) !!}
+                                {!! Form::select('payment_method', $payment_method, null, ['class' => 'form-control amounts-are-select2', 'id' => 'payment_method']) !!}
                                 @error('payment_method')
                                 <span class="text-danger">
                                     <strong>{{ $message }}</strong>
@@ -544,6 +544,13 @@
         });
 
         $("#formExpense").validate({
+            errorPlacement: function (error, element) {
+                if(element.hasClass('amounts-are-select2') && element.next('.select2-container').length) {
+                    error.insertAfter(element.next('.select2-container'));
+                }else {
+                    error.insertAfter(element);
+                }
+            },
             rules: {
                 expense_date: "required",
                 status: "required",
