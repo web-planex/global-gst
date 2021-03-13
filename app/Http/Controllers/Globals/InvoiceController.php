@@ -531,7 +531,7 @@ class InvoiceController extends Controller
             $shipping_state = States::where('id',$data['user']['shipping_state'])->first();
             $data['user']['state'] = $state['state_name'];
             $data['user']['billing_state_code'] = $state['state_number'];
-            $data['user']['billing_name'] = $data['user']['display_name'];
+
 
             $data['user']['shipping_state'] = $shipping_state['state_name'];
             $data['user']['shipping_state_code'] = $shipping_state['state_number'];

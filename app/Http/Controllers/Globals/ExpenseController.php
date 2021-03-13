@@ -521,7 +521,7 @@ class ExpenseController extends Controller
                 $data['user'] = Suppliers::where('id',$payee['type_id'])->first();
                 $state = States::where('id',$data['user']['state'])->first();
 //                $data['user']['billing_name'] = $data['user']['first_name'].' '.$data['user']['last_name'];
-                $data['user']['billing_name'] = $data['user']['display_name'];
+                ;
                 $data['user']['state'] = $state['state_name'];
                 $data['user']['state_code'] = $state['state_number'];
                 $data['user']['billing_state'] = $state['state_name'];
@@ -539,7 +539,6 @@ class ExpenseController extends Controller
                 $data['user'] = Employees::where('id',$payee['type_id'])->first();
                 $state = States::where('id',$data['user']['state'])->first();
 //                $data['user']['billing_name'] = $data['user']['first_name'].' '.$data['user']['last_name'];
-                $data['user']['billing_name'] = $data['user']['display_name'];
                 $data['user']['state'] = $state['state_name'];
                 $data['user']['billing_state'] = $state['state_name'];
                 $data['user']['billing_state_code'] = $state['state_number'];
@@ -557,7 +556,7 @@ class ExpenseController extends Controller
                 $data['user'] = Customers::where('id',$payee['type_id'])->first();
                 $state = States::where('id',$data['user']['billing_state'])->first();
                 $shipping_state = States::where('id',$data['user']['shipping_state'])->first();
-                $data['user']['billing_name'] = $data['user']['display_name'];
+                ;
                 $data['user']['state'] = $state['state_name'];
                 $data['user']['billing_state'] = $state['state_name'];
                 $data['user']['shipping_state'] = $shipping_state['state_name'];
