@@ -118,7 +118,7 @@ class EstimateController extends Controller
 
         $payees = Payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->get();
         $exp_user = array();
-        $exp_user[' '] = 'Select Customer';
+        $exp_user[''] = 'Select Customer';
         foreach ($payees as $pay){
             $pay_user = Customers::where('id',$pay['type_id'])->first();
             $exp_user[$pay->id] = $pay_user['display_name'];
@@ -268,7 +268,7 @@ class EstimateController extends Controller
 //        $data['payees'] = payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->pluck('name','id')->prepend('Select Customer','')->toArray();
         $payees = Payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->get();
         $exp_user = array();
-        $exp_user[' '] = 'Select Customer';
+        $exp_user[''] = 'Select Customer';
         foreach ($payees as $pay){
             $pay_user = Customers::where('id',$pay['type_id'])->first();
             $exp_user[$pay->id] = $pay_user['display_name'];

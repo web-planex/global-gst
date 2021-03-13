@@ -124,7 +124,7 @@ class BillController extends Controller
 
         $payees = Payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->get();
         $exp_user = array();
-        $exp_user[' '] = 'Select Payee / Vendor';
+        $exp_user[''] = 'Select Payee / Vendor';
         foreach ($payees as $pay){
             $pay_user = Customers::where('id',$pay['type_id'])->first();
             $exp_user[$pay->id] = $pay_user['display_name'];
@@ -234,7 +234,7 @@ class BillController extends Controller
 //        $data['payees'] = Payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->pluck('name','id')->prepend('Select Payee / Vendor','')->toArray();
         $payees = Payees::where('user_id',$user->id)->where('company_id',$this->Company())->where('type',3)->get();
         $exp_user = array();
-        $exp_user[' '] = 'Select Payee / Vendor';
+        $exp_user[''] = 'Select Payee / Vendor';
         foreach ($payees as $pay){
             $pay_user = Customers::where('id',$pay['type_id'])->first();
             $exp_user[$pay->id] = $pay_user['display_name'];
