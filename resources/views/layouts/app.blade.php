@@ -173,6 +173,14 @@
                                 @endforeach
                             </ul>
                         </li>
+
+                        <li>
+                            <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-file-text"></i>
+                                <span class="hide-menu">Templates</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="{{url('/invoice-template')}}">Invoice Template</a></li>
+                            </ul>
+                        </li>
                     @else
                         <li>
                             <a class="waves-effect waves-dark" href="{{ url('admin')}}"><i class="fa fa-home"></i><span class="hide-menu">Dashboard</span></a>
@@ -266,7 +274,7 @@
             $('#svg_fullscreen').css('display','block');
             $('#svg_exit_fullscreen').css('display','none');
         }
-    }  
+    }
     $(document).ready(function() {
         @if(Session::get('company_selection'))
             $('#companySelectionModal').modal('show');

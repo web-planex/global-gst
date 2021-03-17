@@ -474,9 +474,12 @@ class EstimateController extends Controller
         $data['company_name'] = $company['company_name'];
         $data['name']  = 'Estimate';
         $data['content'] = 'This is test pdf.';
+
+//        return view('globals.estimate.pdf_estimate_2',$data);
+
         $pdf = new WKPDF($this->common_controller->globalPdfOption());
-//        return $data;
-        $pdf->addPage(view('globals.estimate.pdf_estimate',$data));
+        $pdf_template = $data['company']['pdf_template'] == 1 ?'':'_'.'2';
+        $pdf->addPage(view('globals.estimate.pdf_estimate'.$pdf_template,$data));
         if($request->output == 'download') {
             if (!$pdf->send('estimate.pdf')) {
                 $error = $pdf->getError();

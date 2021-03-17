@@ -32,7 +32,17 @@
             <td align="center" valign="top" width="38%" style="border-top:solid 1px #444444; padding: 10px 0px 0px;">
                 <img src="{{url($company['company_logo'])}}" alt="" width="auto" height="100" style="max-height:100px;"/>
             </td>
-            <td align="center" valign="top" width="38%" style="border-top:solid 1px #444444;border-right:solid 1px #444444;padding: 10px 0px 0px;"></td>
+            <td align="right" valign="top" width="38%" style="border-top:solid 1px #444444;border-right:solid 1px #444444;padding: 10px 0px 0px;">
+                @if($company['fssai_lic_number'] != '')
+                    <strong> {{($company['fssai_lic_number'] != '') ? 'FSSAI LIC NO. : '.$company['fssai_lic_number'] : '' }}&nbsp;&nbsp;</strong>
+                @endif
+                @if($company['iec_code'] != '')
+                    <div><strong style="font-size:16px;">{{($company['iec_code'] != '') ? 'IEC CODE : '.$company['iec_code'] : '' }}&nbsp;&nbsp;</strong></div>
+                @endif
+                @if($company['cin_number'] != '')
+                    <div><strong style="font-size:16px;"> {{($company['cin_number'] != '') ? 'CIN : '.$company['cin_number'] : '' }}&nbsp;&nbsp;</strong></div>
+                @endif
+            </td>
         </tr>
         <tr>
             <td colspan="3" style="border-left:solid 1px #444444;border-right:solid 1px #444444;line-height:25px; padding-bottom: 10px;" align="center">

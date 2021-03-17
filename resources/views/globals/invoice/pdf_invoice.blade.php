@@ -28,22 +28,31 @@
             <td align="left" valign="top" width="31%" style="border-top:solid 1px #444444;border-left:solid 1px #444444;font-size:22px; padding: 8px 0px 0px 5px;">
                 <h2>&nbsp;{{$menu}}</h2>
                 &nbsp;&nbsp;<strong style="font-size:16px;">GSTIN : {{$company['gstin']}}</strong>
-                @if($company['iec_code'] != '')
-                <div>&nbsp;&nbsp;<strong style="font-size:16px;">{{($company['iec_code'] != '') ? 'IEC CODE : '.$company['iec_code'] : '' }}</strong></div>
-                @endif 
-                @if($company['cin_number'] != '')
-                <div>&nbsp;<strong style="font-size:16px;"> {{($company['cin_number'] != '') ? 'CIN : '.$company['cin_number'] : '' }}</strong></div>
+                @if($menu != 'Credit Note')
+                    @if($company['iec_code'] != '')
+                    <div>&nbsp;&nbsp;<strong style="font-size:16px;">{{($company['iec_code'] != '') ? 'IEC CODE : '.$company['iec_code'] : '' }}</strong></div>
+                    @endif
                 @endif
+
             </td>
             <td align="center" valign="top" width="38%" style="border-top:solid 1px #444444; padding: 10px 0px 0px;">
                 <img src="{{url($company['company_logo'])}}" alt="" width="auto" height="100" style="max-height:100px;"/>
             </td>
             <td align="right" width="31%" valign="top" style="font-size:18px;border-top:solid 1px #444444;border-right:solid 1px #444444;line-height:22px; padding: 8px 5px 0px 0px;">
-                <strong>@if($menu != 'Credit Note') {{$invoice_type}}&nbsp;@endif</strong>
+                @if($menu != 'Credit Note')<strong> {{$invoice_type}}&nbsp;</strong>@endif
                 @if($company['fssai_lic_number'] != '')
-                    <br><br><br>
+                    @if($menu != 'Credit Note')
+                    <br><br><br>@endif
                     <strong style="font-size:16px;"> {{($company['fssai_lic_number'] != '') ? 'FSSAI LIC NO. : '.$company['fssai_lic_number'] : '' }}</strong>
-                @endif 
+                @endif
+                @if($company['cin_number'] != '')
+                    <div>&nbsp;<strong style="font-size:16px;"> {{($company['cin_number'] != '') ? 'CIN : '.$company['cin_number'] : '' }}</strong></div>
+                @endif
+                @if($menu == 'Credit Note')
+                    @if($company['iec_code'] != '')
+                        <div>&nbsp;&nbsp;<strong style="font-size:16px;">{{($company['iec_code'] != '') ? 'IEC CODE : '.$company['iec_code'] : '' }}</strong></div>
+                    @endif
+                @endif
             </td>
         </tr>
         <tr>
@@ -98,7 +107,7 @@
             </td>
 
             <td align="left" style="padding:0 5px;border-left: solid 1px #444444;border-right: solid 1px #444444;line-height:30px;">&nbsp;&nbsp;Place of Supply:
-                <strong>{{$invoice['place_of_supply']}}</strong>
+                <strong>{{$company['city']}}</strong>
             </td>
         </tr>
     </table>
@@ -267,7 +276,6 @@
                                 {{number_format($item['amount'], 2)}} &nbsp;
                                 @php $maintotal = $maintotal + $item['amount'] @endphp
                             @endif
-
                         </span>
                     </td>
                     <td style="display:none;">
@@ -384,11 +392,11 @@
                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                         <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Total Amount before Tax <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></td>
-                        <td align="right" height="35" style="border-right:0px;border-bottom:solid 1px #444444;">{{$invoice['amount_before_tax']}}&nbsp;&nbsp;</td>
+                        <td align="right" height="35" style="border-right:0px;border-bottom:solid 1px #444444;">{{number_format($invoice['amount_before_tax'],2)}}&nbsp;&nbsp;</td>
                     </tr>
                     <tr>
                         <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Total Tax Amount <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></td>
-                        <td align="right" height="35" style="border-right:0px;border-bottom:solid 1px #444444;">{{$invoice['tax_amount']}}&nbsp;&nbsp;</td>
+                        <td align="right" height="35" style="border-right:0px;border-bottom:solid 1px #444444;">{{number_format($invoice['tax_amount'],2)}}&nbsp;&nbsp;</td>
                     </tr>
 
                     @foreach($all_tax_labels as $tax)
@@ -436,11 +444,11 @@
                     </tr>
                     <tr>
                         <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Shipping Charge <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></td>
-                        <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">{{$invoice['shipping_charge']==1 ? $invoice['shipping_charge_amount'].'' : '-' }}&nbsp;&nbsp;</td>
+                        <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">{{$invoice['shipping_charge']==1 ? number_format($invoice['shipping_charge_amount'],2).'' : '-' }}&nbsp;&nbsp;</td>
                     </tr>
                     <tr>
                         <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Total Amount After Tax <span style="font-family: DejaVu Sans; sans-serif;">(&#8377;)</span></td>
-                        <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">{{$invoice['total']}}&nbsp;&nbsp;</td>
+                        <td align="right" style="border-right:0px;border-bottom:solid 1px #444444;">{{number_format($invoice['total'],2)}}&nbsp;&nbsp;</td>
                     </tr>
                     <tr>
                         <td align="left" height="35" style="border-right:solid 1px #444444;border-bottom:solid 1px #444444;">&nbsp;&nbsp;Round Off</td>

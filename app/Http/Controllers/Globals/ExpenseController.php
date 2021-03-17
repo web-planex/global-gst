@@ -612,9 +612,12 @@ class ExpenseController extends Controller
         }
         $data['name'] = 'Expense Voucher';
         $data['content'] = 'This is test pdf.';
+
+//        return view('globals.expense.pdf_expense_2',$data);
+
         $pdf = new WKPDF($this->common_controller->globalPdfOption());
-//        return $data;
-        $pdf->addPage(view('globals.expense.pdf_expense',$data));
+        $pdf_template = $data['company']['pdf_template'] == 1 ?'':'_'.'2';
+        $pdf->addPage(view('globals.expense.pdf_expense'.$pdf_template,$data));
 //        return View('globals.expense.pdf_expense',$data);
         if($request->output == 'download') {
             if (!$pdf->send('expense_voucher.pdf')) {

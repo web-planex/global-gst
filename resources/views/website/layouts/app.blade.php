@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="{{ asset('website/vendors/scroll/jquery.mCustomScrollbar.min.css') }}">
     <link rel="stylesheet" href="{{ asset('website/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('website/css/responsive.css') }}">
+    <link rel="stylesheet" href="{{ URL::asset('assets/font-awesome/css/font-awesome.min.css')}}">
     <script src="{{ asset('website/js/jquery-3.2.1.min.js') }}"></script>
     <script src="{{ asset('assets/dist/js/jquery.validate.js') }}"></script>
     <style>
@@ -285,6 +286,7 @@
         });
 
         function SendMail(name, email, subject, message) {
+            $('#contact-btn').html('<i class="fa fa-spinner fa-spin mr-2"></i> Message Sending');
             $.ajax({
                 url: '{{url('send_contact_mail')}}',
                 type: 'POST',
@@ -297,11 +299,13 @@
                     if(result == 0){
                         $('#success').hide();
                         $('#error').hide().html('Opps! There is something wrong. Please try again').fadeIn('slow').delay(5000).hide(1);
+                        $('#contact-btn').html('Send Message');
                     }else{
                         $('#error').hide();
                         $('#success').hide().html('Your message successfully sent!').fadeIn('slow').delay(5000).hide(1);
+                        $('#contact-btn').html('Send Message');
                     }
-                    gtag_report_conversion({{url('/')}});
+                    gtag_report_conversion();
                 }
             });
         }
@@ -313,7 +317,7 @@
         function gtag_report_conversion(url) {
             var callback = function () {
                 if (typeof(url) != 'undefined') {
-                    window.location = url;
+                    // window.location = url;
                 }
             };
             gtag('event', 'conversion', {
@@ -349,7 +353,7 @@
         url = "{{url('/')}}";
         var callback = function () {
             if (typeof(url) != 'undefined') {
-                window.location = url;
+                // window.location = url;
             }
         };
         gtag('event', 'conversion', {

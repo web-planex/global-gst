@@ -172,6 +172,9 @@ Route::get('download-debit-notes-pdf-zip', 'Globals\DebitNoteController@download
 
 Route::get('send_mail', 'Globals\DashboardController@send_mail')->name('send-mail');
 
+Route::post('update-template', 'Globals\InvoiceSettingController@invoice_update_template')->name('invoice-template');
+Route::get('invoice-template', 'Globals\InvoiceSettingController@invoice_template')->name('invoice-template');
+
 
 //--------------------FOR ADMIN SIDE--------------------
 Route::group(['prefix' => 'admin','admin/home', 'guard' => 'admin'], function() {

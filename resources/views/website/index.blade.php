@@ -227,7 +227,7 @@
             <div class="row mb_30">
                 <div class="col-lg-4 col-sm-6">
                     <div class="s_pricing-item">
-                        <img class="shape_img" src="{{url('website/img/saas/price_line1.png')}}" alt="">
+{{--                        <img class="shape_img" src="{{url('website/img/saas/price_line1.png')}}" alt="">--}}
                         <h5 class="f_p f_600 f_size_20 t_color mb-0 mt_40">STARTUP</h5>
                         <div class="price f_size_40 f_p f_700">Free <br><sub class="f_400 f_size_16"> &nbsp;</sub></div>
                         <ul class="list-unstyled mt_30">
@@ -240,7 +240,7 @@
                 </div>
                 <div class="col-lg-4 col-sm-6">
                     <div class="s_pricing-item">
-                        <img class="shape_img" src="{{url('website/img/saas/price_line2.png')}}" alt="">
+{{--                        <img class="shape_img" src="{{url('website/img/saas/price_line2.png')}}" alt="">--}}
                         <div class="tag_label">Popular</div>
                         <h5 class="f_p f_600 f_size_20 t_color mb-0 mt_40">MEDIUM</h5>
                         <div class="price f_size_40 f_p f_700">Free For 90 <sub class="f_400 f_size_16"> days.</sub></div>
@@ -254,7 +254,7 @@
                 </div>
                 <div class="col-lg-4 col-sm-6">
                     <div class="s_pricing-item">
-                        <img class="shape_img" src="{{url('website/img/saas/price_line3.png')}}" alt="">
+{{--                        <img class="shape_img" src="{{url('website/img/saas/price_line3.png')}}" alt="">--}}
                         <h5 class="f_p f_600 f_size_20 t_color mb-0 mt_40">ADVANCED</h5>
                         <div class="price f_size_40 f_p f_700">Free For 90 <sub class="f_400 f_size_16"> days.</sub></div>
                         <ul class="list-unstyled mt_30">
@@ -336,7 +336,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn_three">Send Message</button>
+                            <button type="submit" class="btn_three" id="contact-btn">Send Message</button>
                         {!! Form::close() !!}
                         <div id="success">Your message succesfully sent!</div>
                         <div id="error">Opps! There is something wrong. Please try again</div>
@@ -408,4 +408,4 @@
             </div>
         </div>
     </section>
-endsection
+@endsection

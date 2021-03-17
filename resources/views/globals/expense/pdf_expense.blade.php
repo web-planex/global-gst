@@ -29,7 +29,15 @@
                     <img src="{{url($company['company_logo'])}}" alt="" width="auto" height="100" style="max-height:100px;"/>
                 </td>
                 <td align="right" width="31%" valign="top" style="font-size:18px;border-top:solid 1px #444444;border-right:solid 1px #444444;line-height:22px; padding: 8px 5px 0px 0px;">
-                    <!--<strong>Original&nbsp;&nbsp;</strong>-->
+                    @if($company['iec_code'] != '')
+                        <div><strong style="font-size:16px;">{{($company['iec_code'] != '') ? 'IEC CODE : '.$company['iec_code'] : '' }}</strong></div>
+                    @endif
+                    @if($company['cin_number'] != '')
+                        <div><strong style="font-size:16px;"> {{($company['cin_number'] != '') ? 'CIN : '.$company['cin_number'] : '' }}</strong></div>
+                    @endif
+                    @if($company['fssai_lic_number'] != '')
+                        <div><strong style="font-size:16px;"> {{($company['fssai_lic_number'] != '') ? 'FSSAI LIC NO. : '.$company['fssai_lic_number'] : '' }}</strong></div>
+                    @endif
                 </td>
             </tr>
             <tr>

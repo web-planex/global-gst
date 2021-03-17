@@ -490,10 +490,14 @@ class DebitNoteController extends Controller
         $data['invoice'] = Invoice::select('invoice_number')->where('id',$data['debit_note']['Invoice']['id'])->first();
 
         $data['name'] = 'Debit Note';
+
+//        return view('globals.debit-note.pdf_debit_note_2',$data);
+
         $pdf = new WKPDF($this->common_controller->globalPdfOption());
         //return $data;
-        $pdf->addPage(view('globals.debit-note.pdf_debit_note',$data));
-//        return View('globals.debit-note.pdf_debit_note',$data);
+        $pdf_template = $data['company']['pdf_template'] == 1 ?'':'_'.'2';
+        $pdf->addPage(view('globals.debit-note.pdf_debit_note'.$pdf_template,$data));
+
         if($request->output == 'download') {
             if (!$pdf->send('debit_note.pdf')) {
                 $error = $pdf->getError();
@@ -502,7 +506,7 @@ class DebitNoteController extends Controller
         } else {
             if (!$pdf->send()) {
                 $error = $pdf->getError();
-                Log::error($error);
+                return $error;
             }
         }
     }

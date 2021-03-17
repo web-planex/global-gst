@@ -32,7 +32,17 @@
             <td align="center" valign="top" width="38%" style="border-top:solid 1px #444444; padding: 10px 0px 0px;">
                 <img src="{{url($company['company_logo'])}}" alt="" width="auto" height="100" style="max-height:100px;"/>
             </td>
-            <td align="center" valign="top" width="38%" style="border-top:solid 1px #444444;border-right:solid 1px #444444;padding: 10px 0px 0px;"></td>
+            <td align="right" valign="top" width="38%" style="border-top:solid 1px #444444;border-right:solid 1px #444444;padding: 10px 0px 0px;">
+                @if($company['iec_code'] != '')
+                    &nbsp;&nbsp;<strong style="font-size:16px;">{{($company['iec_code'] != '') ? 'IEC CODE : '.$company['iec_code'] : '' }}&nbsp;&nbsp;</strong>
+                @endif
+                @if($company['cin_number'] != '')
+                    <br>&nbsp;&nbsp;<strong style="font-size:16px;">{{($company['cin_number'] != '') ? 'CIN : '.$company['cin_number'] : '' }}&nbsp;&nbsp;</strong>
+                @endif
+                @if($company['fssai_lic_number'] != '')
+                    <br>&nbsp;&nbsp;<strong>{{($company['fssai_lic_number'] != '') ? 'FSSAI LIC NO. : '.$company['fssai_lic_number'] : '' }}&nbsp;&nbsp;</strong>
+                @endif
+            </td>
         </tr>
         <tr>
             <td colspan="3" style="border-left:solid 1px #444444;border-right:solid 1px #444444;line-height:25px; padding-bottom: 10px;" align="center">
@@ -450,7 +460,7 @@
                     </tr>
                     <tr>
                         <td align="left" height="35" style="border-right:solid 1px #444444; border-bottom:solid 1px #444444; text-transform: uppercase;"><strong>&nbsp;&nbsp;Total</strong></td>
-                        <td align="right" style="border-right:0px; border-bottom:solid 1px #444444;"><strong>{{number_format(round($debit_note['total']))}}&nbsp;&nbsp;</strong></td>
+                        <td align="right" style="border-right:0px; border-bottom:solid 1px #444444;"><strong>{{number_format(round($debit_note['total']),2)}}&nbsp;&nbsp;</strong></td>
                     </tr>
                 </table>
             </td>

@@ -91,4 +91,18 @@ class InvoiceSettingController extends Controller
         \Session::flash('message', 'Company setting has been updated successfully!');
         return redirect('company-setting');
     }
+
+    public function invoice_template(Request $request){
+        $data['menu'] = 'Invoice Template';
+        $data['invoice_setting'] = CompanySettings::where('user_id',Auth::user()->id)->where('id',$this->Company())->first();
+        return view('globals.invoice-setting.select_template',$data);
+    }
+
+    public function invoice_update_template(Request $request){
+        $invoice_setting = CompanySettings::where('user_id',Auth::user()->id)->where('id',$this->Company())->first();
+        $input['pdf_template'] = $request['pdf_view'];
+        $invoice_setting->update($input);
+        \Session::flash('message', 'Invoice template has been changed successfully!');
+        return redirect()->back();
+    }
 }

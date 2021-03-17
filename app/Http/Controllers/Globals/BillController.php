@@ -501,9 +501,11 @@ class BillController extends Controller
         $data['payment_method'] = PaymentMethod::select('method_name')->where('id',$data['bill']['payment_method'])->first();
         $data['name'] = 'Bill';
 
+//        return View('globals.bills.pdf_bill_2',$data);
+
         $pdf = new WKPDF($this->common_controller->globalPdfOption());
-//        return $data;
-        $pdf->addPage(view('globals.bills.pdf_bill',$data));
+        $pdf_template = $data['company']['pdf_template'] == 1 ?'':'_'.'2';
+        $pdf->addPage(view('globals.bills.pdf_bill'.$pdf_template,$data));
         // return View('globals.bills.pdf_bill',$data);
         if($request->output == 'download') {
             if (!$pdf->send('bill.pdf')) {

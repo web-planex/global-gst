@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CompanySettings extends Model
 {
-     protected $fillable = ['user_id','company_name','company_logo','signature_image','pan_no','gstin',
+     protected $fillable = ['user_id','pdf_template','company_name','company_logo','signature_image','pan_no','gstin',
          'company_email','company_phone', 'website','street','city','state','pincode','country', 'iec_code',
          'cin_number','fssai_lic_number','invoice_prefix','invoice_number','credit_note_prefix',
          'credit_note_number','estimate_prefix','estimate_number','product_price_gst',

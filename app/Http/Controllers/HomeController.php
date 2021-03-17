@@ -33,7 +33,7 @@ class HomeController extends Controller
 
         $company_logo = url('assets/images/logo-light-icon_old.png');
         $customer_name = ucwords($request['name']);
-        $from_mail = env('MAIL_FROM_ADDRESS');
+        $from_mail = $request['email'];
         $subject = $request['subject'];
         $message = $request['message'];
 
@@ -45,7 +45,6 @@ class HomeController extends Controller
             'message' => $message,
         ];
         Mail::to('info@webplanex.com')->send(new ContactMail($data));
-
         if (Mail::failures()) {
             return 0;
         }else{

@@ -559,11 +559,13 @@ class InvoiceController extends Controller
         $data['company_name'] = $company['company_name'];
         $data['name']  = 'Sales Voucher';
         $data['content'] = 'This is test pdf.';
+//        return view('globals.invoice.pdf_invoice_2',$data);
+
         $pdf = new WKPDF($this->common_controller->globalPdfOption());
-
-//        return view('globals.invoice.pdf_invoice',$data);
-
-        $pdf->addPage(view('globals.invoice.pdf_invoice',$data));
+        $pdf_template = $data['company']['pdf_template'] == 1 ?'':'_'.'2';
+        $pdf->addPage(view('globals.invoice.pdf_invoice'.$pdf_template,$data));
+        
+        
         if($request->output == 'download') {
             if (!$pdf->send('sales_invoice_'.$data['invoice_type'].'.pdf')) {
                 $error = $pdf->getError();

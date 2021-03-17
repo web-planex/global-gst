@@ -79,7 +79,7 @@ return [
     ],
     'dkim_selector'=> 'mail',
     'dkim_domain'=> 'webplanex.com',
-    'dkim_private_key'=> 'file:///home/webplanexmain/get.webplanex.com/private_key.pem',
+    'dkim_private_key'=> 'file:///home/webplanexmain/gst.webplanex.com/private_key.pem',
     'dkim_algo'=> 'rsa-sha256',
     'pretend' => false,
     /*
