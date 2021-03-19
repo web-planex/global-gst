@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Auth;
 class PaymentTermsController extends Controller
 {
     public function __construct(){
-
-        $this->middleware('UserAccessRight');
+        $this->middleware('multiauth:web');
+//        $this->middleware('UserAccessRight');
     }
 
     public function index(Request $request){

@@ -9,10 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class EmailTemplatesController extends Controller
 {
-
     public function __construct(){
-
-        $this->middleware('UserAccessRight');
+        $this->middleware('multiauth:web');
+//        $this->middleware('UserAccessRight');
     }
 
     public function show($slug) {

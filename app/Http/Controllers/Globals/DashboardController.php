@@ -21,9 +21,9 @@ use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('UserAccessRight');
+    public function __construct(){
+        $this->middleware('multiauth:web');
+//        $this->middleware('UserAccessRight');
     }
 
     public function index()

@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Auth;
 class PayeeController extends Controller
 {
     public function __construct(){
-
-        $this->middleware('UserAccessRight');
+        $this->middleware('multiauth:web');
+//        $this->middleware('UserAccessRight');
     }
 
     public function index(Request $request){

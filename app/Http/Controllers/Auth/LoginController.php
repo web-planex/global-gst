@@ -32,8 +32,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/dashboard';
-    protected $redirectAfterLogout = '/login';
+    protected $redirectTo;
 
     /**
      * Create a new controller instance.
@@ -41,63 +40,39 @@ class LoginController extends Controller
      * @return void
      */
     public function __construct(){
-        $this->middleware('guest')->except('logout');
+//        $this->middleware('guest')->except('logout');
     }
 
-    protected function authenticated(Request $request, $user) {
-        if($user->role == 'admin'){
-            if($user->status == '1'){
-                return redirect('/admin');
-            }else{
-                session()->flush();
-                return redirect()->back()->withErrors(array('global' => "Sorry, Your Account Is In-Active Now."));
-            }
-        }else{
-            $company_count = CompanySettings::where('user_id',$user->id)->get()->count();
+    protected function credentials(Request $request) {
+        return (['email' => $request->email, 'password' => $request->password]);
+    }
 
-            if($company_count > 1) {
-                $session_company_selection = Session::get('company_selection');
-                if(empty($session_company_selection)) {
-                    session(['company_selection' => true]);
-                }
-            } else {
-                $session = Session::get('company');
-                if(empty($session)){
-                    $company = CompanySettings::where('user_id',$user->id)->orderBy('id','DESC')->first();
-                    if(!empty($company)){
-                        session(['company'=>$company['id']]);
-                    }
-                }
-            }
+    public function showLoginForm() {
+        if (Auth::guard('web')->check()) {
             return redirect('/dashboard');
+        } else {
+            return view('auth.login');
         }
     }
 
-    public function logout(Request $request)
-    {
-        $user = Auth::user();
-
-        $this->guard()->logout();
-        session()->flush();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        if ($response = $this->loggedOut($request)) {
-            return $response;
-        }
-
-        if($user['role'] == 'user'){
-            return $request->wantsJson()
-                ? new Response('', 204)
-                : redirect('/login')->withCookie(cookie('sb-login', '', -1));
+    public function redirectTo() {
+        $user_role = Auth::guard('web')->user();
+        if ($user_role['role'] == 'user') {
+            $this->redirectTo = '/dashboard';
         }else{
-            return $request->wantsJson()
-                ? new Response('', 204)
-                : redirect('admin/login')->withCookie(cookie('sb-login', '', -1));
+            Session::flush();
+            \Session::flash('error-message', 'Invalid credential');
+            $this->redirectTo = '/login';
         }
+        return $this->redirectTo;
+    }
 
+    public function guard() {
+        return Auth::guard('web');
+    }
 
+    public function logout() {
+        Auth::guard('web')->logout();
+        return redirect()->route('login');
     }
 }

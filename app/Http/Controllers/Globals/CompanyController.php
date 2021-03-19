@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Auth;
 class CompanyController extends Controller
 {
     public function __construct(){
-        $this->middleware('UserAccessRight');
+        $this->middleware('multiauth:web');
+//        $this->middleware('UserAccessRight');
         $this->common_controller = new CommonController();
     }
 

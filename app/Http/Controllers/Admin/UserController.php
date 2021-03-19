@@ -6,13 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Globals\CompanySettings;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
     public function __construct(){
-
-        $this->middleware('AdminAccessRight');
+        $this->middleware('multiauth:admin');
     }
 
     public function index(Request $request){
@@ -63,9 +64,10 @@ class UserController extends Controller
         return redirect('admin/users');
     }
 
-    public function edit_profile($id){
+    public function edit_profile(){
+        $user = Auth::guard('admin')->user();
         $data['menu'] = 'Profile';
-        $data['user'] = User::where('id',$id)->first();
+        $data['user'] = User::where('id',$user['id'])->first();
         $data['company'] = CompanySettings::where('id',$this->Company())->first();
         return view('admin.users.edit_profile',$data);
     }
@@ -85,5 +87,34 @@ class UserController extends Controller
         $user->update($input);
         \Session::flash('message', 'Profile has been updated successfully!');
         return redirect()->back();
+    }
+
+    public function user_login(Request $request){
+        if(Auth::guard('admin')->check()){
+
+            Auth::guard('web')->logout();
+            $request->session()->forget('company_selection');
+            $request->session()->forget('company');
+
+            $user = User::where('id',$request['user_id'])->first();
+            Auth::guard('web')->login($user);
+
+            $company_count = CompanySettings::where('user_id',$user['id'])->get()->count();
+            if($company_count > 1) {
+                $session_company_selection = Session::get('company_selection');
+                if(empty($session_company_selection)) {
+                    session(['company_selection' => true]);
+                }
+            } else {
+                $session = Session::get('company');
+                if(empty($session)){
+                    $company = CompanySettings::where('user_id',$user['id'])->orderBy('id','DESC')->first();
+                    if(!empty($company)){
+                        session(['company'=>$company['id']]);
+                    }
+                }
+            }
+            return ;
+        }
     }
 }

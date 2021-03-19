@@ -57,7 +57,7 @@ class Controller extends BaseController
     }
 
     public static function AllCompanies(){
-        return $all_companies =CompanySettings::where('user_id',Auth::user()->id)->select('company_name','id')->get();
+        return $all_companies =CompanySettings::where('user_id',Auth::guard('web')->user()->id)->select('company_name','id')->get();
     }
 
     public static function SetCompany(){
@@ -65,7 +65,7 @@ class Controller extends BaseController
     }
 
     public static function AllEmailTemplates() {
-        return EmailTemplates::where('user_id',Auth::user()->id)->where('status',1)->get();
+        return EmailTemplates::where('user_id',Auth::guard('web')->user()->id)->where('status',1)->get();
     }
 
     public function AllTaxes($type, $type_id, $tax_id, $amount){

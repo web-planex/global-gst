@@ -177,23 +177,30 @@ Route::get('invoice-template', 'Globals\InvoiceSettingController@invoice_templat
 
 
 //--------------------FOR ADMIN SIDE--------------------
-Route::group(['prefix' => 'admin','admin/home', 'guard' => 'admin'], function() {
-    Route::get('locale/{locale}', function ($locale){
-        Session::put('locale', $locale);
-        return redirect()->back();
-    });
-    Route::get('login', 'Auth\LoginController@showAdminLoginForm')->name('admin-login');
-    Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
-    Route::get('/','Admin\DashboardController@index');
-    Route::get('dashboard','Admin\DashboardController@index');
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function() {
+
+//    Route::get('locale/{locale}', function ($locale){
+//        Session::put('locale', $locale);
+//        return redirect()->back();
+//    });
+
+    Route::get('/login', 'Auth\LoginController@showLoginForm');
+    Route::post('/login', 'Auth\LoginController@login')->name('admin-login-post');
+    Route::get('/logout', 'Auth\LoginController@logout')->name('admin-login');
+    Route::get('/',['middleware' => 'multiauth:admin', 'uses'=>'DashboardController@index'])->name('admin-dashboard');
+
+    Route::get('/dashboard', ['middleware' => 'multiauth:admin', 'uses'=>'DashboardController@index'])->name('admin-dashboard');
+
+//    Route::get('dashboard','DashboardController@index');
 
     //Admin Profile
-    Route::get('/edit-profile/{id}', 'Admin\UserController@edit_profile');
-    Route::patch('/profile_update/{id}', 'Admin\UserController@update_profile');
+    Route::get('/edit-profile', 'UserController@edit_profile');
+    Route::patch('/profile_update/{id}', 'UserController@update_profile');
 
     //User Management
-    Route::get('/users/delete/{id}', 'Admin\UserController@destroy');
-    Route::resource('users', 'Admin\UserController');
+    Route::post('/user_login', 'UserController@user_login');
+    Route::get('/users/delete/{id}', 'UserController@destroy');
+    Route::resource('users', 'UserController');
 });
 
 //--------------------FOR FRONT SIDE--------------------

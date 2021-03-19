@@ -41,8 +41,9 @@ class InvoiceController extends Controller
 {
     protected $common_controller;
     public function __construct(){
+        $this->middleware('multiauth:web');
         //$this->middleware(['auth','verified'], ['except' => 'download_pdf']);
-        $this->middleware('UserAccessRight');
+//        $this->middleware('UserAccessRight');
         $this->common_controller = new CommonController();
     }
 
@@ -531,8 +532,6 @@ class InvoiceController extends Controller
             $shipping_state = States::where('id',$data['user']['shipping_state'])->first();
             $data['user']['state'] = $state['state_name'];
             $data['user']['billing_state_code'] = $state['state_number'];
-
-
             $data['user']['shipping_state'] = $shipping_state['state_name'];
             $data['user']['shipping_state_code'] = $shipping_state['state_number'];
         }

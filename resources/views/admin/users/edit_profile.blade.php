@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layout.app')
 @section('content')
     <div class="row page-titles">
         <div class="col-sm-6 align-self-center">

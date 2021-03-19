@@ -35,8 +35,9 @@ class EstimateController extends Controller
     protected $common_controller;
 
     public function __construct(){
+        $this->middleware('multiauth:web');
         //$this->middleware(['auth','verified'], ['except' => 'download_pdf']);
-        $this->middleware('UserAccessRight');
+//        $this->middleware('UserAccessRight');
         $this->common_controller = new CommonController();
     }
 

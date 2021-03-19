@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layout.app')
 @section('content')
     <style>
         @media (max-width: 767px) {
@@ -14,6 +14,8 @@
         .swal2-popup #swal2-content {
             text-align: justify;
         }
+
+        .dropdown-item{padding: .65rem 0.65rem!important;}
     </style>
     <div class="row page-titles">
         <div class="col-sm-6 align-self-center">
@@ -79,9 +81,14 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <span data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete User">
-                                                <a class="dropdown-item" href="javascript:void(0)" onclick="delete_users({{$list['id']}})"><i class="fa fa-trash text-danger"></i></a>
-                                            </span>
+                                            <div class="btn-group table-icons-box" role="group" aria-label="Basic example">
+                                                <span data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete User">
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="delete_users({{$list['id']}})"><i class="fa fa-trash text-danger"></i></a>
+                                                </span>
+                                                <span data-toggle="tooltip" data-placement="top" title="" data-original-title="User Login">
+                                                    <a class="dropdown-item" href="javascript:void(0)" onclick="UserLogin({{$list['id']}})"><i class="fa fa-user-plus text-info"></i></a>
+                                                </span>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -121,6 +128,20 @@
                 window.location.href = '{{url("admin/users/delete")}}/'+user_id;
             }
         })
+        }
+
+        function UserLogin(uid) {
+            $.ajax({
+                url: '{{url('admin/user_login')}}',
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {'user_id':uid},
+                success: function (result) {
+                    window.open('{{url('/dashboard')}}');
+                }
+            });
         }
     </script>
 @endsection

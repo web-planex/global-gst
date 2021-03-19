@@ -7,6 +7,7 @@
             <a href="{{url('/')}}" class="db"><img src="{{url('assets/images/logo_2.png')}}" alt="Home" /></a>
         </div>
         <h3 class="box-title m-t-40 m-b-0">Login Now</h3><small>Create your session and enjoy</small>
+        @include('inc.message2')
         <div class="form-group m-t-20">
             <div class="col-xs-12">
                 <input class="form-control" type="text" name="email" required="" placeholder="Email">

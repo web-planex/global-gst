@@ -29,7 +29,8 @@ class BillController extends Controller
 {
     protected $common_controller;
     public function __construct(){
-        $this->middleware('UserAccessRight');
+        $this->middleware('multiauth:web');
+//        $this->middleware('UserAccessRight');
         //$this->middleware(['auth','verified'], ['except' => 'download_pdf']);
         $this->common_controller = new CommonController();
     }

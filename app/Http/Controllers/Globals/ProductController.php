@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\Response;
 class ProductController extends Controller
 {
     public function __construct(){
-//
-        $this->middleware('UserAccessRight');
+        $this->middleware('multiauth:web');
+//        $this->middleware('UserAccessRight');
     }
 
     public function index(Request $request){
