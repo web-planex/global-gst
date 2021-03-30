@@ -7,6 +7,7 @@ use App\Models\Globals\CompanySettings;
 use App\Models\Globals\InvoiceSetting;
 use App\Models\Globals\States;
 use Illuminate\Http\Request;
+use WKPDF;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
@@ -95,8 +96,10 @@ class InvoiceSettingController extends Controller
 
     public function invoice_template(Request $request){
         $data['menu'] = 'Invoice Template';
+        $data['user'] = Auth::user();
         $data['invoice_setting'] = CompanySettings::where('user_id',Auth::user()->id)->where('id',$this->Company())->first();
-        return view('globals.invoice-setting.select_template',$data);
+//        return view('globals.invoice-setting.select_template',$data);
+        return view('globals.invoice-setting.template_setting',$data);
     }
 
     public function invoice_update_template(Request $request){
@@ -105,5 +108,56 @@ class InvoiceSettingController extends Controller
         $invoice_setting->update($input);
         \Session::flash('message', 'Invoice template has been changed successfully!');
         return redirect()->back();
+    }
+
+    public function set_invoice_view(Request $request){
+        $user = Auth::user();
+        $company = CompanySettings::where('id',$this->Company())->first();
+        $path = $user->id.'/company/invoice_template';
+        $root = base_path() . '/public/upload/' . $path;
+        if (!file_exists($root)) {
+            mkdir($root, 0777, true);
+        }
+
+        $invoice_setting = CompanySettings::where('user_id',Auth::user()->id)->where('id',$this->Company())->first();
+
+        $old_pdf = 'upload/'.$user->id.'/company/invoice_template/sample_'.$invoice_setting['pdf_template'].'.pdf';
+
+        if(file_exists($old_pdf)){
+            unlink($old_pdf);
+        }
+
+        if(isset($request['pdf_view'])){
+            $input['pdf_template'] = $request['pdf_view'];
+            $invoice_setting->update($input);
+        }
+
+        if(isset($request['color'])){
+            $input['color'] = $request['color'];
+            $invoice_setting->update($input);
+        }
+
+        if($invoice_setting['pdf_template'] == 1){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>28.1, 'ml'=>0, 'footer'=>'globals.invoice-setting.template.template_1_footer'];
+        }elseif ($invoice_setting['pdf_template'] == 2){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>10, 'ml'=>0, 'footer'=>'globals.invoice-setting.template.template_2_footer'];
+        }elseif ($invoice_setting['pdf_template'] == 3){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>12, 'ml'=>0, 'footer'=>'globals.invoice-setting.template.template_3_footer'];
+        }elseif ($invoice_setting['pdf_template'] == 4){
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.invoice-setting.template.template_4_footer'];
+        }else{
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.invoice-setting.template.template_5_footer'];
+        }
+        $data['company'] = $invoice_setting;
+        $data['user'] = $user->id;
+        $pdf = new WKPDF($this->common_controller->globalPdfOption($pdf_option));
+        $pdf->addPage(view('globals.invoice-setting.template.template_'.$invoice_setting['pdf_template'],$data));
+
+        if (!$pdf->saveAs($root.'/sample_'.$invoice_setting['pdf_template'].'.pdf')) {
+            $error = $pdf->getError();
+            return $error;
+        }else{
+            return 1;
+        }
     }
 }

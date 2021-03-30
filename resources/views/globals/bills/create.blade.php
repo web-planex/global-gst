@@ -304,7 +304,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-12 col-lg-6 col-xl-8">
+                                        <div class="col-md-12 col-lg-6 col-xl-6">
                                             <div class="form-group mb-0">
                                                 <label for="memo">Memo</label>
                                                 {!! Form::textarea('memo', null, ['class' => 'form-control','id'=>'memo','rows' => '3']) !!}
@@ -369,13 +369,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12 col-lg-6 col-xl-8">
+                                        <div class="col-md-12 col-lg-6 col-xl-6">
                                             <div class="subtotal-table">
                                                 <div class="table-responsive">
                                                     <table class="table table-hover" id="Tax-Calculation">
                                                         <tr id="subtotal_row">
-                                                            <th width="50%">Subtotal</th>
-                                                            <td width="50%">
+                                                            <th width="60%">Subtotal</th>
+                                                            <td width="40%">
                                                                 <input type="text" class="form-control text-right" id="subtotal" readonly="" />
                                                             </td>
                                                         </tr>

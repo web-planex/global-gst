@@ -558,13 +558,24 @@ class InvoiceController extends Controller
         $data['company_name'] = $company['company_name'];
         $data['name']  = 'Sales Voucher';
         $data['content'] = 'This is test pdf.';
-//        return view('globals.invoice.pdf_invoice_2',$data);
+//        return $data;
+//        return view('globals.invoice.template.template_1',$data);
 
-        $pdf = new WKPDF($this->common_controller->globalPdfOption());
-        $pdf_template = $data['company']['pdf_template'] == 1 ?'':'_'.'2';
-        $pdf->addPage(view('globals.invoice.pdf_invoice'.$pdf_template,$data));
-        
-        
+        if($data['company']['pdf_template'] == 1){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>28.1, 'ml'=>0, 'footer'=>'globals.invoice.template.template_1_footer'];
+        }elseif ($data['company']['pdf_template'] == 2){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>10, 'ml'=>0, 'footer'=>'globals.invoice.template.template_2_footer'];
+        }elseif ($data['company']['pdf_template'] == 3){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>12, 'ml'=>0, 'footer'=>'globals.invoice.template.template_3_footer'];
+        }elseif ($data['company']['pdf_template'] == 4){
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.invoice.template.template_4_footer'];
+        }else{
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.invoice.template.template_5_footer'];
+        }
+
+        $pdf = new WKPDF($this->common_controller->globalPdfOption($pdf_option));
+        $pdf->addPage(view('globals.invoice.template.template_'.$data['company']['pdf_template'],$data));
+
         if($request->output == 'download') {
             if (!$pdf->send('sales_invoice_'.$data['invoice_type'].'.pdf')) {
                 $error = $pdf->getError();

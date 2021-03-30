@@ -492,8 +492,6 @@
             </td>
         </tr>
     </table>
-
-
     <script type="text/javascript">
         function subTotal() {
             amount = 0;

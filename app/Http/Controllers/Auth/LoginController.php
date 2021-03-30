@@ -58,6 +58,21 @@ class LoginController extends Controller
     public function redirectTo() {
         $user_role = Auth::guard('web')->user();
         if ($user_role['role'] == 'user') {
+            $company_count = CompanySettings::where('user_id',$user_role['id'])->get()->count();
+            if($company_count > 1) {
+                $session_company_selection = Session::get('company_selection');
+                if(empty($session_company_selection)) {
+                    session(['company_selection' => true]);
+                }
+            } else {
+                $session = Session::get('company');
+                if(empty($session)){
+                    $company = CompanySettings::where('user_id',$user_role['id'])->orderBy('id','DESC')->first();
+                    if(!empty($company)){
+                        session(['company'=>$company['id']]);
+                    }
+                }
+            }
             $this->redirectTo = '/dashboard';
         }else{
             Session::flush();
@@ -71,8 +86,10 @@ class LoginController extends Controller
         return Auth::guard('web');
     }
 
-    public function logout() {
+    public function logout(Request $request) {
         Auth::guard('web')->logout();
+        $request->session()->forget('company_selection');
+        $request->session()->forget('company');
         return redirect()->route('login');
     }
 }

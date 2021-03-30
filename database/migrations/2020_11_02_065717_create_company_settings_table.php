@@ -16,6 +16,7 @@ class CreateCompanySettingsTable extends Migration
         Schema::create('company_settings', function (Blueprint $table) {
             $table->integer('id',1);
             $table->integer('user_id');
+            $table->string('color')->default('06a2df');
             $table->integer('pdf_template')->default(1);
             $table->string('company_name',50)->nullable();
             $table->text('company_logo')->nullable();

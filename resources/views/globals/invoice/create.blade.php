@@ -351,7 +351,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-12 col-lg-6 col-xl-8">
+                                        <div class="col-md-12 col-lg-6 col-xl-6">
                                             <div class="form-group mb-0">
                                                 <label for="notes">Notes</label>
                                                 {!! Form::textarea('notes', null, ['class' => 'form-control','id'=>'notes','rows' => '3']) !!}
@@ -416,13 +416,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12 col-lg-6 col-xl-8">
+                                        <div class="col-md-12 col-lg-6 col-xl-6">
                                             <div class="subtotal-table">
                                                 <div class="table-responsive">
                                                     <table class="table table-hover" id="Tax-Calculation">
                                                         <tr id="subtotal_row">
-                                                            <th width="50%">Subtotal</th>
-                                                            <td width="50%">
+                                                            <th width="60%">Subtotal</th>
+                                                            <td width="40%">
                                                                 <input type="text" class="form-control text-right" id="subtotal" readonly="" />
                                                             </td>
                                                         </tr>
@@ -437,8 +437,8 @@
                                                                 @if($invoice['customer']['billing_state_code'] == $company['state'])
                                                                     @if($tax_name == 'GST')
                                                                         <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
-                                                                            <th width="50%">{{$rate / 2}}% CGST on Rs. <span id="label_1_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
-                                                                            <td width="50%"><input type="text" id="input_1_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
+                                                                            <th width="60%">{{$rate / 2}}% CGST on Rs. <span id="label_1_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>
+                                                                            <td width="40%"><input type="text" id="input_1_{{str_replace(".","-",$rate).'_'.$tax_name}}" class="form-control tax-input-row text-right" readonly></td>
                                                                         </tr>
                                                                         <tr class="{{str_replace(".","-",$rate).'_'.$tax_name}} hide tax-tr">
                                                                             <th width="50%">{{$rate / 2}}'% SGST on Rs. <span id="label_2_{{str_replace(".","-",$rate).'_'.$tax_name}}">0.00</span></th>

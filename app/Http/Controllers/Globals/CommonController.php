@@ -216,16 +216,16 @@ class CommonController extends Controller
         }
     }
     
-    public function globalPdfOption() {
+    public function globalPdfOption($data) {
          $global_options = [
             'binary' => 'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf',
 //            'binary' => '/usr/bin/wkhtmltopdf',
-            'margin-top'    => 10,
-            'margin-right'  => 10,
-            'margin-bottom' => 10,
-            'margin-left'   => 10,
+            'margin-top'    => $data['mt'],
+            'margin-right'  => $data['mr'],
+            'margin-bottom' => $data['mb'],
+            'margin-left'   => $data['ml'],
             'header-spacing'=> 5,
-            'footer-html' => view('globals.pdf-footer')->render()
+            'footer-html' => view($data['footer'])->render()
         ]; 
         return $global_options ;
     }
