@@ -124,7 +124,7 @@
                                     </table>
                                 </td>
                                 <td width="50%" align="right" valign="top">
-                                    @if($user['is_shipping']==1 && $print_type==1)
+                                    @if($user['is_shipping']==1)
                                         <table border="0" cellpadding="0" cellspacing="0">
                                             <tr>
                                                 <td align="left" valign="middle"

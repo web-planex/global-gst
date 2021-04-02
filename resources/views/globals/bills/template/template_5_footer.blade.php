@@ -1,6 +1,3 @@
-@php
-    $company = \App\Models\Globals\CompanySettings::where('id',Session::get('company'))->first();
-@endphp
 <!DOCTYPE HTML>
 <html style="padding:0px; margin:0px;">
 

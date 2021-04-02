@@ -198,9 +198,22 @@ class GenerateBulkExpense implements ShouldQueue
 
             $data['name'] = 'Expense Voucher';
             $data['content'] = 'This is test pdf.';
-            $pdf = new WKPDF($this->common_controller->globalPdfOption());
+
+            if($data['company']['pdf_template'] == 1){
+                $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>28.1, 'ml'=>0, 'footer'=>'globals.expense.template.template_1_footer','color'=>$company->color];
+            }elseif ($data['company']['pdf_template'] == 2){
+                $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>10, 'ml'=>0, 'footer'=>'globals.expense.template.template_2_footer','color'=>$company->color];
+            }elseif ($data['company']['pdf_template'] == 3){
+                $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>12, 'ml'=>0, 'footer'=>'globals.expense.template.template_3_footer','color'=>$company->color];
+            }elseif ($data['company']['pdf_template'] == 4){
+                $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.expense.template.template_4_footer','color'=>$company->color];
+            }else{
+                $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.expense.template.template_5_footer','color'=>$company->color];
+            }
+
+            $pdf = new WKPDF($this->common_controller->globalPdfOption($pdf_option));
             //return $data;
-            $pdf->addPage(view('globals.expense.pdf_expense',$data));
+            $pdf->addPage(view('globals.expense.template.template_'.$data['company']['pdf_template'],$data));
             $path = $this->user->id.'/expense_voucher/';
             $root = base_path() . '/public/upload/' . $path;
             if (!file_exists($root)) {
@@ -256,7 +269,20 @@ class GenerateBulkExpense implements ShouldQueue
         ];
 
         $company['address'] = implode(', ', $company_address_arr);
-        $pdf = new WKPDF($this->common_controller->globalPdfOption());
+        $data['company'] = $company;
+        if($data['company']['pdf_template'] == 1){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>28.1, 'ml'=>0, 'footer'=>'globals.expense.template.template_1_footer','color'=>$company->color];
+        }elseif ($data['company']['pdf_template'] == 2){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>10, 'ml'=>0, 'footer'=>'globals.expense.template.template_2_footer','color'=>$company->color];
+        }elseif ($data['company']['pdf_template'] == 3){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>12, 'ml'=>0, 'footer'=>'globals.expense.template.template_3_footer','color'=>$company->color];
+        }elseif ($data['company']['pdf_template'] == 4){
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.expense.template.template_4_footer','color'=>$company->color];
+        }else{
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.expense.template.template_5_footer','color'=>$company->color];
+        }
+
+        $pdf = new WKPDF($this->common_controller->globalPdfOption($pdf_option));
 
         foreach($this->checkboxes as $id){
 
@@ -374,7 +400,7 @@ class GenerateBulkExpense implements ShouldQueue
             $name = 'Expense Voucher';
             $content = 'This is test pdf.';
 
-            $pdf->addPage(view('globals.expense.pdf_expense',[
+            $pdf->addPage(view('globals.expense.template.template_'.$data['company']['pdf_template'],[
                 'expense' => $expense,
                 'taxes' => $taxes,
                 'user' => $user,

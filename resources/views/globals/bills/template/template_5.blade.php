@@ -124,7 +124,7 @@
                                     </table>
                                 </td>
                                 <td width="50%" align="right" valign="top">
-                                    @if($user['is_shipping']==1 && $print_type==1)
+                                    @if($user['is_shipping']==1)
                                         <table border="0" cellpadding="0" cellspacing="0">
                                             <tr>
                                                 <td align="left" valign="middle"
@@ -476,7 +476,7 @@
 <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #fff;">
     <tr>
         <td align="left">
-            @if(in_array($bill['status'],[1,2,4]))
+            @if(in_array($bill['status'],[1,2,3,4]))
                 <img src="{{$bill['status_image']}}" alt="" width="150" height="70" />
             @endif
         </td>

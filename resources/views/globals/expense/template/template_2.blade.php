@@ -120,7 +120,7 @@
                         <table width="100%" border="0" cellspacing="0" cellpadding="0" id="table-top" style="border-collapse:separate;">
                             <tbody>
                                 <tr>
-                                    @if($user['is_shipping']==1 && $print_type==1)
+                                    @if($user['is_shipping']==1 )
                                         <td width="40%" align="right" valign="top">
                                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                                 <tbody>
@@ -364,7 +364,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td align="left" valign="top" style="padding:8px 0; font-size:11px; color:#{{$company->color}};">
-                                                        @if(in_array($expense['status'],[1,2,4]))
+                                                        @if(in_array($expense['status'],[1,2,3,4]))
                                                             <img src="{{$expense['status_image']}}" alt="" width="150" height="70" />
                                                         @endif
                                                     </td>

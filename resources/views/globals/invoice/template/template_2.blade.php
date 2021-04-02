@@ -388,7 +388,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td align="left" valign="top" style="padding:8px 0; font-size:11px; color:#{{$company->color}};">
-                                                        @if(in_array($invoice['status'],[1,2,4]))
+                                                        @if(in_array($invoice['status'],[1,2,3,4]))
                                                             <img src="{{url('assets/images/pdf_img/'.$invoice['status_image'])}}" alt="" width="150" height="70" />
                                                         @endif
                                                     </td>

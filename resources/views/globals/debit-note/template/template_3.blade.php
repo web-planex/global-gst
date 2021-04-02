@@ -118,7 +118,7 @@
                                                     </table>
                                                 </td>
                                                 <td width="34%">
-                                                    @if($user['is_shipping']==1 && $print_type==1)
+                                                    @if($user['is_shipping']==1)
                                                         <table cellpadding="0" cellspacing="0" style="width: 100%">
                                                             <tr>
                                                                 <td colspan="2" align="left" valign="middle" style="font-size:12px; padding-bottom:5px; color:#fff;">

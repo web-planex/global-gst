@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Globals\PaymentMethod;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -147,7 +148,6 @@ class GenerateBulkDebitNote implements ShouldQueue
             }
             $data['all_tax_labels'] = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
             $data['products'] = Product::where('user_id',$this->user->id)->where('company_id',$this->company_id)->where('status',1)->get();
-            $company = CompanySettings::select('company_name')->where('id',$this->company_id)->first();
             $data['company_name'] = $company['company_name'];
             $data['debit_note']['status_image'] = '';
 
@@ -161,9 +161,23 @@ class GenerateBulkDebitNote implements ShouldQueue
             $data['invoice'] = Invoice::select('invoice_number')->where('id',$data['debit_note']['Invoice']['id'])->first();
             $data['name'] = 'Debit Note';
             $data['content'] = 'This is test pdf.';
-            $pdf = new WKPDF($this->common_controller->globalPdfOption());
+            $data['payment_method'] = PaymentMethod::select('method_name')->where('id',$data['debit_note']['payment_method'])->first();
+            if($data['company']['pdf_template'] == 1){
+                $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>28.1, 'ml'=>0, 'footer'=>'globals.debit-note.template.template_1_footer','color'=>$company->color];
+            }elseif ($data['company']['pdf_template'] == 2){
+                $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>10, 'ml'=>0, 'footer'=>'globals.debit-note.template.template_2_footer','color'=>$company->color];
+            }elseif ($data['company']['pdf_template'] == 3){
+                $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>12, 'ml'=>0, 'footer'=>'globals.debit-note.template.template_3_footer','color'=>$company->color];
+            }elseif ($data['company']['pdf_template'] == 4){
+                $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.debit-note.template.template_4_footer','color'=>$company->color];
+            }else{
+                $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.debit-note.template.template_5_footer','color'=>$company->color];
+            }
+
+            $pdf = new WKPDF($this->common_controller->globalPdfOption($pdf_option));
             //return $data;
-            $pdf->addPage(view('globals.debit-note.pdf_debit_note',$data));
+
+            $pdf->addPage(view('globals.debit-note.template.template_'.$company['pdf_template'],$data));
             $path = $this->user->id.'/debit_note/';
             $root = base_path() . '/public/upload/' . $path;
             if (!file_exists($root)) {
@@ -218,7 +232,19 @@ class GenerateBulkDebitNote implements ShouldQueue
         ];
 
         $company['address'] = implode(', ', $company_address_arr);
-        $pdf = new WKPDF($this->common_controller->globalPdfOption());
+        $data['company'] = $company;
+        if($data['company']['pdf_template'] == 1){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>28.1, 'ml'=>0, 'footer'=>'globals.debit-note.template.template_1_footer','color'=>$company->color];
+        }elseif ($data['company']['pdf_template'] == 2){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>10, 'ml'=>0, 'footer'=>'globals.debit-note.template.template_2_footer','color'=>$company->color];
+        }elseif ($data['company']['pdf_template'] == 3){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>12, 'ml'=>0, 'footer'=>'globals.debit-note.template.template_3_footer','color'=>$company->color];
+        }elseif ($data['company']['pdf_template'] == 4){
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.debit-note.template.template_4_footer','color'=>$company->color];
+        }else{
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.debit-note.template.template_5_footer','color'=>$company->color];
+        }
+        $pdf = new WKPDF($this->common_controller->globalPdfOption($pdf_option));
 
         foreach($this->checkboxes as $id){
 
@@ -299,8 +325,8 @@ class GenerateBulkDebitNote implements ShouldQueue
             $invoice = Invoice::select('invoice_number')->where('id',$debit_note['Invoice']['id'])->first();
             $name = 'Debit Note';
             $content = 'This is test pdf.';
-
-            $pdf->addPage(view('globals.debit-note.pdf_debit_note',[
+            $payment_method = PaymentMethod::select('method_name')->where('id',$debit_note['payment_method'])->first();
+            $pdf->addPage(view('globals.debit-note.template.template_'.$data['company']['pdf_template'],[
                 'debit_note' => $debit_note,
                 'taxes' => $taxes,
                 'user' => $user,
@@ -310,7 +336,8 @@ class GenerateBulkDebitNote implements ShouldQueue
                 'name' => $name,
                 'content' => $content,
                 'company' => $company,
-                'invoice' => $invoice
+                'invoice' => $invoice,
+                'payment_method' => $payment_method
             ]));
         }
         $file_name = 'debit_note.pdf';

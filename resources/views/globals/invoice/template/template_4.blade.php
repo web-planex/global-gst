@@ -397,7 +397,7 @@
                                 <tr>
                                     <td align="left" style="border-top:solid 1px #444444;border-left:solid 1px #444444;border-bottom: solid 1px #444444;line-height:25px;">
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        @if(in_array($invoice['status'],[1,2,4]))
+                                        @if(in_array($invoice['status'],[1,2,3,4]))
                                             <img src="{{url('assets/images/pdf_img/'.$invoice['status_image'])}}" alt="" width="150" height="70" />
                                         @endif
                                     </td>

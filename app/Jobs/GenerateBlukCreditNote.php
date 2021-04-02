@@ -143,13 +143,27 @@ class GenerateBlukCreditNote implements ShouldQueue
             Log::info($data['user']);
 
             $data['all_tax_labels'] = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
-            $company = CompanySettings::select('company_name')->where('id',$this->company_id)->first();
+            $company = CompanySettings::where('id',$this->company_id)->first();
             $data['company_name'] = $company['company_name'];
             $data['name'] = 'Credit Note';
             $data['content'] = 'This is credit note pdf.';
-            $pdf = new WKPDF($this->common_controller->globalPdfOption());
+            $data['company'] = $company;
+            if($data['company']['pdf_template'] == 1){
+                $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>28.1, 'ml'=>0, 'footer'=>'globals.invoice.template.template_1_footer','color'=>$company->color];
+            }elseif ($data['company']['pdf_template'] == 2){
+                $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>10, 'ml'=>0, 'footer'=>'globals.invoice.template.template_2_footer','color'=>$company->color];
+            }elseif ($data['company']['pdf_template'] == 3){
+                $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>12, 'ml'=>0, 'footer'=>'globals.invoice.template.template_3_footer','color'=>$company->color];
+            }elseif ($data['company']['pdf_template'] == 4){
+                $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.invoice.template.template_4_footer','color'=>$company->color];
+            }else{
+                $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.invoice.template.template_5_footer','color'=>$company->color];
+            }
+
+            $pdf = new WKPDF($this->common_controller->globalPdfOption($pdf_option));
             //return $data;
-            $pdf->addPage(view('globals.invoice.pdf_invoice',$data));
+//            $pdf->addPage(view('globals.invoice.pdf_invoice',$data));
+            $pdf->addPage(view('globals.invoice.template.template_'.$data['company']['pdf_template'],$data));
             $path = $this->user->id.'/credit_note/';
             $root = base_path() . '/public/upload/' . $path;
             if (!file_exists($root)) {
@@ -206,7 +220,21 @@ class GenerateBlukCreditNote implements ShouldQueue
         ];
 
         $company['address'] = implode(', ', $company_address_arr);
-        $pdf = new WKPDF($this->common_controller->globalPdfOption());
+
+        $data['company'] = $company;
+        if($data['company']['pdf_template'] == 1){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>28.1, 'ml'=>0, 'footer'=>'globals.invoice.template.template_1_footer','color'=>$company->color];
+        }elseif ($data['company']['pdf_template'] == 2){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>10, 'ml'=>0, 'footer'=>'globals.invoice.template.template_2_footer','color'=>$company->color];
+        }elseif ($data['company']['pdf_template'] == 3){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>12, 'ml'=>0, 'footer'=>'globals.invoice.template.template_3_footer','color'=>$company->color];
+        }elseif ($data['company']['pdf_template'] == 4){
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.invoice.template.template_4_footer','color'=>$company->color];
+        }else{
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.invoice.template.template_5_footer','color'=>$company->color];
+        }
+
+        $pdf = new WKPDF($this->common_controller->globalPdfOption($pdf_option));
 
         foreach($this->checkboxes as $id){
             $invoice = Invoice::with('InvoiceItems')->where('id',$id)->first();
@@ -262,7 +290,7 @@ class GenerateBlukCreditNote implements ShouldQueue
 
             $name = 'Sales Invoice';
             $content = 'This is sales invoice pdf.';
-            $pdf->addPage(view('globals.invoice.pdf_invoice',[
+            $pdf->addPage(view('globals.invoice.template.template_'.$company['pdf_template'],[
                 'invoice' => $invoice,
                 'taxes' => $taxes,
                 'user' => $user,

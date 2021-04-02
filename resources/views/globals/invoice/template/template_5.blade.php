@@ -476,7 +476,7 @@
 <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #fff;">
     <tr>
         <td align="left">
-            @if(in_array($invoice['status'],[1,2,4]))
+            @if(in_array($invoice['status'],[1,2,3,4]))
                 <img src="{{url('assets/images/pdf_img/'.$invoice['status_image'])}}" alt="" width="150" height="70" />
             @endif
         </td>

@@ -145,9 +145,22 @@ class GenerateBlukEstimate implements ShouldQueue
             $data['company_name'] = $company['company_name'];
             $data['name'] = 'Estimate';
             $data['content'] = 'This is estimate pdf.';
-            $pdf = new WKPDF($this->common_controller->globalPdfOption());
+
+            if($data['company']['pdf_template'] == 1){
+                $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>28.1, 'ml'=>0, 'footer'=>'globals.estimate.template.template_1_footer','color'=>$company->color];
+            }elseif ($data['company']['pdf_template'] == 2){
+                $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>10, 'ml'=>0, 'footer'=>'globals.estimate.template.template_2_footer','color'=>$company->color];
+            }elseif ($data['company']['pdf_template'] == 3){
+                $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>12, 'ml'=>0, 'footer'=>'globals.estimate.template.template_3_footer','color'=>$company->color];
+            }elseif ($data['company']['pdf_template'] == 4){
+                $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.estimate.template.template_4_footer','color'=>$company->color];
+            }else{
+                $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.estimate.template.template_5_footer','color'=>$company->color];
+            }
+
+            $pdf = new WKPDF($this->common_controller->globalPdfOption($pdf_option));
             //return $data;
-            $pdf->addPage(view('globals.estimate.pdf_estimate',$data));
+            $pdf->addPage(view('globals.estimate.template.template_'.$data['company']['pdf_template'],$data));
             $path = $this->user->id.'/estimate/';
             $root = base_path() . '/public/upload/' . $path;
             if (!file_exists($root)) {
@@ -204,7 +217,19 @@ class GenerateBlukEstimate implements ShouldQueue
         ];
 
         $company['address'] = implode(', ', $company_address_arr);
-        $pdf = new WKPDF($this->common_controller->globalPdfOption());
+        $data['company'] = $company;
+        if($data['company']['pdf_template'] == 1){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>28.1, 'ml'=>0, 'footer'=>'globals.estimate.template.template_1_footer','color'=>$company->color];
+        }elseif ($data['company']['pdf_template'] == 2){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>10, 'ml'=>0, 'footer'=>'globals.estimate.template.template_2_footer','color'=>$company->color];
+        }elseif ($data['company']['pdf_template'] == 3){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>12, 'ml'=>0, 'footer'=>'globals.estimate.template.template_3_footer','color'=>$company->color];
+        }elseif ($data['company']['pdf_template'] == 4){
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.estimate.template.template_4_footer','color'=>$company->color];
+        }else{
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.estimate.template.template_5_footer','color'=>$company->color];
+        }
+        $pdf = new WKPDF($this->common_controller->globalPdfOption($pdf_option));
 
         foreach($this->checkboxes as $id){
             $estimate = Estimate::with('EstimateItems')->where('id',$id)->first();
@@ -257,7 +282,7 @@ class GenerateBlukEstimate implements ShouldQueue
 
             $name = 'Estimate';
             $content = 'This is estimate pdf.';
-            $pdf->addPage(view('globals.estimate.pdf_estimate',[
+            $pdf->addPage(view('globals.estimate.template.template_'.$data['company']['pdf_template'],[
                 'estimate' => $estimate,
                 'taxes' => $taxes,
                 'user' => $user,

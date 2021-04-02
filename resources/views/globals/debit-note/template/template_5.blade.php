@@ -66,11 +66,11 @@
                                                         <td align="left" style="background-color:#{{$company->color}};">
                                                             <table border="0" cellspacing="0" cellpadding="0">
                                                                 <tr>
-                                                                    <td align="center" style="font-size:14px; padding:12px; color:#fff;">
-                                                                        <strong>Debit Note Date&nbsp;&nbsp;</strong>{{date('d-m-Y', strtotime($debit_note['debit_note_date']))}}</td>
-                                                                    <td align="center" style="font-size:18px; padding:12px 2px; color:#fff;">|</td>
-                                                                    <td align="center" style="font-size:14px; padding:12px; color:#fff;">
-                                                                        <strong>Debit Note No&nbsp;&nbsp;</strong>{{$debit_note['debit_note_number']}}
+                                                                    <td align="left" style="font-size:13px; padding:11px; color:#fff;">
+                                                                        <strong>Debit Note Date&nbsp;</strong>{{date('d-m-Y', strtotime($debit_note['debit_note_date']))}}</td>
+                                                                    <td align="center" style="font-size:18px; padding:11px 2px; color:#fff;">|</td>
+                                                                    <td align="left" style="font-size:13px; padding:11px; color:#fff;">
+                                                                        <strong>Debit Note No&nbsp;</strong>{{$debit_note['debit_note_number']}}
                                                                     </td>
                                                                 </tr>
                                                             </table>
@@ -124,7 +124,7 @@
                                     </table>
                                 </td>
                                 <td width="50%" align="right" valign="top">
-                                    @if($user['is_shipping']==1 && $print_type==1)
+                                    @if($user['is_shipping']==1)
                                         <table border="0" cellpadding="0" cellspacing="0">
                                             <tr>
                                                 <td align="left" valign="middle"

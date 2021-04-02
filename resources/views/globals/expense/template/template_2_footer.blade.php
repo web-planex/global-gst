@@ -1,6 +1,3 @@
-@php
-    $company = \App\Models\Globals\CompanySettings::where('id',Session::get('company'))->first();
-@endphp
 <!DOCTYPE HTML>
 <html style="padding:0px; margin:0px;">
 
@@ -20,7 +17,7 @@
 </head>
 
 <body>
-<div style="font-family:Arial, Helvetica, sans-serif; margin-left: -8px;margin-right: -8px;border-top:solid 2px #{{$company->color}};">
+<div style="font-family:Arial, Helvetica, sans-serif; margin-left: -8px;margin-right: -8px;border-top:solid 2px #{{$color}};">
     <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr>
             <td width="5%"></td>

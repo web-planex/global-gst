@@ -217,6 +217,7 @@ class CommonController extends Controller
     }
     
     public function globalPdfOption($data) {
+        $color_arr['color'] = $data['color'];
          $global_options = [
             'binary' => 'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf',
 //            'binary' => '/usr/bin/wkhtmltopdf',
@@ -225,7 +226,7 @@ class CommonController extends Controller
             'margin-bottom' => $data['mb'],
             'margin-left'   => $data['ml'],
             'header-spacing'=> 5,
-            'footer-html' => view($data['footer'])->render()
+            'footer-html' => view($data['footer'],$color_arr)->render()
         ]; 
         return $global_options ;
     }

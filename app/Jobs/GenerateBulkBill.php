@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Globals\PaymentMethod;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -99,7 +100,7 @@ class GenerateBulkBill implements ShouldQueue
                 }
             }
             $data['bill']['total_in_word'] = $this->common_controller->convert_digit_to_words($data['bill']['total']);
-
+            $data['payment_method'] = PaymentMethod::select('method_name')->where('id',$data['bill']['payment_method'])->first();
             $payee = Payees::where('id',$data['bill']['payee_id'])->first();
 
             $data['user'] = Customers::where('id',$payee['type_id'])->first();
@@ -160,9 +161,22 @@ class GenerateBulkBill implements ShouldQueue
 
             $data['name'] = 'Bill';
             $data['content'] = 'This is test pdf.';
-            $pdf = new WKPDF($this->common_controller->globalPdfOption());
+
+            if($data['company']['pdf_template'] == 1){
+                $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>28.1, 'ml'=>0, 'footer'=>'globals.bills.template.template_1_footer','color'=>$company->color];
+            }elseif ($data['company']['pdf_template'] == 2){
+                $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>10, 'ml'=>0, 'footer'=>'globals.bills.template.template_2_footer','color'=>$company->color];
+            }elseif ($data['company']['pdf_template'] == 3){
+                $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>12, 'ml'=>0, 'footer'=>'globals.bills.template.template_3_footer','color'=>$company->color];
+            }elseif ($data['company']['pdf_template'] == 4){
+                $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.bills.template.template_4_footer','color'=>$company->color];
+            }else{
+                $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.bills.template.template_5_footer','color'=>$company->color];
+            }
+
+            $pdf = new WKPDF($this->common_controller->globalPdfOption($pdf_option));
             //return $data;
-            $pdf->addPage(view('globals.bills.pdf_bill',$data));
+            $pdf->addPage(view('globals.bills.template.template_'.$data['company']['pdf_template'],$data));
             $path = $this->user->id.'/bill/';
             $root = base_path() . '/public/upload/' . $path;
             if (!file_exists($root)) {
@@ -218,7 +232,21 @@ class GenerateBulkBill implements ShouldQueue
         ];
 
         $company['address'] = implode(', ', $company_address_arr);
-        $pdf = new WKPDF($this->common_controller->globalPdfOption());
+
+        $data['company'] = $company;
+        if($data['company']['pdf_template'] == 1){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>28.1, 'ml'=>0, 'footer'=>'globals.bills.template.template_1_footer','color'=>$company->color];
+        }elseif ($data['company']['pdf_template'] == 2){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>10, 'ml'=>0, 'footer'=>'globals.bills.template.template_2_footer','color'=>$company->color];
+        }elseif ($data['company']['pdf_template'] == 3){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>12, 'ml'=>0, 'footer'=>'globals.bills.template.template_3_footer','color'=>$company->color];
+        }elseif ($data['company']['pdf_template'] == 4){
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.bills.template.template_4_footer','color'=>$company->color];
+        }else{
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.bills.template.template_5_footer','color'=>$company->color];
+        }
+
+        $pdf = new WKPDF($this->common_controller->globalPdfOption($pdf_option));
 
         foreach($this->checkboxes as $id){
 
@@ -335,8 +363,9 @@ class GenerateBulkBill implements ShouldQueue
 
             $name = 'Bill';
             $content = 'This is test pdf.';
+            $payment_method = PaymentMethod::select('method_name')->where('id',$bill['payment_method'])->first();
 
-            $pdf->addPage(view('globals.bills.pdf_bill',[
+            $pdf->addPage(view('globals.bills.template.template_'.$data['company']['pdf_template'],[
                 'bill' => $bill,
                 'taxes' => $taxes,
                 'user' => $user,
@@ -345,7 +374,8 @@ class GenerateBulkBill implements ShouldQueue
                 'company_name' => $company_name,
                 'name' => $name,
                 'content' => $content,
-                'company' => $company
+                'company' => $company,
+                'payment_method' => $payment_method
             ]));
         }
         $file_name = 'bill.pdf';

@@ -89,7 +89,7 @@
                                     <td @if($user['is_shipping']==0) colspan="2" @endif align="center" width="50%" style="border-left:solid 1px #444444;border-right:solid 1px #444444;border-top:solid 1px #444444; padding:0 5px;line-height:30px;">
                                         <strong style="color: #{{$company->color}}">Billing Information</strong>
                                     </td>
-                                    @if($user['is_shipping']==1 && $print_type==1)
+                                    @if($user['is_shipping']==1 )
                                         <td align="center" width="50%" style="border-left:solid 1px #444444;border-top:solid 1px #444444; border-right:solid 1px #444444;padding:0 5px;line-height:30px;">
                                             <strong style="color: #{{$company->color}}">Shipping Information</strong>
                                         </td>
@@ -99,7 +99,7 @@
                                     <td @if($user['is_shipping']==0) colspan="2" @endif align="left" style="border:solid 1px #444444;padding:0 5px;line-height:30px; font-weight: bold;">
                                         &nbsp;&nbsp;{{$user['billing_name']}}
                                     </td>
-                                    @if($user['is_shipping']==1 && $print_type==1)
+                                    @if($user['is_shipping']==1)
                                         <td align="left" style="border:solid 1px #444444;padding:0 5px;line-height:30px; font-weight: bold;">
                                             &nbsp;&nbsp;{{$user['shipping_name']}}
                                         </td>
@@ -109,7 +109,7 @@
                                     <td @if($user['is_shipping']==0) colspan="2" @endif align="left" valign="top" style="border:solid 1px #444444;padding:0 5px;line-height:30px;">
                                         &nbsp;&nbsp;{{$user['billing_street']}}, {{$user['billing_city']}}-{{$user['billing_pincode']}}, {{$user['state']}}, {{$user['billing_country']}}.
                                     </td>
-                                    @if($user['is_shipping']==1 && $print_type==1)
+                                    @if($user['is_shipping']==1)
                                         <td align="left" valign="top" style="border:solid 1px #444444;padding:0 5px;line-height:30px;">
                                             &nbsp;&nbsp;{{$user['shipping_street']}}, {{$user['shipping_city']}}-{{$user['shipping_pincode']}}, {{$user['shipping_state']}}, {{$user['shipping_country']}}.
                                         </td>
@@ -119,7 +119,7 @@
                                     <td @if($user['is_shipping']==0) colspan="2" @endif align="left" style="border:solid 1px #444444;border-bottom:0px; padding:0 5px;line-height:30px;">
                                         &nbsp;&nbsp;Phone:{{$user['billing_phone']}}
                                     </td>
-                                    @if($user['is_shipping']==1 && $print_type==1)
+                                    @if($user['is_shipping']==1)
                                         <td align="left"style="border:solid 1px #444444;border-bottom:0px; padding:0 5px;line-height:30px;">
                                             &nbsp;&nbsp;Phone:{{$user['shipping_phone']}}
                                         </td>
@@ -358,7 +358,7 @@
                                 <tr>
                                     <td align="left" style="border-top:solid 1px #444444;border-left:solid 1px #444444;border-bottom: solid 1px #444444;line-height:25px;">
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        @if(in_array($expense['status'],[1,2,4]))
+                                        @if(in_array($expense['status'],[1,2,3,4]))
                                             <img src="{{$expense['status_image']}}" alt="" width="150" height="70" />
                                         @endif
                                     </td>

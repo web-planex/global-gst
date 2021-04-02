@@ -120,7 +120,7 @@
                         <table width="100%" border="0" cellspacing="0" cellpadding="0" id="table-top" style="border-collapse:separate;">
                             <tbody>
                                 <tr>
-                                    @if($user['is_shipping']==1 && $print_type==1)
+                                    @if($user['is_shipping']==1)
                                         <td width="40%" align="right" valign="top">
                                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                                 <tbody>

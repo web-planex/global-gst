@@ -77,7 +77,7 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ URL::to('/') }}/upload/{{$user_id}}/sales_invoice/{{$zip_file->zip_name}}" class="btn waves-effect waves-light btn-success" target="_blank"><i class="fas fa-download"></i> Download</a>
+                                            <a href="{{ URL::to('/') }}/upload/{{$user_id}}/credit_note/{{$zip_file->zip_name}}" class="btn waves-effect waves-light btn-success" target="_blank"><i class="fas fa-download"></i> Download</a>
                                         </td>
                                     </tr>
                                     @endforeach

@@ -320,7 +320,7 @@
                     <td style="line-height:30px; border: solid 2px #fff;" align="right" valign="top">
                         <span class="amount-input">
                             @if($invoice['tax_type'] == 1)
-                                {{number_format($item['amount'] + $total_tax + $cess_tax, 2)}} &nbsp;
+                                {{number5_format($item['amount'] + $total_tax + $cess_tax, 2)}} &nbsp;
                                 @php $maintotal = $maintotal + $item['amount'] + $total_tax + $cess_tax @endphp
                             @elseif($invoice['tax_type'] == 2)
                                 {{number_format($item['amount'], 2)}} &nbsp;
@@ -411,7 +411,7 @@
 
                                 <tr>
                                     <td align="left" valign="top" style="padding:8px 0; font-size:11px; color:#{{$company->color}};">
-                                        @if(in_array($invoice['status'],[1,2,4]))
+                                        @if(in_array($invoice['status'],[1,2,3,4]))
                                             <img src="{{url('assets/images/pdf_img/'.$invoice['status_image'])}}" alt="" width="150" height="70" />
                                         @endif
                                     </td>

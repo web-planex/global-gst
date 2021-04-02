@@ -493,15 +493,15 @@ class DebitNoteController extends Controller
         $data['name'] = 'Debit Note';
 
         if($data['company']['pdf_template'] == 1){
-            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>28.1, 'ml'=>0, 'footer'=>'globals.debit-note.template.template_1_footer'];
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>28.1, 'ml'=>0, 'footer'=>'globals.debit-note.template.template_1_footer','color'=>$data['company']['color']];
         }elseif ($data['company']['pdf_template'] == 2){
-            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>10, 'ml'=>0, 'footer'=>'globals.debit-note.template.template_2_footer'];
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>10, 'ml'=>0, 'footer'=>'globals.debit-note.template.template_2_footer','color'=>$data['company']['color']];
         }elseif ($data['company']['pdf_template'] == 3){
-            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>12, 'ml'=>0, 'footer'=>'globals.debit-note.template.template_3_footer'];
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>12, 'ml'=>0, 'footer'=>'globals.debit-note.template.template_3_footer','color'=>$data['company']['color']];
         }elseif ($data['company']['pdf_template'] == 4){
-            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.debit-note.template.template_4_footer'];
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.debit-note.template.template_4_footer','color'=>$data['company']['color']];
         }else{
-            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.debit-note.template.template_5_footer'];
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.debit-note.template.template_5_footer','color'=>$data['company']['color']];
         }
 
         $pdf = new WKPDF($this->common_controller->globalPdfOption($pdf_option));

@@ -97,7 +97,42 @@ class InvoiceSettingController extends Controller
     public function invoice_template(Request $request){
         $data['menu'] = 'Invoice Template';
         $data['user'] = Auth::user();
-        $data['invoice_setting'] = CompanySettings::where('user_id',Auth::user()->id)->where('id',$this->Company())->first();
+        $invoice_setting = CompanySettings::where('user_id',Auth::user()->id)->where('id',$this->Company())->first();
+
+        $path = Auth::user()->id.'/company/invoice_template';
+        $root = base_path() . '/public/upload/' . $path;
+        if (!file_exists($root)) {
+            mkdir($root, 0777, true);
+        }
+
+        $old_pdf = 'upload/'.Auth::user()->id.'/company/invoice_template/sample_'.$invoice_setting['pdf_template'].'.pdf';
+        $data['company'] = $invoice_setting;
+
+        if(file_exists($old_pdf)){
+            unlink($old_pdf);
+        }
+
+        if($invoice_setting['pdf_template'] == 1){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>28.1, 'ml'=>0, 'footer'=>'globals.invoice-setting.template.template_1_footer','color'=>$invoice_setting->color];
+        }elseif ($invoice_setting['pdf_template'] == 2){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>10, 'ml'=>0, 'footer'=>'globals.invoice-setting.template.template_2_footer','color'=>$invoice_setting->color];
+        }elseif ($invoice_setting['pdf_template'] == 3){
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>12, 'ml'=>0, 'footer'=>'globals.invoice-setting.template.template_3_footer','color'=>$invoice_setting->color];
+        }elseif ($invoice_setting['pdf_template'] == 4){
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.invoice-setting.template.template_4_footer','color'=>$invoice_setting->color];
+        }else{
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.invoice-setting.template.template_5_footer','color'=>$invoice_setting->color];
+        }
+
+        $pdf = new WKPDF($this->common_controller->globalPdfOption($pdf_option));
+        $pdf->addPage(view('globals.invoice-setting.template.template_'.$invoice_setting['pdf_template'],$data));
+
+        if (!$pdf->saveAs($root.'/sample_'.$invoice_setting['pdf_template'].'.pdf')) {
+            $error = $pdf->getError();
+            return $error;
+        }
+
+        $data['invoice_setting'] = $invoice_setting;
 //        return view('globals.invoice-setting.select_template',$data);
         return view('globals.invoice-setting.template_setting',$data);
     }
@@ -138,15 +173,15 @@ class InvoiceSettingController extends Controller
         }
 
         if($invoice_setting['pdf_template'] == 1){
-            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>28.1, 'ml'=>0, 'footer'=>'globals.invoice-setting.template.template_1_footer'];
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>28.1, 'ml'=>0, 'footer'=>'globals.invoice-setting.template.template_1_footer','color'=>$invoice_setting->color];
         }elseif ($invoice_setting['pdf_template'] == 2){
-            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>10, 'ml'=>0, 'footer'=>'globals.invoice-setting.template.template_2_footer'];
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>10, 'ml'=>0, 'footer'=>'globals.invoice-setting.template.template_2_footer','color'=>$invoice_setting->color];
         }elseif ($invoice_setting['pdf_template'] == 3){
-            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>12, 'ml'=>0, 'footer'=>'globals.invoice-setting.template.template_3_footer'];
+            $pdf_option = ['mt'=>0, 'mr'=>0, 'mb'=>12, 'ml'=>0, 'footer'=>'globals.invoice-setting.template.template_3_footer','color'=>$invoice_setting->color];
         }elseif ($invoice_setting['pdf_template'] == 4){
-            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.invoice-setting.template.template_4_footer'];
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.invoice-setting.template.template_4_footer','color'=>$invoice_setting->color];
         }else{
-            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.invoice-setting.template.template_5_footer'];
+            $pdf_option = ['mt'=>10, 'mr'=>10, 'mb'=>10, 'ml'=>10, 'footer'=>'globals.invoice-setting.template.template_5_footer','color'=>$invoice_setting->color];
         }
         $data['company'] = $invoice_setting;
         $data['user'] = $user->id;

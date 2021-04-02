@@ -21,14 +21,14 @@
         <div style="margin-left: -7px;">
             <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: -3px;">
                 <tr>
-                    <td width="4%" style="height:60px; border-left:solid 20px #{{$company->color}};"></td>
-                    <td width="91%" style="height:60px; border-bottom:solid 5px #{{$company->color}};"></td>
+                    <td width="4%" style="height:60px; border-left:solid 20px #{{$color}};"></td>
+                    <td width="91%" style="height:60px; border-bottom:solid 5px #{{$color}};"></td>
                     <td width="5%" style="height:60px;"></td>
                 </tr>
             </table>
             <table cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
-                    <td width="4%" style="padding-top:10px; border-left:solid 20px #{{$company->color}};"></td>
+                    <td width="4%" style="padding-top:10px; border-left:solid 20px #{{$color}};"></td>
                     <td align="left" width="46%" style="padding-top:10px;font-size: 14px;">
                         Thank you for your business
                     </td>
@@ -41,7 +41,7 @@
             </table>
             <table cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
-                    <td width="49%" style="padding-bottom:25px; border-left:solid 20px #{{$company->color}}; border-bottom:solid 18px #{{$company->color}};"></td>
+                    <td width="49%" style="padding-bottom:25px; border-left:solid 20px #{{$color}}; border-bottom:solid 18px #{{$color}};"></td>
                     <td width="51%" style="padding-bottom:25px;"></td>
                 </tr>
             </table>

@@ -1,6 +1,3 @@
-@php
-    $company = \App\Models\Globals\CompanySettings::where('id',Session::get('company'))->first();
-@endphp
 <!DOCTYPE HTML>
 <html style="padding:0px; margin:0px;">
 
@@ -20,12 +17,12 @@
 </head>
 
 <body style="font-family:Arial, Helvetica, sans-serif; font-size:14px; margin:0; padding:0; font-weight:normal; line-height:20px;">
-    <div style="margin-left: -8px;margin-right: -8px;border-top:solid 6px #{{$company->color}};">
+    <div style="margin-left: -8px;margin-right: -8px;border-top:solid 6px #{{$color}};">
         <div style="margin-left: -8px;margin-right: -8px;border-top:solid 6px #000;">
             <table cellpadding="0" cellspacing="0" border="0" width="100%">
                 <tr>
                     <td width="8%"></td>
-                    <td align="left" width="42%" style="text-transform: uppercase; padding-top:12px;font-size:13px; color: #{{$company->color}};">
+                    <td align="left" width="42%" style="text-transform: uppercase; padding-top:12px;font-size:13px; color: #{{$color}};">
                         <strong>Thank you for your business</strong>
                     </td>
                     <td align="right" width="45%" style="padding-top:12px;font-size:12px; color:#5e5e5e;">
