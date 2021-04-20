@@ -305,7 +305,7 @@
                         $('#success').hide().html('Your message successfully sent!').fadeIn('slow').delay(5000).hide(1);
                         $('#contact-btn').html('Send Message');
                     }
-                    gtag_report_conversion();
+                    gtag_report_conversion('');
                 }
             });
         }

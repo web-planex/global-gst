@@ -206,7 +206,13 @@
                         contentType: false,
                         processData: false,
                         success: function (result) {
-                            $('#import_msg').html('Product imported successfully.');
+                            if(result == ""){
+                                $('#import_msg').html('Product imported successfully.');
+                            }else{
+                                $('#import_msg').removeClass('alert-info');
+                                $('#import_msg').addClass('alert-danger');
+                                $('#import_msg').html(result);
+                            }
                             $('#import_msg').removeClass('hide');
                             $('#ImportProduct').modal('toggle');
                             $("#pro_list").load(location.href + " #pro_list");
