@@ -300,8 +300,8 @@ class InvoiceController extends Controller
         $data['invoice']['customer'] = $customer;
         $data['invoice']['customer']['billing_state_name'] = $billing_state['state_name'];
         $data['invoice']['customer']['billing_state_code'] = $billing_state['state_number'];
-        $data['invoice']['customer']['shipping_state_name'] = $shipping_state['state_name'];
-        $data['invoice']['customer']['shipping_state_code'] = $shipping_state['state_number'];
+        $data['invoice']['customer']['shipping_state_name'] = !empty($shipping_state)?$shipping_state['state_name']:"";
+        $data['invoice']['customer']['shipping_state_code'] = !empty($shipping_state)?$shipping_state['state_number']:"";
         $data['invoice']['file_name'] = '';
         if(!empty($data['invoice']['files']) && file_exists($data['invoice']['files'])){
             $ext = explode('/',$data['invoice']['files']);

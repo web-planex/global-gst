@@ -90,6 +90,17 @@
         });
     </script>
 
+    <script>
+        window.addEventListener('load',function(){
+            jQuery('[href="https://gst.webplanex.com/register"]:contains(Join Now)').click(function(){
+                gtag('event', 'conversion', {'send_to': 'AW-1042132981/bzN1CI6874kCEPXf9vAD'});
+            })
+            jQuery('[href="https://gst.webplanex.com/register"]:contains(Register)').click(function(){
+                gtag('event', 'conversion', {'send_to': 'AW-1042132981/WAA8CNq374kCEPXf9vAD'});
+            })
+        })
+    </script>
+
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="104">
 <div id="preloader">
