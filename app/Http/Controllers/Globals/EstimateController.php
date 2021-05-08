@@ -21,9 +21,11 @@ use App\Models\Globals\Product;
 use App\Models\Globals\States;
 use App\Models\Globals\Suppliers;
 use App\Models\Globals\Taxes;
+use App\Models\Globals\Configuration;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use WKPDF;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Globals\EstimateMail;
@@ -466,7 +468,7 @@ class EstimateController extends Controller
         $i=0;
         foreach($taxes_with_cess as $tax) {
             $taxes_with_cess_arr[$i] = $tax['rate'].'_'.$tax['tax_name'];
-            $taxes_with_cess_arr[$i+1] = $tax['cess'].'_CESS';
+              $taxes_with_cess_arr[$i+1] = $tax['cess'].'_CESS';
             $i = $i+2;
         }
         $data['all_tax_labels'] = array_unique(array_merge($taxes_without_cess_arr ,$taxes_with_cess_arr));
@@ -828,10 +830,51 @@ class EstimateController extends Controller
             'estimate_id' => $id
         ];
 
+        $user = Auth::guard()->user();
+        $company = $this->Company();
+
+        $config = Configuration::where('user_id',$user['id'])->where('company_id',$company)->first();
+
         if(count($site_admin_email_arr) > 0) {
-            Mail::to($customer_email)->bcc($site_admin_email_arr)->send(new EstimateMail($data));
+            if(empty($config)){
+                Mail::to($customer_email)->bcc($site_admin_email_arr)->send(new EstimateMail($data));
+            }else{
+                $configs = array(
+                    'driver' => 'smtp',
+                    'host' => $config->smtp_host,
+                    'port' => $config->smtp_port,
+                    'from' => array('address' => $config->from_email, 'name' => $config->from_name),
+                    'encryption' => $config->smtp_security,
+                    'username' => $config->smtp_username,
+                    'password' => $config->smtp_password,
+                    'sendmail' => '/usr/sbin/sendmail -bs',
+                    'pretend' => false,
+                );
+                Config::set('mail', $configs);
+                $data['smtp_from_email'] = $config->from_email;
+                $data['smtp_from_name'] = $config->from_name;
+                Mail::to($customer_email)->bcc($site_admin_email_arr)->send(new EstimateMail($data));
+            }
         } else {
-            Mail::to($customer_email)->send(new EstimateMail($data));
+            if(empty($config)){
+                Mail::to($customer_email)->send(new EstimateMail($data));
+            }else{
+                $configs = array(
+                    'driver' => 'smtp',
+                    'host' => $config->smtp_host,
+                    'port' => $config->smtp_port,
+                    'from' => array('address' => $config->from_email, 'name' => $config->from_name),
+                    'encryption' => $config->smtp_security,
+                    'username' => $config->smtp_username,
+                    'password' => $config->smtp_password,
+                    'sendmail' => '/usr/sbin/sendmail -bs',
+                    'pretend' => false,
+                );
+                Config::set('mail', $configs);
+                $data['smtp_from_email'] = $config->from_email;
+                $data['smtp_from_name'] = $config->from_name;
+                Mail::to($customer_email)->send(new EstimateMail($data));
+            }
         }
         if($redirect) {
             return redirect()->back()->with('message','Email has been sent successfully!');

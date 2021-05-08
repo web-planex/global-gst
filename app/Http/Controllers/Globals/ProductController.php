@@ -173,7 +173,7 @@ class ProductController extends Controller
                         return $msg;
                     }
 
-                    if(!empty($arrResult[$i][6])){
+                    if(!empty($arrResult[$i][5])){
                         if(!preg_match("/^[0-9 +-]*$/", $arrResult[$i][5])){
                             $entry = 0;
                             $msg = 'Invalid price <strong>['.$arrResult[$i][5].']</strong> find at index number <strong>['.$index.']</strong> in your uploaded csv file';

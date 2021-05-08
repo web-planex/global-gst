@@ -172,6 +172,10 @@ Route::get('download-debit-notes-pdf-zip', 'Globals\DebitNoteController@download
 
 Route::get('send_mail', 'Globals\DashboardController@send_mail')->name('send-mail');
 
+Route::resource('configuration', 'Globals\ConfigurationController');
+Route::post('test_configuration', 'Globals\ConfigurationController@test_configuration');
+Route::get('reset_configuration', 'Globals\ConfigurationController@reset_configuration');
+
 Route::post('update-template', 'Globals\InvoiceSettingController@invoice_update_template')->name('invoice-template');
 Route::post('set_invoice_view', 'Globals\InvoiceSettingController@set_invoice_view')->name('set-invoice-view');
 Route::get('invoice-template', 'Globals\InvoiceSettingController@invoice_template')->name('invoice-template');
@@ -203,6 +207,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function() {
     Route::get('/users/delete/{id}', 'UserController@destroy');
     Route::resource('users', 'UserController');
 });
+
 
 //--------------------FOR FRONT SIDE--------------------
 Route::get('/', 'HomeController@index')->name('home-page');
