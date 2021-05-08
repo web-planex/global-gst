@@ -233,13 +233,13 @@
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <input type="text" class="form-control hsn_code_input" name="hsn_code[0]" id="hsn_code_0" value="{{$first_product['hsn_code']}}" required>
+                                                        <input type="text" class="form-control hsn_code_input" name="hsn_code[0]" id="hsn_code_0" value="@if(isset($first_product) && !empty($first_product)) {{$first_product['hsn_code']}} @endif" required>
                                                     </td>
                                                     <td>
                                                         <input type="number" min="1" value="1" class="form-control quantity-input floatTextBox" name="quantity[0]" required>
                                                     </td>
                                                     <td>
-                                                        <input type="text" min="0" class="form-control rate-input floatTextBox" id="rate_0"  name="rate[0]" value="{{$first_product['price']}}" required>
+                                                        <input type="text" min="0" class="form-control rate-input floatTextBox" id="rate_0"  name="rate[0]" value="@if(isset($first_product) && !empty($first_product)) {{$first_product['price']}} @endif" required>
                                                     </td>
                                                     <td style="display: none;" class="discount-line-section">
                                                         <input style="width: 65px" type="text" name="discount_items[]" class="form-control discount-items">
@@ -844,9 +844,9 @@
                             "<a href=\"javascript:;\" class=\"font-weight-300 add-new-prod-link\" data-id=\"product_select"+i+"\" onclick=\"OpenProductModel('product_select"+i+"')\"><i class=\"fa fa-plus-circle\"></i> Add New</a>"+
                             "</div>"+
                             "</td>";
-                        html += "<td><input type=\"text\" class=\"form-control hsn_code_input\" name=\"hsn_code["+numItems+"]\" id=\"hsn_code_"+numItems+"\" value='{{$first_product['hsn_code']}}' required><span class=\"multi-error\"></span></td>";
+                        html += "<td><input type=\"text\" class=\"form-control hsn_code_input\" name=\"hsn_code["+numItems+"]\" id=\"hsn_code_"+numItems+"\" value='@if(isset($first_product) && !empty($first_product)) {{$first_product['hsn_code']}} @endif' required><span class=\"multi-error\"></span></td>";
                         html += "<td><input type=\"number\" min=\"1\" value=\"1\" class=\"form-control quantity-input floatTextBox\" name=\"quantity["+numItems+"]\" required><span class=\"multi-error\"></span></td>";
-                        html += "<td><input type=\"text\" min=\"0\" class=\"form-control rate-input floatTextBox\" id=\"rate_"+numItems+"\" name=\"rate["+numItems+"]\" value='{{$first_product['price']}}' required><span class=\"multi-error\"></span></td>";
+                        html += "<td><input type=\"text\" min=\"0\" class=\"form-control rate-input floatTextBox\" id=\"rate_"+numItems+"\" name=\"rate["+numItems+"]\" value='@if(isset($first_product) && !empty($first_product)) {{$first_product['price']}} @endif' required><span class=\"multi-error\"></span></td>";
                         html += "<td "+discount_field_style+" class='discount-line-section'>";
                         html += "<input style='width: 65px' type='text' name='discount_items[]' class='form-control discount-items'>";
                         html += "<select name='discount_type_items[]' class='discount-type-items'>";
