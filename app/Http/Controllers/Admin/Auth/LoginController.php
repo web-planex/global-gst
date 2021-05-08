@@ -97,7 +97,7 @@ class LoginController extends Controller
                 }
             }
         } else {
-            return redirect()->back()->withInput()->withErrors(['Invalid credential']);
+            return redirect()->back()->withInput()->with('error-message','These credentials do not match our records.');
         }
     }
 
