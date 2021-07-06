@@ -90,6 +90,17 @@
         });
     </script>
 
+    <script>
+        window.addEventListener('load',function(){
+            jQuery('[href="https://gst.webplanex.com/register"]:contains(Join Now)').click(function(){
+                gtag('event', 'conversion', {'send_to': 'AW-1042132981/bzN1CI6874kCEPXf9vAD'});
+            })
+            jQuery('[href="https://gst.webplanex.com/register"]:contains(Register)').click(function(){
+                gtag('event', 'conversion', {'send_to': 'AW-1042132981/WAA8CNq374kCEPXf9vAD'});
+            })
+        })
+    </script>
+
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="104">
 <div id="preloader">
@@ -305,7 +316,7 @@
                         $('#success').hide().html('Your message successfully sent!').fadeIn('slow').delay(5000).hide(1);
                         $('#contact-btn').html('Send Message');
                     }
-                    gtag_report_conversion();
+                    gtag_report_conversion('');
                 }
             });
         }

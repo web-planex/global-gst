@@ -171,6 +171,7 @@
                                 @foreach(\App\Http\Controllers\Controller::AllEmailTemplates() as $template)
                                     <li><a href="{{route('show-email-template',['slug'=>$template['slug']])}}">{{$template['name']}}</a></li>
                                 @endforeach
+                                <li><a href="{{url('configuration')}}">SMTP Configuration</a></li>
                             </ul>
                         </li>
 

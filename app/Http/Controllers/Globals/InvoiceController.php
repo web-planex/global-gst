@@ -25,6 +25,7 @@ use App\Models\Globals\States;
 use App\Models\Globals\Suppliers;
 use App\Models\Globals\Taxes;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Config;
 use Symfony\Component\CssSelector\Parser\Reader;
 use WKPDF;
 use Illuminate\Http\Request;
@@ -35,6 +36,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\Globals\InvoiceMail;
 use App\Mail\Globals\CreditNoteMail;
 use App\Models\Globals\EmailTemplates;
+use App\Models\Globals\Configuration;
 use App\Http\Controllers\Globals\CommonController;
 
 class InvoiceController extends Controller
@@ -300,8 +302,8 @@ class InvoiceController extends Controller
         $data['invoice']['customer'] = $customer;
         $data['invoice']['customer']['billing_state_name'] = $billing_state['state_name'];
         $data['invoice']['customer']['billing_state_code'] = $billing_state['state_number'];
-        $data['invoice']['customer']['shipping_state_name'] = $shipping_state['state_name'];
-        $data['invoice']['customer']['shipping_state_code'] = $shipping_state['state_number'];
+        $data['invoice']['customer']['shipping_state_name'] = !empty($shipping_state)?$shipping_state['state_name']:"";
+        $data['invoice']['customer']['shipping_state_code'] = !empty($shipping_state)?$shipping_state['state_number']:"";
         $data['invoice']['file_name'] = '';
         if(!empty($data['invoice']['files']) && file_exists($data['invoice']['files'])){
             $ext = explode('/',$data['invoice']['files']);
@@ -798,10 +800,51 @@ class InvoiceController extends Controller
             'invoice_id' => $id
         ];
 
+        $user = Auth::guard()->user();
+        $company = $this->Company();
+
+        $config = Configuration::where('user_id',$user['id'])->where('company_id',$company)->first();
+
         if(count($site_admin_email_arr) > 0) {
-            Mail::to($customer_email)->bcc($site_admin_email_arr)->send(new InvoiceMail($data));
+            if(empty($config)){
+                Mail::to($customer_email)->bcc($site_admin_email_arr)->send(new InvoiceMail($data));
+            }else{
+                $configs = array(
+                    'driver' => 'smtp',
+                    'host' => $config->smtp_host,
+                    'port' => $config->smtp_port,
+                    'from' => array('address' => $config->from_email, 'name' => $config->from_name),
+                    'encryption' => $config->smtp_security,
+                    'username' => $config->smtp_username,
+                    'password' => $config->smtp_password,
+                    'sendmail' => '/usr/sbin/sendmail -bs',
+                    'pretend' => false,
+                );
+                Config::set('mail', $configs);
+                $data['smtp_from_email'] = $config->from_email;
+                $data['smtp_from_name'] = $config->from_name;
+                Mail::to($customer_email)->bcc($site_admin_email_arr)->send(new InvoiceMail($data));
+            }
         } else {
-            Mail::to($customer_email)->send(new InvoiceMail($data));
+            if(empty($config)){
+                Mail::to($customer_email)->send(new InvoiceMail($data));
+            }else{
+                $configs = array(
+                    'driver' => 'smtp',
+                    'host' => $config->smtp_host,
+                    'port' => $config->smtp_port,
+                    'from' => array('address' => $config->from_email, 'name' => $config->from_name),
+                    'encryption' => $config->smtp_security,
+                    'username' => $config->smtp_username,
+                    'password' => $config->smtp_password,
+                    'sendmail' => '/usr/sbin/sendmail -bs',
+                    'pretend' => false,
+                );
+                Config::set('mail', $configs);
+                $data['smtp_from_email'] = $config->from_email;
+                $data['smtp_from_name'] = $config->from_name;
+                Mail::to($customer_email)->send(new InvoiceMail($data));
+            }
         }
         if($redirect) {
             return redirect()->back()->with('message','Email has been sent successfully!');
@@ -840,10 +883,51 @@ class InvoiceController extends Controller
             'credit_note_id' => $id
         ];
 
+        $user = Auth::guard()->user();
+        $company = $this->Company();
+
+        $config = Configuration::where('user_id',$user['id'])->where('company_id',$company)->first();
+
         if(count($site_admin_email_arr) > 0) {
-            Mail::to($customer_email)->bcc($site_admin_email_arr)->send(new CreditNoteMail($data));
+            if(empty($config)){
+                Mail::to($customer_email)->bcc($site_admin_email_arr)->send(new CreditNoteMail($data));
+            }else{
+                $configs = array(
+                    'driver' => 'smtp',
+                    'host' => $config->smtp_host,
+                    'port' => $config->smtp_port,
+                    'from' => array('address' => $config->from_email, 'name' => $config->from_name),
+                    'encryption' => $config->smtp_security,
+                    'username' => $config->smtp_username,
+                    'password' => $config->smtp_password,
+                    'sendmail' => '/usr/sbin/sendmail -bs',
+                    'pretend' => false,
+                );
+                Config::set('mail', $configs);
+                $data['smtp_from_email'] = $config->from_email;
+                $data ['smtp_from_name'] = $config->from_name;
+                Mail::to($customer_email)->bcc($site_admin_email_arr)->send(new CreditNoteMail($data));
+            }
         } else {
-            Mail::to($customer_email)->send(new CreditNoteMail($data));
+            if(empty($config)){
+                Mail::to($customer_email)->send(new CreditNoteMail($data));
+            }else{
+                $configs = array(
+                    'driver' => 'smtp',
+                    'host' => $config->smtp_host,
+                    'port' => $config->smtp_port,
+                    'from' => array('address' => $config->from_email, 'name' => $config->from_name),
+                    'encryption' => $config->smtp_security,
+                    'username' => $config->smtp_username,
+                    'password' => $config->smtp_password,
+                    'sendmail' => '/usr/sbin/sendmail -bs',
+                    'pretend' => false,
+                );
+                Config::set('mail', $configs);
+                $data['smtp_from_email'] = $config->from_email;
+                $data['smtp_from_name'] = $config->from_name;
+                Mail::to($customer_email)->send(new CreditNoteMail($data));
+            }
         }
         return redirect()->back()->with('message','Email has been sent successfully!');
     }

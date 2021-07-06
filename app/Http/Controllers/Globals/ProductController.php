@@ -148,11 +148,56 @@ class ProductController extends Controller
             }
             fclose($handle);
         }
-
+        $msg = '';
         for ($i=0; $i<count($arrResult); $i++){
-            $old_product = Product::where('title',$arrResult[$i][0])->where('user_id',Auth::user()->id)->where('company_id',$this->Company())->first();
-            if(empty($old_product)){
-                if(!empty($arrResult[$i][0])){
+            $entry = 1;
+            $index = $i+2 ;
+            if(!empty($arrResult[$i][0])){
+                $all_products = Product::where('user_id',Auth::user()->id)->where('company_id',$this->Company())->get();
+                foreach ($all_products as $pro){
+                    if($pro['title'] == $arrResult[$i][0]){
+                        $entry = 0;
+                        $msg = 'Duplicate title <strong>['.$arrResult[$i][0].']</strong> find at index number <strong>['.$index.']</strong> in your uploaded csv file';
+                        return $msg;
+                    }
+
+                    if(!empty($arrResult[$i][2]) && $pro['hsn_code'] == $arrResult[$i][2]){
+                        $entry = 0;
+                        $msg = 'Duplicate hsn code <strong>['.$arrResult[$i][2].']</strong> find at index number <strong>['.$index.']</strong> in your uploaded csv file';
+                        return $msg;
+                    }
+
+                    if(!empty($arrResult[$i][3]) && $pro['sku'] == $arrResult[$i][3]){
+                        $entry = 0;
+                        $msg = 'Duplicate sku <strong>['.$arrResult[$i][3].']</strong> find at index number <strong>['.$index.']</strong> in your uploaded csv file';
+                        return $msg;
+                    }
+
+                    if(!empty($arrResult[$i][5])){
+                        if(!preg_match("/^[0-9 +-]*$/", $arrResult[$i][5])){
+                            $entry = 0;
+                            $msg = 'Invalid price <strong>['.$arrResult[$i][5].']</strong> find at index number <strong>['.$index.']</strong> in your uploaded csv file';
+                            return $msg;
+                        }
+                    }else{
+                        $entry = 0;
+                        $msg = 'Price is empty at index number <strong>['.$index.']</strong> in your uploaded csv file';
+                        return $msg;
+                    }
+
+                    if(!empty($arrResult[$i][6])){
+                        if(!preg_match("/^[0-9 +-]*$/", $arrResult[$i][6])){
+                            $entry = 0;
+                            $msg = 'Invalid sale price <strong>['.$arrResult[$i][6].']</strong> find at index number <strong>['.$index.']</strong> in your uploaded csv file';
+                            return $msg;
+                        }
+                    }else{
+                        $entry = 0;
+                        $msg = 'Sale price is empty at index number <strong>['.$index.']</strong> in your uploaded csv file';
+                        return $msg;
+                    }
+                }
+                if($entry==1){
                     $input['user_id'] = Auth::user()->id;
                     $input['company_id'] = $this->Company();
                     $input['title'] = $arrResult[$i][0];
@@ -164,8 +209,11 @@ class ProductController extends Controller
                     $input['sale_price'] = $arrResult[$i][6];
                     Product::create($input);
                 }
+            }else{
+                $msg = 'Title is empty at index number <strong>['.$index.']</strong> in your uploaded csv file';
+                return $msg;
             }
         }
-        return ;
+        return $msg;
     }
 }
