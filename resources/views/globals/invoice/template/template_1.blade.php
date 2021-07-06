@@ -320,7 +320,7 @@
                     <td style="line-height:30px; border: solid 2px #fff;" align="right" valign="top">
                         <span class="amount-input">
                             @if($invoice['tax_type'] == 1)
-                                {{number5_format($item['amount'] + $total_tax + $cess_tax, 2)}} &nbsp;
+                                {{number_format($item['amount'] + $total_tax + $cess_tax, 2)}} &nbsp;
                                 @php $maintotal = $maintotal + $item['amount'] + $total_tax + $cess_tax @endphp
                             @elseif($invoice['tax_type'] == 2)
                                 {{number_format($item['amount'], 2)}} &nbsp;

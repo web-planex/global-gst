@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Globals\CommonController;
+use App\Http\Controllers\Globals\DKIMConfigurationController;
 use App\Mail\Globals\EmailVerification;
 use App\Mail\Globals\SignUpMail;
+use App\Mail\Globals\VerifyEmail;
 use App\Models\Globals\CompanySettings;
 use App\Http\Controllers\Controller;
 use App\Models\Globals\PaymentTerms;
@@ -14,7 +16,6 @@ use App\Models\Globals\PaymentMethod;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Carbon\Carbon;
-use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -185,30 +186,12 @@ class RegisterController extends Controller
         $data2 = ['company_logo' => $company_logo,'customer_name' => $customer_name];
 
         $to = $user['email'];
-        $from = env('MAIL_FROM_ADDRESS');
-        $subject = "Verify Email Address";
-        $subject2 = "Welcome to GST Invoices by WebPlanex";
-        $message = view('globals.emails.verify-email',$data);
-        $message2 = view('globals.emails.sign-up',$data2);
-
-        $headers = "MIME-Version: 1.0" . "\r\n";
-        $headers .= "Content-type:text/html;charset=iso-8859-1" . "\r\n";
-        $headers .= 'From: ' . $from . ' GST Invoices By WebPlanex'."\r\n";
-        $headers .= 'Reply-To: ' .$from . "\r\n";
-        $headers .= 'Bcc: ' . $from ."\r\n";
-        $headers .= 'X-Mailer: PHP/' . phpversion();
-
-        $headers1 = "MIME-Version: 1.0" . "\r\n";
-        $headers1 .= "Content-type:text/html;charset=iso-8859-1" . "\r\n";
-        $headers1 .= 'From: ' . $from . ' GST Invoices By WebPlanex'."\r\n";
-        $headers1 .= 'Reply-To: ' .$from . "\r\n";
-        $headers1 .= 'X-Mailer: PHP/' . phpversion();
 
         // Send verification email
-        \mail($to, $subject, $message, $headers1);
+        Mail::to($to)->send(new VerifyEmail($data));
 
         // Send welcome email
-        \mail($to, $subject2, $message2, $headers);
+        Mail::to($to)->send(new SignUpMail($data2));
         return $user;
     }
 
